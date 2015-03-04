@@ -22,11 +22,10 @@ from zope.interface.registry import Components
 
 from nti.assessment.interfaces import IQAssignment
 from nti.assessment.interfaces import IQTimedAssignment
+from nti.assessment._question_index import QuestionIndex
+from nti.assessment._question_index import _load_question_map_json
 
 from nti.externalization.externalization import to_external_object
-
-from .._question_index import QuestionIndex
-from .._question_index import _load_question_map_json
 
 def _load_assignments(json_string):
 

@@ -17,11 +17,11 @@ does_not = is_not
 import os
 
 from nti.assessment import parts
-from nti.assessment import hashfile
 from nti.assessment import question
-from nti.assessment import signature
 from nti.assessment import assignment
 from nti.assessment import interfaces
+from nti.assessment.common import hashfile
+from nti.assessment.common import signature
 
 from nti.assessment.tests import AssessmentTestCase
 

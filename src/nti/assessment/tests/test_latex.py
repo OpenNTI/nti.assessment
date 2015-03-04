@@ -13,7 +13,7 @@ from zope import component
 
 from nti.assessment import interfaces
 from nti.assessment import response, solution
-from nti.assessment import grade_one_response
+from nti.assessment.common import grade_one_response
 from nti.assessment._latexplastexdomcompare import _mathChildIsEqual as mce
 
 from nti.assessment.tests.test_solution import grades_right, grades_wrong

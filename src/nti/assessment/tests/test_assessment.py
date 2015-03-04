@@ -12,7 +12,7 @@ from hamcrest import assert_that
 
 import plasTeX.Base
 
-from nti.assessment import grade_one_response, assess
+from nti.assessment.common import grade_one_response, assess
 from nti.assessment.interfaces import IResponseToSymbolicMathConverter
 
 from nti.assessment._latexplastexconverter import factory

@@ -15,8 +15,6 @@
 
 	<include package="plone.namedfile" file="z3c-blobfile.zcml" />
 
-	<include package=".contentrendering" file="configure.zcml" />
-
 	<!-- Response types -->
 	<adapter factory=".response.QTextResponse"
 			 provides=".interfaces.IQTextResponse"

@@ -60,7 +60,7 @@ from .interfaces import IQMultipleChoiceMultipleAnswerPartGrader
 
 from .interfaces import convert_response_for_solution
 
-from . import grader_for_solution_and_response
+from .common import grader_for_solution_and_response
 
 @interface.implementer(IQPart)
 @WithRepr

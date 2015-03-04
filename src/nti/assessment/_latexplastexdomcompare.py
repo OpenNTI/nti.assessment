@@ -129,7 +129,6 @@ def _sanitizeTextNodeContent(textNode):
 
 	return text
 
-
 def grade( solution, response ):
 	__traceback_info__ = solution, response
 	try:

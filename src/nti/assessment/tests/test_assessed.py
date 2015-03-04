@@ -28,7 +28,7 @@ from zope import component
 from zope.annotation.interfaces import IAttributeAnnotatable
 from zope.dublincore.annotatableadapter import ZDCAnnotatableAdapter
 
-from nti.dataserver import interfaces as nti_interfaces
+from nti.coremetadata.interfaces import ILastModified
 
 from nti.externalization import internalization
 from nti.externalization.externalization import toExternalObject
@@ -111,7 +111,7 @@ class TestAssessedQuestion(AssessmentTestCase):
 
 	def test_externalizes(self):
 		assert_that( assessed.QAssessedQuestion(), verifiably_provides( interfaces.IQAssessedQuestion ) )
-		assert_that( assessed.QAssessedQuestion(), verifiably_provides( nti_interfaces.ILastModified ) )
+		assert_that( assessed.QAssessedQuestion(), verifiably_provides( ILastModified ) )
 		assert_that( assessed.QAssessedQuestion(), externalizes( has_entry( 'Class', 'AssessedQuestion' ) ) )
 		assert_that( internalization.find_factory_for( toExternalObject( assessed.QAssessedQuestion() ) ),
 					 is_( none() ) )
@@ -264,7 +264,7 @@ class TestAssessedQuestionSet(AssessmentTestCase):
 
 	def test_externalizes(self):
 		assert_that( assessed.QAssessedQuestionSet(), verifiably_provides( interfaces.IQAssessedQuestionSet ) )
-		assert_that( assessed.QAssessedQuestionSet(), verifiably_provides( nti_interfaces.ILastModified ) )
+		assert_that( assessed.QAssessedQuestionSet(), verifiably_provides( ILastModified ) )
 		assert_that( assessed.QAssessedQuestionSet(), externalizes( has_entries( 'Class', 'AssessedQuestionSet',
 																				 'MimeType', 'application/vnd.nextthought.assessment.assessedquestionset') ) )
 		assert_that( internalization.find_factory_for( toExternalObject( assessed.QAssessedQuestionSet() ) ),

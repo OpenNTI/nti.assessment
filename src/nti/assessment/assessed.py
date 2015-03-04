@@ -28,11 +28,10 @@ from nti.dataserver.core.mixins import ContainedMixin
 
 from nti.externalization.representation import WithRepr
 
+from nti.schema.schema import EqHash
 from nti.schema.field import InvalidValue
 from nti.schema.field import SchemaConfigured
 from nti.schema.fieldproperty import createDirectFieldProperties
-
-from nti.schema.schema import EqHash
 
 from .interfaces import IQuestion
 from .interfaces import IQuestionSet
