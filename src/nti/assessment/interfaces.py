@@ -56,6 +56,16 @@ plonefile_zopefile_patch_on_import.patch()
 NTIID_TYPE = 'NAQ'
 QUESTION_SET_MIME_TYPE = u'application/vnd.nextthought.naquestionset'
 
+class IPollable(interface.Interface):
+	"""
+	marker interface for pollable parts
+	"""
+
+class IGradable(interface.Interface):
+	"""
+	marker interface for gradable parts
+	"""
+	
 class IQHint(interface.Interface):
 	"""
 	Information intended to help a student complete a question.
@@ -64,7 +74,6 @@ class IQHint(interface.Interface):
 
 	It my be inline or be a link (reference) to other content.
 	"""
-	# TODO: Model this better
 
 class IQTextHint(IQHint):
 	"""
@@ -97,27 +106,29 @@ class IQPartSolutionsExternalizer(interface.Interface):
 	def to_external_object(self):
 		pass
 
-# It seems like the concepts of domain and range may come into play here,
-# somewhere
+## It seems like the concepts of domain and range may come into play here,
+## somewhere
 
-class IQPart(interface.Interface):
-	"""
-	One generally unnumbered (or only locally numbered) portion of a :class:`Question`
-	which requires a response.
-	"""
+class IQNonGradablePart(interface.Interface):
 
 	content = _ContentFragment( title="The content to present to the user for this portion, if any." )
 	
 	hints = IndexedIterable( title="Any hints that pertain to this part",
 							 value_type=Object(IQHint, title="A hint for the part") )
 	
+	explanation = _ContentFragment( title="An explanation of how the solution is arrived at.",
+									default='' )
+
+class IQPart(IQNonGradablePart, IGradable):
+	"""
+	One generally unnumbered (or only locally numbered) portion of a :class:`Question`
+	which requires a response.
+	"""
+
 	solutions = IndexedIterable( title="Acceptable solutions for this question part in no particular order.",
 								 description="All solutions must be of the same type, and there must be at least one.",
 								 value_type=Object(IQSolution, title="A solution for this part")	)
 	
-	explanation = _ContentFragment( title="An explanation of how the solution is arrived at.",
-									default='' )
-
 	def grade( response ):
 		"""
 		Determine the correctness of the given response. Usually this will do its work
@@ -131,11 +142,7 @@ class IQPart(interface.Interface):
 			there are no provided solutions. If solution weights are
 			taken into account, this will be a floating point number between 0.0 (incorrect) and 1.0 (perfect).
 		"""
-
-class IQMathPart(IQPart):
-	"""
-	A question part whose answer lies in the math domain.
-	"""
+IQGradablePart = IQPart # alias
 
 class IQPartGrader(interface.Interface):
 	"""
@@ -162,6 +169,19 @@ class IQMultiValuedSolution(IQSolution):
 				  description="The correct answer as a tuple of items which are a zero-based index into the choices list.",
 				  min_length=0,
 				  value_type=TextLine( title="The value" ) )
+
+## math parts
+
+class IQNonGradableMathPart(IQNonGradablePart):
+	"""
+	A math question part
+	"""
+	
+class IQMathPart(IQNonGradableMathPart, IQPart):
+	"""
+	A question part whose answer lies in the math domain.
+	"""
+IQGradableMathPart = IQMathPart
 
 class IQMathSolution(IQSolution):
 	"""
@@ -214,7 +234,7 @@ class IQNumericMathPart(IQMathPart):
 	A part whose solutions are numeric math.
 	"""
 
-class IQLatexSymbolicMathSolution(IQSymbolicMathSolution,IQSingleValuedSolution):
+class IQLatexSymbolicMathSolution(IQSymbolicMathSolution, IQSingleValuedSolution):
 	"""
 	A solution whose correct answer should be interpreted
 	as symbols, parsed from latex.
@@ -240,7 +260,21 @@ class IQSymbolicMathGrader(IQPartGrader):
 	Specialized grader for symbolic math expressions.
 	"""
 
-class IQMultipleChoiceSolution(IQSolution,IQSingleValuedSolution):
+## multiple choice
+
+class IQNonGradableMultipleChoicePart(IQNonGradablePart):
+	"""
+	A question part that asks the student to choose between a fixed set
+	of alternatives.
+	"""
+	
+	choices = List( title="The choice strings to present to the user.",
+					min_length=1,
+					description="""Presentation order may matter, hence the list. But for grading purposes,
+					the order does not matter and simple existence within the set is sufficient.""",
+					value_type=_ContentFragment( title="A rendered value" ) )
+
+class IQMultipleChoiceSolution(IQSolution, IQSingleValuedSolution):
 	"""
 	A solution whose correct answer is drawn from a fixed list
 	of possibilities. The student is expected to choose from
@@ -249,28 +283,30 @@ class IQMultipleChoiceSolution(IQSolution,IQSingleValuedSolution):
 
 	value = interface.Attribute( "The correct answer as the zero-based index into the choices list." )
 
-class IQMultipleChoicePart(IQPart):
-	"""
-	A question part that asks the student to choose between a fixed set
-	of alternatives.
-	"""
+class IQMultipleChoicePart(IQNonGradableMultipleChoicePart, IQPart):
 
-	choices = List( title="The choice strings to present to the user.",
-					min_length=1,
-					description="""Presentation order may matter, hence the list. But for grading purposes,
-					the order does not matter and simple existence within the set is sufficient.""",
-					value_type=_ContentFragment( title="A rendered value" ) )
-	
 	solutions = IndexedIterable( title="The multiple-choice solutions",
 								 min_length=1,
-								 value_type=Object( IQMultipleChoiceSolution, title="Multiple choice solution" ) )
+								 value_type=Object( IQMultipleChoiceSolution,
+													title="Multiple choice solution" ) )
+
+IQGradableMultipleChoicePart = IQMultipleChoicePart
 
 class IQMultipleChoicePartGrader(IQPartGrader):
 	"""
 	Specialized interface for grading multiple choice questions.
 	"""
 
-class IQMultipleChoiceMultipleAnswerSolution(IQSolution,IQMultiValuedSolution):
+## multiple choice multiple answer
+
+class IQNonGradableMultipleChoiceMultipleAnswerPart(IQNonGradableMultipleChoicePart):
+	"""
+	A question part that asks the student to choose between a fixed set
+	of alternatives.
+	"""
+	
+class IQMultipleChoiceMultipleAnswerSolution(IQSolution,
+											 IQMultiValuedSolution):
 	"""
 	A solution whose correct answer is drawn from a fixed list
 	of possibilities. The student is expected to choose from
@@ -283,12 +319,9 @@ class IQMultipleChoiceMultipleAnswerSolution(IQSolution,IQMultiValuedSolution):
 				  value_type=Int( title="The value",
 								  min=0) )
 
-class IQMultipleChoiceMultipleAnswerPart(IQMultipleChoicePart):
-	"""
-	A question part that asks the student to choose between a fixed set
-	of alternatives.
-	"""
-
+class IQMultipleChoiceMultipleAnswerPart(IQNonGradableMultipleChoiceMultipleAnswerPart, 
+										 IQMultipleChoicePart):
+	
 	solutions = IndexedIterable( title="The multiple-choice solutions",
 								 min_length=1,
 								 value_type=Object(IQMultipleChoiceMultipleAnswerSolution,
@@ -299,37 +332,29 @@ class IQMultipleChoiceMultipleAnswerPartGrader(IQPartGrader):
 	Specialized interface for grading multiple choice questions.
 	"""
 
-class IQFreeResponseSolution(IQSolution,IQSingleValuedSolution):
+## free response
+
+class IQNonGradableFreeResponsePart(IQNonGradablePart):
+	pass
+	
+class IQFreeResponseSolution(IQSolution, IQSingleValuedSolution):
 	"""
 	A solution whose correct answer is simple text.
 	"""
 
 	value = Text( title="The correct text response", min_length=1 )
 
-class IQFreeResponsePart(IQPart):
+class IQFreeResponsePart(IQNonGradableFreeResponsePart, IQPart):
 	"""
 	A part whose correct answer is simple text.
 
 	These parts are intended for very short submissions.
 	"""
+IQGradableFreeResponsePart = IQFreeResponsePart
 
-class IQConnectingSolution(IQSolution):
-	"""
-	Connecting solutions are the correct mapping from keys to values.
-	Generally this will be a mapping of integer locations, but it may
-	also be a mapping of actual keys and values. The response is an
-	IDictResponse of ints or key/values.
-	"""
-	
-	value = Dict( title="The correct mapping." )
-	
-class IQMatchingSolution(IQConnectingSolution):
-	pass
-	
-class IQOrderingSolution(IQConnectingSolution):
-	pass
+## connecting part
 
-class IQConnectingPart(IQPart):
+class IQNonGradableConnectingPart(IQNonGradablePart):	
 	"""
 	A question part that asks the student to connect items from one
 	column (labels) with items in another column (values) forming a
@@ -344,21 +369,51 @@ class IQConnectingPart(IQPart):
 	labels = List( title="The list of labels",
 				   min_length=2,
 				   value_type=_ContentFragment( title="A label-column value" ) )
+
 	values = List( title="The list of values",
 				   min_length=2,
 				   value_type=_ContentFragment( title="A value-column value" ) )
+
+class IQNonGradableMatchingPart(IQNonGradableConnectingPart):
+	pass
+
+class IQNonGradableOrderingPart(IQNonGradableConnectingPart):
+	pass
+
+class IQConnectingSolution(IQSolution):
+	"""
+	Connecting solutions are the correct mapping from keys to values.
+	Generally this will be a mapping of integer locations, but it may
+	also be a mapping of actual keys and values. The response is an
+	IDictResponse of ints or key/values.
+	"""
+	value = Dict( title="The correct mapping." )
 	
-class IQMatchingPart(IQConnectingPart):
+class IQMatchingSolution(IQConnectingSolution):
+	pass
+	
+class IQOrderingSolution(IQConnectingSolution):
+	pass
+
+class IQConnectingPart(IQNonGradableConnectingPart, IQPart): # BWC
+	pass
+IQGradableConnectingPart = IQConnectingPart # alias
+
+class IQMatchingPart(IQNonGradableMatchingPart, IQConnectingPart):
 	
 	solutions = IndexedIterable( title="The matching solution",
 								 min_length=1,
 								 value_type=Object(IQMatchingSolution, title="Matching solution" ) )
 
-class IQOrderingPart(IQConnectingPart):
+IQGradableMatchingPart = IQMatchingPart # alias
+
+class IQOrderingPart(IQNonGradableOrderingPart, IQConnectingPart):
 
 	solutions = IndexedIterable( title="The matching solution",
 								 min_length=1,
 								 value_type=Object(IQOrderingSolution, title="Ordering solution" ) )
+
+IQGradableOrderingPart = IQMatchingPart # alias
 
 class IQConnectingPartGrader(IQPartGrader):
 	pass
@@ -373,12 +428,12 @@ class IQOrderingPartGrader(IQConnectingPartGrader):
 	A grader for ordering questions.
 	"""
 
-class IQFilePart(IQPart):
+## file part
+
+class IQNonGradableFilePart(IQNonGradablePart):
 	"""
 	A part that requires the student to upload a file from their own
-	computer. Note that this part cannot be automatically graded
-	(hence there is no corresponding solution), it can merely be
-	routed to a responsible party for grading manually.
+	computer.
 
 	In this interface you specify MIME types and/or
 	filename extensions that can be used as input. If the incoming
@@ -413,7 +468,17 @@ class IQFilePart(IQPart):
 		the allowed list of extensions.
 		"""
 
-class IQModeledContentPart(IQPart):
+class IQFilePart(IQNonGradableFilePart, IQPart):
+	"""
+	Note that this part cannot be automatically graded
+	(hence there is no corresponding solution), it can merely be
+	routed to a responsible party for grading manually.
+	"""
+IQGradableFilePart = IQFilePart # alias
+
+## modeled content part
+
+class IQNonGradableModeledContentPart(IQNonGradableFilePart):
 	"""
 	A part intended for \"essay\" style submissions
 	of rich content authored on the platform. These
@@ -425,6 +490,11 @@ class IQModeledContentPart(IQPart):
 	allow whiteboards, force a whiteboard). Those can be added
 	if needed.
 	"""
+	
+class IQModeledContentPart(IQNonGradableModeledContentPart, IQPart):
+	pass
+
+## question
 
 class IQuestion(IAnnotatable):
 	"""
@@ -439,6 +509,7 @@ class IQuestion(IAnnotatable):
 
 	content = Text( title="The content to present to the user, if any.",
 					default='')
+
 	parts = IndexedIterable( title="The ordered parts of the question.",
 							 min_length=1,
 							 value_type=Object( IQPart, title="A question part" ),
@@ -891,32 +962,31 @@ class IQAssessmentItemContainer(interface.Interface):
 	typically with annotations).
 	"""
 
-class IWordEntry(interface.Interface):
-	wid = TextLine(title="word identifier")
-	word = TextLine(title="the word")
-	lang = TextLine(title="language identifier", default="en", required=False)
-	content = _ContentFragment(title="The input to present to the user.", required=False)
+## fill-in-the-blank part
 
-class IWordBank(IIterable, IReadMapping):
-
-	entries = List(title="The word entries",
-				   value_type=Object(IWordEntry, title="The word"),
-				   min_length=1)
-
-	unique = Bool(title="A word can be used once in a question/part",
-				  default=True, required=False)
-
-class IQFillInTheBlankPart(IQPart):
+class IQNonGradableFillInTheBlankPart(IQNonGradablePart):
 	"""
 	Marker interface for a Fill-in-the-blank question part.
 	"""
+	
+class IQFillInTheBlankPart(IQNonGradableFillInTheBlankPart, IQPart):
+	"""
+	Marker interface for a Fill-in-the-blank question part.
+	"""
+IQGradableFillInTheBlankPart = IQFillInTheBlankPart
 
-class IRegEx(interface.Interface):
-	pattern = TextLine(title="the pattern")
-	solution = _ContentFragment(title="A solution to present to the user.", required=False)
+## fill-in-the-blank short answer part
+
+class IQNonGradableFillInTheBlankShortAnswerPart(IQNonGradableFillInTheBlankPart):
+	pass
 
 class IQFillInTheBlankShortAnswerGrader(IQPartGrader):
 	pass
+
+class IRegEx(interface.Interface):
+	pattern = TextLine(title="the pattern")
+	solution = _ContentFragment(title="A solution to present to the user.", 
+								required=False)
 
 class IQFillInTheBlankShortAnswerSolution(IQSolution):
 
@@ -930,13 +1000,16 @@ class IQFillInTheBlankShortAnswerSolution(IQSolution):
 
 IQFillInTheBlankShortAnswerSolution.setTaggedValue('response_type', IQDictResponse)
 
-class IQFillInTheBlankShortAnswerPart(IQFillInTheBlankPart):
+class IQFillInTheBlankShortAnswerPart(IQNonGradableFillInTheBlankShortAnswerPart,
+									  IQFillInTheBlankPart):
 	"""
 	Marker interface for a Fill-in-the-blank short answer question part.
 	"""
+
 	solutions = IndexedIterable(title="The solutions",
 								min_length=1,
-								value_type=Object(IQFillInTheBlankShortAnswerSolution, title="the solution"))
+								value_type=Object(IQFillInTheBlankShortAnswerSolution, 
+												  title="the solution"))
 
 class IQFillInTheBlankWithWordBankGrader(IQPartGrader):
 	pass
@@ -953,19 +1026,41 @@ class IQFillInTheBlankWithWordBankSolution(IQSolution):
 
 IQFillInTheBlankWithWordBankSolution.setTaggedValue('response_type', IQDictResponse)
 
-class IQFillInTheBlankWithWordBankPart(IQFillInTheBlankPart):
+## fill-in-the-blank with word bank part
+
+class IWordEntry(interface.Interface):
+	wid = TextLine(title="word identifier")
+	word = TextLine(title="the word")
+	lang = TextLine(title="language identifier", default="en", required=False)
+	content = _ContentFragment(title="The input to present to the user.", required=False)
+
+class IWordBank(IIterable, IReadMapping):
+
+	entries = List(title="The word entries",
+				   value_type=Object(IWordEntry, title="The word"),
+				   min_length=1)
+
+	unique = Bool(title="A word can be used once in a question/part",
+				  default=True, required=False)
+
+class IQNonGradableFillInTheBlankWithWordBankPart(IQFillInTheBlankPart):
 	"""
 	Marker interface for a Fill-in-the-blank with word bank question part.
 	If the word bank is not specified it would the one from the parent question
 	"""
+
 	wordbank = Object(IWordBank, required=False,
 					  title="The wordbank to present to the user.")
 
+	input = _ContentFragment(title="The input to present to the user.")
+	
+class IQFillInTheBlankWithWordBankPart(IQNonGradableFillInTheBlankWithWordBankPart, 
+									   IQFillInTheBlankPart):
+
 	solutions = IndexedIterable(title="The solutions",
 								min_length=1,
-								value_type=Object(IQFillInTheBlankWithWordBankSolution, title="the solution"))
-
-	input = _ContentFragment(title="The input to present to the user.")
+								value_type=Object(IQFillInTheBlankWithWordBankSolution, 
+												  title="the solution"))
 
 class IQFillInTheBlankWithWordBankQuestion(IQuestion):
 	"""
@@ -974,6 +1069,8 @@ class IQFillInTheBlankWithWordBankQuestion(IQuestion):
 	The word bank for the question may be used by any question parts
 	"""
 	wordbank = Object(IWordBank, required=False)
+
 	parts = IndexedIterable(title="The ordered parts of the question.",
 							min_length=1,
-							value_type=Object(IQFillInTheBlankWithWordBankPart, title="A question part"))
+							value_type=Object(IQFillInTheBlankWithWordBankPart, 
+											  title="A question part"))
