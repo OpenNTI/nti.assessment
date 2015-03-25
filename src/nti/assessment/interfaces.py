@@ -478,7 +478,7 @@ IQGradableFilePart = IQFilePart # alias
 
 ## modeled content part
 
-class IQNonGradableModeledContentPart(IQNonGradableFilePart):
+class IQNonGradableModeledContentPart(IQNonGradablePart):
 	"""
 	A part intended for \"essay\" style submissions
 	of rich content authored on the platform. These
@@ -493,6 +493,8 @@ class IQNonGradableModeledContentPart(IQNonGradableFilePart):
 	
 class IQModeledContentPart(IQNonGradableModeledContentPart, IQPart):
 	pass
+
+IQGradableModeledContentPart = IQModeledContentPart
 
 ## question
 
