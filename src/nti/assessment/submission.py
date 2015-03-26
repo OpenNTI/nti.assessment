@@ -1,8 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 """
-Having to do with submitting external data for grading.
-
 .. $Id$
 """
 
@@ -41,13 +39,16 @@ from ._util import make_sublocations as _make_sublocations
 # the assessed versions were stored in the database.
 # With assignments that have grading pending, however, they
 # can be stored in the database.
+
 # It IS NOT SAFE to change the superclass to be Persistent if there
 # are already objects out there that are not Persistent (they cannot be
 # unpickled)
+
 # In general, these will be small objects consisting of the IQResponse
 # subclasses, which already were persistent, so there should be
 # negligible performance impact. Just remember they CANNOT
 # be mutated.
+
 # A side effect of the submission objects being persistent
 # is that they get added to the user's _p_jar *before* being
 # transformed; the transformed object may or may not

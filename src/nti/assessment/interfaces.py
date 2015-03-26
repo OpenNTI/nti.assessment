@@ -1076,3 +1076,36 @@ class IQFillInTheBlankWithWordBankQuestion(IQuestion):
 							min_length=1,
 							value_type=Object(IQFillInTheBlankWithWordBankPart, 
 											  title="A question part"))
+
+## polls
+
+class IQPoll(IAnnotatable):
+	"""
+	A poll question consists of one or more parts (typically one).
+	It may have prefacing text. It may have other metadata, such as what
+	concepts it relates to (e.g., Common Core Standards numbers); such concepts
+	will be domain specific.
+
+	Polls are annotatable. Uses of this include things like references
+	to where questions appear in question sets or other types of content.
+	"""
+
+	content = Text( title="The content to present to the user, if any.",
+					default='')
+
+	parts = IndexedIterable( title="The ordered parts of the question.",
+							 min_length=1,
+							 value_type=Object( IPollable, title="A pollable question part" ),
+							 )
+
+class IQSurvey(ITitledContent, IAnnotatable):
+	"""
+	An ordered group of poll questions.
+
+	Surveys sets are annotatable.
+	"""
+
+	questions = IndexedIterable( title="The ordered questions in the set.",
+								 min_length=1,
+								 value_type=Object(IQPoll, title="The poll questions" ),
+								 )

@@ -125,7 +125,6 @@ class TestExternalization(AssessmentTestCase):
 
 		assert_that(internal, has_property('value', is_(('a part',))))
 
-
 	def test_wordbankentry(self):
 		ext_obj = {
 			u'Class': 'WordEntry',

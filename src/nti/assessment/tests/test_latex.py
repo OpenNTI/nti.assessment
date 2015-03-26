@@ -36,7 +36,6 @@ class TestLatex(AssessmentTestCase):
 		assert_that( grader(  ), is_true() )
 		assert_that( soln, grades_right( soln.value ) )
 
-
 	def test_simple_grade_with_numeric_parens(self):
 		# We don't get it right, but we don't blow up either
 		soln = solution.QLatexSymbolicMathSolution( r"$6$" )
@@ -45,7 +44,6 @@ class TestLatex(AssessmentTestCase):
 
 		grader = component.getMultiAdapter( (None, soln, rsp), interfaces.IQSymbolicMathGrader )
 		assert_that( grader(  ), is_false() )
-
 
 	def test_simple_grade_require_trailing_units(self):
 		soln = solution.QLatexSymbolicMathSolution( r"$\frac{1}{2}$", ('day',) )
@@ -121,7 +119,6 @@ class TestLatex(AssessmentTestCase):
 				rsp = response.QTextResponse( r )
 				assert_that( soln, grades_right( rsp ) )
 
-
 	def test_grade_empty(self):
 		rsp = response.QTextResponse( "" )
 		soln = solution.QLatexSymbolicMathSolution( r"$\frac{1}{2}$" )
@@ -154,7 +151,6 @@ class TestLatex(AssessmentTestCase):
 
 		grader = component.getMultiAdapter( (None, soln, rsp), interfaces.IQSymbolicMathGrader )
 		assert_that( grader(), is_false() )
-
 
 	def test_math_child_is_equal_cases(self):
 

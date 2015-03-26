@@ -242,6 +242,7 @@ class TestAssessment(AssessmentTestCase):
 		assert_that(results, is_({1: True}))
 
 class MockQuiz(object):
+
 	def __init__(self, answers):
 		if not answers:
 			answers = ['No answer']

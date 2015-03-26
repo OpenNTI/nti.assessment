@@ -1,8 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 """
-Code related to the question interfaces.
-
 .. $Id$
 """
 
@@ -32,27 +30,24 @@ from nti.schema.fieldproperty import createDirectFieldProperties
 
 from nti.schema.schema import EqHash
 
-from .interfaces import IQuestion
-from .interfaces import IQuestionSet
-from .interfaces import IQFillInTheBlankWithWordBankQuestion
+from .interfaces import IQPoll
+from .interfaces import IQSurvey
 
-from .interfaces import QUESTION_SET_MIME_TYPE
-
-@interface.implementer(IQuestion,
+@interface.implementer(IQPoll,
 					   IFiniteSequence,
 					   IContentTypeAware,
 					   IAttributeAnnotatable)
 @EqHash('content', 'parts', superhash=True)
-class QQuestion(Contained,
-				SchemaConfigured,
-				Persistent):
+class QPoll(Contained,
+			SchemaConfigured,
+			Persistent):
 
 	parts = ()
 	content = None
 
-	createDirectFieldProperties(IQuestion)
+	createDirectFieldProperties(IQPoll)
 
-	mimeType = mime_type = 'application/vnd.nextthought.naquestion'
+	mimeType = mime_type = 'application/vnd.nextthought.napoll'
 
 	def __init__(self, *args, **kwargs):
 		Persistent.__init__(self)
@@ -64,24 +59,24 @@ class QQuestion(Contained,
 	def __len__(self):
 		return len(self.parts or ())
 
-@interface.implementer(IQuestionSet,
+@interface.implementer(IQSurvey,
 					   ISublocations,
 					   IFiniteSequence,
 					   IContentTypeAware,
 					   IAttributeAnnotatable)
 @EqHash('title', 'questions', superhash=True)
-class QQuestionSet(Contained,
-				   SchemaConfigured,
-				   Persistent):
+class QSurvey(Contained,
+			  SchemaConfigured,
+			  Persistent):
 
 	questions = ()
 	parts = alias('questions')
 
-	createDirectFieldProperties(IQuestionSet)
+	createDirectFieldProperties(IQSurvey)
 
-	title = AdaptingFieldProperty(IQuestionSet['title'])
+	title = AdaptingFieldProperty(IQSurvey['title'])
 
-	mimeType = mime_type = QUESTION_SET_MIME_TYPE
+	mimeType = mime_type = 'application/vnd.nextthought.nasurvey'
 
 	def __init__(self, *args, **kwargs):
 		Persistent.__init__(self)
@@ -96,23 +91,3 @@ class QQuestionSet(Contained,
 	
 	def __len__(self):
 		return len(self.parts or ())
-
-@interface.implementer(IQFillInTheBlankWithWordBankQuestion)
-@EqHash('wordbank', include_super=True)
-class QFillInTheBlankWithWordBankQuestion(QQuestion):
-	createDirectFieldProperties(IQFillInTheBlankWithWordBankQuestion)
-
-	__external_class_name__ = "Question"
-	mime_type = mimeType = 'application/vnd.nextthought.naquestionfillintheblankwordbank'
-
-	wordBank = alias('wordbank')
-	
-	def __setattr__(self, name, value):
-		super(QFillInTheBlankWithWordBankQuestion, self).__setattr__(name, value)
-		if name == "parts":
-			for x in self.parts or ():
-				x.__parent__ = self  # take ownership
-
-	def sublocations(self):
-		for part in self.parts or ():
-			yield part

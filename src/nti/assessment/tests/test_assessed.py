@@ -25,7 +25,9 @@ import datetime
 
 from zope import interface
 from zope import component
+
 from zope.annotation.interfaces import IAttributeAnnotatable
+
 from zope.dublincore.annotatableadapter import ZDCAnnotatableAdapter
 
 from nti.coremetadata.interfaces import ILastModified
@@ -83,13 +85,11 @@ def lineage(resource):
 
 class TestAssessedPart(AssessmentTestCase):
 
-
 	def test_externalizes(self):
 		assert_that( assessed.QAssessedPart(), verifiably_provides( interfaces.IQAssessedPart ) )
 		assert_that( assessed.QAssessedPart(), externalizes( has_entry( 'Class', 'AssessedPart' ) ) )
 		assert_that( internalization.find_factory_for( toExternalObject( assessed.QAssessedPart() ) ),
 					 is_( none() ) )
-
 
 		# These cannot be created externally, so we're not worried about
 		# what happens when they are updated...this test just serves to document
@@ -163,7 +163,6 @@ class TestAssessedQuestion(AssessmentTestCase):
 		assert_that( calling( interfaces.IQAssessedQuestion ).with_args(sub),
 					 raises(InvalidValue))
 
-
 	def test_assess_with_incorrect_multichoice_part(self):
 		part = parts.QMultipleChoicePart(solutions=(solutions.QMultipleChoiceSolution(value=1),))
 		question = QQuestion( parts=(part,) )
@@ -190,8 +189,6 @@ class TestAssessedQuestion(AssessmentTestCase):
 
 		assert_that( calling( interfaces.IQAssessedQuestion ).with_args(sub),
 					 raises(InvalidValue))
-
-
 
 	def test_assess_with_file_part(self):
 		part = parts.QFilePart()
