@@ -7,18 +7,18 @@ __docformat__ = "restructuredtext en"
 # disable: accessing protected members, too many methods
 # pylint: disable=W0212,R0904
 
-from hamcrest import assert_that
-from hamcrest import has_entry
-from hamcrest import has_entries
 from hamcrest import is_
-from hamcrest import has_property
-from hamcrest import contains
 from hamcrest import none
 from hamcrest import is_not
-from hamcrest import has_length
-from hamcrest import greater_than
-from hamcrest import calling
 from hamcrest import raises
+from hamcrest import calling
+from hamcrest import contains
+from hamcrest import has_entry
+from hamcrest import has_length
+from hamcrest import assert_that
+from hamcrest import has_entries
+from hamcrest import greater_than
+from hamcrest import has_property
 
 import time
 import datetime
@@ -62,7 +62,6 @@ def _check_old_dublin_core( qaq ):
 	assert_that( qaq.lastModified, is_( 0 ) )
 	assert_that( qaq.createdTime, is_( 0 ) )
 
-
 	interface.alsoProvides( qaq, IAttributeAnnotatable )
 
 	zdc = ZDCAnnotatableAdapter( qaq )
@@ -98,7 +97,8 @@ class TestAssessedPart(AssessmentTestCase):
 		# the raw string/int value. Responses would be ideal, but that could break existing
 		# client code. The two behaviours are now unified
 		part = assessed.QAssessedPart()
-		update_from_external_object( part, {"submittedResponse": "The text response"}, require_updater=True )
+		update_from_external_object( part, {"submittedResponse": "The text response"},
+									 require_updater=True )
 
 		assert_that( part.submittedResponse, is_( "The text response" ) )
 
@@ -340,7 +340,8 @@ class TestAssessedQuestionSet(AssessmentTestCase):
 		assert_that( result, has_property( 'questionSetId', "2" ) )
 		assert_that( result, has_property( 'questions',
 										   contains(
-											   has_property( 'parts', contains( assessed.QAssessedPart( submittedResponse='correct2', assessedValue=1.0 ) ) ) ) ) )
+											   has_property( 'parts', contains( assessed.QAssessedPart( submittedResponse='correct2',
+																										assessedValue=1.0 ) ) ) ) ) )
 
 
 		ext_obj = toExternalObject( result )
