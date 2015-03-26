@@ -66,7 +66,6 @@ class TestMultipleChoicePart(AssessmentTestCase):
 			sf.bind( part )
 			sf.validate( part.solutions )
 
-
 	def test_grade(self):
 		solution = solutions.QMultipleChoiceSolution( 1 )
 		choices = ("A", "B", "C")
@@ -97,7 +96,6 @@ class TestMultipleChoiceMultipleAnswerPart(AssessmentTestCase):
 			sf = interfaces.IQMultipleChoiceMultipleAnswerPart['solutions']
 			sf.bind( part )
 			sf.validate( part.solutions )
-
 
 	def test_grade(self):
 		solution = solutions.QMultipleChoiceMultipleAnswerSolution( [ 1 ] )

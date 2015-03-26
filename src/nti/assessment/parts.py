@@ -35,9 +35,6 @@ from nti.schema.field import SchemaConfigured
 from .interfaces import IQPart
 from .interfaces import IQFilePart
 from .interfaces import IQMathPart
-from .interfaces import IQPartGrader
-from .interfaces import IQDictResponse
-from .interfaces import IQFileResponse
 from .interfaces import IQMatchingPart
 from .interfaces import IQOrderingPart
 from .interfaces import IQConnectingPart
@@ -46,34 +43,74 @@ from .interfaces import IQFreeResponsePart
 from .interfaces import IQSymbolicMathPart
 from .interfaces import IQModeledContentPart
 from .interfaces import IQMultipleChoicePart
+from .interfaces import IQFillInTheBlankShortAnswerPart
+from .interfaces import IQFillInTheBlankWithWordBankPart
+from .interfaces import IQMultipleChoiceMultipleAnswerPart
+
+from .interfaces import IQNonGradablePart
+from .interfaces import IQNonGradableFilePart
+from .interfaces import IQNonGradableMathPart
+from .interfaces import IQNonGradableMatchingPart
+from .interfaces import IQNonGradableOrderingPart
+from .interfaces import IQNonGradableConnectingPart
+from .interfaces import IQNonGradableFreeResponsePart
+from .interfaces import IQNonGradableModeledContentPart
+from .interfaces import IQNonGradableMultipleChoicePart
+from .interfaces import IQNonGradableFillInTheBlankShortAnswerPart
+from .interfaces import IQNonGradableFillInTheBlankWithWordBankPart
+from .interfaces import IQNonGradableMultipleChoiceMultipleAnswerPart
+
+
+from .interfaces import IQDictResponse
+from .interfaces import IQFileResponse
+from .interfaces import IQModeledContentResponse
+
+from .interfaces import IQPartGrader
 from .interfaces import IQMatchingPartGrader
 from .interfaces import IQOrderingPartGrader
 from .interfaces import IQSymbolicMathGrader
-from .interfaces import IQModeledContentResponse
 from .interfaces import IQMultipleChoicePartGrader
-from .interfaces import IQFillInTheBlankShortAnswerPart
-from .interfaces import IQFillInTheBlankWithWordBankPart
 from .interfaces import IQFillInTheBlankShortAnswerGrader
 from .interfaces import IQFillInTheBlankWithWordBankGrader
-from .interfaces import IQMultipleChoiceMultipleAnswerPart
 from .interfaces import IQMultipleChoiceMultipleAnswerPartGrader
 
 from .interfaces import convert_response_for_solution
 
 from .common import grader_for_solution_and_response
 
-@interface.implementer(IQPart)
+@interface.implementer(IQNonGradablePart)
 @WithRepr
-@EqHash('content', 'hints', 'solutions', 'explanation', 
-		'grader_interface', 'grader_name',
+@EqHash('content', 'hints', 'explanation',
 		superhash=True,
 		include_type=True)
-class QPart(SchemaConfigured,Persistent):
+class QNonGradablePart(SchemaConfigured, Persistent):
+	"""
+	Base class for parts.
+	"""
+
+	response_interface = None
+
+	hints = ()
+	content = _u('')
+	explanation = _u('')
+
+@interface.implementer(IQPart)
+@EqHash('content', 'hints', 'explanation',
+		'solutions', 'grader_interface', 'grader_name',
+		superhash=True,
+		include_type=True)
+class QPart(QNonGradablePart):
 	"""
 	Base class for parts. Its :meth:`grade` method will attempt to
 	transform the input based on the interfaces this object
 	implements, plus the interfaces of the solution, and then call the
 	:meth:`_grade` method.
+	
+	If response_interface is non-None, then we will always attempt to convert the
+	esponse to this interface before attempting to grade.
+	In this way parts that may not have a solution
+	can always be sure that the response is at least
+	of an appropriate type.
 	"""
 
 	#: The interface to which we will attempt to adapt ourself, the
@@ -86,17 +123,7 @@ class QPart(SchemaConfigured,Persistent):
 	#: unnamed, adapter
 	grader_name = _u('')
 
-	#: If non-None, then we will always attempt to convert the
-	#: response to this interface before attempting to grade.
-	#: In this way parts that may not have a solution
-	#: can always be sure that the response is at least
-	#: of an appropriate type.
-	response_interface = None
-
-	hints = ()
 	solutions = ()
-	content = _u('')
-	explanation = _u('')
 
 	def grade( self, response ):
 
@@ -130,10 +157,20 @@ class QPart(SchemaConfigured,Persistent):
 			raise ComponentLookupError(objects, self.grader_interface, self.grader_name)
 		return grader()
 
+## Math
+
+@interface.implementer(IQNonGradableMathPart)
+@EqHash(include_super=True,
+		include_type=True)
+class QNonGradableMathPart(QNonGradablePart):
+
+	def _eq_instance( self, other ):
+		return isinstance(other, QNonGradableMathPart)
+	
 @interface.implementer(IQMathPart)
 @EqHash(include_super=True,
 		include_type=True)
-class QMathPart(QPart):
+class QMathPart(QPart, QNonGradableMathPart): # order matters
 
 	def _eq_instance( self, other ):
 		return isinstance(other, QMathPart)
@@ -150,65 +187,94 @@ class QSymbolicMathPart(QMathPart):
 class QNumericMathPart(QMathPart):
 	pass
 
+## Multiple Choice
+
+@interface.implementer(IQNonGradableMultipleChoicePart)
+@EqHash('choices',
+		include_super=True,
+		include_type=True,
+		superhash=True)
+class QNonGradableMultipleChoicePart(QNonGradablePart):
+	choices = ()
+	
 @interface.implementer(IQMultipleChoicePart)
 @EqHash('choices',
 		include_super=True,
 		include_type=True,
 		superhash=True)
-class QMultipleChoicePart(QPart):
+class QMultipleChoicePart(QPart, QNonGradableMultipleChoicePart): # order matters
 	grader_interface = IQMultipleChoicePartGrader
-	choices = ()
 
+## Multiple Choice Multiple Answer
+
+@interface.implementer(IQNonGradableMultipleChoiceMultipleAnswerPart)
+class QNonGradableMultipleChoiceMultipleAnswerPart(QNonGradableMultipleChoicePart):
+	pass
+	
 @interface.implementer(IQMultipleChoiceMultipleAnswerPart)
-class QMultipleChoiceMultipleAnswerPart(QMultipleChoicePart):
+class QMultipleChoiceMultipleAnswerPart(QMultipleChoicePart,
+										QNonGradableMultipleChoiceMultipleAnswerPart): # order matters
 	grader_interface = IQMultipleChoiceMultipleAnswerPartGrader
 
+## Connecting
+
+@interface.implementer(IQNonGradableConnectingPart)
+@EqHash('labels', 'values',
+		include_super=True,
+		superhash=True)
+class QNonGradableConnectingPart(QNonGradablePart):
+	labels = ()
+	values = ()
+	
 @interface.implementer(IQConnectingPart)
 @EqHash('labels', 'values',
 		include_super=True,
 		superhash=True)
-class QConenctingPart(QPart):
-	labels = ()
-	values = ()
+class QConnectingPart(QPart, QNonGradableConnectingPart): # order matters
+	pass			  
+QConenctingPart = QConnectingPart # BWC
 
+@interface.implementer(IQNonGradableMatchingPart)
+class QNonGradableMatchingPart(QNonGradableConnectingPart):	
+	pass
+	
 @interface.implementer(IQMatchingPart)
-class QMatchingPart(QConenctingPart):	
+class QMatchingPart(QConnectingPart, QNonGradableMatchingPart):	
 	grader_interface = IQMatchingPartGrader
 
+@interface.implementer(IQNonGradableOrderingPart)
+class QNonGradableOrderinPart(QNonGradableConnectingPart):	
+	pass
+	
 @interface.implementer(IQOrderingPart)
-class QOrderingPart(QConenctingPart):
+class QOrderingPart(QConnectingPart, QNonGradableOrderinPart): # order matters
 	grader_interface = IQOrderingPartGrader
+	
+## Free Response
+
+@interface.implementer(IQNonGradableFreeResponsePart)
+@EqHash(include_super=True,
+		include_type=True)
+class QNonGradableFreeResponsePart(QNonGradablePart):
+	pass
 	
 @interface.implementer(IQFreeResponsePart)
 @EqHash(include_super=True,
 		include_type=True)
-class QFreeResponsePart(QPart):
+class QFreeResponsePart(QPart, QNonGradableFreeResponsePart): # order matters
 	grader_name = 'LowerQuoteNormalizedStringEqualityGrader'
 
-@interface.implementer(IQFilePart)
+## File part
+
+@interface.implementer(IQNonGradableFilePart)
 @EqHash('allowed_mime_types', 'allowed_extensions', 'max_file_size',
 		include_super=True,
 		superhash=True)
-class QFilePart(QPart):
-
-	response_interface = IQFileResponse
+class QNonGradableFilePart(QNonGradablePart):
 
 	allowed_mime_types = ()
 	allowed_extensions = ()
 	max_file_size = None
-
-	def grade(self, response):
-		response = self.response_interface(response)
-		# We first check our own constraints for submission
-		# and refuse to even grade if they are not met
-		if not self.is_mime_type_allowed(response.value.contentType):
-			raise ConstraintNotSatisfied(response.value.contentType, 'mimeType')
-		if not self.is_filename_allowed( response.value.filename ):
-			raise ConstraintNotSatisfied(response.value.filename, 'filename')
-		if (self.max_file_size is not None and response.value.getSize() > self.max_file_size ):
-			raise ConstraintNotSatisfied(response.value.getSize(), 'max_file_size')
-
-		super(QFilePart,self).grade(response)
 
 	def is_mime_type_allowed( self, mime_type ):
 		if mime_type:
@@ -244,20 +310,58 @@ class QFilePart(QPart):
 				 and (os.path.splitext(filename.lower())[1] in self.allowed_extensions
 					  or '*' in self.allowed_extensions))
 
+@interface.implementer(IQFilePart)
+@EqHash('allowed_mime_types', 'allowed_extensions', 'max_file_size',
+		include_super=True,
+		superhash=True)
+class QFilePart(QPart, QNonGradableFilePart): # order matters
+
+	response_interface = IQFileResponse
+
+	def grade(self, response):
+		response = self.response_interface(response)
+		# We first check our own constraints for submission
+		# and refuse to even grade if they are not met
+		if not self.is_mime_type_allowed(response.value.contentType):
+			raise ConstraintNotSatisfied(response.value.contentType, 'mimeType')
+		if not self.is_filename_allowed( response.value.filename ):
+			raise ConstraintNotSatisfied(response.value.filename, 'filename')
+		if (self.max_file_size is not None and response.value.getSize() > self.max_file_size ):
+			raise ConstraintNotSatisfied(response.value.getSize(), 'max_file_size')
+
+		super(QFilePart,self).grade(response)
+
+## Modeled Content
+
+@interface.implementer(IQNonGradableModeledContentPart)
+@EqHash(include_super=True,
+		include_type=True)
+class QNonGradableModeledContentPart(QNonGradablePart):
+	response_interface = IQModeledContentResponse
+	
 @interface.implementer(IQModeledContentPart)
 @EqHash(include_super=True,
 		include_type=True)
-class QModeledContentPart(QPart):
-	response_interface = IQModeledContentResponse
+class QModeledContentPart(QPart, QNonGradableModeledContentPart): # order matters
+	pass
 
-@interface.implementer(IQFillInTheBlankShortAnswerPart)
-class QFillInTheBlankShortAnswerPart(QPart):
+## Fill in the Blank
+
+@interface.implementer(IQNonGradableFillInTheBlankShortAnswerPart)
+class QNonGradableFillInTheBlankShortAnswerPart(QNonGradablePart):
 	response_interface = IQDictResponse
+	
+@interface.implementer(IQFillInTheBlankShortAnswerPart)
+class QFillInTheBlankShortAnswerPart(QPart, QNonGradableFillInTheBlankShortAnswerPart): # order matters
 	grader_interface = IQFillInTheBlankShortAnswerGrader
 
-@interface.implementer(IQFillInTheBlankWithWordBankPart)
-class QFillInTheBlankWithWordBankPart(QPart, Contained):
+@interface.implementer(IQNonGradableFillInTheBlankWithWordBankPart)
+class QNonGradableFillInTheBlankWithWordBankPart(QNonGradablePart, Contained):
 	response_interface = IQDictResponse
+
+@interface.implementer(IQFillInTheBlankWithWordBankPart)
+class QFillInTheBlankWithWordBankPart(QPart, QNonGradableFillInTheBlankWithWordBankPart): # order matters
+	
 	grader_interface = IQFillInTheBlankWithWordBankGrader
 
 	def _weight(self, result, solution):
