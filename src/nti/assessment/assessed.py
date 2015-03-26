@@ -11,6 +11,8 @@ __docformat__ = "restructuredtext en"
 
 logger = __import__('logging').getLogger(__name__)
 
+import time
+
 from zope import interface
 from zope import component
 
@@ -66,36 +68,7 @@ class QAssessedPart(SchemaConfigured,
 			if part.__parent__ is self:
 				yield part
 
-import time
-from zope.datetime import parseDatetimetz
-
-def _dctimes_property_fallback(attrname, dcname):
-	# For BWC, if we happen to have annotations that happens to include
-	# zope dublincore data, we will use it
-	# TODO: Add a migration to remove these
-	def get(self):
-		self._p_activate()  # make sure there's a __dict__
-		if attrname in self.__dict__:
-			return self.__dict__[attrname]
-
-		if '__annotations__' in self.__dict__:
-			try:
-				dcdata = self.__annotations__['zope.app.dublincore.ZopeDublinCore']
-				date_modified = dcdata[dcname]  # tuple of a string
-				datetime = parseDatetimetz(date_modified[0])
-				result = time.mktime(datetime.timetuple())
-				self.__dict__[attrname] = result  # migrate
-				self._p_changed = True
-				return result
-			except KeyError: # pragma: no cover
-				pass
-
-		return 0
-
-	def _set(self, value):
-		self.__dict__[attrname] = value
-
-	return property(get, _set)
+from ._util import dctimes_property_fallback as _dctimes_property_fallback 
 
 @interface.implementer(IQAssessedQuestion,
 					   ICreated,

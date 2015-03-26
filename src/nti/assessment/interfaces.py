@@ -829,14 +829,19 @@ class IQBaseSubmission(IContained):
 		default=None)
 
 	CreatorRecordedEffortDuration.setTaggedValue('_ext_allow_initial_set', True)
-	# XXX: This is documented as not being available for public
-	# consumption, but if we enforce that, we also are not able to
-	# automatically read it on creation, because
-	# `nti.externalization.datastructures.InterfaceObjectIO``
+	# This is documented as not being available for public consumption,
+	# but if we enforce that, we also are not able to automatically read it on creation,
+	# because `nti.externalization.datastructures.InterfaceObjectIO``
 	# collapses the two concepts into one.
-	#CreatorRecordedEffortDuration.setTaggedValue('_ext_excluded_out', True)
 
-class IQuestionSubmission(IQBaseSubmission):
+class IQPartsSubmission(IQBaseSubmission):
+
+	parts = IndexedIterable( title="Ordered submissions, one for each part of the poll.",
+							 default=(),
+							 description="""The length must match the length of the questions. Each object must be
+							 adaptable into the proper :class:`IQResponse` object (e.g., a string or dict).""" )
+	
+class IQuestionSubmission(IQPartsSubmission):
 	"""
 	A student's submission in response to a question.
 
@@ -844,18 +849,22 @@ class IQuestionSubmission(IQBaseSubmission):
 	"""
 
 	questionId = TextLine( title="Identifier of the question being responded to." )
-	parts = IndexedIterable( title="Ordered submissions, one for each part of the question.",
-							 default=(),
-							 description="""The length must match the length of the questions. Each object must be
-							 adaptable into the proper :class:`IQResponse` object (e.g., a string or dict).""" )
 
-class IQAssessedPart(IContained):
+class IPollSubmission(IQPartsSubmission):
 	"""
-	The assessed value of a single part.
+	A submission in response to a poll.
+
+	These will typically be transient objects.
+	"""
+
+	pollId = TextLine( title="Identifier of the poll being responded to." )
+
+class IQSubmittedPart(IContained):
+	"""
+	The submitted value of a single part.
 
 	These will generally be persistent values that are echoed back to clients.
 	"""
-	# TODO: Matching to question?
 
 	# In the past, updating from external objects transformed the
 	# value into an IQResponse (because this was an Object field of
@@ -876,13 +885,21 @@ class IQAssessedPart(IContained):
 								 title="The response as the student submitted it, or None if they skipped",
 								 required=False,
 								 default=None)
+
+class IQAssessedPart(IQSubmittedPart):
+	"""
+	The assessed value of a single part.
+
+	"""
+	# TODO: Matching to question?
+
 	assessedValue = Float( title="The relative correctness of the submitted response, from 0.0 (entirely wrong) to 1.0 (perfectly correct)",
 						   description="A value of None means that it was not possible to assess this part.",
 						   min=0.0,
 						   max=1.0,
 						   default=0.0,
 						   required=False)
-
+	
 class IQAssessedQuestion(IContained):
 	"""
 	The assessed value of a student's submission for a single question.
@@ -894,7 +911,17 @@ class IQAssessedQuestion(IContained):
 	parts = IndexedIterable( title="Ordered assessed values, one for each part of the question.",
 							 value_type=Object( IQAssessedPart, title="The assessment of a part." ) )
 
+class IQSubmittedPoll(IContained):
+	"""
+	The value of a submission for a single poll.
 
+	These will typically be persistent values, echoed back to clients.
+	"""
+
+	pollId = TextLine( title="Identifier of the question being responded to." )
+	parts = IndexedIterable( title="Ordered assessed values, one for each part of the question.",
+							 value_type=Object( IQSubmittedPart, title="The assessment of a part." ) )
+	
 class IQuestionSetSubmission(IQBaseSubmission):
 	"""
 	A student's submission in response to an entire question set.
@@ -909,6 +936,18 @@ class IQuestionSetSubmission(IQBaseSubmission):
 								 default=(),
 								 value_type=Object( IQuestionSubmission, title="The submission for a particular question.") )
 
+class ISurveySubmission(IQBaseSubmission):
+	"""
+	A submission in response to a survey
+
+	These will generally be transient objects.
+	"""
+
+	surveyId = TextLine( title="Identifier of the survey being responded to." )
+	questions = IndexedIterable( title="Submissions, one for each poll in the survey.",
+								 default=(),
+								 value_type=Object( IPollSubmission, title="The submission for a particular poll.") )
+
 class IQAssessedQuestionSet(IContained):
 	"""
 	The assessed value of a student's submission to an entire question set.
@@ -919,6 +958,17 @@ class IQAssessedQuestionSet(IContained):
 	questionSetId = TextLine( title="Identifier of the question set being responded to." )
 	questions = IndexedIterable( title="Assessed questions, one for each question in the set.",
 								 value_type=Object( IQAssessedQuestion, title="The assessed value for a particular question.") )
+
+class IQSubmittedSurvey(IContained):
+	"""
+	The value of a submission to an entire survey
+
+	These will usually be persistent values that are also echoed back to clients.
+	"""
+
+	surveyId = TextLine( title="Identifier of the survey being responded to." )
+	questions = IndexedIterable( title="Submitted polls, one for each poll in the survey.",
+								 value_type=Object( IQSubmittedPoll, title="The submitted value for a particular poll.") )
 
 class IQAssignmentSubmission(IQBaseSubmission):
 	"""

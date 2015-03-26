@@ -176,7 +176,11 @@
 						 .interfaces.IQuestionSet
 						 .interfaces.IQNonGradablePart
 						 .interfaces.IQPoll
-						 .interfaces.IQSurvey"
+						 .interfaces.IQSurvey
+						 .interfaces.IPollSubmission
+						 .interfaces.ISurveySubmission
+						 .interfaces.IQSubmittedPoll
+						 .interfaces.IQSubmittedSurvey"
 		modules=".hint .assessed .parts .question .response .solution .submission .assignment .poll"
 		factory_modules=".submission .question .response"
 		iobase=".externalization._AssessmentInternalObjectIOBase"/>
