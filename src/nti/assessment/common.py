@@ -30,7 +30,12 @@ from nti.schema.schema import EqHash
 from nti.schema.field import SchemaConfigured
 from nti.schema.fieldproperty import createDirectFieldProperties
 
+from .interfaces import IQPart
+from .interfaces import IQuestion
+from .interfaces import IQuestionSet
+from .interfaces import IQAssignment
 from .interfaces import IQSubmittedPart
+from .interfaces import IQTimedAssignment
 from .interfaces import IQLatexSymbolicMathSolution
 
 ## functions
@@ -93,6 +98,13 @@ def hashfile(afile, hasher=None, blocksize=65536):
 		hasher.update(buf)
 		buf = afile.read(blocksize)
 	return hasher.hexdigest()
+
+def iface_of_assessment(thing):
+	for iface in (IQuestion, IQuestionSet, IQTimedAssignment,
+				  IQAssignment, IQPart): # order matters
+		if iface.providedBy(thing):
+			return iface
+	return IQuestion # default
 
 ## classes
 

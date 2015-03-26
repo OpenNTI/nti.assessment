@@ -25,7 +25,7 @@ from .interfaces import IQuestion
 from .interfaces import IQAssignment
 from .interfaces import IQuestionSet
 
-from ._util import iface_of_assessment as _iface_to_register
+from .common import iface_of_assessment as _iface_to_register
 
 def _ntiid_object_hook( k, v, x ):
 	"""
