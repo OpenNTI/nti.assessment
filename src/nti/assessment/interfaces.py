@@ -206,7 +206,7 @@ class IQMathSolution(IQSolution):
 									 required=False,
 									 value_type=TextLine( title="The unit" ) )
 
-class IQNumericMathSolution(IQMathSolution,IQSingleValuedSolution):
+class IQNumericMathSolution(IQMathSolution, IQSingleValuedSolution):
 	"""
 	A solution whose correct answer is numeric in nature, and
 	should be graded according to numeric equivalence.
@@ -262,7 +262,7 @@ class IQSymbolicMathGrader(IQPartGrader):
 
 ## multiple choice
 
-class IQNonGradableMultipleChoicePart(IQNonGradablePart):
+class IQNonGradableMultipleChoicePart(IQNonGradablePart, IPollable):
 	"""
 	A question part that asks the student to choose between a fixed set
 	of alternatives.
@@ -334,7 +334,7 @@ class IQMultipleChoiceMultipleAnswerPartGrader(IQPartGrader):
 
 ## free response
 
-class IQNonGradableFreeResponsePart(IQNonGradablePart):
+class IQNonGradableFreeResponsePart(IQNonGradablePart, IPollable):
 	pass
 	
 class IQFreeResponseSolution(IQSolution, IQSingleValuedSolution):
@@ -478,7 +478,7 @@ IQGradableFilePart = IQFilePart # alias
 
 ## modeled content part
 
-class IQNonGradableModeledContentPart(IQNonGradablePart):
+class IQNonGradableModeledContentPart(IQNonGradablePart, IPollable):
 	"""
 	A part intended for \"essay\" style submissions
 	of rich content authored on the platform. These

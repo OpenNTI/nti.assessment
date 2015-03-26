@@ -60,11 +60,6 @@ from .interfaces import IQNonGradableFillInTheBlankShortAnswerPart
 from .interfaces import IQNonGradableFillInTheBlankWithWordBankPart
 from .interfaces import IQNonGradableMultipleChoiceMultipleAnswerPart
 
-
-from .interfaces import IQDictResponse
-from .interfaces import IQFileResponse
-from .interfaces import IQModeledContentResponse
-
 from .interfaces import IQPartGrader
 from .interfaces import IQMatchingPartGrader
 from .interfaces import IQOrderingPartGrader
@@ -73,6 +68,10 @@ from .interfaces import IQMultipleChoicePartGrader
 from .interfaces import IQFillInTheBlankShortAnswerGrader
 from .interfaces import IQFillInTheBlankWithWordBankGrader
 from .interfaces import IQMultipleChoiceMultipleAnswerPartGrader
+
+from .interfaces import IQDictResponse
+from .interfaces import IQFileResponse
+from .interfaces import IQModeledContentResponse
 
 from .interfaces import convert_response_for_solution
 

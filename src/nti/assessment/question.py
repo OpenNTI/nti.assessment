@@ -33,8 +33,9 @@ from nti.schema.schema import EqHash
 
 from .interfaces import IQuestion
 from .interfaces import IQuestionSet
-from .interfaces import QUESTION_SET_MIME_TYPE
 from .interfaces import IQFillInTheBlankWithWordBankQuestion
+
+from .interfaces import QUESTION_SET_MIME_TYPE
 
 @interface.implementer(IQuestion,
 					   IContentTypeAware,
