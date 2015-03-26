@@ -16,8 +16,6 @@ import time
 from zope import interface
 from zope import component
 
-from zope.container.contained import Contained
-
 from zope.location.interfaces import ISublocations
 
 from persistent import Persistent
@@ -43,32 +41,16 @@ from .interfaces import IQuestionSubmission
 from .interfaces import IQAssessedQuestionSet
 
 from ._util import make_sublocations as _make_sublocations
+from ._util import dctimes_property_fallback as _dctimes_property_fallback 
 
-@interface.implementer(IQAssessedPart,
-					   ISublocations)
+from .common import QSubmittedPart
+
+@interface.implementer(IQAssessedPart, ISublocations)
 @EqHash('assessedValue', 'submittedResponse',
 		superhash=True)
 @WithRepr
-class QAssessedPart(SchemaConfigured,
-					Contained,
-					Persistent):
-
-	submittedResponse = None
-
+class QAssessedPart(QSubmittedPart):
 	createDirectFieldProperties(IQAssessedPart)
-	__external_can_create__ = False
-
-	def sublocations(self):
-		part = self.submittedResponse
-		if hasattr(part, '__parent__'):
-			if part.__parent__ is None:
-				# XXX: HACK: Taking ownership because of cross-database issues.
-				logger.debug("XXX: HACK: Taking ownership of a sub-part")
-				part.__parent__ = self
-			if part.__parent__ is self:
-				yield part
-
-from ._util import dctimes_property_fallback as _dctimes_property_fallback 
 
 @interface.implementer(IQAssessedQuestion,
 					   ICreated,

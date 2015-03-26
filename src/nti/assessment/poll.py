@@ -9,6 +9,8 @@ __docformat__ = "restructuredtext en"
 
 logger = __import__('logging').getLogger(__name__)
 
+import time
+
 from zope import interface
 from zope.interface.common.mapping import IWriteMapping
 from zope.interface.common.sequence import IFiniteSequence
@@ -25,6 +27,11 @@ from persistent import Persistent
 
 from nti.common.property import alias
 
+from nti.coremetadata.interfaces import ICreated
+from nti.coremetadata.interfaces import ILastModified
+
+from nti.dataserver.core.mixins import ContainedMixin
+
 from nti.externalization.representation import WithRepr
 
 from nti.schema.field import SchemaConfigured
@@ -33,13 +40,15 @@ from nti.schema.fieldproperty import createDirectFieldProperties
 
 from nti.schema.schema import EqHash
 
+from ._util import make_sublocations as _make_sublocations
+from ._util import dctimes_property_fallback as _dctimes_property_fallback 
+
 from .interfaces import IQPoll
 from .interfaces import IQSurvey
-from .interfaces import IQSubmittedPart
 from .interfaces import IPollSubmission
+from .interfaces import IQSubmittedPoll
+from .interfaces import IQSubmittedSurvey
 from .interfaces import ISurveySubmission
-
-from ._util import make_sublocations as _make_sublocations
 
 @interface.implementer(IQPoll,
 					   IFiniteSequence,
@@ -165,20 +174,57 @@ class QSurveySubmission(SchemaConfigured, Contained):
 	def __len__(self):
 		return len(self.polls)
 
+@interface.implementer(IQSubmittedPoll,
+					   ICreated,
+					   ILastModified,
+					   ISublocations)
+@EqHash('pollId', 'parts',
+		superhash=True)
 @WithRepr
-@interface.implementer(IQSubmittedPart, ISublocations)
-@EqHash('submittedResponse', superhash=True)
-class QSubmittedPart(SchemaConfigured, Contained, Persistent):
-
-	submittedResponse = None
+class QSubmittedPoll(SchemaConfigured,
+					 ContainedMixin,
+					 Persistent):
+	
 	__external_can_create__ = False
+	createDirectFieldProperties(IQSubmittedPoll)
+
+	creator = None
+	createdTime = _dctimes_property_fallback('createdTime', 'Date.Modified')
+	lastModified = _dctimes_property_fallback('lastModified', 'Date.Created')
 	
-	createDirectFieldProperties(IQSubmittedPart)
+	def __init__(self, *args, **kwargs):
+		super(QSubmittedPoll, self).__init__(*args, **kwargs)
+		self.lastModified = self.createdTime = time.time()
+
+	def updateLastMod(self, t=None):
+		self.lastModified = (t if t is not None and t > self.lastModified else time.time())
+		return self.lastModified
+
+	sublocations = _make_sublocations()
+
+@interface.implementer(IQSubmittedSurvey,
+					   ICreated,
+					   ILastModified)
+@EqHash('surveyId', 'questions',
+		superhash=True)
+@WithRepr
+class QSubmittedSurvey(SchemaConfigured,
+					   ContainedMixin,
+					   Persistent):
 	
-	def sublocations(self):
-		part = self.submittedResponse
-		if hasattr(part, '__parent__'):
-			if part.__parent__ is None:
-				part.__parent__ = self
-			if part.__parent__ is self:
-				yield part
+	__external_can_create__ = False
+	createDirectFieldProperties(IQSubmittedSurvey)
+	
+	creator = None
+	createdTime = _dctimes_property_fallback('createdTime', 'Date.Modified')
+	lastModified = _dctimes_property_fallback('lastModified', 'Date.Created')
+
+	def __init__(self, *args, **kwargs):
+		super(QSubmittedSurvey, self).__init__(*args, **kwargs)
+		self.lastModified = self.createdTime = time.time()
+
+	def updateLastMod(self, t=None):
+		self.lastModified = (t if t is not None and t > self.lastModified else time.time())
+		return self.lastModified
+	
+	sublocations = _make_sublocations('questions')

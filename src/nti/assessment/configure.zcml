@@ -166,6 +166,7 @@
 						 .interfaces.IQAssignmentPart
 						 .interfaces.IQAssignmentSubmissionPendingAssessment
 						 .interfaces.IQuestionSubmission
+						 .interfaces.IQSubmittedPart
 						 .interfaces.IQAssessedPart
 						 .interfaces.IQAssessedQuestion
 						 .interfaces.IQuestionSetSubmission
@@ -181,7 +182,8 @@
 						 .interfaces.ISurveySubmission
 						 .interfaces.IQSubmittedPoll
 						 .interfaces.IQSubmittedSurvey"
-		modules=".hint .assessed .parts .question .response .solution .submission .assignment .poll"
+		modules=".common .hint .assessed .parts .question .response 
+				 .solution .submission .assignment .poll"
 		factory_modules=".submission .question .response"
 		iobase=".externalization._AssessmentInternalObjectIOBase"/>
 

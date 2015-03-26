@@ -25,6 +25,8 @@ from .interfaces import IQuestionSet
 from .interfaces import IQAssignment
 from .interfaces import IQTimedAssignment
 
+## classes
+
 @WithRepr
 @EqHash('value', superhash=True)
 class TrivialValuedMixin(object):
@@ -53,6 +55,8 @@ class TrivialValuedMixin(object):
 	def __str__(self):
 		return str(self.value)
 
+## functions
+
 def make_sublocations(child_attr='parts'):
 	def sublocations(self):
 		for part in getattr(self, child_attr, None) or ():
@@ -62,6 +66,32 @@ def make_sublocations(child_attr='parts'):
 				if part.__parent__ is self:
 					yield part
 	return sublocations
+
+def dctimes_property_fallback(attrname, dcname):
+	# For BWC, if we happen to have annotations that happens to include
+	# zope dublincore data, we will use it
+	# TODO: Add a migration to remove these
+	def get(self):
+		self._p_activate()  # make sure there's a __dict__
+		if attrname in self.__dict__:
+			return self.__dict__[attrname]
+		if '__annotations__' in self.__dict__:
+			try:
+				dcdata = self.__annotations__['zope.app.dublincore.ZopeDublinCore']
+				date_modified = dcdata[dcname]  # tuple of a string
+				datetime = parseDatetimetz(date_modified[0])
+				result = time.mktime(datetime.timetuple())
+				self.__dict__[attrname] = result  # migrate
+				self._p_changed = True
+				return result
+			except KeyError: # pragma: no cover
+				pass
+		return 0
+
+	def _set(self, value):
+		self.__dict__[attrname] = value
+
+	return property(get, _set)
 
 def iface_of_assessment(thing):
 	iface = IQuestion
@@ -74,31 +104,3 @@ def iface_of_assessment(thing):
 	elif IQPart.providedBy(thing):
 		iface = IQPart
 	return iface
-
-def dctimes_property_fallback(attrname, dcname):
-	# For BWC, if we happen to have annotations that happens to include
-	# zope dublincore data, we will use it
-	# TODO: Add a migration to remove these
-	def get(self):
-		self._p_activate()  # make sure there's a __dict__
-		if attrname in self.__dict__:
-			return self.__dict__[attrname]
-
-		if '__annotations__' in self.__dict__:
-			try:
-				dcdata = self.__annotations__['zope.app.dublincore.ZopeDublinCore']
-				date_modified = dcdata[dcname]  # tuple of a string
-				datetime = parseDatetimetz(date_modified[0])
-				result = time.mktime(datetime.timetuple())
-				self.__dict__[attrname] = result  # migrate
-				self._p_changed = True
-				return result
-			except KeyError: # pragma: no cover
-				pass
-
-		return 0
-
-	def _set(self, value):
-		self.__dict__[attrname] = value
-
-	return property(get, _set)

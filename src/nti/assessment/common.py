@@ -14,11 +14,26 @@ from collections import Mapping
 
 import simplejson as json
 
+from zope import interface
 from zope import component
 
+from zope.container.contained import Contained
+
+from zope.location.interfaces import ISublocations
+
+from persistent import Persistent
+
+from nti.externalization.representation import WithRepr
 from nti.externalization.externalization import toExternalObject
 
+from nti.schema.schema import EqHash
+from nti.schema.field import SchemaConfigured
+from nti.schema.fieldproperty import createDirectFieldProperties
+
+from .interfaces import IQSubmittedPart
 from .interfaces import IQLatexSymbolicMathSolution
+
+## functions
 
 def grade_one_response(questionResponse, possible_answers):
 	"""
@@ -78,3 +93,24 @@ def hashfile(afile, hasher=None, blocksize=65536):
 		hasher.update(buf)
 		buf = afile.read(blocksize)
 	return hasher.hexdigest()
+
+## classes
+
+@WithRepr
+@interface.implementer(IQSubmittedPart, ISublocations)
+@EqHash('submittedResponse', superhash=True)
+class QSubmittedPart(SchemaConfigured, Contained, Persistent):
+
+	submittedResponse = None
+	
+	__external_can_create__ = False
+	
+	createDirectFieldProperties(IQSubmittedPart)
+	
+	def sublocations(self):
+		part = self.submittedResponse
+		if hasattr(part, '__parent__'):
+			if part.__parent__ is None:
+				part.__parent__ = self
+			if part.__parent__ is self:
+				yield part
