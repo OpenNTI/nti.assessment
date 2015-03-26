@@ -12,9 +12,13 @@ from hamcrest import none
 from hamcrest import is_not
 from hamcrest import has_entry
 from hamcrest import assert_that
+from hamcrest import has_property
+
+from zope import component
 
 from nti.externalization.externalization import toExternalObject
 from nti.externalization.internalization import find_factory_for
+from nti.externalization.internalization import update_from_external_object
 
 from nti.assessment.interfaces import IQPoll
 from nti.assessment.interfaces import IQSurvey
@@ -25,6 +29,7 @@ from nti.assessment.parts import QNonGradableMultipleChoicePart
 
 from nti.assessment.poll import QPoll
 from nti.assessment.poll import QSurvey
+from nti.assessment.poll import QPollSubmission
 
 from nti.externalization.tests import externalizes
 
@@ -58,3 +63,15 @@ class TestPolls(AssessmentTestCase):
 		assert_that( survery, verifiably_provides( IQSurvey ) )
 		assert_that( find_factory_for( toExternalObject( survery ) ),
 					 is_not( none() ) )
+
+	def test_submitted_with_null_part(self):
+		part = QNonGradableFreeResponsePart()
+		question = QPoll( parts=(part,) )
+		component.provideUtility( question, provides=IQPoll,  name="1")
+
+		sub = QPollSubmission( )
+		update_from_external_object( sub, {'pollId':"1", 'parts': [None]},
+									 notify=False)
+
+		assert_that( sub, has_property( 'pollId', "1" ) )
+		assert_that( sub, has_property( 'parts', is_([None])) )
