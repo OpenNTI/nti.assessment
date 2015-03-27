@@ -52,7 +52,7 @@ from nti.assessment.tests import lineage
 from nti.assessment.tests import AssessmentTestCase
 from nti.assessment.tests import check_old_dublin_core
 
-class TestPolls(AssessmentTestCase):
+class TestPoll(AssessmentTestCase):
 
 	def test_part_provides(self):
 		assert_that( QNonGradableMultipleChoicePart(), 
