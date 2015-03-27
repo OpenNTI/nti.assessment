@@ -91,7 +91,7 @@ class QSurvey(Contained,
 			  Persistent):
 
 	questions = ()
-	parts = alias('questions')
+	polls = parts = alias('questions')
 
 	createDirectFieldProperties(IQSurvey)
 
