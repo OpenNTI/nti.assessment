@@ -59,7 +59,8 @@ class TestPolls(AssessmentTestCase):
 					 verifiably_provides(IQNonGradableMultipleChoicePart ) )
 
 		assert_that( QNonGradableMultipleChoicePart(),
-					 externalizes( has_entry( 'Class', 'MultipleChoicePart' ) ) )
+					 externalizes( has_entries( 'Class', 'MultipleChoicePart',
+												'MimeType', 'application/vnd.nextthought.assessment.nongradablemultiplechoicepart' ) ) )
 
 		part = QNonGradableMultipleChoicePart( choices=list(("A", "B", "C")) )
 		assert_that( part, verifiably_provides( IQNonGradableMultipleChoicePart ) )
