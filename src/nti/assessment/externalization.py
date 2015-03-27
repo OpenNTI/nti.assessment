@@ -61,6 +61,9 @@ class _AssessmentInternalObjectIOBase(object):
 			result = iface.__name__[2:] if not iface.__name__.startswith('IQuestion') \
 					 else iface.__name__[1:]
 			# Strip NonGradable 
+			idx = result.find('NonGradable')
+			if idx >=0:
+				result = result[0:idx] + result[idx+11:]
 		return result
 
 	@classmethod

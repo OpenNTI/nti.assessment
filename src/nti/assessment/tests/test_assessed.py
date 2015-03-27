@@ -20,15 +20,8 @@ from hamcrest import has_entries
 from hamcrest import greater_than
 from hamcrest import has_property
 
-import time
-import datetime
-
 from zope import interface
 from zope import component
-
-from zope.annotation.interfaces import IAttributeAnnotatable
-
-from zope.dublincore.annotatableadapter import ZDCAnnotatableAdapter
 
 from nti.coremetadata.interfaces import ILastModified
 
@@ -51,36 +44,9 @@ from nti.externalization.tests import externalizes
 from nti.testing.matchers import is_false
 from nti.testing.matchers import verifiably_provides
 
+from nti.assessment.tests import lineage
 from nti.assessment.tests import AssessmentTestCase
-
-def _check_old_dublin_core( qaq ):
-	"we can read old dublin core metadata"
-
-	del qaq.__dict__['lastModified']
-	del qaq.__dict__['createdTime']
-
-	assert_that( qaq.lastModified, is_( 0 ) )
-	assert_that( qaq.createdTime, is_( 0 ) )
-
-	interface.alsoProvides( qaq, IAttributeAnnotatable )
-
-	zdc = ZDCAnnotatableAdapter( qaq )
-
-	now = datetime.datetime.now()
-
-	zdc.created = now
-	zdc.modified = now
-
-	assert_that( qaq.lastModified, is_( time.mktime( now.timetuple() ) ) )
-	assert_that( qaq.createdTime, is_( time.mktime( now.timetuple() ) ) )
-
-def lineage(resource):
-	while resource is not None:
-		yield resource
-		try:
-			resource = resource.__parent__
-		except AttributeError:
-			resource = None
+from nti.assessment.tests import check_old_dublin_core as _check_old_dublin_core
 
 class TestAssessedPart(AssessmentTestCase):
 

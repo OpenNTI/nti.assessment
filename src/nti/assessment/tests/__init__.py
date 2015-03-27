@@ -89,3 +89,47 @@ grades_right = grades_correct
 
 def grades_wrong(response):
 	return GradeMatcher(False, response)
+
+# ==========
+
+from hamcrest import is_
+from hamcrest import assert_that
+
+import time
+from datetime import datetime
+
+from zope import interface
+
+from zope.annotation.interfaces import IAttributeAnnotatable
+
+from zope.dublincore.annotatableadapter import ZDCAnnotatableAdapter
+
+def check_old_dublin_core( qaq ):
+	"we can read old dublin core metadata"
+
+	del qaq.__dict__['lastModified']
+	del qaq.__dict__['createdTime']
+
+	assert_that( qaq.lastModified, is_( 0 ) )
+	assert_that( qaq.createdTime, is_( 0 ) )
+
+	interface.alsoProvides( qaq, IAttributeAnnotatable )
+
+	zdc = ZDCAnnotatableAdapter( qaq )
+
+	now = datetime.now()
+
+	zdc.created = now
+	zdc.modified = now
+
+	assert_that( qaq.lastModified, is_( time.mktime( now.timetuple() ) ) )
+	assert_that( qaq.createdTime, is_( time.mktime( now.timetuple() ) ) )
+
+def lineage(resource):
+	while resource is not None:
+		yield resource
+		try:
+			resource = resource.__parent__
+		except AttributeError:
+			resource = None
+

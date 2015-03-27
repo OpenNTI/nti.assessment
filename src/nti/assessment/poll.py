@@ -249,7 +249,7 @@ def submitted_poll_submission(submission, registry=component):
 	:raises LookupError: If no question can be found for the submission.
 	"""
 
-	poll = registry.getUtility(IQPoll, name=submission.questionId)
+	poll = registry.getUtility(IQPoll, name=submission.pollId)
 	if len(poll.parts) != len(submission.parts):
 		raise ValueError("Poll (%s) and submission (%s) have different numbers of parts." %
 						 (len(poll.parts), len(submission.parts)))
