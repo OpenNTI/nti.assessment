@@ -10,7 +10,8 @@
 	<include package="zope.component" />
 	<include package="zope.location" />
 	<include package="zope.annotation" />
-
+	
+	<include package="nti.mimetype" />
 	<include package="nti.contentfragments" />
 
 	<include package="plone.namedfile" file="z3c-blobfile.zcml" />

@@ -73,6 +73,7 @@ setup(
  		'nti.dublincore',
  		'nti.externalization',
  		'nti.links',
+ 		'nti.mimetype',
  		'nti.openmath',
  		'nti.plasTeX',
  		'nti.schema'
