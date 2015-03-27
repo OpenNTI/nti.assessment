@@ -209,7 +209,8 @@ class QSubmittedPoll(SchemaConfigured,
 
 @interface.implementer(IQSubmittedSurvey,
 					   ICreated,
-					   ILastModified)
+					   ILastModified,
+					   ISublocations)
 @EqHash('surveyId', 'questions',
 		superhash=True)
 @WithRepr
@@ -222,6 +223,7 @@ class QSubmittedSurvey(SchemaConfigured,
 	
 	creator = None
 	polls = alias('questions')
+
 	createdTime = _dctimes_property_fallback('createdTime', 'Date.Modified')
 	lastModified = _dctimes_property_fallback('lastModified', 'Date.Created')
 
@@ -276,12 +278,12 @@ def submitted_survey_submission(set_submission, registry=component):
 
 	survey = registry.getUtility(IQSurvey, name=set_submission.surveyId)
 
-	polls_ntiids = {getattr(q, 'ntiid', None) for q in survey.questions}
+	polls_ntiids = {q.ntiid for q in survey.questions}
 
 	submitted = PersistentList()
 	for sub_poll in set_submission.questions:
 		poll = registry.getUtility(IQPoll, name=sub_poll.pollId )
-		if poll in survey.questions or getattr(poll, 'ntiid', None) in polls_ntiids:
+		if poll in survey.questions or poll.ntiid in polls_ntiids:
 			stted_poll = IQSubmittedPoll(sub_poll)
 			submitted.append(stted_poll)
 		else: # pragma: no cover

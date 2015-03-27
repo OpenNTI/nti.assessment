@@ -200,6 +200,10 @@
 			 for=".interfaces.IQFillInTheBlankShortAnswerSolution"
 			 provides="nti.externalization.interfaces.IInternalObjectUpdater" />
 
+	<adapter factory=".externalization._QSubmittedPartExternalizer"
+			 for=".interfaces.IQSubmittedPart"
+			 provides="nti.externalization.interfaces.IInternalObjectExternalizer" />
+
 	<adapter factory=".externalization._QAssessedPartExternalizer"
 			 for=".interfaces.IQAssessedPart"
 			 provides="nti.externalization.interfaces.IInternalObjectExternalizer" />
@@ -219,6 +223,23 @@
 	<adapter factory=".externalization._QuestionSetSubmissionExternalizer"
 			 for=".interfaces.IQuestionSetSubmission"
 			 provides="nti.externalization.interfaces.IInternalObjectExternalizer" />
+
+	<adapter factory=".externalization._QPollSubmissionExternalizer"
+			 for=".interfaces.IQPollSubmission"
+			 provides="nti.externalization.interfaces.IInternalObjectExternalizer" />
+
+	<adapter factory=".externalization._QSurveySubmissionSubmissionExternalizer"
+			 for=".interfaces.IQSurveySubmission"
+			 provides="nti.externalization.interfaces.IInternalObjectExternalizer" />
+			 
+	<adapter factory=".externalization._QSubmittedPollExternalizer"
+			 for=".interfaces.IQSubmittedPoll"
+			 provides="nti.externalization.interfaces.IInternalObjectExternalizer" />
+
+	<adapter factory=".externalization._QSubmittedSurveyExternalizer"
+			 for=".interfaces.IQSubmittedSurvey"
+			 provides="nti.externalization.interfaces.IInternalObjectExternalizer" />
+
 
 	<!-- WordBank & Regex -->
 	<ext:registerAutoPackageIO

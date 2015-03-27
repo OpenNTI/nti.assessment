@@ -278,27 +278,28 @@ class TestAssessedQuestionSet(AssessmentTestCase):
 	def test_assess_not_same_instance_question_but_id_matches(self):
 		part = parts.QFreeResponsePart(solutions=(solutions.QFreeResponseSolution(value='correct'),))
 		question = QQuestion( parts=(part,) )
-		question.ntiid = 'abc'
+		ntiid = 'tag:nextthought.com,2015-11-30:Test' 
+		question.ntiid = ntiid
 		question_set = QQuestionSet( questions=(question,) )
 
 		component.provideUtility( question,
 								  provides=interfaces.IQuestion,
-								  name='abc')
+								  name=ntiid)
 		component.provideUtility( question_set,
 								  provides=interfaces.IQuestionSet,
 								  name="2" )
 		# New instance
 		part = parts.QFreeResponsePart(solutions=(solutions.QFreeResponseSolution(value='correct2'),))
 		question = QQuestion( parts=(part,) )
-		question.ntiid = 'abc'
+		question.ntiid = ntiid
 
 		component.provideUtility( question,
 								  provides=interfaces.IQuestion,
-								  name='abc')
+								  name=ntiid)
 
 		assert_that( question, is_not( question_set.questions[0] ) )
 
-		sub = submission.QuestionSubmission( questionId='abc', parts=('correct2',) )
+		sub = submission.QuestionSubmission( questionId=ntiid, parts=('correct2',) )
 		set_sub = submission.QuestionSetSubmission( questionSetId="2", questions=(sub,) )
 
 		result = interfaces.IQAssessedQuestionSet( set_sub )

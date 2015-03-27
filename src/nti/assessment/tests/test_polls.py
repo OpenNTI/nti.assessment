@@ -15,6 +15,7 @@ from hamcrest import has_entry
 from hamcrest import has_length
 from hamcrest import assert_that
 from hamcrest import has_entries
+from hamcrest import greater_than
 from hamcrest import has_property
 
 from zope import component
@@ -150,9 +151,17 @@ class TestPolls(AssessmentTestCase):
 		for question in result.questions:
 			parents = list(lineage(question))
 			assert_that(parents, has_length(1))
-			
-		check_old_dublin_core(result)
-		
+					
 		ext_obj = toExternalObject( result )
 		assert_that( ext_obj, has_entry( 'questions', has_length( 1 ) ) )
 
+		check_old_dublin_core(result)
+				
+		for poll in result.polls:
+			parents = list(lineage(poll))
+			assert_that(parents[-1], is_(result))
+			assert_that(parents, has_length(greater_than(1)))
+			for part in poll.parts:
+				parents = list(lineage(part))
+				assert_that(parents, has_length(greater_than(2)))
+				assert_that(parents[-1], is_(result))

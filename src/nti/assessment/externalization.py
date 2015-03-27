@@ -38,11 +38,17 @@ from .response import QUploadedImageFile
 
 from .interfaces import IQAssessedPart
 from .interfaces import IQUploadedFile
+from .interfaces import IQSubmittedPart
 from .interfaces import IQAssessedQuestion
 from .interfaces import IQuestionSubmission
 from .interfaces import IQAssessedQuestionSet
 from .interfaces import IQuestionSetSubmission
 from .interfaces import IInternalUploadedFileRef
+
+from .interfaces import IQSubmittedPoll
+from .interfaces import IQPollSubmission
+from .interfaces import IQSubmittedSurvey
+from .interfaces import IQSurveySubmission
 
 OID = StandardExternalFields.OID
 NTIID = StandardExternalFields.NTIID
@@ -73,7 +79,7 @@ class _AssessmentInternalObjectIOBase(object):
 		return ext_class_name
 
 @interface.implementer(IInternalObjectExternalizer)
-class _QAssessedObjectExternalizer(object):
+class _QContainedObjectExternalizer(object):
 
 	interface = None
 	
@@ -82,33 +88,52 @@ class _QAssessedObjectExternalizer(object):
 
 	def toExternalObject(self, **kwargs):
 		if hasattr(self.assessed, 'sublocations'):
-			## the sublocations method for asseed parts/questions/questionsets
 			## sets the full parent lineage for these objects. 
 			## we wrapp the execution of it in a tuple in case it
 			## returns a generator
 			tuple(self.assessed.sublocations())
 		return InterfaceObjectIO(self.assessed, self.interface).toExternalObject( **kwargs)
 
+@component.adapter(IQSubmittedPart)	
+class _QSubmittedPartExternalizer(_QContainedObjectExternalizer):
+	interface = IQSubmittedPart
+	
 @component.adapter(IQAssessedPart)	
-class _QAssessedPartExternalizer(_QAssessedObjectExternalizer):
+class _QAssessedPartExternalizer(_QContainedObjectExternalizer):
 	interface = IQAssessedPart
 	
-@component.adapter(IQAssessedQuestion)	
-class _QAssessedQuestionExternalizer(_QAssessedObjectExternalizer):
-	interface = IQAssessedQuestion
-
-@component.adapter(IQAssessedQuestionSet)	
-class _QAssessedQuestionSetExternalizer(_QAssessedObjectExternalizer):
-	interface = IQAssessedQuestionSet
-	
 @component.adapter(IQuestionSubmission)	
-class _QuestionSubmissionExternalizer(_QAssessedObjectExternalizer):
+class _QuestionSubmissionExternalizer(_QContainedObjectExternalizer):
 	interface = IQuestionSubmission
 	
 @component.adapter(IQuestionSetSubmission)	
-class _QuestionSetSubmissionExternalizer(_QAssessedObjectExternalizer):
+class _QuestionSetSubmissionExternalizer(_QContainedObjectExternalizer):
 	interface = IQuestionSetSubmission
 	
+@component.adapter(IQAssessedQuestion)	
+class _QAssessedQuestionExternalizer(_QContainedObjectExternalizer):
+	interface = IQAssessedQuestion
+
+@component.adapter(IQAssessedQuestionSet)	
+class _QAssessedQuestionSetExternalizer(_QContainedObjectExternalizer):
+	interface = IQAssessedQuestionSet
+
+@component.adapter(IQPollSubmission)	
+class _QPollSubmissionExternalizer(_QContainedObjectExternalizer):
+	interface = IQPollSubmission
+	
+@component.adapter(IQSurveySubmission)	
+class _QSurveySubmissionSubmissionExternalizer(_QContainedObjectExternalizer):
+	interface = IQSurveySubmission
+	
+@component.adapter(IQSubmittedPoll)	
+class _QSubmittedPollExternalizer(_QContainedObjectExternalizer):
+	interface = IQSubmittedPoll
+
+@component.adapter(IQSubmittedSurvey)	
+class _QSubmittedSurveyExternalizer(_QContainedObjectExternalizer):
+	interface = IQSubmittedSurvey
+
 ##
 # File uploads
 # TODO: This can probably be generalized.

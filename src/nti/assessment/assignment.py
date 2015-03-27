@@ -63,6 +63,8 @@ class QAssignmentPart(SchemaConfigured,
 class QAssignment(SchemaConfigured,
 				  Contained,
 				  Persistent):
+	ntiid = None
+	
 	createDirectFieldProperties(IQAssignment)
 
 	title = AdaptingFieldProperty(IQAssignment['title'])

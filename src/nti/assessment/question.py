@@ -48,6 +48,7 @@ class QQuestion(Contained,
 				Persistent):
 
 	parts = ()
+	ntiid = None
 	content = None
 
 	createDirectFieldProperties(IQuestion)
@@ -74,6 +75,7 @@ class QQuestionSet(Contained,
 				   SchemaConfigured,
 				   Persistent):
 
+	ntiid = None
 	questions = ()
 	parts = alias('questions')
 

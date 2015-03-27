@@ -166,7 +166,7 @@ def assess_question_set_submission(set_submission, registry=component):
 	question_set = registry.getUtility(IQuestionSet,
 									   name=set_submission.questionSetId)
 
-	questions_ntiids = {getattr(q, 'ntiid', None) for q in question_set.questions}
+	questions_ntiids = {q.ntiid for q in question_set.questions}
 
 	# NOTE: At this point we need to decide what to do for missing values
 	# We are currently not really grading them at all, which is what we
@@ -174,12 +174,8 @@ def assess_question_set_submission(set_submission, registry=component):
 
 	assessed = PersistentList()
 	for sub_question in set_submission.questions:
-		question = registry.getUtility( IQuestion,
-										name=sub_question.questionId )
-		# FIXME: Checking an 'ntiid' property that is not defined here is a hack
-		# because we have an equality bug. It should go away as soon as equality is fixed
-		if 	question in question_set.questions or \
-			getattr(question, 'ntiid', None) in questions_ntiids:
+		question = registry.getUtility( IQuestion, name=sub_question.questionId )
+		if 	question in question_set.questions or question.ntiid in questions_ntiids:
 			sub_assessed = IQAssessedQuestion(sub_question)  # Raises ComponentLookupError
 			assessed.append(sub_assessed)
 		else: # pragma: no cover

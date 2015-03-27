@@ -35,6 +35,8 @@ from nti.dataserver.core.interfaces import INeverStoredInSharedStream
 from nti.dataserver.fragments.interfaces import ITitledContent
 from nti.dataserver.fragments.schema import CompoundModeledContentBody
 
+from nti.ntiids.schema import ValidNTIID
+
 from nti.schema.field import Int
 from nti.schema.field import Bool
 from nti.schema.field import Dict
@@ -509,6 +511,8 @@ class IQuestion(IAnnotatable):
 	to where questions appear in question sets or other types of content.
 	"""
 
+	ntiid = ValidNTIID(title="Question NTIID", required=False)
+
 	content = Text( title="The content to present to the user, if any.",
 					default='')
 
@@ -526,7 +530,9 @@ class IQuestionSet(ITitledContent, IAnnotatable):
 	references to where question sets are defined in content or
 	which assignments reference them.
 	"""
-
+	
+	ntiid = ValidNTIID(title="Question set NTIID", required=False)
+	
 	questions = IndexedIterable( title="The ordered questions in the set.",
 								 description="For convenience, this should also be aliased to `parts`",
 								 min_length=1,
@@ -579,6 +585,8 @@ class IQAssignment(ITitledContent, IAnnotatable):
 	where assignments are defined in content.
 	"""
 
+	ntiid = ValidNTIID(title="Assignment NTIID", required=False)
+	
 	content = Text( title="The content to present to the user, if any.",
 					default='')
 
@@ -1141,6 +1149,8 @@ class IQPoll(IAnnotatable):
 	to where questions appear in question sets or other types of content.
 	"""
 
+	ntiid = ValidNTIID(title="Poll NTIID", required=False)
+	
 	content = Text( title="The content to present to the user, if any.",
 					default='')
 
@@ -1156,6 +1166,8 @@ class IQSurvey(ITitledContent, IAnnotatable):
 	Surveys sets are annotatable.
 	"""
 
+	ntiid = ValidNTIID(title="Survey NTIID", required=False)
+	
 	questions = IndexedIterable( title="The ordered questions in the set.",
 								 min_length=1,
 								 value_type=Object(IQPoll, title="The poll questions" ),
