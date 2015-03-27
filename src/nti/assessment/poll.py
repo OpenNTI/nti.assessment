@@ -37,11 +37,10 @@ from nti.dataserver.core.mixins import ContainedMixin
 
 from nti.externalization.representation import WithRepr
 
+from nti.schema.schema import EqHash
 from nti.schema.field import SchemaConfigured
 from nti.schema.fieldproperty import AdaptingFieldProperty
 from nti.schema.fieldproperty import createDirectFieldProperties
-
-from nti.schema.schema import EqHash
 
 from ._util import make_sublocations as _make_sublocations
 from ._util import dctimes_property_fallback as _dctimes_property_fallback 

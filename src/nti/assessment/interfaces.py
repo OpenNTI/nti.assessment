@@ -920,7 +920,7 @@ class IQAssessedQuestion(IContained):
 	parts = IndexedIterable( title="Ordered assessed values, one for each part of the question.",
 							 value_type=Object( IQAssessedPart, title="The assessment of a part." ) )
 
-class IQSubmittedPoll(IContained):
+class IQSubmittedPoll(IContained, IContextAnnotatable):
 	"""
 	The value of a submission for a single poll.
 
@@ -946,7 +946,7 @@ class IQuestionSetSubmission(IQBaseSubmission, IContextAnnotatable):
 								 value_type=Object( IQuestionSubmission,
 													title="The submission for a particular question.") )
 
-class IQSurveySubmission(IQBaseSubmission):
+class IQSurveySubmission(IQBaseSubmission, IContextAnnotatable):
 	"""
 	A submission in response to a survey
 
@@ -959,7 +959,7 @@ class IQSurveySubmission(IQBaseSubmission):
 								 value_type=Object( IQPollSubmission,
 													title="The submission for a particular poll.") )
 
-class IQAssessedQuestionSet(IContained):
+class IQAssessedQuestionSet(IContained, IContextAnnotatable):
 	"""
 	The assessed value of a student's submission to an entire question set.
 
@@ -971,7 +971,7 @@ class IQAssessedQuestionSet(IContained):
 								 value_type=Object( IQAssessedQuestion,
 													title="The assessed value for a particular question.") )
 
-class IQSubmittedSurvey(IContained):
+class IQSubmittedSurvey(IContained, IContextAnnotatable):
 	"""
 	The value of a submission to an entire survey
 
