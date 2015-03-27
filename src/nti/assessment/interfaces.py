@@ -119,15 +119,15 @@ class IQNonGradablePart(interface.Interface):
 	hints = IndexedIterable( title="Any hints that pertain to this part",
 							 value_type=Object(IQHint, title="A hint for the part") )
 
-	explanation = _ContentFragment( title="An explanation of how the solution is arrived at.",
-									default='' )
-
 class IQPart(IQNonGradablePart, IGradable):
 	"""
 	One generally unnumbered (or only locally numbered) portion of a :class:`Question`
 	which requires a response.
 	"""
 
+	explanation = _ContentFragment( title="An explanation of how the solution is arrived at.",
+									default='' )
+	
 	solutions = IndexedIterable( title="Acceptable solutions for this question part in no particular order.",
 								 description="All solutions must be of the same type, and there must be at least one.",
 								 value_type=Object(IQSolution, title="A solution for this part")	)
