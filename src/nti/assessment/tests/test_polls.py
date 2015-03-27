@@ -152,7 +152,7 @@ class TestPolls(AssessmentTestCase):
 			parents = list(lineage(question))
 			assert_that(parents, has_length(1))
 					
-		ext_obj = toExternalObject( result )
+		ext_obj = toExternalObject( result ) # set lineage
 		assert_that( ext_obj, has_entry( 'questions', has_length( 1 ) ) )
 
 		check_old_dublin_core(result)
