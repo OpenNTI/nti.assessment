@@ -70,14 +70,14 @@ class QAssessedQuestion(SchemaConfigured,
 	createdTime = _dctimes_property_fallback('createdTime', 'Date.Modified')
 	lastModified = _dctimes_property_fallback('lastModified', 'Date.Created')
 	
-	def updateLastMod(self, t=None):
-		self.lastModified = (t if t is not None and t > self.lastModified else time.time())
-		return self.lastModified
-
 	def __init__(self, *args, **kwargs):
 		super(QAssessedQuestion, self).__init__(*args, **kwargs)
 		self.lastModified = self.createdTime = time.time()
 
+	def updateLastMod(self, t=None):
+		self.lastModified = (t if t is not None and t > self.lastModified else time.time())
+		return self.lastModified
+	
 	sublocations = _make_sublocations()
 
 @interface.implementer(IQAssessedQuestionSet,
@@ -97,13 +97,13 @@ class QAssessedQuestionSet(SchemaConfigured,
 	createdTime = _dctimes_property_fallback('createdTime', 'Date.Modified')
 	lastModified = _dctimes_property_fallback('lastModified', 'Date.Created')
 
-	def updateLastMod(self, t=None):
-		self.lastModified = (t if t is not None and t > self.lastModified else time.time())
-		return self.lastModified
-
 	def __init__(self, *args, **kwargs):
 		super(QAssessedQuestionSet, self).__init__(*args, **kwargs)
 		self.lastModified = self.createdTime = time.time()
+
+	def updateLastMod(self, t=None):
+		self.lastModified = (t if t is not None and t > self.lastModified else time.time())
+		return self.lastModified
 
 	sublocations = _make_sublocations('questions')
 
@@ -145,9 +145,11 @@ def assess_question_submission(submission, registry=component):
 			__traceback_info__ = sub_part, q_part
 			raise InvalidValue(value=sub_part, field=IQuestionSubmission['parts'])
 		else:
-			assessed_parts.append(QAssessedPart(submittedResponse=sub_part, assessedValue=grade))
+			apart = QAssessedPart(submittedResponse=sub_part, assessedValue=grade)
+			assessed_parts.append(apart)
 
-	return QAssessedQuestion(questionId=submission.questionId, parts=assessed_parts)
+	result = QAssessedQuestion(questionId=submission.questionId, parts=assessed_parts)
+	return result
 
 def assess_question_set_submission(set_submission, registry=component):
 	"""
@@ -176,7 +178,8 @@ def assess_question_set_submission(set_submission, registry=component):
 										name=sub_question.questionId )
 		# FIXME: Checking an 'ntiid' property that is not defined here is a hack
 		# because we have an equality bug. It should go away as soon as equality is fixed
-		if question in question_set.questions or getattr(question, 'ntiid', None) in questions_ntiids:
+		if 	question in question_set.questions or \
+			getattr(question, 'ntiid', None) in questions_ntiids:
 			sub_assessed = IQAssessedQuestion(sub_question)  # Raises ComponentLookupError
 			assessed.append(sub_assessed)
 		else: # pragma: no cover
@@ -184,4 +187,6 @@ def assess_question_set_submission(set_submission, registry=component):
 						 question, question_set, question_set.questions)
 
 	# NOTE: We're not really creating some sort of aggregate grade here
-	return QAssessedQuestionSet(questionSetId=set_submission.questionSetId, questions=assessed)
+	result = QAssessedQuestionSet(questionSetId=set_submission.questionSetId, 
+								  questions=assessed)
+	return result
