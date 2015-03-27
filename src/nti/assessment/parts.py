@@ -242,11 +242,11 @@ class QMatchingPart(QConnectingPart, QNonGradableMatchingPart):
 	grader_interface = IQMatchingPartGrader
 
 @interface.implementer(IQNonGradableOrderingPart)
-class QNonGradableOrderinPart(QNonGradableConnectingPart):	
+class QNonGradableOrderingPart(QNonGradableConnectingPart):	
 	pass
 	
 @interface.implementer(IQOrderingPart)
-class QOrderingPart(QConnectingPart, QNonGradableOrderinPart): # order matters
+class QOrderingPart(QConnectingPart, QNonGradableOrderingPart): # order matters
 	grader_interface = IQOrderingPartGrader
 	
 ## Free Response
