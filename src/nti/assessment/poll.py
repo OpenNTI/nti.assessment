@@ -11,7 +11,9 @@ logger = __import__('logging').getLogger(__name__)
 
 import time
 
+from zope import component
 from zope import interface
+
 from zope.interface.common.mapping import IWriteMapping
 from zope.interface.common.sequence import IFiniteSequence
 
@@ -24,6 +26,7 @@ from zope.location.interfaces import ISublocations
 from zope.mimetype.interfaces import IContentTypeAware
 
 from persistent import Persistent
+from persistent.list import PersistentList
 
 from nti.common.property import alias
 
@@ -43,12 +46,14 @@ from nti.schema.schema import EqHash
 from ._util import make_sublocations as _make_sublocations
 from ._util import dctimes_property_fallback as _dctimes_property_fallback 
 
+from .common import QSubmittedPart
+
 from .interfaces import IQPoll
 from .interfaces import IQSurvey
-from .interfaces import IPollSubmission
+from .interfaces import IQPollSubmission
 from .interfaces import IQSubmittedPoll
 from .interfaces import IQSubmittedSurvey
-from .interfaces import ISurveySubmission
+from .interfaces import IQSurveySubmission
 
 @interface.implementer(IQPoll,
 					   IFiniteSequence,
@@ -110,9 +115,9 @@ class QSurvey(Contained,
 		return len(self.parts or ())
 
 @WithRepr
-@interface.implementer(IPollSubmission, ISublocations, IFiniteSequence)
+@interface.implementer(IQPollSubmission, ISublocations, IFiniteSequence)
 class QPollSubmission(SchemaConfigured, Contained):
-	createDirectFieldProperties(IPollSubmission)
+	createDirectFieldProperties(IQPollSubmission)
 
 	sublocations = _make_sublocations()
 
@@ -129,9 +134,9 @@ class QPollSubmission(SchemaConfigured, Contained):
 		return len(self.parts)
 	
 @WithRepr
-@interface.implementer(ISurveySubmission, ISublocations, IWriteMapping)
+@interface.implementer(IQSurveySubmission, ISublocations, IWriteMapping)
 class QSurveySubmission(SchemaConfigured, Contained):
-	createDirectFieldProperties(ISurveySubmission)
+	createDirectFieldProperties(IQSurveySubmission)
 
 	polls = alias('questions')
 	sublocations = _make_sublocations('questions')
@@ -216,6 +221,7 @@ class QSubmittedSurvey(SchemaConfigured,
 	createDirectFieldProperties(IQSubmittedSurvey)
 	
 	creator = None
+	polls = alias('questions')
 	createdTime = _dctimes_property_fallback('createdTime', 'Date.Modified')
 	lastModified = _dctimes_property_fallback('lastModified', 'Date.Created')
 
@@ -228,3 +234,60 @@ class QSubmittedSurvey(SchemaConfigured,
 		return self.lastModified
 	
 	sublocations = _make_sublocations('questions')
+
+def submitted_poll_submission(submission, registry=component):
+	"""
+	Register the given poll submission.
+
+	:return: An :class:`.interfaces.IQSubmittedPoll`.
+	:param submission: An :class:`.interfaces.IQPollSubmission`.
+		The ``parts`` of this submission must be the same length
+		as the parts of the poll being submitted. 
+	:param registry: If given, an :class:`.IComponents`. If
+		not given, the current component registry will be used.
+		Used to look up the question set and question by id.
+	:raises LookupError: If no question can be found for the submission.
+	"""
+
+	poll = registry.getUtility(IQPoll, name=submission.questionId)
+	if len(poll.parts) != len(submission.parts):
+		raise ValueError("Poll (%s) and submission (%s) have different numbers of parts." %
+						 (len(poll.parts), len(submission.parts)))
+
+	parts = PersistentList()
+	for sub_part in submission.parts:
+		part = QSubmittedPart(submittedResponse=sub_part)
+		parts.append(part)
+
+	result = QSubmittedPoll(pollId=submission.pollId, parts=parts)
+	return result
+
+def submitted_survey_submission(set_submission, registry=component):
+	"""
+	Register the given question set submission.
+
+	:return: An :class:`.interfaces.IQSubmittedSurvey`.
+	:param set_submission: An :class:`.interfaces.IQSurveySubmission`.
+	:param registry: If given, an :class:`.IComponents`. If
+		not given, the current component registry will be used.
+		Used to look up the question set and question by id.
+	:raises LookupError: If no survery can be found for the submission.
+	"""
+
+	survey = registry.getUtility(IQSurvey, name=set_submission.surveyId)
+
+	polls_ntiids = {getattr(q, 'ntiid', None) for q in survey.questions}
+
+	submitted = PersistentList()
+	for sub_poll in set_submission.questions:
+		poll = registry.getUtility(IQPoll, name=sub_poll.pollId )
+		if poll in survey.questions or getattr(poll, 'ntiid', None) in polls_ntiids:
+			stted_poll = IQSubmittedPoll(sub_poll)
+			submitted.append(stted_poll)
+		else: # pragma: no cover
+			logger.debug("Bad input, poll (%s) not in survey (%s) (kownn: %s)",
+						 poll, survey, survey.questions)
+
+	result = QSubmittedSurvey(surveyId=set_submission.surveyId, 
+							  questions=submitted)
+	return result

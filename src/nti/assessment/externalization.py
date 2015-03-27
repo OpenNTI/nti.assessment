@@ -60,6 +60,7 @@ class _AssessmentInternalObjectIOBase(object):
 			# Strip off 'IQ' if it's not 'IQuestionXYZ'
 			result = iface.__name__[2:] if not iface.__name__.startswith('IQuestion') \
 					 else iface.__name__[1:]
+			# Strip NonGradable 
 		return result
 
 	@classmethod

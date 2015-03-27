@@ -850,7 +850,7 @@ class IQuestionSubmission(IQPartsSubmission):
 
 	questionId = TextLine( title="Identifier of the question being responded to." )
 
-class IPollSubmission(IQPartsSubmission):
+class IQPollSubmission(IQPartsSubmission):
 	"""
 	A submission in response to a poll.
 
@@ -934,9 +934,10 @@ class IQuestionSetSubmission(IQBaseSubmission):
 								 description="""Order is not important. Depending on the question set,
 								 missing answers may or may not be allowed; the set may refuse to grade, or simply consider them wrong.""",
 								 default=(),
-								 value_type=Object( IQuestionSubmission, title="The submission for a particular question.") )
+								 value_type=Object( IQuestionSubmission, 
+													title="The submission for a particular question.") )
 
-class ISurveySubmission(IQBaseSubmission):
+class IQSurveySubmission(IQBaseSubmission):
 	"""
 	A submission in response to a survey
 
@@ -946,7 +947,8 @@ class ISurveySubmission(IQBaseSubmission):
 	surveyId = TextLine( title="Identifier of the survey being responded to." )
 	questions = IndexedIterable( title="Submissions, one for each poll in the survey.",
 								 default=(),
-								 value_type=Object( IPollSubmission, title="The submission for a particular poll.") )
+								 value_type=Object( IQPollSubmission, 
+													title="The submission for a particular poll.") )
 
 class IQAssessedQuestionSet(IContained):
 	"""
@@ -957,7 +959,8 @@ class IQAssessedQuestionSet(IContained):
 
 	questionSetId = TextLine( title="Identifier of the question set being responded to." )
 	questions = IndexedIterable( title="Assessed questions, one for each question in the set.",
-								 value_type=Object( IQAssessedQuestion, title="The assessed value for a particular question.") )
+								 value_type=Object( IQAssessedQuestion,
+													title="The assessed value for a particular question.") )
 
 class IQSubmittedSurvey(IContained):
 	"""
@@ -968,7 +971,8 @@ class IQSubmittedSurvey(IContained):
 
 	surveyId = TextLine( title="Identifier of the survey being responded to." )
 	questions = IndexedIterable( title="Submitted polls, one for each poll in the survey.",
-								 value_type=Object( IQSubmittedPoll, title="The submitted value for a particular poll.") )
+								 value_type=Object( IQSubmittedPoll,
+													title="The submitted value for a particular poll.") )
 
 class IQAssignmentSubmission(IQBaseSubmission):
 	"""
@@ -983,7 +987,6 @@ class IQAssignmentSubmission(IQBaseSubmission):
 							 default=(),
 							 value_type=Object(IQuestionSetSubmission,
 											   title="The submission for a particular part.") )
-	#parts.setTaggedValue( '_ext_excluded_out', True ) # Internal use only
 
 	# TODO: What does the result of submitting an assignment look like?
 	# It's not always an `Assessed` object, because not all parts will have been
@@ -1001,8 +1004,6 @@ class IQAssignmentSubmissionPendingAssessment(IQBaseSubmission):
 							 value_type=Variant(
 								 (Object(IQAssessedQuestionSet),
 								  Object(IQuestionSetSubmission))) )
-	#parts.setTaggedValue( '_ext_excluded_out', True ) # Internal use only
-
 
 class IQAssessmentItemContainer(interface.Interface):
 	"""

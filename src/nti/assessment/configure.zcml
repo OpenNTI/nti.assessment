@@ -153,6 +153,15 @@
 			 for=".interfaces.IQuestionSetSubmission"
 			 provides=".interfaces.IQAssessedQuestionSet" />
 
+	<!-- Incoming poll/survey submissions can be adapted to persisten objects -->
+	<adapter factory=".poll.submitted_poll_submission"
+			 for=".interfaces.IQPollSubmission"
+			 provides=".interfaces.IQSubmittedPoll" />
+
+	<adapter factory=".poll.submitted_survey_submission"
+			 for=".interfaces.IQSurveySubmission"
+			 provides=".interfaces.IQSubmittedSurvey" />
+			 
 	<!-- Externalization -->
 	<include package="nti.externalization" file="meta.zcml" />
 	<include package="nti.externalization" />
@@ -178,8 +187,8 @@
 						 .interfaces.IQNonGradablePart
 						 .interfaces.IQPoll
 						 .interfaces.IQSurvey
-						 .interfaces.IPollSubmission
-						 .interfaces.ISurveySubmission
+						 .interfaces.IQPollSubmission
+						 .interfaces.IQSurveySubmission
 						 .interfaces.IQSubmittedPoll
 						 .interfaces.IQSubmittedSurvey"
 		modules=".common .hint .assessed .parts .question .response 
