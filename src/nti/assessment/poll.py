@@ -54,6 +54,8 @@ from .interfaces import IQSubmittedPoll
 from .interfaces import IQSubmittedSurvey
 from .interfaces import IQSurveySubmission
 
+from .interfaces import SURVEY_MIME_TYPE
+
 @interface.implementer(IQPoll,
 					   IFiniteSequence,
 					   IContentTypeAware,
@@ -97,7 +99,7 @@ class QSurvey(Contained,
 
 	title = AdaptingFieldProperty(IQSurvey['title'])
 
-	mimeType = mime_type = 'application/vnd.nextthought.nasurvey'
+	mimeType = mime_type = SURVEY_MIME_TYPE
 
 	def __init__(self, *args, **kwargs):
 		Persistent.__init__(self)

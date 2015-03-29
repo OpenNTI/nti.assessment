@@ -57,6 +57,7 @@ from . import monkey as plonefile_zopefile_patch_on_import
 plonefile_zopefile_patch_on_import.patch()
 
 NTIID_TYPE = 'NAQ'
+SURVEY_MIME_TYPE = u'application/vnd.nextthought.nasurvey'
 QUESTION_SET_MIME_TYPE = u'application/vnd.nextthought.naquestionset'
 
 class IPollable(interface.Interface):
