@@ -358,7 +358,7 @@ IQGradableFreeResponsePart = IQFreeResponsePart
 
 ## connecting part
 
-class IQNonGradableConnectingPart(IQNonGradablePart):
+class IQNonGradableConnectingPart(IQNonGradablePart, IPollable):
 	"""
 	A question part that asks the student to connect items from one
 	column (labels) with items in another column (values) forming a
