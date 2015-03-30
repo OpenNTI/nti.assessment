@@ -21,6 +21,7 @@ from nti.contentfragments.interfaces import SanitizedHTMLContentFragment
 from nti.externalization.internalization import find_factory_for
 from nti.externalization.internalization import update_from_external_object
 
+from .interfaces import IQSurvey
 from .interfaces import IQuestion
 from .interfaces import IQAssignment
 from .interfaces import IQuestionSet
@@ -60,12 +61,20 @@ class QuestionIndex(object):
 			things_to_register.add( child_question )
 		return things_to_register
 
+	def _explode_survey_to_register(self, survey):
+		things_to_register = set([survey])
+		for child_poll in survey.questions:
+			things_to_register.add( child_poll )
+		return things_to_register
+	
 	def _explode_object_to_register(self, obj):
 		things_to_register = set([obj])
 		if IQAssignment.providedBy(obj):
 			things_to_register.update(self._explode_assignment_to_register(obj))
 		elif IQuestionSet.providedBy(obj):
 			things_to_register.update(self._explode_question_set_to_register(obj))
+		elif IQSurvey.providedBy(obj):
+			things_to_register.update(self._explode_survey_to_register(obj))
 		return things_to_register
 
 	def _canonicalize_question_set(self, obj, registry):
@@ -73,6 +82,11 @@ class QuestionIndex(object):
 						 for x
 						 in obj.questions]
 
+	def _canonicalize_survey(self, obj, registry):
+		obj.questions = [registry.getUtility(IQSurvey, name=x.ntiid)
+						 for x
+						 in obj.questions]
+		
 	def _canonicalize_object(self, obj, registry):
 		if IQAssignment.providedBy(obj):
 			for part in obj.parts:
@@ -81,7 +95,9 @@ class QuestionIndex(object):
 				self._canonicalize_question_set(part.question_set, registry)
 		elif IQuestionSet.providedBy(obj):
 			self._canonicalize_question_set(obj, registry)
-
+		elif IQSurvey.providedBy(obj):
+			self._canonicalize_object(obj, registry)
+			
 	def _register_and_canonicalize(self, things_to_register, registry):
 
 		for thing_to_register in things_to_register:
