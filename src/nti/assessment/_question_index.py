@@ -96,7 +96,7 @@ class QuestionIndex(object):
 		elif IQuestionSet.providedBy(obj):
 			self._canonicalize_question_set(obj, registry)
 		elif IQSurvey.providedBy(obj):
-			self._canonicalize_object(obj, registry)
+			self._canonicalize_survey(obj, registry)
 			
 	def _register_and_canonicalize(self, things_to_register, registry):
 
