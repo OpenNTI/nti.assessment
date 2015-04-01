@@ -197,6 +197,8 @@
 		factory_modules=".submission .question .response"
 		iobase=".externalization._AssessmentInternalObjectIOBase"/>
 
+	<ext:registerMimeFactories module=".parts" />
+	
 	<adapter factory=".internalization._QFillInTheBlankWithWordBankSolutionUpdater"
 			 for=".interfaces.IQFillInTheBlankShortAnswerSolution"
 			 provides="nti.externalization.interfaces.IInternalObjectUpdater" />

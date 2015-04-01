@@ -13,7 +13,7 @@ from zope import interface
 
 from ..parts import QMatchingPart
 from ..parts import QOrderingPart
-from ..parts import QConenctingPart
+from ..parts import QConnectingPart
 from ..parts import QMultipleChoicePart
 from ..parts import QMultipleChoiceMultipleAnswerPart
 
@@ -37,7 +37,7 @@ from .interfaces import ISha224RandomizedMultipleChoicePart
 from .interfaces import ISha224RandomizedMultipleChoiceMultipleAnswerPart
 
 @interface.implementer(IQRandomizedConnectingPart)
-class QRandomizedConnectingPart(QConenctingPart):
+class QRandomizedConnectingPart(QConnectingPart):
 	response_interface = None
 		
 @interface.implementer(IQRandomizedMatchingPart)

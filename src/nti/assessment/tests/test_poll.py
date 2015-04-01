@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 
 from __future__ import print_function, unicode_literals, absolute_import, division
+from hamcrest.core.core.isinstanceof import instance_of
 __docformat__ = "restructuredtext en"
 
 # disable: accessing protected members, too many methods
@@ -67,6 +68,15 @@ class TestPoll(AssessmentTestCase):
 		assert_that( part, is_( part ) )
 		assert_that( hash(part), is_( hash(part) ) )
 
+	def test_internalize(self):
+		part = QNonGradableMultipleChoicePart(choices=[u''], content=u'here')
+		poll = QPoll( parts=(part,) )
+		ext_obj= toExternalObject( poll )
+		factory = find_factory_for(ext_obj)
+		obj = factory()
+		update_from_external_object(obj, ext_obj, notify=False)
+		assert_that(obj.parts[0], instance_of(QNonGradableMultipleChoicePart))
+		
 	def test_externalizes(self):
 		part = QNonGradableFreeResponsePart()
 		poll = QPoll( parts=(part,) )

@@ -230,8 +230,13 @@ class QNonGradableConnectingPart(QNonGradablePart):
 		include_super=True,
 		superhash=True)
 class QConnectingPart(QPart, QNonGradableConnectingPart): # order matters
-	pass			  
-QConenctingPart = QConnectingPart # BWC
+	pass	
+
+import zope.deferredimport
+zope.deferredimport.initialize()
+zope.deferredimport.deprecated(
+	"Import from QConnectingPart instead",
+	QConenctingPart = 'nti.assessment.parts:QConnectingPart' )
 
 @interface.implementer(IQNonGradableMatchingPart)
 class QNonGradableMatchingPart(QNonGradableConnectingPart):	

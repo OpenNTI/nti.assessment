@@ -58,6 +58,7 @@ setup(
  		'zope.app.file',
  		'zope.component',
  		'zope.container',
+ 		'zope.deferredimport',
  		'zope.dublincore',
  		'zope.interface',
  		'zope.datetime',
