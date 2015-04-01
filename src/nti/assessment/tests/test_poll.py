@@ -74,7 +74,9 @@ class TestPoll(AssessmentTestCase):
 		assert_that( poll, verifiably_provides( IQPoll ) )
 		assert_that( find_factory_for( toExternalObject( poll ) ),
 					 is_not( none() ) )
-		
+		assert_that( poll,
+					 externalizes( has_entries( 'Class', 'Poll',
+												'MimeType', 'application/vnd.nextthought.napoll' ) ) )
 		survey = QSurvey(questions=(poll,))
 		assert_that( survey, verifiably_provides( IQSurvey ) )
 		assert_that( find_factory_for( toExternalObject( survey ) ),
