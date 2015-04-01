@@ -128,7 +128,7 @@ class IQPart(IQNonGradablePart, IGradable):
 
 	explanation = _ContentFragment( title="An explanation of how the solution is arrived at.",
 									default='' )
-	
+
 	solutions = IndexedIterable( title="Acceptable solutions for this question part in no particular order.",
 								 description="All solutions must be of the same type, and there must be at least one.",
 								 value_type=Object(IQSolution, title="A solution for this part")	)
@@ -932,7 +932,7 @@ class IQSubmittedPoll(IContained, IContextAnnotatable):
 	parts = IndexedIterable( title="Ordered assessed values, one for each part of the question.",
 							 value_type=Object( IQSubmittedPart, title="The assessment of a part." ) )
 
-class IQuestionSetSubmission(IQBaseSubmission, IContextAnnotatable):
+class IQuestionSetSubmission(IQBaseSubmission):
 	"""
 	A student's submission in response to an entire question set.
 
@@ -947,7 +947,7 @@ class IQuestionSetSubmission(IQBaseSubmission, IContextAnnotatable):
 								 value_type=Object( IQuestionSubmission,
 													title="The submission for a particular question.") )
 
-class IQSurveySubmission(IQBaseSubmission, IContextAnnotatable):
+class IQSurveySubmission(IQBaseSubmission):
 	"""
 	A submission in response to a survey
 

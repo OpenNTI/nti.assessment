@@ -41,7 +41,7 @@ from .interfaces import IQuestionSubmission
 from .interfaces import IQAssessedQuestionSet
 
 from ._util import make_sublocations as _make_sublocations
-from ._util import dctimes_property_fallback as _dctimes_property_fallback 
+from ._util import dctimes_property_fallback as _dctimes_property_fallback
 
 from .common import QSubmittedPart
 
@@ -69,7 +69,7 @@ class QAssessedQuestion(SchemaConfigured,
 	creator = None
 	createdTime = _dctimes_property_fallback('createdTime', 'Date.Modified')
 	lastModified = _dctimes_property_fallback('lastModified', 'Date.Created')
-	
+
 	def __init__(self, *args, **kwargs):
 		super(QAssessedQuestion, self).__init__(*args, **kwargs)
 		self.lastModified = self.createdTime = time.time()
@@ -77,7 +77,7 @@ class QAssessedQuestion(SchemaConfigured,
 	def updateLastMod(self, t=None):
 		self.lastModified = (t if t is not None and t > self.lastModified else time.time())
 		return self.lastModified
-	
+
 	sublocations = _make_sublocations()
 
 @interface.implementer(IQAssessedQuestionSet,
@@ -134,6 +134,7 @@ def assess_question_submission(submission, registry=component):
 						 (len(question.parts), len(submission.parts)))
 
 	assessed_parts = PersistentList()
+
 	for sub_part, q_part in zip(submission.parts, question.parts):
 		# Grade what they submitted, if they submitted something. If they didn't
 		# submit anything, it's automatically "wrong."
@@ -162,7 +163,6 @@ def assess_question_set_submission(set_submission, registry=component):
 		Used to look up the question set and question by id.
 	:raises LookupError: If no question can be found for the submission.
 	"""
-
 	question_set = registry.getUtility(IQuestionSet,
 									   name=set_submission.questionSetId)
 
@@ -183,6 +183,6 @@ def assess_question_set_submission(set_submission, registry=component):
 						 question, question_set, question_set.questions)
 
 	# NOTE: We're not really creating some sort of aggregate grade here
-	result = QAssessedQuestionSet(questionSetId=set_submission.questionSetId, 
+	result = QAssessedQuestionSet(questionSetId=set_submission.questionSetId,
 								  questions=assessed)
 	return result
