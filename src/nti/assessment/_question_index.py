@@ -98,10 +98,16 @@ class QuestionIndex(object):
 		elif IQSurvey.providedBy(obj):
 			self._canonicalize_survey(obj, registry)
 			
+	def _registry_utility(self, registry, component, provided, name, event=False):
+		registry.registerUtility( component,
+								  provided=provided,
+								  name=name,
+								  event=event)
+		
 	def _register_and_canonicalize(self, things_to_register, registry):
 
 		for thing_to_register in things_to_register:
-			iface = _iface_to_register(thing_to_register)
+			provided = _iface_to_register(thing_to_register)
 
 			# Previously, we were very careful not to re-register things
 			# that we could find utilities for.
@@ -118,10 +124,12 @@ class QuestionIndex(object):
 			# if ex_utility == thing_to_register:
 			#	continue
 			
-			registry.registerUtility( thing_to_register,
-									  provided=iface,
-									  name=thing_to_register.ntiid,
-									  event=False)
+			name = thing_to_register.ntiid
+			self._registry_utility( registry, 
+									thing_to_register,
+									provided=provided,
+									name=name,
+									event=False)
 
 		# Now that everything is in place, we can canonicalize
 		for o in things_to_register:
