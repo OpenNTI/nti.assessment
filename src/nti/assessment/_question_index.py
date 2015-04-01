@@ -21,6 +21,7 @@ from nti.contentfragments.interfaces import SanitizedHTMLContentFragment
 from nti.externalization.internalization import find_factory_for
 from nti.externalization.internalization import update_from_external_object
 
+from .interfaces import IQPoll
 from .interfaces import IQSurvey
 from .interfaces import IQuestion
 from .interfaces import IQAssignment
@@ -83,7 +84,7 @@ class QuestionIndex(object):
 						 in obj.questions]
 
 	def _canonicalize_survey(self, obj, registry):
-		obj.questions = [registry.getUtility(IQSurvey, name=x.ntiid)
+		obj.questions = [registry.getUtility(IQPoll, name=x.ntiid)
 						 for x
 						 in obj.questions]
 		
