@@ -144,11 +144,11 @@ class TestPoll(AssessmentTestCase):
 		
 		assert_that(ssub, has_length(1))
 		assert_that(ssub['foo-ps'], is_not(none()))
-		return
-		ssub['foo-qs2'] = QPollSubmission(pollId='foo-ps2', questions=())
+		
+		ssub['foo-ps2'] = QPollSubmission(pollId='foo-ps2', parts=())
 		assert_that(ssub, has_length(2))
 		assert_that(ssub['foo-ps2'], is_not(none()))
 	
-		del ssub['foo-qs']
+		del ssub['foo-ps']
 		assert_that(ssub, has_length(1))
 		assert_that(ssub.index('foo-ps'), is_(-1))
