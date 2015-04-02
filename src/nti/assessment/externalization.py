@@ -45,9 +45,7 @@ from .interfaces import IQAssessedQuestionSet
 from .interfaces import IQuestionSetSubmission
 from .interfaces import IInternalUploadedFileRef
 
-from .interfaces import IQSubmittedPoll
 from .interfaces import IQPollSubmission
-from .interfaces import IQSubmittedSurvey
 from .interfaces import IQSurveySubmission
 
 OID = StandardExternalFields.OID
@@ -83,16 +81,16 @@ class _QContainedObjectExternalizer(object):
 
 	interface = None
 	
-	def __init__(self, assessed):
-		self.assessed = assessed
+	def __init__(self, item):
+		self.item = item
 
 	def toExternalObject(self, **kwargs):
-		if hasattr(self.assessed, 'sublocations'):
+		if hasattr(self.item, 'sublocations'):
 			## sets the full parent lineage for these objects. 
 			## we wrapp the execution of it in a tuple in case it
 			## returns a generator
-			tuple(self.assessed.sublocations())
-		return InterfaceObjectIO(self.assessed, self.interface).toExternalObject( **kwargs)
+			tuple(self.item.sublocations())
+		return InterfaceObjectIO(self.item, self.interface).toExternalObject( **kwargs)
 
 @component.adapter(IQSubmittedPart)	
 class _QSubmittedPartExternalizer(_QContainedObjectExternalizer):
@@ -125,14 +123,6 @@ class _QPollSubmissionExternalizer(_QContainedObjectExternalizer):
 @component.adapter(IQSurveySubmission)	
 class _QSurveySubmissionSubmissionExternalizer(_QContainedObjectExternalizer):
 	interface = IQSurveySubmission
-	
-@component.adapter(IQSubmittedPoll)	
-class _QSubmittedPollExternalizer(_QContainedObjectExternalizer):
-	interface = IQSubmittedPoll
-
-@component.adapter(IQSubmittedSurvey)	
-class _QSubmittedSurveyExternalizer(_QContainedObjectExternalizer):
-	interface = IQSubmittedSurvey
 
 ##
 # File uploads

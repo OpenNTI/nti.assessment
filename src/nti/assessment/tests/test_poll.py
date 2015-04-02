@@ -12,16 +12,13 @@ from hamcrest import is_
 from hamcrest import none
 from hamcrest import is_not
 from hamcrest import contains
-from hamcrest import has_entry
 from hamcrest import has_length
 from hamcrest import assert_that
 from hamcrest import has_entries
 from hamcrest import greater_than
 from hamcrest import has_property
 
-from zope import component
-
-from nti.coremetadata.interfaces import ILastModified
+from zope.schema.interfaces import WrongContainedType
 
 from nti.externalization.externalization import toExternalObject
 from nti.externalization.internalization import find_factory_for
@@ -29,29 +26,26 @@ from nti.externalization.internalization import update_from_external_object
 
 from nti.assessment.interfaces import IQPoll
 from nti.assessment.interfaces import IQSurvey
-from nti.assessment.interfaces import IQSubmittedPoll
-from nti.assessment.interfaces import IQSubmittedSurvey
+from nti.assessment.interfaces import IQPollSubmission
+from nti.assessment.interfaces import IQSurveySubmission
 from nti.assessment.interfaces import IQNonGradableMultipleChoicePart
-
-from nti.assessment.common import QSubmittedPart
 
 from nti.assessment.parts import QNonGradableFreeResponsePart
 from nti.assessment.parts import QNonGradableMultipleChoicePart
 
 from nti.assessment.poll import QPoll
 from nti.assessment.poll import QSurvey
-from nti.assessment.poll import QSubmittedPoll
 from nti.assessment.poll import QPollSubmission
-from nti.assessment.poll import QSubmittedSurvey
 from nti.assessment.poll import QSurveySubmission
 
 from nti.externalization.tests import externalizes
 
+from nti.testing.matchers import validly_provides
 from nti.testing.matchers import verifiably_provides
 
-from nti.assessment.tests import lineage
+from nose.tools import assert_raises
+
 from nti.assessment.tests import AssessmentTestCase
-from nti.assessment.tests import check_old_dublin_core
 
 class TestPoll(AssessmentTestCase):
 
@@ -95,89 +89,66 @@ class TestPoll(AssessmentTestCase):
 					 externalizes( has_entries( 'Class', 'Survey',
 												'MimeType', 'application/vnd.nextthought.nasurvey' ) ) )
 
-		assert_that( QSubmittedPoll(), verifiably_provides( IQSubmittedPoll ) )
-		assert_that( QSubmittedPoll(), verifiably_provides( ILastModified ) )
-		assert_that( QSubmittedPoll(), externalizes( has_entries( 'Class', 'SubmittedPoll',
-																  'MimeType', 'application/vnd.nextthought.assessment.submittedpoll') ) )
-		assert_that( find_factory_for( toExternalObject ( QSubmittedPoll() ) ),
-					 is_( none() ) )
+
+		assert_that( QPollSubmission(), verifiably_provides( IQPollSubmission ) )
+		assert_that( QPollSubmission(), externalizes( has_entries('Class', 'PollSubmission',
+																  'MimeType', 'application/vnd.nextthought.assessment.pollsubmission') ) )
 		
-		assert_that( QSubmittedSurvey(), verifiably_provides( IQSubmittedSurvey ) )
-		assert_that( QSubmittedSurvey(), verifiably_provides( ILastModified ) )
-		assert_that( QSubmittedSurvey(), externalizes( has_entries( 'Class', 'SubmittedSurvey',
-																	'MimeType', 'application/vnd.nextthought.assessment.submittedsurvey') ) )
-		assert_that( find_factory_for( toExternalObject(QSubmittedSurvey() ) ),
-					 is_( none() ) )
+		assert_that( QSurveySubmission(), verifiably_provides( IQSurveySubmission ) )
+		assert_that( QSurveySubmission(), externalizes( has_entries( 'Class', 'SurveySubmission',
+																	 'MimeType', 'application/vnd.nextthought.assessment.surveysubmission') ) )
 
-	def test_submitted_poll(self):
-		part = QNonGradableFreeResponsePart()
-		poll = QPoll( parts=(part,) )
-		component.provideUtility( poll, provides=IQPoll,  name="1")
+		ssub = QSurveySubmission()
+		assert_that( ssub, has_property('lastModified', greater_than(0)))
+		assert_that( ssub, has_property('createdTime', greater_than(0)))
+		# Recursive validation
+		with assert_raises(WrongContainedType):
+			update_from_external_object( ssub,
+										 {'questions': [QPollSubmission()]},
+										 require_updater=True )
 
-		sub = QPollSubmission( )
-		update_from_external_object( sub, {'pollId':"1", 'parts': ['correct']},
-									 notify=False)
+		update_from_external_object( ssub,
+ 									 {'questions': [QPollSubmission(pollId='foo', parts=())],
+ 									  'surveyId': 'baz'},
+ 									 require_updater=True )
 
-		assert_that( sub, has_property( 'pollId', "1" ) )
-		assert_that( sub, has_property( 'parts', is_(['correct'])) )
+		assert_that( ssub, has_property( 'questions', contains( is_( QPollSubmission ) ) ) )
 
-		result = IQSubmittedPoll( sub )
-		assert_that( result, has_property( 'pollId', "1" ) )
-		assert_that( result, has_property( 'parts', contains( QSubmittedPart( submittedResponse='correct') ) ) )
+		assert_that( ssub, validly_provides( IQSurveySubmission ))
+
+		# time_length
+		update_from_external_object( ssub,
+									 {'questions': [QPollSubmission(pollId='foo', parts=(),
+																	CreatorRecordedEffortDuration=10)],
+									  'surveyId': 'baz'},
+									 require_updater=True )
+
+		assert_that( ssub, validly_provides( IQSurveySubmission ))
+		assert_that( ssub.questions[0], has_property('CreatorRecordedEffortDuration', 10) )
+
+		update_from_external_object( ssub,
+									 {'questions': [QPollSubmission(pollId='foo', parts=())],
+									  'surveyId': 'baz',
+									  'CreatorRecordedEffortDuration': 12},
+									 require_updater=True )
+
+		assert_that( ssub, validly_provides( IQSurveySubmission ))
+		assert_that( ssub, has_property('CreatorRecordedEffortDuration', 12))
 		
-		check_old_dublin_core(result)
+	def test_mapping(self):
+		ssub = QSurveySubmission()
+		update_from_external_object( ssub,
+									 {'questions': [QPollSubmission(pollId='foo-ps', parts=())],
+									  'surveyId': 'baz'},
+									 require_updater=True )
 		
-	def test_submitted_poll_non_part(self):
-		part = QNonGradableFreeResponsePart()
-		poll = QPoll( parts=(part,) )
-		component.provideUtility( poll, provides=IQPoll,  name="1")
-
-		sub = QPollSubmission( )
-		update_from_external_object( sub, {'pollId':"1", 'parts': [None]},
-									 notify=False)
-
-		result = IQSubmittedPoll( sub )
-		assert_that( result, has_property( 'pollId', "1" ) )
-		assert_that( result, has_property( 'parts', contains( QSubmittedPart( submittedResponse=None) ) ) )
-
-	def test_submitted_survey(self):
-		part = QNonGradableFreeResponsePart()
-		poll = QPoll( parts=(part,) )
-		survey = QSurvey( questions=(poll,) )
-
-		component.provideUtility( poll,
-								  provides=IQPoll,
-								  name="1" )
-		component.provideUtility( survey,
-								  provides=IQSurvey,
-								  name="2" )
-
-		sub = QPollSubmission( pollId="1", parts=('correct',) )
-		set_sub = QSurveySubmission( surveyId="2", questions=(sub,) )
-
-		result = IQSubmittedSurvey( set_sub )
-
-		assert_that( result, has_property( 'surveyId', "2" ) )
-		assert_that( result, has_property( 'questions',
-										   contains( has_property( 'parts',
-																  contains( QSubmittedPart( submittedResponse='correct' ) ) ) ) ) )
-		# consistent hashing
-		assert_that( hash(result), is_(hash(result)))
-		
-		for question in result.questions:
-			parents = list(lineage(question))
-			assert_that(parents, has_length(1))
-					
-		ext_obj = toExternalObject( result ) # set lineage
-		assert_that( ext_obj, has_entry( 'questions', has_length( 1 ) ) )
-
-		check_old_dublin_core(result)
-				
-		for poll in result.polls:
-			parents = list(lineage(poll))
-			assert_that(parents[-1], is_(result))
-			assert_that(parents, has_length(greater_than(1)))
-			for part in poll.parts:
-				parents = list(lineage(part))
-				assert_that(parents, has_length(greater_than(2)))
-				assert_that(parents[-1], is_(result))
+		assert_that(ssub, has_length(1))
+		assert_that(ssub['foo-ps'], is_not(none()))
+		return
+		ssub['foo-qs2'] = QPollSubmission(pollId='foo-ps2', questions=())
+		assert_that(ssub, has_length(2))
+		assert_that(ssub['foo-ps2'], is_not(none()))
+	
+		del ssub['foo-qs']
+		assert_that(ssub, has_length(1))
+		assert_that(ssub.index('foo-ps'), is_(-1))
