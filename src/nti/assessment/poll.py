@@ -135,6 +135,8 @@ class QSurveySubmission(ContainedMixin,
 
 	parts = polls = alias('questions')
 
+	sublocations = _make_sublocations('questions')
+	
 	def __init__(self, *args, **kwargs):
 		# schema configured is not cooperative
 		ContainedMixin.__init__(self, *args, **kwargs)
