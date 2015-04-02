@@ -198,9 +198,9 @@
 		iobase=".externalization._AssessmentInternalObjectIOBase"/>
 
 	<!--
-	Register mimeType factories for the part classes. This is not done in
-	ext:registerAutoPackageIO. Make sure the factories are registered
-	after ext:registerAutoPackageIO
+	Register mimeType factories for the QNonGradablePart and QPart classes.
+	Registration is not done in ext:registerAutoPackageIO.
+	Make sure the factories are registered after ext:registerAutoPackageIO
 	-->
 	<ext:registerMimeFactories module=".parts" />
 	
