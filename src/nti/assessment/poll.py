@@ -265,24 +265,24 @@ def submitted_poll_submission(submission, registry=component):
 	result = QSubmittedPoll(pollId=submission.pollId, parts=parts)
 	return result
 
-def submitted_survey_submission(set_submission, registry=component):
+def submitted_survey_submission(survey_submission, registry=component):
 	"""
-	Register the given question set submission.
+	Register the given survey submission.
 
 	:return: An :class:`.interfaces.IQSubmittedSurvey`.
-	:param set_submission: An :class:`.interfaces.IQSurveySubmission`.
+	:param survey_submission: An :class:`.interfaces.IQSurveySubmission`.
 	:param registry: If given, an :class:`.IComponents`. If
 		not given, the current component registry will be used.
 		Used to look up the question set and question by id.
-	:raises LookupError: If no survery can be found for the submission.
+	:raises LookupError: If no survey can be found for the submission.
 	"""
 
-	survey = registry.getUtility(IQSurvey, name=set_submission.surveyId)
+	survey = registry.getUtility(IQSurvey, name=survey_submission.surveyId)
 
 	polls_ntiids = {q.ntiid for q in survey.questions}
 
 	submitted = PersistentList()
-	for sub_poll in set_submission.questions:
+	for sub_poll in survey_submission.questions:
 		poll = registry.getUtility(IQPoll, name=sub_poll.pollId )
 		if poll in survey.questions or poll.ntiid in polls_ntiids:
 			stted_poll = IQSubmittedPoll(sub_poll)
@@ -291,6 +291,6 @@ def submitted_survey_submission(set_submission, registry=component):
 			logger.debug("Bad input, poll (%s) not in survey (%s) (kownn: %s)",
 						 poll, survey, survey.questions)
 
-	result = QSubmittedSurvey(surveyId=set_submission.surveyId, 
+	result = QSubmittedSurvey(surveyId=survey_submission.surveyId, 
 							  questions=submitted)
 	return result
