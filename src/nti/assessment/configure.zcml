@@ -197,6 +197,11 @@
 		factory_modules=".submission .question .response"
 		iobase=".externalization._AssessmentInternalObjectIOBase"/>
 
+	<!--
+	Register mimeType factories for the part classes. This is not done in
+	ext:registerAutoPackageIO. Make sure the factories are registered
+	after ext:registerAutoPackageIO
+	-->
 	<ext:registerMimeFactories module=".parts" />
 	
 	<adapter factory=".internalization._QFillInTheBlankWithWordBankSolutionUpdater"
@@ -242,7 +247,6 @@
 	<adapter factory=".externalization._QSubmittedSurveyExternalizer"
 			 for=".interfaces.IQSubmittedSurvey"
 			 provides="nti.externalization.interfaces.IInternalObjectExternalizer" />
-
 
 	<!-- WordBank & Regex -->
 	<ext:registerAutoPackageIO
