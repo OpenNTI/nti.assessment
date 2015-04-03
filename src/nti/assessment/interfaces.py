@@ -110,6 +110,73 @@ class IQPartSolutionsExternalizer(interface.Interface):
 	def to_external_object(self):
 		pass
 
+class IQResponse(IContained, INeverStoredInSharedStream):
+	"""
+	A response submitted by the student.
+	"""
+
+class IQTextResponse(IQResponse):
+	"""
+	A response submitted as text.
+	"""
+
+	value = Text(title="The response text")
+
+class IQListResponse(IQResponse):
+	"""
+	A response submitted as a list.
+	"""
+
+	value = List(title="The response list",
+				  min_length=1,
+				  value_type=TextLine(title="The value"))
+
+class IQDictResponse(IQResponse):
+	"""
+	A response submitted as a mapping between keys and values.
+	"""
+	value = Dict(title="The response dictionary",
+				 key_type=TextLine(title="The key"),
+				 value_type=TextLine(title="The value"))
+
+class IQModeledContentResponse(IQResponse,
+							   ITitledContent):
+	"""
+	A response with a value similar to that of a conventional
+	Note, consisting of multiple parts and allowing for things
+	like embedded whiteboards and the like.
+
+	Unlike other response types, this one must be submitted
+	in its proper external form as this type object, not a primitive.
+	"""
+
+	value = CompoundModeledContentBody()
+	value.required = True
+	value.__name__ = 'value'
+
+from plone.namedfile.interfaces import INamedFile
+
+class IQUploadedFile(INamedFile, ILastModified):
+	name = ValidTextLine(title="Identifier for the file", required=False, default=None)
+
+class IInternalUploadedFileRef(interface.Interface):
+	"""
+	Marker interface for reference to to other uploaded file
+	"""
+	reference = ValidTextLine(title="the ntiid/oid", required=False)
+
+class IQFileResponse(IQResponse):
+	"""
+	A response containing a file and associated metadata.
+	The file is uploaded as a ``data`` URI (:mod:`nti. utils. dataurl`)
+	which should contain a MIME type definition;  the original
+	filename may be given as well. Externalization refers to these
+	two fields as
+	"""
+
+	value = Object( IQUploadedFile,
+					title="The uploaded file" )
+
 ## It seems like the concepts of domain and range may come into play here,
 ## somewhere
 
@@ -185,7 +252,7 @@ class IQMathPart(IQNonGradableMathPart, IQPart):
 	"""
 	A question part whose answer lies in the math domain.
 	"""
-IQGradableMathPart = IQMathPart
+IQGradableMathPart = IQMathPart # alias
 
 class IQMathSolution(IQSolution):
 	"""
@@ -277,6 +344,7 @@ class IQNonGradableMultipleChoicePart(IQNonGradablePart, IPollable):
 					description="""Presentation order may matter, hence the list. But for grading purposes,
 					the order does not matter and simple existence within the set is sufficient.""",
 					value_type=_ContentFragment( title="A rendered value" ) )
+IQNonGradableMultipleChoicePart.setTaggedValue('response_type', IQTextResponse)
 
 class IQMultipleChoiceSolution(IQSolution, IQSingleValuedSolution):
 	"""
@@ -293,8 +361,7 @@ class IQMultipleChoicePart(IQNonGradableMultipleChoicePart, IQPart):
 								 min_length=1,
 								 value_type=Object( IQMultipleChoiceSolution,
 													title="Multiple choice solution" ) )
-
-IQGradableMultipleChoicePart = IQMultipleChoicePart
+IQGradableMultipleChoicePart = IQMultipleChoicePart  # alias
 
 class IQMultipleChoicePartGrader(IQPartGrader):
 	"""
@@ -308,6 +375,7 @@ class IQNonGradableMultipleChoiceMultipleAnswerPart(IQNonGradableMultipleChoiceP
 	A question part that asks the student to choose between a fixed set
 	of alternatives.
 	"""
+IQNonGradableMultipleChoiceMultipleAnswerPart.setTaggedValue('response_type', IQListResponse)
 
 class IQMultipleChoiceMultipleAnswerSolution(IQSolution,
 											 IQMultiValuedSolution):
@@ -340,6 +408,7 @@ class IQMultipleChoiceMultipleAnswerPartGrader(IQPartGrader):
 
 class IQNonGradableFreeResponsePart(IQNonGradablePart, IPollable):
 	pass
+IQNonGradableFreeResponsePart.setTaggedValue('response_type', IQTextResponse)
 
 class IQFreeResponseSolution(IQSolution, IQSingleValuedSolution):
 	"""
@@ -719,72 +788,7 @@ class IQAssignmentPolicyValidator(interface.Interface):
 		validates the specfied policy.
 		"""
 
-class IQResponse(IContained, INeverStoredInSharedStream):
-	"""
-	A response submitted by the student.
-	"""
-
-class IQTextResponse(IQResponse):
-	"""
-	A response submitted as text.
-	"""
-
-	value = Text(title="The response text")
-
-class IQListResponse(IQResponse):
-	"""
-	A response submitted as a list.
-	"""
-
-	value = List(title="The response list",
-				  min_length=1,
-				  value_type=TextLine(title="The value"))
-
-class IQDictResponse(IQResponse):
-	"""
-	A response submitted as a mapping between keys and values.
-	"""
-	value = Dict(title="The response dictionary",
-				 key_type=TextLine(title="The key"),
-				 value_type=TextLine(title="The value"))
-
-class IQModeledContentResponse(IQResponse,
-							   ITitledContent):
-	"""
-	A response with a value similar to that of a conventional
-	Note, consisting of multiple parts and allowing for things
-	like embedded whiteboards and the like.
-
-	Unlike other response types, this one must be submitted
-	in its proper external form as this type object, not a primitive.
-	"""
-
-	value = CompoundModeledContentBody()
-	value.required = True
-	value.__name__ = 'value'
-
-from plone.namedfile.interfaces import INamedFile
-
-class IQUploadedFile(INamedFile, ILastModified):
-	name = ValidTextLine(title="Identifier for the file", required=False, default=None)
-
-class IInternalUploadedFileRef(interface.Interface):
-	"""
-	Marker interface for reference to to other uploaded file
-	"""
-	reference = ValidTextLine(title="the ntiid/oid", required=False)
-
-class IQFileResponse(IQResponse):
-	"""
-	A response containing a file and associated metadata.
-	The file is uploaded as a ``data`` URI (:mod:`nti. utils. dataurl`)
-	which should contain a MIME type definition;  the original
-	filename may be given as well. Externalization refers to these
-	two fields as
-	"""
-
-	value = Object( IQUploadedFile,
-					title="The uploaded file" )
+# set solutions response types
 
 IQMathSolution.setTaggedValue('response_type', IQTextResponse)
 IQMatchingSolution.setTaggedValue('response_type', IQDictResponse)

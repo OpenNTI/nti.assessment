@@ -71,6 +71,8 @@ from .interfaces import IQMultipleChoiceMultipleAnswerPartGrader
 
 from .interfaces import IQDictResponse
 from .interfaces import IQFileResponse
+from .interfaces import IQListResponse
+from .interfaces import IQTextResponse
 from .interfaces import IQModeledContentResponse
 
 from .interfaces import convert_response_for_solution
@@ -106,7 +108,7 @@ class QPart(QNonGradablePart):
 	:meth:`_grade` method.
 	
 	If response_interface is non-None, then we will always attempt to convert the
-	esponse to this interface before attempting to grade.
+	response to this interface before attempting to grade.
 	In this way parts that may not have a solution
 	can always be sure that the response is at least
 	of an appropriate type.
@@ -195,6 +197,7 @@ class QNumericMathPart(QMathPart):
 		superhash=True)
 class QNonGradableMultipleChoicePart(QNonGradablePart):
 	choices = ()
+	response_interface = IQTextResponse
 	
 @interface.implementer(IQMultipleChoicePart)
 @EqHash('choices',
@@ -202,17 +205,19 @@ class QNonGradableMultipleChoicePart(QNonGradablePart):
 		include_type=True,
 		superhash=True)
 class QMultipleChoicePart(QPart, QNonGradableMultipleChoicePart): # order matters
+	response_interface = None
 	grader_interface = IQMultipleChoicePartGrader
 
 ## Multiple Choice Multiple Answer
 
 @interface.implementer(IQNonGradableMultipleChoiceMultipleAnswerPart)
 class QNonGradableMultipleChoiceMultipleAnswerPart(QNonGradableMultipleChoicePart):
-	pass
+	response_interface = IQListResponse
 	
 @interface.implementer(IQMultipleChoiceMultipleAnswerPart)
 class QMultipleChoiceMultipleAnswerPart(QMultipleChoicePart,
 										QNonGradableMultipleChoiceMultipleAnswerPart): # order matters
+	response_interface = None
 	grader_interface = IQMultipleChoiceMultipleAnswerPartGrader
 
 ## Connecting
@@ -260,12 +265,13 @@ class QOrderingPart(QConnectingPart, QNonGradableOrderingPart): # order matters
 @EqHash(include_super=True,
 		include_type=True)
 class QNonGradableFreeResponsePart(QNonGradablePart):
-	pass
+	response_interface = IQTextResponse
 	
 @interface.implementer(IQFreeResponsePart)
 @EqHash(include_super=True,
 		include_type=True)
 class QFreeResponsePart(QPart, QNonGradableFreeResponsePart): # order matters
+	response_interface = None
 	grader_name = 'LowerQuoteNormalizedStringEqualityGrader'
 
 ## File part
