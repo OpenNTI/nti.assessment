@@ -30,7 +30,7 @@ from nti.contentfragments.schema import LatexFragmentTextLine as _LatexTextLine
 from nti.contentfragments.schema import HTMLContentFragment as _HTMLContentFragment
 from nti.contentfragments.schema import TextUnicodeContentFragment as _ContentFragment
 
-from nti.dataserver.core.interfaces import IContextAnnotatable, IModeledContent
+from nti.dataserver.core.interfaces import IContextAnnotatable
 from nti.dataserver.core.interfaces import INeverStoredInSharedStream
 
 from nti.dataserver.fragments.interfaces import ITitledContent
@@ -1190,11 +1190,19 @@ class IQSurveySubmission(IQBaseSubmission, IContextAnnotatable):
 	
 class IQAggregatedPart(IContained):
 	
+	def reset(self):
+		"""
+		reset this part
+		"""
+		
 	def append(response):
 		"""
 		Aggregate the specified response
 		"""
 
+	def __iadd__(other):
+		pass
+	
 class IQAggregatedMultipleChoicePart(IQAggregatedPart):
 	
 	Results = Dict(	title="The response results",
@@ -1223,3 +1231,25 @@ class IQAggregatedModeledContentPart(IQAggregatedPart):
 	Results = List(	title="The response results",
 				 	value_type=Object(IQModeledContentResponse),
 				 	readonly=True)
+
+class IQAggregatedPoll(IContained, IContextAnnotatable):
+	"""
+	Aggregation for a poll
+	"""
+
+	pollId = TextLine( title="Identifier of the poll being aggregated." )
+	parts = IndexedIterable( title="Part aggregations.",
+							 default=(),
+							 value_type=Object( IQAggregatedPart,
+												title="The aggregated part.") )
+
+class IQAggregatedSurvey(IContained, IContextAnnotatable):
+	"""
+	Aggregation for a survey
+	"""
+
+	surveyId = TextLine( title="Identifier of the survey being aggregated." )
+	questions = IndexedIterable( title="Poll aggregations.",
+								default=(),
+							 	value_type=Object( 	IQAggregatedPoll,
+													title="The aggregated poll.") )

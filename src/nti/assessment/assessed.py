@@ -163,9 +163,7 @@ def assess_question_set_submission(set_submission, registry=component):
 		Used to look up the question set and question by id.
 	:raises LookupError: If no question can be found for the submission.
 	"""
-	question_set = registry.getUtility(IQuestionSet,
-									   name=set_submission.questionSetId)
-
+	question_set = registry.getUtility(IQuestionSet, name=set_submission.questionSetId)
 	questions_ntiids = {q.ntiid for q in question_set.questions}
 
 	# NOTE: At this point we need to decide what to do for missing values
