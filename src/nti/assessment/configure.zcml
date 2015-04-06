@@ -155,7 +155,15 @@
 	<adapter factory=".assessed.assess_question_set_submission"
 			 for=".interfaces.IQuestionSetSubmission"
 			 provides=".interfaces.IQAssessedQuestionSet" />
-			 
+			
+	<adapter factory=".survey.aggregate_poll_submission"
+			 for=".interfaces.IQPollSubmission"
+			 provides=".interfaces.IQAggregatedPoll" />
+
+	<adapter factory=".survey.aggregate_survey_submission"
+			 for=".interfaces.IQSurveySubmission"
+			 provides=".interfaces.IQAggregatedSurvey" />
+
 	<!-- Normalizers -->
 	<adapter factory=".adapters.MultipleChoicePartResponseNormalizer"
 			 for=".interfaces.IQNonGradableMultipleChoicePart 
