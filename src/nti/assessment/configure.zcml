@@ -205,8 +205,8 @@
 						 .interfaces.IQPollSubmission
 						 .interfaces.IQSurveySubmission"
 		modules=".common .hint .assessed .parts .question .response 
-				 .solution .submission .assignment .poll"
-		factory_modules=".submission .question .response .poll"
+				 .solution .submission .assignment .survey"
+		factory_modules=".submission .question .response .survey"
 		iobase=".externalization._AssessmentInternalObjectIOBase"/>
 
 	<!--

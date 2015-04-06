@@ -33,10 +33,10 @@ from nti.assessment.interfaces import IQNonGradableMultipleChoicePart
 from nti.assessment.parts import QNonGradableFreeResponsePart
 from nti.assessment.parts import QNonGradableMultipleChoicePart
 
-from nti.assessment.poll import QPoll
-from nti.assessment.poll import QSurvey
-from nti.assessment.poll import QPollSubmission
-from nti.assessment.poll import QSurveySubmission
+from nti.assessment.survey import QPoll
+from nti.assessment.survey import QSurvey
+from nti.assessment.survey import QPollSubmission
+from nti.assessment.survey import QSurveySubmission
 
 from nti.externalization.tests import externalizes
 
