@@ -30,7 +30,7 @@ from nti.contentfragments.schema import LatexFragmentTextLine as _LatexTextLine
 from nti.contentfragments.schema import HTMLContentFragment as _HTMLContentFragment
 from nti.contentfragments.schema import TextUnicodeContentFragment as _ContentFragment
 
-from nti.dataserver.core.interfaces import IContextAnnotatable
+from nti.dataserver.core.interfaces import IContextAnnotatable, IModeledContent
 from nti.dataserver.core.interfaces import INeverStoredInSharedStream
 
 from nti.dataserver.fragments.interfaces import ITitledContent
@@ -43,6 +43,7 @@ from nti.schema.field import Bool
 from nti.schema.field import Dict
 from nti.schema.field import List
 from nti.schema.field import Float
+from nti.schema.field import Tuple
 from nti.schema.field import Object
 from nti.schema.field import Number
 from nti.schema.field import Variant
@@ -128,8 +129,8 @@ class IQListResponse(IQResponse):
 	"""
 
 	value = List(title="The response list",
-				  min_length=1,
-				  value_type=TextLine(title="The value"))
+				 min_length=1,
+				 value_type=TextLine(title="The value"))
 
 class IQDictResponse(IQResponse):
 	"""
@@ -1094,6 +1095,42 @@ class IQFillInTheBlankWithWordBankQuestion(IQuestion):
 							value_type=Object(IQFillInTheBlankWithWordBankPart,
 											  title="A question part"))
 
+
+## Normalizer
+
+class IQPartResponseNormalizer(interface.Interface):
+	"""
+	A marker interface for an adapter that that knows how to normalize a given 
+	:class:`IQResponse` for a :class:`IQNonGradablePart`
+	"""
+	
+	def __call__():
+		pass
+
+class IQFreeResponsePartResponseNormalizer(IQPartResponseNormalizer):
+	"""
+	A marker interface for an adapter that that knows how to normalize a given 
+	a :class:`IQResponse` for a :class:`IQNonGradablePart`
+	"""
+	
+class IQModeledContentPartResponseNormalizer(IQPartResponseNormalizer):
+	"""
+	A marker interface for an adapter that that knows how to normalize a given 
+	a :class:`IQResponse` for a :class:`IQNonGradableModeledContentPart`
+	"""
+
+class IQMultipleChoicePartResponseNormalizer(IQPartResponseNormalizer):
+	"""
+	A marker interface for an adapter that that knows how to normalize a given 
+	a :class:`IQResponse` for a :class:`IQNonGradableMultipleChoicePart`
+	"""
+	
+class IQMultipleChoiceMultipleAnswerPartResponseNormalizer(IQPartResponseNormalizer):
+	"""
+	A marker interface for an adapter that that knows how to normalize a given 
+	a :class:`IQResponse` for a :class:`IQNonGradableMultipleChoiceMultipleAnswerPart`
+	"""
+
 ## polls
 
 class IQPoll(IAnnotatable):
@@ -1150,3 +1187,39 @@ class IQSurveySubmission(IQBaseSubmission, IContextAnnotatable):
 								 default=(),
 								 value_type=Object( IQPollSubmission,
 													title="The submission for a particular poll.") )
+	
+class IQAggregatedPart(IContained):
+	
+	def append(response):
+		"""
+		Aggregate the specified response
+		"""
+
+class IQAggregatedMultipleChoicePart(IQAggregatedPart):
+	
+	Results = Dict(	title="The response results",
+				 	key_type=Int(title="The choice index"),
+				 	value_type=Number(title="The aggregated value"),
+				 	readonly=True)
+
+class IQAggregatedMultipleChoiceMultipleAnswerPart(IQAggregatedPart):
+	
+	Results = Dict(	title="The response results",
+				 	key_type=Tuple(	title="The response tuple",
+									min_length=1,
+				 					value_type=Int(title="The choice index")),
+				 	value_type=Number(title="The aggregated value"),
+				 	readonly=True)
+
+class IQAggregatedFreeResponsePart(IQAggregatedPart):
+	
+	Results = Dict(	title="The response results",
+				 	key_type=TextLine(title="the value"),
+				 	value_type=Number(title="The aggregated value"),
+				 	readonly=True)
+
+class IQAggregatedModeledContentPart(IQAggregatedPart):
+	
+	Results = List(	title="The response results",
+				 	value_type=Object(IQModeledContentResponse),
+				 	readonly=True)

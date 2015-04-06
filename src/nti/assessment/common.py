@@ -39,6 +39,7 @@ from .interfaces import IQAssignment
 from .interfaces import IQSubmittedPart
 from .interfaces import IQNonGradablePart
 from .interfaces import IQTimedAssignment
+from .interfaces import IQPartResponseNormalizer
 from .interfaces import IQLatexSymbolicMathSolution
 
 ## functions
@@ -81,6 +82,12 @@ def grader_for_response(part, response):
 		if grader is not None:
 			return grader
 	return None
+
+def normalize_response(part, response):
+	normalizer = component.queryMultiAdapter((part, response),
+										 	 IQPartResponseNormalizer )
+	result = normalizer()
+	return result
 
 def hexdigest(data, hasher=None):
 	hasher = hashlib.sha256() if hasher is None else hasher	

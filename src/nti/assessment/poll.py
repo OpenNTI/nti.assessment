@@ -23,6 +23,8 @@ from zope.location.interfaces import ISublocations
 from zope.mimetype.interfaces import IContentTypeAware
 
 from persistent import Persistent
+from persistent.list import PersistentList
+from persistent.mapping import PersistentMapping
 
 from nti.common.property import alias
 
@@ -44,6 +46,12 @@ from .interfaces import IQSurvey
 from .interfaces import IQBaseSubmission
 from .interfaces import IQPollSubmission
 from .interfaces import IQSurveySubmission
+
+from .interfaces import IQAggregatedPart
+from .interfaces import IQAggregatedFreeResponsePart
+from .interfaces import IQAggregatedModeledContentPart
+from .interfaces import IQAggregatedMultipleChoicePart
+from .interfaces import IQAggregatedMultipleChoiceMultipleAnswerPart
 
 from .interfaces import SURVEY_MIME_TYPE
 
@@ -179,3 +187,103 @@ class QSurveySubmission(ContainedMixin,
 		
 	def __len__(self):
 		return len(self.polls)
+
+## Aggregation
+
+@WithRepr
+@interface.implementer(IQAggregatedPart)
+class QAggregatedPart(ContainedMixin,
+					  SchemaConfigured,
+					  PersistentCreatedModDateTrackingObject):
+	
+	createDirectFieldProperties(IQAggregatedPart)
+	
+	results = None
+	
+	__external_can_create__ = False
+	
+	def __init__(self, *args, **kwargs):
+		# schema configured is not cooperative
+		ContainedMixin.__init__(self, *args, **kwargs)
+		PersistentCreatedModDateTrackingObject.__init__(self)
+		self.reset()
+
+	def reset(self):
+		raise NotImplementedError()
+
+	def append(self, response):
+		raise NotImplementedError()
+
+@interface.implementer(IQAggregatedMultipleChoicePart)
+class QAggregatedMultipleChoicePart(QAggregatedPart):
+	createDirectFieldProperties(IQAggregatedMultipleChoicePart)
+	
+	def Results(self):
+		return dict(self.results)
+
+	def reset(self):
+		self.results = PersistentMapping()
+		
+	def append(self, response):
+		current = self.result.get(response) or 0
+		self.results[response] = current + 1
+
+@interface.implementer(IQAggregatedMultipleChoiceMultipleAnswerPart)
+class QMultipleChoiceMultipleAnswerAggregatedPart(QAggregatedMultipleChoicePart):
+	createDirectFieldProperties(IQAggregatedMultipleChoiceMultipleAnswerPart)
+	
+@interface.implementer(IQAggregatedFreeResponsePart)
+class QAggregatedFreeResponsePart(QAggregatedPart):
+	createDirectFieldProperties(IQAggregatedFreeResponsePart)
+	
+	def Results(self):
+		return dict(self.results)
+	
+	def reset(self):
+		self.results = PersistentMapping()
+		
+	def append(self, response):
+		current = self.result.get(response) or 0
+		self.results[response] = current + 1
+
+@interface.implementer(IQAggregatedModeledContentPart)
+class QAggregatedModeledContentPart(QAggregatedPart):
+	createDirectFieldProperties(IQAggregatedModeledContentPart)
+	
+	def Results(self):
+		return list(self.results)
+	
+	def reset(self):
+		self.results = PersistentList()
+		
+	def append(self, response):
+		self.results.append(response)
+	
+@WithRepr
+@interface.implementer(IQSurveySubmission, ISublocations, IWriteMapping)
+class QAggregatedPoll(ContainedMixin,
+					  SchemaConfigured,
+					  PersistentCreatedModDateTrackingObject):
+	
+	createDirectFieldProperties(IQSurveySubmission)
+	
+	def __init__(self, *args, **kwargs):
+		# schema configured is not cooperative
+		ContainedMixin.__init__(self, *args, **kwargs)
+		PersistentCreatedModDateTrackingObject.__init__(self)
+	
+@WithRepr
+@interface.implementer(IQSurveySubmission, ISublocations, IWriteMapping)
+class QAggregatedSurvey(ContainedMixin,
+					  	SchemaConfigured,
+					  	PersistentCreatedModDateTrackingObject):
+	
+	createDirectFieldProperties(IQSurveySubmission)
+	
+	def __init__(self, *args, **kwargs):
+		# schema configured is not cooperative
+		ContainedMixin.__init__(self, *args, **kwargs)
+		PersistentCreatedModDateTrackingObject.__init__(self)
+			
+def aggregated_part_factory(part):
+	raise TypeError("Cannot find aggregated part factory for %s", part)

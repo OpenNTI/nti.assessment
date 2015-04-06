@@ -24,9 +24,11 @@
 	<adapter factory=".response.QTextResponse"
 			 provides=".interfaces.IQTextResponse"
 			 for="int"/>
+
 	<adapter factory=".response.QTextResponse"
 			 provides=".interfaces.IQTextResponse"
 			 for="long"/>
+
 	<adapter factory=".response.QTextResponse"
 			 provides=".interfaces.IQTextResponse"
 			 for="float"/>
@@ -154,6 +156,27 @@
 			 for=".interfaces.IQuestionSetSubmission"
 			 provides=".interfaces.IQAssessedQuestionSet" />
 			 
+	<!-- Normalizers -->
+	<adapter factory=".adapters.MultipleChoicePartResponseNormalizer"
+			 for=".interfaces.IQNonGradableMultipleChoicePart 
+			 	  .interfaces.IQTextResponse"
+			 provides=".interfaces.IQMultipleChoicePartResponseNormalizer" />
+
+	<adapter factory=".adapters.MultipleChoiceMultipleAnswerPartResponseNormalizer"
+			 for=".interfaces.IQNonGradableMultipleChoiceMultipleAnswerPart
+			 	  .interfaces.IQListResponse"
+			 provides=".interfaces.IQMultipleChoiceMultipleAnswerPartResponseNormalizer" />
+		
+	<adapter factory=".adapters.FreeResponsePartResponseNormalizer"
+			 for=".interfaces.IQNonGradableFreeResponsePart
+			 	  .interfaces.IQTextResponse"
+			 provides=".interfaces.IQFreeResponsePartResponseNormalizer" />
+	 
+	<adapter factory=".adapters.ModeledContentPartResponseNormalizer"
+			 for=".interfaces.IQNonGradableModeledContentPart
+			 	  .interfaces.IQModeledContentResponse"
+			 provides=".interfaces.IQModeledContentPartResponseNormalizer" />
+
 	<!-- Externalization -->
 	<include package="nti.externalization" file="meta.zcml" />
 	<include package="nti.externalization" />
