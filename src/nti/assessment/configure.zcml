@@ -211,7 +211,10 @@
 						 .interfaces.IQPoll
 						 .interfaces.IQSurvey
 						 .interfaces.IQPollSubmission
-						 .interfaces.IQSurveySubmission"
+						 .interfaces.IQSurveySubmission
+						 .interfaces.IQAggregatedPart
+						 .interfaces.IQAggregatedPoll
+						 .interfaces.IQAggregatedSurvey"
 		modules=".common .hint .assessed .parts .question .response 
 				 .solution .submission .assignment .survey"
 		factory_modules=".submission .question .response .survey"

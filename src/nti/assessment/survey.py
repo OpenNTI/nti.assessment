@@ -216,8 +216,6 @@ class QAggregatedPart(ContainedMixin,
 	
 	createDirectFieldProperties(IQAggregatedPart)
 	
-	results = None
-	
 	__external_can_create__ = False
 	
 	def __init__(self, *args, **kwargs):
@@ -231,14 +229,19 @@ class QAggregatedPart(ContainedMixin,
 
 	def append(self, response):
 		raise NotImplementedError()
-
+		
 @interface.implementer(IQAggregatedMultipleChoicePart)
 class QAggregatedMultipleChoicePart(QAggregatedPart):
 	createDirectFieldProperties(IQAggregatedMultipleChoicePart)
 	
+	@property
 	def Results(self):
 		return dict(self.results)
 
+	@Results.setter
+	def Results(self,nv):
+		pass
+		
 	def reset(self):
 		self.results = PersistentMapping()
 		
@@ -261,8 +264,13 @@ class QMultipleChoiceMultipleAnswerAggregatedPart(QAggregatedMultipleChoicePart)
 class QAggregatedFreeResponsePart(QAggregatedPart):
 	createDirectFieldProperties(IQAggregatedFreeResponsePart)
 	
+	@property
 	def Results(self):
 		return dict(self.results)
+	
+	@Results.setter
+	def Results(self,nv):
+		pass
 	
 	def reset(self):
 		self.results = PersistentMapping()
@@ -282,8 +290,13 @@ class QAggregatedFreeResponsePart(QAggregatedPart):
 class QAggregatedModeledContentPart(QAggregatedPart):
 	createDirectFieldProperties(IQAggregatedModeledContentPart)
 	
+	@property
 	def Results(self):
 		return list(self.results)
+	
+	@Results.setter
+	def Results(self,nv):
+		pass
 	
 	def reset(self):
 		self.results = PersistentList()

@@ -30,6 +30,8 @@ from nti.assessment.interfaces import IQPollSubmission
 from nti.assessment.interfaces import IQSurveySubmission
 from nti.assessment.interfaces import IQNonGradableMultipleChoicePart
 
+from nti.assessment.interfaces import IQAggregatedMultipleChoicePart
+
 from nti.assessment.parts import QNonGradableFreeResponsePart
 from nti.assessment.parts import QNonGradableMultipleChoicePart
 
@@ -37,6 +39,8 @@ from nti.assessment.survey import QPoll
 from nti.assessment.survey import QSurvey
 from nti.assessment.survey import QPollSubmission
 from nti.assessment.survey import QSurveySubmission
+
+from nti.assessment.survey import QAggregatedMultipleChoicePart
 
 from nti.externalization.tests import externalizes
 
@@ -47,7 +51,7 @@ from nose.tools import assert_raises
 
 from nti.assessment.tests import AssessmentTestCase
 
-class TestPoll(AssessmentTestCase):
+class TestSurvey(AssessmentTestCase):
 
 	def test_part_provides(self):
 		assert_that( QNonGradableMultipleChoicePart(), 
@@ -152,3 +156,13 @@ class TestPoll(AssessmentTestCase):
 		del ssub['foo-ps']
 		assert_that(ssub, has_length(1))
 		assert_that(ssub.index('foo-ps'), is_(-1))
+
+class TestAggregation(AssessmentTestCase):
+	
+	def test_externalizes(self):
+		assert_that(QAggregatedMultipleChoicePart(), verifiably_provides(IQAggregatedMultipleChoicePart) )
+		assert_that(QAggregatedMultipleChoicePart(), 
+					externalizes(has_entries('Class', 'AggregatedMultipleChoicePart',
+								 			 'MimeType', 'application/vnd.nextthought.assessment.aggregatedmultiplechoicepart' )) )
+		assert_that( find_factory_for( toExternalObject( QAggregatedMultipleChoicePart() ) ),
+					 is_( none() ) )

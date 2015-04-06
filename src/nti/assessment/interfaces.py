@@ -1190,7 +1190,7 @@ class IQSurveySubmission(IQBaseSubmission, IContextAnnotatable):
 	
 class IQAggregatedPart(IContained):
 	
-	def reset(self):
+	def reset():
 		"""
 		reset this part
 		"""
