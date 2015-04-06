@@ -237,6 +237,8 @@ class QNonGradableConnectingPart(QNonGradablePart):
 class QConnectingPart(QPart, QNonGradableConnectingPart): # order matters
 	pass	
 
+## CS: Spelling mistake. There maybe objects stored with 
+## this invalid class name
 import zope.deferredimport
 zope.deferredimport.initialize()
 zope.deferredimport.deprecated(
