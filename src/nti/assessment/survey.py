@@ -5,8 +5,6 @@
 """
 
 from __future__ import unicode_literals, print_function, absolute_import, division
-from nti.assessment.interfaces import IQResponse
-from asyncore import poll
 __docformat__ = "restructuredtext en"
 
 logger = __import__('logging').getLogger(__name__)
@@ -48,6 +46,7 @@ from .common import normalize_response
 
 from .interfaces import IQPoll
 from .interfaces import IQSurvey
+from .interfaces import IQResponse
 from .interfaces import IQBaseSubmission
 from .interfaces import IQPollSubmission
 from .interfaces import IQSurveySubmission
