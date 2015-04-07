@@ -6,6 +6,7 @@
 
 from __future__ import unicode_literals, print_function, absolute_import, division
 from nti.assessment.interfaces import IQResponse
+from asyncore import poll
 __docformat__ = "restructuredtext en"
 
 logger = __import__('logging').getLogger(__name__)
@@ -162,6 +163,9 @@ class QBasePollSet(object):
 			if poll.pollId == key:
 				return idx
 		return -1
+
+	def append(self, value):
+		self.polls.append(value)
 
 	def __getitem__(self, key):
 		idx = self.index(key)
@@ -339,6 +343,12 @@ class QAggregatedPoll(ContainedMixin,
 	def __len__(self):
 		return len(self.parts)
 
+	def __iadd__(self, other):
+		assert IQAggregatedPoll.providedBy(other) and self.pollId == other.pollId
+		for idx, part in enumerate(other.parts):
+			self.parts[idx] += part
+		return self
+
 @interface.implementer(IQAggregatedSurvey, ISublocations, IWriteMapping)
 class QAggregatedSurvey(ContainedMixin,
 					  	SchemaConfigured,
@@ -355,6 +365,16 @@ class QAggregatedSurvey(ContainedMixin,
 		# schema configured is not cooperative
 		ContainedMixin.__init__(self, *args, **kwargs)
 		PersistentCreatedModDateTrackingObject.__init__(self)
+
+	def __iadd__(self, other):
+		assert IQAggregatedSurvey.providedBy(other) and self.surveyId == other.surveyId
+		for agg_poll in enumerate(other.questions):
+			this_poll = self.get(agg_poll.pollId)
+			if this_poll is None:
+				self.append(agg_poll)
+			else:
+				this_poll += agg_poll
+		return self
 
 def aggregated_part_factory(part):
 	if IQNonGradableFreeResponsePart.providedBy(part):
@@ -392,7 +412,7 @@ def aggregate_poll_submission(submission, registry=component):
 	for sub_part, q_part in zip(submission.parts, poll.parts):
 		__traceback_info__ = sub_part, q_part
 		response = IQResponse(sub_part)
-		response = normalize_response(response, q_part)
+		response = normalize_response(q_part, response)
 		aggregated_part = aggregated_part_factory(q_part)()
 		aggregated_part.append(response)
 		aggregated_parts.append(aggregated_part)
