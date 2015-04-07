@@ -12,12 +12,14 @@ from hamcrest import is_
 from hamcrest import none
 from hamcrest import is_not
 from hamcrest import contains
+from hamcrest import has_entry
 from hamcrest import has_length
 from hamcrest import assert_that
 from hamcrest import has_entries
 from hamcrest import greater_than
 from hamcrest import has_property
 
+from zope import component
 from zope.schema.interfaces import WrongContainedType
 
 from nti.externalization.externalization import toExternalObject
@@ -40,6 +42,7 @@ from nti.assessment.survey import QSurvey
 from nti.assessment.survey import QPollSubmission
 from nti.assessment.survey import QSurveySubmission
 
+from nti.assessment.interfaces import IQAggregatedPoll
 from nti.assessment.survey import QAggregatedMultipleChoicePart
 
 from nti.externalization.tests import externalizes
@@ -166,3 +169,22 @@ class TestAggregation(AssessmentTestCase):
 								 			 'MimeType', 'application/vnd.nextthought.assessment.aggregatedmultiplechoicepart' )) )
 		assert_that( find_factory_for( toExternalObject( QAggregatedMultipleChoicePart() ) ),
 					 is_( none() ) )
+
+	def test_aggregation_poll(self):
+		part = QNonGradableMultipleChoicePart(choices=[u'a', 'b', 'c'], content=u'here')
+		poll = QPoll(parts=(part,))
+		poll.ntiid = 'tag:nextthought.com,2011-10:AOPS-HTML-poll.0'
+		component.globalSiteManager.registerUtility(poll, IQPoll, name=poll.ntiid)
+		
+		poll_1 = QPollSubmission(pollId=poll.ntiid, parts=(1,))
+		aggregated = IQAggregatedPoll(poll_1, None)
+		assert_that(aggregated, is_not(none()))
+		assert_that(aggregated, has_length(1))
+		assert_that(aggregated, has_property('parts', has_length(1)))
+		assert_that(aggregated.parts[0], has_property('Results', has_entry(1,1)))
+		
+		poll_2 = QPollSubmission(pollId=poll.ntiid, parts=(1,))
+		aggregated_2 = IQAggregatedPoll(poll_2, None)
+		
+		aggregated += aggregated_2
+		assert_that(aggregated.parts[0], has_property('Results', has_entry(1,2)))

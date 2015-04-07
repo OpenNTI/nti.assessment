@@ -249,14 +249,14 @@ class QAggregatedMultipleChoicePart(QAggregatedPart):
 		self.results = PersistentMapping()
 		
 	def append(self, response):
-		current = self.result.get(response) or 0
+		current = self.results.get(response) or 0
 		self.results[response] = current + 1
 
 	def __iadd__(self, other):
 		assert IQAggregatedMultipleChoicePart.providedBy(other)
 		for k, v in other.results.items():
-			current = v + self.result.get(k) or 0
-			self.result[k] = current
+			current = v + self.results.get(k) or 0
+			self.results[k] = current
 		return self
 
 @interface.implementer(IQAggregatedMultipleChoiceMultipleAnswerPart)
@@ -279,14 +279,14 @@ class QAggregatedFreeResponsePart(QAggregatedPart):
 		self.results = PersistentMapping()
 		
 	def append(self, response):
-		current = self.result.get(response) or 0
+		current = self.results.get(response) or 0
 		self.results[response] = current + 1
 
 	def __iadd__(self, other):
 		assert IQAggregatedFreeResponsePart.providedBy(other)
 		for k, v in other.results.items():
-			current = v + self.result.get(k) or 0
-			self.result[k] = current
+			current = v + self.results.get(k) or 0
+			self.results[k] = current
 		return self
 
 @interface.implementer(IQAggregatedModeledContentPart)
