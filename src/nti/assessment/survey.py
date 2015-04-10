@@ -82,6 +82,8 @@ class QPoll(Contained,
 
 	mimeType = mime_type = 'application/vnd.nextthought.napoll'
 
+	id = alias('ntiid')
+	
 	def __init__(self, *args, **kwargs):
 		Persistent.__init__(self)
 		SchemaConfigured.__init__(self, *args, **kwargs)
@@ -103,6 +105,8 @@ class QSurvey(Contained,
 			  Persistent):
 
 	questions = ()
+
+	id = alias('ntiid')
 	polls = parts = alias('questions')
 
 	createDirectFieldProperties(IQSurvey)
@@ -130,8 +134,9 @@ class QSurvey(Contained,
 class QPollSubmission(SchemaConfigured, Contained):
 	createDirectFieldProperties(IQPollSubmission)
 
+	id = alias('pollId')
 	sublocations = _make_sublocations()
-
+	
 	def __iter__(self):
 		return iter(self.parts)
 
@@ -200,6 +205,7 @@ class QSurveySubmission(ContainedMixin,
 	createDirectFieldProperties(IQBaseSubmission)
 	createDirectFieldProperties(IQSurveySubmission)
 
+	id = alias('surveyId')
 	parts = polls = alias('questions')
 
 	sublocations = _make_sublocations('questions')
@@ -320,8 +326,9 @@ class QAggregatedPoll(ContainedMixin,
 	
 	createDirectFieldProperties(IQAggregatedPoll)
 	
+	id = alias('pollId')
 	sublocations = _make_sublocations()
-	
+		
 	def __init__(self, *args, **kwargs):
 		# schema configured is not cooperative
 		ContainedMixin.__init__(self, *args, **kwargs)
@@ -356,6 +363,7 @@ class QAggregatedSurvey(ContainedMixin,
 	
 	createDirectFieldProperties(IQAggregatedSurvey)
 		
+	id = alias('surveyId')
 	parts = polls = alias('questions')
 	
 	sublocations = _make_sublocations('questions')

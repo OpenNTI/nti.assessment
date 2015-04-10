@@ -1134,7 +1134,7 @@ class IQMultipleChoiceMultipleAnswerPartResponseNormalizer(IQPartResponseNormali
 ## polls
 
 class IQInquiry(IAnnotatable):
-	pass
+	ntiid = ValidNTIID(title="Object NTIID", required=False)
 
 class IQPoll(IQInquiry):
 	"""
@@ -1146,8 +1146,6 @@ class IQPoll(IQInquiry):
 	Polls are annotatable. Uses of this include things like references
 	to where questions appear in question sets or other types of content.
 	"""
-
-	ntiid = ValidNTIID(title="Poll NTIID", required=False)
 
 	content = Text( title="The content to present to the user, if any.",
 					default='')
@@ -1164,16 +1162,15 @@ class IQSurvey(ITitledContent, IQInquiry):
 	Surveys sets are annotatable.
 	"""
 
-	ntiid = ValidNTIID(title="Survey NTIID", required=False)
-
 	questions = IndexedIterable( title="The ordered questions in the set.",
 								 min_length=1,
 								 value_type=Object(IQPoll, title="The poll questions" ),
 								 )
 
 class IQInquirySubmission(IQPartsSubmission):
-	pass
-
+	id = interface.Attribute("Identifier of the inquiry being responded to." )
+	id.setTaggedValue('_ext_excluded_out', True)
+	
 class IQPollSubmission(IQInquirySubmission):
 	"""
 	A submission in response to a poll.
@@ -1239,6 +1236,9 @@ class IQAggregatedModeledContentPart(IQAggregatedPart):
 				 	readonly=True)
 
 class IQAggregatedInquiry(IContained, IContextAnnotatable):
+	
+	id = interface.Attribute("Identifier of the inquiry being aggregated." )
+	id.setTaggedValue('_ext_excluded_out', True)
 	
 	def __iadd__(other):
 		pass
