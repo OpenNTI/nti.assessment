@@ -1133,7 +1133,10 @@ class IQMultipleChoiceMultipleAnswerPartResponseNormalizer(IQPartResponseNormali
 
 ## polls
 
-class IQPoll(IAnnotatable):
+class IQInquiry(IAnnotatable):
+	pass
+
+class IQPoll(IQInquiry):
 	"""
 	A poll question consists of one or more parts (typically one).
 	It may have prefacing text. It may have other metadata, such as what
@@ -1154,7 +1157,7 @@ class IQPoll(IAnnotatable):
 							 value_type=Object( IPollable, title="A pollable question part" ),
 							 )
 
-class IQSurvey(ITitledContent, IAnnotatable):
+class IQSurvey(ITitledContent, IQInquiry):
 	"""
 	An ordered group of poll questions.
 
@@ -1168,7 +1171,10 @@ class IQSurvey(ITitledContent, IAnnotatable):
 								 value_type=Object(IQPoll, title="The poll questions" ),
 								 )
 
-class IQPollSubmission(IQPartsSubmission):
+class IQInquirySubmission(IQPartsSubmission):
+	pass
+
+class IQPollSubmission(IQInquirySubmission):
 	"""
 	A submission in response to a poll.
 
@@ -1177,7 +1183,7 @@ class IQPollSubmission(IQPartsSubmission):
 
 	pollId = TextLine( title="Identifier of the poll being responded to." )
 
-class IQSurveySubmission(IQBaseSubmission, IContextAnnotatable):
+class IQSurveySubmission(IQInquirySubmission, IContextAnnotatable):
 	"""
 	A submission in response to a survey
 	"""
@@ -1232,12 +1238,12 @@ class IQAggregatedModeledContentPart(IQAggregatedPart):
 				 	value_type=Object(IQModeledContentResponse),
 				 	readonly=True)
 
-class IQAggregatedAnalysis(IContained, IContextAnnotatable):
+class IQAggregatedInquiry(IContained, IContextAnnotatable):
 	
 	def __iadd__(other):
 		pass
 
-class IQAggregatedPoll(IQAggregatedAnalysis):
+class IQAggregatedPoll(IQAggregatedInquiry):
 	"""
 	Aggregation for a poll
 	"""
@@ -1248,7 +1254,7 @@ class IQAggregatedPoll(IQAggregatedAnalysis):
 							 value_type=Object( IQAggregatedPart,
 												title="The aggregated part.") )
 
-class IQAggregatedSurvey(IQAggregatedAnalysis):
+class IQAggregatedSurvey(IQAggregatedInquiry):
 	"""
 	Aggregation for a survey
 	"""
