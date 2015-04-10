@@ -1232,7 +1232,12 @@ class IQAggregatedModeledContentPart(IQAggregatedPart):
 				 	value_type=Object(IQModeledContentResponse),
 				 	readonly=True)
 
-class IQAggregatedPoll(IContained, IContextAnnotatable):
+class IQAggregatedAnalysis(IContained, IContextAnnotatable):
+	
+	def __iadd__(other):
+		pass
+
+class IQAggregatedPoll(IQAggregatedAnalysis):
 	"""
 	Aggregation for a poll
 	"""
@@ -1243,7 +1248,7 @@ class IQAggregatedPoll(IContained, IContextAnnotatable):
 							 value_type=Object( IQAggregatedPart,
 												title="The aggregated part.") )
 
-class IQAggregatedSurvey(IContained, IContextAnnotatable):
+class IQAggregatedSurvey(IQAggregatedAnalysis):
 	"""
 	Aggregation for a survey
 	"""
