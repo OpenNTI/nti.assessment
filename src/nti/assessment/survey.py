@@ -131,12 +131,19 @@ class QSurvey(Contained,
 
 @WithRepr
 @interface.implementer(IQPollSubmission, ISublocations, IFiniteSequence)
-class QPollSubmission(SchemaConfigured, Contained):
+class QPollSubmission(ContainedMixin,
+					  SchemaConfigured,
+					  PersistentCreatedModDateTrackingObject):
 	createDirectFieldProperties(IQPollSubmission)
 
 	id = alias('pollId')
 	sublocations = _make_sublocations()
 	
+	def __init__(self, *args, **kwargs):
+		# schema configured is not cooperative
+		ContainedMixin.__init__(self, *args, **kwargs)
+		PersistentCreatedModDateTrackingObject.__init__(self)
+		
 	def __iter__(self):
 		return iter(self.parts)
 
