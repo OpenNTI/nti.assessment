@@ -1134,7 +1134,22 @@ class IQMultipleChoiceMultipleAnswerPartResponseNormalizer(IQPartResponseNormali
 ## polls
 
 class IQInquiry(IAnnotatable):
+
 	ntiid = ValidNTIID(title="Object NTIID", required=False)
+	
+	available_for_submission_beginning = Datetime(
+		title="Submissions are accepted no earlier than this.",
+		description="""When present, this specifies the time instant at which
+		submissions of this inquity may begin to be accepted.""",
+		required=False)
+
+	available_for_submission_ending = Datetime(
+		title="Submissions are accepted no later than this.",
+		description="""When present, this specifies the last instance at which
+		submissions will be accepted. It can be considered the poll's "closing date."
+		As with ``available_for_submission_beginning``,
+		this will typically be relative and converted.""",
+		required=False )
 
 class IQPoll(IQInquiry):
 	"""
