@@ -3,6 +3,7 @@
 """
 .. $Id$
 """
+
 from __future__ import unicode_literals, print_function, absolute_import, division
 __docformat__ = "restructuredtext en"
 
@@ -19,7 +20,7 @@ from zope.location.interfaces import ISublocations
 
 from persistent import Persistent
 
-from nti.common.property import Lazy
+from nti.common.string import safestr
 from nti.common.property import CachedProperty
 from nti.common.maps import CaseInsensitiveDict
 
@@ -33,10 +34,6 @@ from nti.schema.fieldproperty import createDirectFieldProperties
 
 from .interfaces import IWordBank
 from .interfaces import IWordEntry
-
-def safestr(s):
-	s = s.decode("utf-8") if isinstance(s, bytes) else s
-	return unicode(s) if s is not None else None
 
 def safe_encode(word, encoding="UTF-8"):
 	if not isinstance(word, six.string_types):
@@ -142,12 +139,12 @@ class WordBank(Contained, SchemaConfigured, Persistent):
 		for entry in self:
 			yield entry
 
-	@Lazy
+	@CachedProperty('entries')
 	def _id_map(self):
 		result = {x.wid: x for x in self.entries}
 		return result
 
-	@Lazy
+	@CachedProperty('entries')
 	def _word_map(self):
 		result = CaseInsensitiveDict()
 		result.update({safe_encode(x.word): x.wid for x in self.entries})
