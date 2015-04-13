@@ -625,7 +625,30 @@ class IQAssignmentPart(ITitledContent):
 	auto_grade = Bool(title="Should this part be run through the grading machinery?",
 					  default=False)
 
-class IQAssignment(ITitledContent, IAnnotatable):
+class IQSubmittable(interface.Interface):
+	
+	available_for_submission_beginning = Datetime(
+		title="Submissions are accepted no earlier than this.",
+		description="""When present, this specifies the time instant at which
+		submissions of this object may begin to be accepted. If this is absent,
+		submissions are always allowed. While this is represented here as an actual
+		concrete timestamp, it is expected that in many cases the source representation
+		will be relative to something else (a ``timedelta``) and conversion to absolute
+		timestamp will be done as needed.""",
+		required=False)
+
+	available_for_submission_ending = Datetime(
+		title="Submissions are accepted no later than this.",
+		description="""When present, this specifies the last instance at which
+		submissions will be accepted. It can be considered the object's "due date."
+		As with ``available_for_submission_beginning``,
+		this will typically be relative and converted.""",
+		required=False )
+	
+	no_submit = Bool( title="Whether this object accept submissions",
+					  default=False)
+
+class IQAssignment(ITitledContent, IAnnotatable, IQSubmittable):
 	"""
 	An assignment differs from either plain questions or question sets
 	in that there is an expectation that it must be completed,
@@ -662,24 +685,6 @@ class IQAssignment(ITitledContent, IAnnotatable):
 	content = Text( title="The content to present to the user, if any.",
 					default='')
 
-	available_for_submission_beginning = Datetime(
-		title="Submissions are accepted no earlier than this.",
-		description="""When present, this specifies the time instant at which
-		submissions of this assignment may begin to be accepted. If this is absent,
-		submissions are always allowed. While this is represented here as an actual
-		concrete timestamp, it is expected that in many cases the source representation
-		will be relative to something else (a ``timedelta``) and conversion to absolute
-		timestamp will be done as needed.""",
-		required=False)
-
-	available_for_submission_ending = Datetime(
-		title="Submissions are accepted no later than this.",
-		description="""When present, this specifies the last instance at which
-		submissions will be accepted. It can be considered the assignment's "due date."
-		As with ``available_for_submission_beginning``,
-		this will typically be relative and converted.""",
-		required=False )
-
 	category_name = Tag(title="Assignments can be grouped into categories.",
 						description="""By providing this information, assignments
 						can be grouped by an additional dimension. This grouping
@@ -715,9 +720,6 @@ class IQAssignment(ITitledContent, IAnnotatable):
 						  is the default. Specific applications will determine what should and should
 						  not be public""",
 						  default=True)
-
-	no_submit = Bool( title="Whether this assignment accept submissions",
-					  default=False)
 
 	# A note on handling assignments that have an associated time limit
 	# (e.g., you have one hour to complete this assignment once you begin):
@@ -1133,23 +1135,9 @@ class IQMultipleChoiceMultipleAnswerPartResponseNormalizer(IQPartResponseNormali
 
 ## polls
 
-class IQInquiry(IAnnotatable):
+class IQInquiry(IAnnotatable, IQSubmittable):
 
 	ntiid = ValidNTIID(title="Object NTIID", required=False)
-	
-	available_for_submission_beginning = Datetime(
-		title="Submissions are accepted no earlier than this.",
-		description="""When present, this specifies the time instant at which
-		submissions of this inquity may begin to be accepted.""",
-		required=False)
-
-	available_for_submission_ending = Datetime(
-		title="Submissions are accepted no later than this.",
-		description="""When present, this specifies the last instance at which
-		submissions will be accepted. It can be considered the poll's "closing date."
-		As with ``available_for_submission_beginning``,
-		this will typically be relative and converted.""",
-		required=False )
 
 class IQPoll(IQInquiry):
 	"""
