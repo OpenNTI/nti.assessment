@@ -66,6 +66,7 @@ setup(
  		'zope.location',
  		'zope.mimetype',
  		'zope.schema',
+ 		'zope.security',
  		'nti.common',
  		'nti.contentfragments',
  		'nti.coremetadata',

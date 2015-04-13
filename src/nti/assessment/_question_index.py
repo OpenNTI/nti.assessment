@@ -21,13 +21,13 @@ from nti.contentfragments.interfaces import SanitizedHTMLContentFragment
 from nti.externalization.internalization import find_factory_for
 from nti.externalization.internalization import update_from_external_object
 
+from .common import iface_of_assessment as _iface_to_register
+
 from .interfaces import IQPoll
 from .interfaces import IQSurvey
 from .interfaces import IQuestion
 from .interfaces import IQAssignment
 from .interfaces import IQuestionSet
-
-from .common import iface_of_assessment as _iface_to_register
 
 def _ntiid_object_hook( k, v, x ):
 	"""
