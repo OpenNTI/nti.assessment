@@ -17,17 +17,24 @@ import simplejson as json
 from zope import interface
 from zope import component
 
+from zope.annotation.interfaces import IAttributeAnnotatable
+
 from zope.container.contained import Contained
 
 from zope.location.interfaces import ISublocations
 
+from zope.mimetype.interfaces import IContentTypeAware
+
 from persistent import Persistent
+
+from nti.common.property import alias
 
 from nti.externalization.representation import WithRepr
 from nti.externalization.externalization import toExternalObject
 
 from nti.schema.schema import EqHash
 from nti.schema.field import SchemaConfigured
+from nti.schema.fieldproperty import AdaptingFieldProperty
 from nti.schema.fieldproperty import createDirectFieldProperties
 
 from .interfaces import IQPoll
@@ -36,6 +43,7 @@ from .interfaces import IQSurvey
 from .interfaces import IQuestion
 from .interfaces import IQuestionSet
 from .interfaces import IQAssignment
+from .interfaces import IQSubmittable
 from .interfaces import IQSubmittedPart
 from .interfaces import IQNonGradablePart
 from .interfaces import IQTimedAssignment
@@ -120,6 +128,20 @@ def iface_of_assessment(thing):
 
 ## classes
 
+@WithRepr
+@interface.implementer(	IQSubmittable,
+						IContentTypeAware,
+						IAttributeAnnotatable)
+class QSubmittable(SchemaConfigured, Contained):
+	
+	ntiid = None
+
+	available_for_submission_ending = AdaptingFieldProperty(IQAssignment['available_for_submission_ending'])
+	available_for_submission_beginning = AdaptingFieldProperty(IQAssignment['available_for_submission_beginning'])
+	
+	not_after = alias('available_for_submission_ending')
+	not_before = alias('available_for_submission_beginning')
+	
 @WithRepr
 @interface.implementer(IQSubmittedPart, ISublocations)
 @EqHash('submittedResponse', superhash=True)

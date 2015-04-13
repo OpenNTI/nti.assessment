@@ -35,13 +35,15 @@ from nti.schema.field import SchemaConfigured
 from nti.schema.fieldproperty import AdaptingFieldProperty
 from nti.schema.fieldproperty import createDirectFieldProperties
 
+from ._util import make_sublocations as _make_sublocations
+
+from .common import QSubmittable
+
 from .interfaces import IQAssignment
 from .interfaces import IQAssignmentPart
 from .interfaces import IQBaseSubmission
 from .interfaces import IQTimedAssignment
 from .interfaces import IQAssignmentSubmissionPendingAssessment
-
-from ._util import make_sublocations as _make_sublocations
 
 @interface.implementer(IQAssignmentPart,
 					   IContentTypeAware,
@@ -56,21 +58,14 @@ class QAssignmentPart(SchemaConfigured,
 	
 	mime_type = 'application/vnd.nextthought.assessment.assignmentpart'
 
-@interface.implementer(IQAssignment,
-					   IContentTypeAware,
-					   IAttributeAnnotatable)
+@interface.implementer(IQAssignment)
 @WithRepr
-class QAssignment(SchemaConfigured,
-				  Contained,
+class QAssignment(QSubmittable,
 				  Persistent):
-	ntiid = None
-	
+
 	createDirectFieldProperties(IQAssignment)
 
 	title = AdaptingFieldProperty(IQAssignment['title'])
-	
-	available_for_submission_ending = AdaptingFieldProperty(IQAssignment['available_for_submission_ending'])
-	available_for_submission_beginning = AdaptingFieldProperty(IQAssignment['available_for_submission_beginning'])
 	
 	mime_type = 'application/vnd.nextthought.assessment.assignment'
 	

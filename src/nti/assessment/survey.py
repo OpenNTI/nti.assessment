@@ -15,13 +15,7 @@ from zope import interface
 from zope.interface.common.mapping import IWriteMapping
 from zope.interface.common.sequence import IFiniteSequence
 
-from zope.annotation.interfaces import IAttributeAnnotatable
-
-from zope.container.contained import Contained
-
 from zope.location.interfaces import ISublocations
-
-from zope.mimetype.interfaces import IContentTypeAware
 
 from persistent import Persistent
 from persistent.list import PersistentList
@@ -42,6 +36,7 @@ from nti.schema.fieldproperty import createDirectFieldProperties
 
 from ._util import make_sublocations as _make_sublocations
 
+from .common import QSubmittable
 from .common import normalize_response
 
 from .interfaces import IQPoll
@@ -67,12 +62,9 @@ from .interfaces import IQAggregatedMultipleChoiceMultipleAnswerPart
 from .interfaces import SURVEY_MIME_TYPE
 
 @interface.implementer(IQPoll,
-					   IFiniteSequence,
-					   IContentTypeAware,
-					   IAttributeAnnotatable)
+					   IFiniteSequence)
 @EqHash('content', 'parts', superhash=True)
-class QPoll(Contained,
-			SchemaConfigured,
+class QPoll(QSubmittable,
 			Persistent):
 
 	parts = ()
@@ -96,12 +88,9 @@ class QPoll(Contained,
 
 @interface.implementer(IQSurvey,
 					   ISublocations,
-					   IFiniteSequence,
-					   IContentTypeAware,
-					   IAttributeAnnotatable)
+					   IFiniteSequence)
 @EqHash('title', 'questions', superhash=True)
-class QSurvey(Contained,
-			  SchemaConfigured,
+class QSurvey(QSubmittable,
 			  Persistent):
 
 	questions = ()
