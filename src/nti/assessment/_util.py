@@ -28,8 +28,8 @@ class TrivialValuedMixin(object):
 	value = None
 
 	def __init__(self, *args, **kwargs):
-		# The contents of ``self.value`` come from either the first arg
-		# (if positional args are given) or the kwarg name such.
+		## The contents of ``self.value`` come from either the first arg
+		## (if positional args are given) or the kwarg name such.
 
 		if args:
 			value = args[0]
@@ -38,7 +38,8 @@ class TrivialValuedMixin(object):
 		else:
 			value = None
 
-		# Avoid the appearance of trying to pass args to object.__init__ to avoid a Py3K warning
+		## Avoid the appearance of trying to pass args to object.__init__ to
+		## avoid a Py3K warning
 		init = super(TrivialValuedMixin, self).__init__
 		if getattr(init, '__objclass__', None) is not object:  # object's init is a method-wrapper
 			init(*args, **kwargs)
@@ -62,9 +63,9 @@ def make_sublocations(child_attr='parts'):
 	return sublocations
 
 def dctimes_property_fallback(attrname, dcname):
-	# For BWC, if we happen to have annotations that happens to include
-	# zope dublincore data, we will use it
-	# TODO: Add a migration to remove these
+	## For BWC, if we happen to have annotations that happens to include
+	## zope dublincore data, we will use it
+	## TODO: Add a migration to remove these
 	def get(self):
 		self._p_activate()  # make sure there's a __dict__
 		if attrname in self.__dict__:

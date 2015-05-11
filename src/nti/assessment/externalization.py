@@ -154,10 +154,10 @@ class _QUploadedFileObjectIO(AbstractDynamicObjectIO):
 			## NTIID/OID is provided save the reference
 			interface.alsoProvides(ext_self, IInternalUploadedFileRef)
 			ext_self.reference = parsed.get(OID) or parsed.get(NTIID)
-			# then remove those fields to avoid any hint of a copy
+			## then remove those fields to avoid any hint of a copy
 			for name in (OID, NTIID, 'download_url', 'url', 'value', 'filename'):
 				parsed.pop(name, None)
-		# start update
+		## start update
 		updated = super(_QUploadedFileObjectIO, self).updateFromExternalObject(parsed, *args, **kwargs)
 		ext_self = self._ext_replacement()
 		url = parsed.get('url') or parsed.get('value')
@@ -184,9 +184,9 @@ class _QUploadedFileObjectIO(AbstractDynamicObjectIO):
 
 	def toExternalObject( self, mergeFrom=None, **kwargs ):
 		ext_dict = super(_QUploadedFileObjectIO,self).toExternalObject(**kwargs)
-		# TODO: View name. Coupled to the app layer. And this is now in three places.
-		# It's not quite possible to fully traverse to the file sometimes
-		# (TODO: verify this in this case) so we go directly to the file address
+		## TODO: View name. Coupled to the app layer. And this is now in three places.
+		## It's not quite possible to fully traverse to the file sometimes
+		## (TODO: verify this in this case) so we go directly to the file address
 		the_file = self._ext_replacement()
 		ext_dict['name'] = the_file.name or None
 		ext_dict['filename'] = the_file.filename or None

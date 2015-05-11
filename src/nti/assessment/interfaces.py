@@ -570,9 +570,16 @@ class IQModeledContentPart(IQNonGradableModeledContentPart, IQPart):
 
 IQGradableModeledContentPart = IQModeledContentPart
 
+## assessment
+
+class IQAssessment(interface.Interface):
+	"""
+	Marker interface for all assessment objects
+	"""
+	
 ## question
 
-class IQuestion(IAnnotatable):
+class IQuestion(IQAssessment, IAnnotatable):
 	"""
 	A question consists of one or more parts (typically one) that require answers.
 	It may have prefacing text. It may have other metadata, such as what
@@ -593,7 +600,7 @@ class IQuestion(IAnnotatable):
 							 value_type=Object( IQPart, title="A question part" ),
 							 )
 
-class IQuestionSet(ITitledContent, IAnnotatable):
+class IQuestionSet(IQAssessment, ITitledContent, IAnnotatable):
 	"""
 	An ordered group of related questions generally intended to be
 	completed as a unit (aka, a Quiz or worksheet).
@@ -648,7 +655,7 @@ class IQSubmittable(interface.Interface):
 	no_submit = Bool( title="Whether this object accept submissions",
 					  default=False)
 
-class IQAssignment(ITitledContent, IAnnotatable, IQSubmittable):
+class IQAssignment(IQAssessment, ITitledContent, IAnnotatable, IQSubmittable):
 	"""
 	An assignment differs from either plain questions or question sets
 	in that there is an expectation that it must be completed,
