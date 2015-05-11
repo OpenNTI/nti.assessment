@@ -758,7 +758,8 @@ class IQAssignmentDateContext(interface.Interface):
 		itself.
 		"""
 
-class IQAssignmentPolicies(interface.Interface):
+class IQAssessmentPolicies(interface.Interface):
+	
 	"""
 	An object that can be used to hold (uninterpreted) policy
 	objects keyed off of assignment NTIIDs.
@@ -766,20 +767,24 @@ class IQAssignmentPolicies(interface.Interface):
 	This package defines no implementations of this interface.
 	"""
 
-	def getPolicyForAssignment(assignment_ntiid):
+	def getPolicyForAssessment(assignment_ntiid):
 		"""
-		Return a policy object for the assignment.
+		Return a policy object for the assessment.
 		"""
-
-	def assignments():
+	getPolicyForAssignment = getPolicyForAssessment # alias for BWC
+	
+	def assessments():
 		"""
-		return the list of assigments ids in this object
+		return the list of assessments ids in this object
 		"""
-
+	assignments = assessments # alias for BWC
+	
 	def __bool__():
 		"""
 		Are there any policies registered? If no, return False.
 		"""
+
+IQAssignmentPolicies = IQAssessmentPolicies # alias for BWC
 
 class IQAssignmentPolicyValidator(interface.Interface):
 	"""
