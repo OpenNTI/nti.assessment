@@ -744,26 +744,28 @@ class IQTimedAssignment(IQAssignment):
 								seconds) students have to submit the assignments""",
 								required=True)
 
-class IQAssignmentDateContext(interface.Interface):
+class IQAssessmentDateContext(interface.Interface):
 	"""
-	An object that can be used as context to adapt an assignment
+	An object that can be used as context to adapt an assessment
 	date.
 
 	This package provides no implementations of this interface.
 	"""
 
-	def assignments():
+	def assessments():
 		"""
-		return the list of assigments ids in this context
+		return the list of assessment ids in this context
 		"""
+	assignments = assessments # alias for BWC
 
-	def of(assignment):
+	def of(assessment):
 		"""
-		Given an assignment, return an object having the same date
-		attributes as the assignment, but interpreted in the context
-		of this object. If no changes are required, can return the assignment
+		Given an assessment, return an object having the same date
+		attributes as the assessment, but interpreted in the context
+		of this object. If no changes are required, can return the assessment
 		itself.
 		"""
+IQAssignmentDateContext = IQAssessmentDateContext # alias for BWC
 
 class IQAssessmentPolicies(interface.Interface):
 	
