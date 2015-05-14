@@ -20,7 +20,8 @@ from nti.common.dataurl import DataURL
 
 from nti.links.links import Link
 
-from nti.dataserver.core.schema import DataURI
+from nti.coremetadata.schema import DataURI
+
 from nti.dataserver.core.interfaces import ILinkExternalHrefOnly
 
 from nti.externalization.interfaces import IInternalObjectIO
