@@ -61,7 +61,7 @@ class TestExternalization(AssessmentTestCase):
 		# We produced an image file, not a plain file
 		assert_that(internal.getImageSize(), is_((11, 11)))
 		# with the right content time and filename
-		assert_that(internal, has_property('mimeType', 'image/gif'))
+		assert_that(internal, has_property('contentType', 'image/gif'))
 		assert_that(internal, has_property('filename', 'file.gif'))
 		assert_that(internal, has_property('name', 'ichigo'))
 
@@ -97,7 +97,7 @@ class TestExternalization(AssessmentTestCase):
 		# We produced an image file, not a plain file
 		assert_that(internal.getImageSize(), is_((11, 11)))
 		# with the right content time and filename
-		assert_that(internal, has_property('mimeType', 'image/gif'))
+		assert_that(internal, has_property('contentType', 'image/gif'))
 		assert_that(internal, has_property('filename', 'file.gif'))
 		assert_that(internal, has_property('name', 'ichigo'))
 

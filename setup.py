@@ -19,20 +19,19 @@ TESTS_REQUIRE = [
 	'nose-progressive',
 	'nose2[coverage_plugin]',
 	'pyhamcrest',
-	'nti.nose_traceback_info',
 	'nti.testing'
 ]
 
 setup(
-	name = 'nti.assessment',
-	version = VERSION,
-	author = 'Jason Madden',
-	author_email = 'jason@nextthought.com',
-	description = "Support for automated assessments",
-	long_description = codecs.open('README.rst', encoding='utf-8').read(),
-	license = 'Proprietary',
-	keywords = 'Assessments',
-	classifiers = [
+	name='nti.assessment',
+	version=VERSION,
+	author='Jason Madden',
+	author_email='jason@nextthought.com',
+	description="Support for automated assessments",
+	long_description=codecs.open('README.rst', encoding='utf-8').read(),
+	license='Proprietary',
+	keywords='Assessments',
+	classifiers=[
 		'Intended Audience :: Developers',
 		'Natural Language :: English',
 		'Operating System :: OS Independent',
@@ -42,7 +41,7 @@ setup(
 	],
 	packages=find_packages('src'),
 	package_dir={'': 'src'},
-	namespace_packages=['nti',],
+	namespace_packages=['nti', ],
 	tests_require=TESTS_REQUIRE,
 	install_requires=[
 		'setuptools',
@@ -76,6 +75,7 @@ setup(
  		'nti.externalization',
  		'nti.links',
  		'nti.mimetype',
+ 		'nti.namedfile',
  		'nti.openmath',
  		'nti.plasTeX',
  		'nti.schema'
@@ -83,9 +83,6 @@ setup(
 	extras_require={
 		'test': TESTS_REQUIRE,
 	},
-	dependency_links=[
-		'git+https://github.com/NextThought/nti.schema.git#egg=nti.schema',
-		'git+https://github.com/NextThought/nti.nose_traceback_info.git#egg=nti.nose_traceback_info'
-	],
+	dependency_links=[],
 	entry_points=entry_points
 )

@@ -18,12 +18,12 @@ from zope.container.contained import Contained
 
 from persistent import Persistent
 
-from plone.namedfile.file import NamedBlobFile
-from plone.namedfile.file import NamedBlobImage
-
 from nti.dataserver.core.schema import BodyFieldProperty
 
 from nti.dublincore.datastructures import PersistentCreatedModDateTrackingObject
+
+from nti.namedfile.file import NamedBlobFile
+from nti.namedfile.file import NamedBlobImage
 
 from nti.schema.fieldproperty import AdaptingFieldProperty
 
@@ -53,12 +53,12 @@ class QTextResponse(TrivialValuedMixin, QResponse):
 	A text response.
 	"""
 
-	def __init__( self, *args, **kwargs ):
-		super(QTextResponse,self).__init__( *args, **kwargs )
+	def __init__(self, *args, **kwargs):
+		super(QTextResponse, self).__init__(*args, **kwargs)
 		if self.value is not None and not isinstance(self.value, string_types):
 			# Convert e.g., numbers, to text values
 			self.value = text_type(self.value)
-		if isinstance(self.value, bytes): # pragma: no cover
+		if isinstance(self.value, bytes):  # pragma: no cover
 			# Decode incoming byte strings to text
 			self.value = text_type(self.value, 'utf-8')
 
@@ -75,24 +75,14 @@ class QDictResponse(TrivialValuedMixin, QResponse):
 	"""
 
 @interface.implementer(IQUploadedFile)
-class QUploadedFile(PersistentCreatedModDateTrackingObject, # Order matters
+class QUploadedFile(PersistentCreatedModDateTrackingObject,  # Order matters
 					NamedBlobFile):
-	
-	name = None
-	
-	def __str__(self):
-		return "%s(%s)" % (self.__class__.__name__, self.filename)
-	__repr__ = __str__
-	
+	pass
+
 @interface.implementer(IQUploadedFile)
-class QUploadedImageFile(PersistentCreatedModDateTrackingObject, # Order matters
+class QUploadedImageFile(PersistentCreatedModDateTrackingObject,  # Order matters
 						 NamedBlobImage):
-		
-	name = None
-	
-	def __str__(self):
-		return "%s(%s)" % (self.__class__.__name__, self.filename)
-	__repr__ = __str__
+	pass
 
 @interface.implementer(IQFileResponse)
 class QFileResponse(TrivialValuedMixin, QResponse):

@@ -23,8 +23,6 @@ from dolmen.builtins.interfaces import INumeric
 from dolmen.builtins.interfaces import IUnicode
 from dolmen.builtins.interfaces import IIterable
 
-from nti.coremetadata.interfaces import ILastModified
-
 from nti.contentfragments.schema import Tag
 from nti.contentfragments.schema import LatexFragmentTextLine as _LatexTextLine
 from nti.contentfragments.schema import HTMLContentFragment as _HTMLContentFragment
@@ -48,7 +46,6 @@ from nti.schema.field import Object
 from nti.schema.field import Number
 from nti.schema.field import Variant
 from nti.schema.field import ListOrTuple
-from nti.schema.field import ValidTextLine
 from nti.schema.field import IndexedIterable
 from nti.schema.field import ValidText as Text
 from nti.schema.field import ValidTextLine as TextLine
@@ -84,13 +81,13 @@ class IQTextHint(IQHint):
 	"""
 	A hint represented as text.
 	"""
-	value = _ContentFragment( title="The hint text" )
+	value = _ContentFragment(title="The hint text")
 
 class IQHTMLHint(IQHint):
 	"""
 	A hint represented as html.
 	"""
-	value = _HTMLContentFragment( title="The hint html" )
+	value = _HTMLContentFragment(title="The hint html")
 
 class IQSolution(interface.Interface):
 
@@ -101,7 +98,7 @@ class IQSolution(interface.Interface):
 					""",
 					min=0.0,
 					max=1.0,
-					default=1.0 )
+					default=1.0)
 
 class IQPartSolutionsExternalizer(interface.Interface):
 	"""
@@ -155,16 +152,12 @@ class IQModeledContentResponse(IQResponse,
 	value.required = True
 	value.__name__ = 'value'
 
-from plone.namedfile.interfaces import INamedFile
+from nti.namedfile.interfaces import INamedFile
+from nti.namedfile.interfaces import IInternalFileRef
 
-class IQUploadedFile(INamedFile, ILastModified):
-	name = ValidTextLine(title="Identifier for the file", required=False, default=None)
-
-class IInternalUploadedFileRef(interface.Interface):
-	"""
-	Marker interface for reference to to other uploaded file
-	"""
-	reference = ValidTextLine(title="the ntiid/oid", required=False)
+class IQUploadedFile(INamedFile):
+	pass
+IInternalUploadedFileRef = IInternalFileRef  # BWC
 
 class IQFileResponse(IQResponse):
 	"""
@@ -175,18 +168,18 @@ class IQFileResponse(IQResponse):
 	two fields as
 	"""
 
-	value = Object( IQUploadedFile,
-					title="The uploaded file" )
+	value = Object(IQUploadedFile,
+					title="The uploaded file")
 
-## It seems like the concepts of domain and range may come into play here,
-## somewhere
+# It seems like the concepts of domain and range may come into play here,
+# somewhere
 
 class IQNonGradablePart(interface.Interface):
 
-	content = _ContentFragment( title="The content to present to the user for this portion, if any." )
+	content = _ContentFragment(title="The content to present to the user for this portion, if any.")
 
-	hints = IndexedIterable( title="Any hints that pertain to this part",
-							 value_type=Object(IQHint, title="A hint for the part") )
+	hints = IndexedIterable(title="Any hints that pertain to this part",
+							value_type=Object(IQHint, title="A hint for the part"))
 
 class IQPart(IQNonGradablePart, IGradable):
 	"""
@@ -194,14 +187,14 @@ class IQPart(IQNonGradablePart, IGradable):
 	which requires a response.
 	"""
 
-	explanation = _ContentFragment( title="An explanation of how the solution is arrived at.",
-									default='' )
+	explanation = _ContentFragment(title="An explanation of how the solution is arrived at.",
+									default='')
 
-	solutions = IndexedIterable( title="Acceptable solutions for this question part in no particular order.",
-								 description="All solutions must be of the same type, and there must be at least one.",
-								 value_type=Object(IQSolution, title="A solution for this part")	)
+	solutions = IndexedIterable(title="Acceptable solutions for this question part in no particular order.",
+								description="All solutions must be of the same type, and there must be at least one.",
+								value_type=Object(IQSolution, title="A solution for this part"))
 
-	def grade( response ):
+	def grade(response):
 		"""
 		Determine the correctness of the given response. Usually this will do its work
 		by delegating to a registered :class:`IQPartGrader`.
@@ -214,7 +207,7 @@ class IQPart(IQNonGradablePart, IGradable):
 			there are no provided solutions. If solution weights are
 			taken into account, this will be a floating point number between 0.0 (incorrect) and 1.0 (perfect).
 		"""
-IQGradablePart = IQPart # alias
+IQGradablePart = IQPart  # alias
 
 class IQPartGrader(interface.Interface):
 	"""
@@ -222,7 +215,7 @@ class IQPartGrader(interface.Interface):
 	as a multi-adapter on the question part, solution, and response types.
 	"""
 
-	def __call__( ):
+	def __call__():
 		"""
 		Implement the contract of :meth:`IQPart.grade`.
 		"""
@@ -231,18 +224,18 @@ class IQSingleValuedSolution(IQSolution):
 	"""
 	A solution consisting of a single value.
 	"""
-	value = interface.Attribute( "The correct value" )
+	value = interface.Attribute("The correct value")
 
 class IQMultiValuedSolution(IQSolution):
 	"""
 	A solution consisting of a set of values.
 	"""
-	value = List( title="The correct answer selections",
-				  description="The correct answer as a tuple of items which are a zero-based index into the choices list.",
-				  min_length=0,
-				  value_type=TextLine( title="The value" ) )
+	value = List(title="The correct answer selections",
+				 description="The correct answer as a tuple of items which are a zero-based index into the choices list.",
+				 min_length=0,
+				 value_type=TextLine(title="The value"))
 
-## math parts
+# math parts
 
 class IQNonGradableMathPart(IQNonGradablePart):
 	"""
@@ -253,7 +246,7 @@ class IQMathPart(IQNonGradableMathPart, IQPart):
 	"""
 	A question part whose answer lies in the math domain.
 	"""
-IQGradableMathPart = IQMathPart # alias
+IQGradableMathPart = IQMathPart  # alias
 
 class IQMathSolution(IQSolution):
 	"""
@@ -261,22 +254,22 @@ class IQMathSolution(IQSolution):
 	specialized.
 	"""
 
-	allowed_units = IndexedIterable( title="Strings naming unit suffixes",
-									 description="""
-									 Numbers or expressions may have units. Sometimes the correct
-									 answer depends on the correct unit being applied; sometimes the unit is optional,
-									 and sometimes there must not be a unit (it is a dimensionless quantity).
+	allowed_units = IndexedIterable(title="Strings naming unit suffixes",
+									description="""
+									Numbers or expressions may have units. Sometimes the correct
+									answer depends on the correct unit being applied; sometimes the unit is optional,
+									and sometimes there must not be a unit (it is a dimensionless quantity).
 
-									 If this attribute is ``None`` (the default) no special handling of units
-									 is attempted.
+									If this attribute is ``None`` (the default) no special handling of units
+									is attempted.
 
-									 If this attribute is an empty sequence, no units are accepted.
+									If this attribute is an empty sequence, no units are accepted.
 
-									 If this attribute consists of one or more strings, those are units to accept.
-									 Include the empty string (last) to make units optional.""",
-									 min_length=0,
-									 required=False,
-									 value_type=TextLine( title="The unit" ) )
+									If this attribute consists of one or more strings, those are units to accept.
+									Include the empty string (last) to make units optional.""",
+									min_length=0,
+									required=False,
+									value_type=TextLine(title="The unit"))
 
 class IQNumericMathSolution(IQMathSolution, IQSingleValuedSolution):
 	"""
@@ -284,7 +277,7 @@ class IQNumericMathSolution(IQMathSolution, IQSingleValuedSolution):
 	should be graded according to numeric equivalence.
 	"""
 
-	value = Float( title="The correct numeric answer; really an arbitrary number" )
+	value = Float(title="The correct numeric answer; really an arbitrary number")
 
 class IQSymbolicMathSolution(IQMathSolution):
 	"""
@@ -312,8 +305,8 @@ class IQLatexSymbolicMathSolution(IQSymbolicMathSolution, IQSingleValuedSolution
 	as symbols, parsed from latex.
 	"""
 
-	value = _LatexTextLine( title="The LaTeX form of the correct answer.",
-							min_length=1 )
+	value = _LatexTextLine(title="The LaTeX form of the correct answer.",
+							min_length=1)
 
 class IResponseToSymbolicMathConverter(interface.Interface):
 	"""
@@ -322,7 +315,7 @@ class IResponseToSymbolicMathConverter(interface.Interface):
 	solution and response type.
 	"""
 
-	def convert( response ):
+	def convert(response):
 		"""
 		Produce and return a symbolic version of the response.
 		"""
@@ -332,7 +325,7 @@ class IQSymbolicMathGrader(IQPartGrader):
 	Specialized grader for symbolic math expressions.
 	"""
 
-## multiple choice
+# multiple choice
 
 class IQNonGradableMultipleChoicePart(IQNonGradablePart, IPollable):
 	"""
@@ -340,11 +333,11 @@ class IQNonGradableMultipleChoicePart(IQNonGradablePart, IPollable):
 	of alternatives.
 	"""
 
-	choices = List( title="The choice strings to present to the user.",
+	choices = List(title="The choice strings to present to the user.",
 					min_length=1,
 					description="""Presentation order may matter, hence the list. But for grading purposes,
 					the order does not matter and simple existence within the set is sufficient.""",
-					value_type=_ContentFragment( title="A rendered value" ) )
+					value_type=_ContentFragment(title="A rendered value"))
 IQNonGradableMultipleChoicePart.setTaggedValue('response_type', IQTextResponse)
 
 class IQMultipleChoiceSolution(IQSolution, IQSingleValuedSolution):
@@ -354,14 +347,14 @@ class IQMultipleChoiceSolution(IQSolution, IQSingleValuedSolution):
 	the options presented. These will typically be used in isolation as a single part.
 	"""
 
-	value = interface.Attribute( "The correct answer as the zero-based index into the choices list." )
+	value = interface.Attribute("The correct answer as the zero-based index into the choices list.")
 
 class IQMultipleChoicePart(IQNonGradableMultipleChoicePart, IQPart):
 
-	solutions = IndexedIterable( title="The multiple-choice solutions",
-								 min_length=1,
-								 value_type=Object( IQMultipleChoiceSolution,
-													title="Multiple choice solution" ) )
+	solutions = IndexedIterable(title="The multiple-choice solutions",
+								min_length=1,
+								value_type=Object(IQMultipleChoiceSolution,
+													title="Multiple choice solution"))
 IQGradableMultipleChoicePart = IQMultipleChoicePart  # alias
 
 class IQMultipleChoicePartGrader(IQPartGrader):
@@ -369,7 +362,7 @@ class IQMultipleChoicePartGrader(IQPartGrader):
 	Specialized interface for grading multiple choice questions.
 	"""
 
-## multiple choice multiple answer
+# multiple choice multiple answer
 
 class IQNonGradableMultipleChoiceMultipleAnswerPart(IQNonGradableMultipleChoicePart):
 	"""
@@ -386,26 +379,25 @@ class IQMultipleChoiceMultipleAnswerSolution(IQSolution,
 	the options presented. These will typically be used in isolation as a single part.
 	"""
 
-	value = List( title="The correct answer selections",
-				  description="The correct answer as a tuple of items which are a zero-based index into the choices list.",
-				  min_length=1,
-				  value_type=Int( title="The value",
-								  min=0) )
+	value = List(title="The correct answer selections",
+				 description="The correct answer as a tuple of items which are a zero-based index into the choices list.",
+				 min_length=1,
+				 value_type=Int(title="The value", min=0))
 
 class IQMultipleChoiceMultipleAnswerPart(IQNonGradableMultipleChoiceMultipleAnswerPart,
 										 IQMultipleChoicePart):
 
-	solutions = IndexedIterable( title="The multiple-choice solutions",
-								 min_length=1,
-								 value_type=Object(IQMultipleChoiceMultipleAnswerSolution,
-												   title="Multiple choice / multiple answer solution" ) )
+	solutions = IndexedIterable(title="The multiple-choice solutions",
+								min_length=1,
+								value_type=Object(IQMultipleChoiceMultipleAnswerSolution,
+												  title="Multiple choice / multiple answer solution"))
 
 class IQMultipleChoiceMultipleAnswerPartGrader(IQPartGrader):
 	"""
 	Specialized interface for grading multiple choice questions.
 	"""
 
-## free response
+# free response
 
 class IQNonGradableFreeResponsePart(IQNonGradablePart, IPollable):
 	pass
@@ -416,7 +408,7 @@ class IQFreeResponseSolution(IQSolution, IQSingleValuedSolution):
 	A solution whose correct answer is simple text.
 	"""
 
-	value = Text( title="The correct text response", min_length=1 )
+	value = Text(title="The correct text response", min_length=1)
 
 class IQFreeResponsePart(IQNonGradableFreeResponsePart, IQPart):
 	"""
@@ -426,7 +418,7 @@ class IQFreeResponsePart(IQNonGradableFreeResponsePart, IQPart):
 	"""
 IQGradableFreeResponsePart = IQFreeResponsePart
 
-## connecting part
+# connecting part
 
 class IQNonGradableConnectingPart(IQNonGradablePart, IPollable):
 	"""
@@ -440,13 +432,13 @@ class IQNonGradableConnectingPart(IQNonGradablePart, IPollable):
 	value position.
 	"""
 
-	labels = List( title="The list of labels",
-				   min_length=2,
-				   value_type=_ContentFragment( title="A label-column value" ) )
+	labels = List(title="The list of labels",
+				  min_length=2,
+				  value_type=_ContentFragment(title="A label-column value"))
 
-	values = List( title="The list of values",
-				   min_length=2,
-				   value_type=_ContentFragment( title="A value-column value" ) )
+	values = List(title="The list of values",
+				  min_length=2,
+				  value_type=_ContentFragment(title="A value-column value"))
 
 class IQNonGradableMatchingPart(IQNonGradableConnectingPart):
 	pass
@@ -461,7 +453,7 @@ class IQConnectingSolution(IQSolution):
 	also be a mapping of actual keys and values. The response is an
 	IDictResponse of ints or key/values.
 	"""
-	value = Dict( title="The correct mapping." )
+	value = Dict(title="The correct mapping.")
 
 class IQMatchingSolution(IQConnectingSolution):
 	pass
@@ -469,25 +461,25 @@ class IQMatchingSolution(IQConnectingSolution):
 class IQOrderingSolution(IQConnectingSolution):
 	pass
 
-class IQConnectingPart(IQNonGradableConnectingPart, IQPart): # BWC
+class IQConnectingPart(IQNonGradableConnectingPart, IQPart):  # BWC
 	pass
-IQGradableConnectingPart = IQConnectingPart # alias
+IQGradableConnectingPart = IQConnectingPart  # alias
 
 class IQMatchingPart(IQNonGradableMatchingPart, IQConnectingPart):
 
-	solutions = IndexedIterable( title="The matching solution",
-								 min_length=1,
-								 value_type=Object(IQMatchingSolution, title="Matching solution" ) )
+	solutions = IndexedIterable(title="The matching solution",
+								min_length=1,
+								value_type=Object(IQMatchingSolution, title="Matching solution"))
 
-IQGradableMatchingPart = IQMatchingPart # alias
+IQGradableMatchingPart = IQMatchingPart  # alias
 
 class IQOrderingPart(IQNonGradableOrderingPart, IQConnectingPart):
 
-	solutions = IndexedIterable( title="The matching solution",
-								 min_length=1,
-								 value_type=Object(IQOrderingSolution, title="Ordering solution" ) )
+	solutions = IndexedIterable(title="The matching solution",
+								min_length=1,
+								value_type=Object(IQOrderingSolution, title="Ordering solution"))
 
-IQGradableOrderingPart = IQMatchingPart # alias
+IQGradableOrderingPart = IQMatchingPart  # alias
 
 class IQConnectingPartGrader(IQPartGrader):
 	pass
@@ -502,7 +494,7 @@ class IQOrderingPartGrader(IQConnectingPartGrader):
 	A grader for ordering questions.
 	"""
 
-## file part
+# file part
 
 class IQNonGradableFilePart(IQNonGradablePart):
 	"""
@@ -516,27 +508,27 @@ class IQNonGradableFilePart(IQNonGradablePart):
 	or include "*" in the ``allowed_extensions``.
 	"""
 
-	allowed_mime_types = IndexedIterable( title="Mime types that are accepted for upload",
-										  min_length=1,
-										  value_type=Text(title="An allowed mimetype",
-														  constraint=mimeTypeConstraint) )
+	allowed_mime_types = IndexedIterable(title="Mime types that are accepted for upload",
+										 min_length=1,
+										 value_type=Text(title="An allowed mimetype",
+													 	 constraint=mimeTypeConstraint))
 
-	allowed_extensions = IndexedIterable( title="Extensions like '.doc' that are accepted for upload",
-										  min_length=0,
-										  value_type=Text(title="An allowed extension") )
+	allowed_extensions = IndexedIterable(title="Extensions like '.doc' that are accepted for upload",
+										 min_length=0,
+										 value_type=Text(title="An allowed extension"))
 
-	max_file_size = Int( title="Maximum size in bytes for the file",
-						 min=1,
-						 required=False )
+	max_file_size = Int(title="Maximum size in bytes for the file",
+						min=1,
+						required=False)
 
-	def is_mime_type_allowed( mime_type ):
+	def is_mime_type_allowed(mime_type):
 		"""
 		Return whether or not the given mime type, which must match
 		the mime type constraint, is one of the allowed types of this
 		part, taking into account wildcards.
 		"""
 
-	def is_filename_allowed( filename ):
+	def is_filename_allowed(filename):
 		"""
 		Return whether the filename given is allowed according to
 		the allowed list of extensions.
@@ -548,9 +540,9 @@ class IQFilePart(IQNonGradableFilePart, IQPart):
 	(hence there is no corresponding solution), it can merely be
 	routed to a responsible party for grading manually.
 	"""
-IQGradableFilePart = IQFilePart # alias
+IQGradableFilePart = IQFilePart  # alias
 
-## modeled content part
+# # modeled content part
 
 class IQNonGradableModeledContentPart(IQNonGradablePart, IPollable):
 	"""
@@ -570,14 +562,14 @@ class IQModeledContentPart(IQNonGradableModeledContentPart, IQPart):
 
 IQGradableModeledContentPart = IQModeledContentPart
 
-## assessment
+# # assessment
 
 class IQAssessment(interface.Interface):
 	"""
 	Marker interface for all assessment objects
 	"""
-	
-## question
+
+# # question
 
 class IQuestion(IQAssessment, IAnnotatable):
 	"""
@@ -592,13 +584,12 @@ class IQuestion(IQAssessment, IAnnotatable):
 
 	ntiid = ValidNTIID(title="Question NTIID", required=False)
 
-	content = Text( title="The content to present to the user, if any.",
+	content = Text(title="The content to present to the user, if any.",
 					default='')
 
-	parts = IndexedIterable( title="The ordered parts of the question.",
-							 min_length=1,
-							 value_type=Object( IQPart, title="A question part" ),
-							 )
+	parts = IndexedIterable(title="The ordered parts of the question.",
+							min_length=1,
+							value_type=Object(IQPart, title="A question part") )
 
 class IQuestionSet(IQAssessment, ITitledContent, IAnnotatable):
 	"""
@@ -612,18 +603,17 @@ class IQuestionSet(IQAssessment, ITitledContent, IAnnotatable):
 
 	ntiid = ValidNTIID(title="Question set NTIID", required=False)
 
-	questions = IndexedIterable( title="The ordered questions in the set.",
-								 description="For convenience, this should also be aliased to `parts`",
-								 min_length=1,
-								 value_type=Object( IQuestion, title="The questions" ),
-								 )
+	questions = IndexedIterable(title="The ordered questions in the set.",
+								description="For convenience, this should also be aliased to `parts`",
+								min_length=1,
+								value_type=Object(IQuestion, title="The questions") )
 
 class IQAssignmentPart(ITitledContent):
 	"""
 	One portion of an assignment.
 	"""
 
-	content = Text( title="Additional content for the question set in the context of an assignment.",
+	content = Text(title="Additional content for the question set in the context of an assignment.",
 					default='')
 
 	question_set = Object(IQuestionSet,
@@ -633,7 +623,7 @@ class IQAssignmentPart(ITitledContent):
 					  default=False)
 
 class IQSubmittable(interface.Interface):
-	
+
 	available_for_submission_beginning = Datetime(
 		title="Submissions are accepted no earlier than this.",
 		description="""When present, this specifies the time instant at which
@@ -650,9 +640,9 @@ class IQSubmittable(interface.Interface):
 		submissions will be accepted. It can be considered the object's "due date."
 		As with ``available_for_submission_beginning``,
 		this will typically be relative and converted.""",
-		required=False )
-	
-	no_submit = Bool( title="Whether this object accept submissions",
+		required=False)
+
+	no_submit = Bool(title="Whether this object accept submissions",
 					  default=False)
 
 class IQAssignment(IQAssessment, ITitledContent, IAnnotatable, IQSubmittable):
@@ -689,7 +679,7 @@ class IQAssignment(IQAssessment, ITitledContent, IAnnotatable, IQSubmittable):
 
 	ntiid = ValidNTIID(title="Assignment NTIID", required=False)
 
-	content = Text( title="The content to present to the user, if any.",
+	content = Text(title="The content to present to the user, if any.",
 					default='')
 
 	category_name = Tag(title="Assignments can be grouped into categories.",
@@ -712,21 +702,20 @@ class IQAssignment(IQAssessment, ITitledContent, IAnnotatable, IQSubmittable):
 						default='default',
 						required=True)
 
-	parts = ListOrTuple( title="The ordered parts of the assignment.",
-						 description="""Unlike questions, assignments with zero parts are allowed.
-						 Because they accept no input, such an assignment is very
-						 special and serves as a marker to higher levels of code.
-						 """,
-						 min_length=0,
-						 value_type=Object( IQAssignmentPart,
-											title="An assignment part" ) )
+	parts = ListOrTuple(title="The ordered parts of the assignment.",
+						description="""Unlike questions, assignments with zero parts are allowed.
+						Because they accept no input, such an assignment is very
+						special and serves as a marker to higher levels of code.
+						""",
+						min_length=0,
+						value_type=Object(IQAssignmentPart, title="An assignment part"))
 
-	is_non_public = Bool( title="Whether this assignment should be public or restricted",
-						  description="""An ill-defined semi-layer violation. Set it to true if
-						  this should somehow be non-public and not available to everyone. This
-						  is the default. Specific applications will determine what should and should
-						  not be public""",
-						  default=True)
+	is_non_public = Bool(title="Whether this assignment should be public or restricted",
+						 description="""An ill-defined semi-layer violation. Set it to true if
+						 this should somehow be non-public and not available to everyone. This
+						 is the default. Specific applications will determine what should and should
+						 not be public""",
+						 default=True)
 
 	# A note on handling assignments that have an associated time limit
 	# (e.g., you have one hour to complete this assignment once you begin):
@@ -739,7 +728,7 @@ class IQAssignment(IQAssessment, ITitledContent, IAnnotatable, IQSubmittable):
 
 class IQTimedAssignment(IQAssignment):
 
-	maximum_time_allowed = Int( title="Maximum Time Allowed (Seconds)",
+	maximum_time_allowed = Int(title="Maximum Time Allowed (Seconds)",
 						 		description="""When present, this specifies the maximum time allowed (in
 								seconds) students have to submit the assignments""",
 								required=True)
@@ -756,7 +745,7 @@ class IQAssessmentDateContext(interface.Interface):
 		"""
 		return the list of assessment ids in this context
 		"""
-	assignments = assessments # alias for BWC
+	assignments = assessments  # alias for BWC
 
 	def of(assessment):
 		"""
@@ -765,10 +754,10 @@ class IQAssessmentDateContext(interface.Interface):
 		of this object. If no changes are required, can return the assessment
 		itself.
 		"""
-IQAssignmentDateContext = IQAssessmentDateContext # alias for BWC
+IQAssignmentDateContext = IQAssessmentDateContext  # alias for BWC
 
 class IQAssessmentPolicies(interface.Interface):
-	
+
 	"""
 	An object that can be used to hold (uninterpreted) policy
 	objects keyed off of assignment NTIIDs.
@@ -780,20 +769,20 @@ class IQAssessmentPolicies(interface.Interface):
 		"""
 		Return a policy object for the assessment.
 		"""
-	getPolicyForAssignment = getPolicyForAssessment # alias for BWC
-	
+	getPolicyForAssignment = getPolicyForAssessment  # alias for BWC
+
 	def assessments():
 		"""
 		return the list of assessments ids in this object
 		"""
-	assignments = assessments # alias for BWC
-	
+	assignments = assessments  # alias for BWC
+
 	def __bool__():
 		"""
 		Are there any policies registered? If no, return False.
 		"""
 
-IQAssignmentPolicies = IQAssessmentPolicies # alias for BWC
+IQAssignmentPolicies = IQAssessmentPolicies  # alias for BWC
 
 class IQAssignmentPolicyValidator(interface.Interface):
 	"""
@@ -821,25 +810,25 @@ def convert_response_for_solution(solution, response):
 	Uses the `response_type` tagged value on the interfaces implemented
 	by the grader.
 	"""
-	if not IQSolution.providedBy( solution ):
+	if not IQSolution.providedBy(solution):
 		# Well, nothing to be done, no info given
 		return response
 
-	for iface in interface.providedBy( solution ).flattened():
-		response_type = iface.queryTaggedValue( 'response_type' )
+	for iface in interface.providedBy(solution).flattened():
+		response_type = iface.queryTaggedValue('response_type')
 		if response_type:
-			result = response_type( response, alternate=None ) # adapt or return if already present
+			result = response_type(response, alternate=None)  # adapt or return if already present
 			if result is not None:
 				response = result
 				break
 	return response
 
-###
+# ##
 # Objects having to do with the assessment process itself.
 # There is a three part lifecycle: The source object,
 # the submission, and finally the assessed value. The three
 # parts have similar structure.
-###
+# ##
 
 class IQBaseSubmission(IContained):
 	"""
@@ -867,10 +856,10 @@ class IQBaseSubmission(IContained):
 
 class IQPartsSubmission(IQBaseSubmission):
 
-	parts = IndexedIterable( title="Ordered submissions, one for each part of the poll.",
-							 default=(),
-							 description="""The length must match the length of the questions. Each object must be
-							 adaptable into the proper :class:`IQResponse` object (e.g., a string or dict).""" )
+	parts = IndexedIterable(title="Ordered submissions, one for each part of the poll.",
+							default=(),
+							description="""The length must match the length of the questions. Each object must be
+							adaptable into the proper :class:`IQResponse` object (e.g., a string or dict).""")
 
 class IQuestionSubmission(IQPartsSubmission):
 	"""
@@ -879,7 +868,7 @@ class IQuestionSubmission(IQPartsSubmission):
 	These will typically be transient objects.
 	"""
 
-	questionId = TextLine( title="Identifier of the question being responded to." )
+	questionId = TextLine(title="Identifier of the question being responded to.")
 
 class IQSubmittedPart(IContained):
 	"""
@@ -895,14 +884,14 @@ class IQSubmittedPart(IContained):
 	# break existing client code. The two behaviours are now unified
 	# because of using a field property, so this Variant now documents
 	# the types that clients were actually seeing on the wire.
-	submittedResponse = Variant( (Object(IString),
-								  Object(INumeric),
-								  Object(IDict),
-								  Object(IList),
-								  Object(IUnicode),
-								  Object(IQUploadedFile),
-								  Object(IQModeledContentResponse), # List this so we get specific validation for it
-								  Object(IQResponse)),
+	submittedResponse = Variant((Object(IString),
+								 Object(INumeric),
+								 Object(IDict),
+								 Object(IList),
+								 Object(IUnicode),
+								 Object(IQUploadedFile),
+								 Object(IQModeledContentResponse),  # List this so we get specific validation for it
+								 Object(IQResponse)),
 								 variant_raise_when_schema_provided=True,
 								 title="The response as the student submitted it, or None if they skipped",
 								 required=False,
@@ -915,12 +904,12 @@ class IQAssessedPart(IQSubmittedPart):
 	"""
 	# TODO: Matching to question?
 
-	assessedValue = Float( title="The relative correctness of the submitted response, from 0.0 (entirely wrong) to 1.0 (perfectly correct)",
-						   description="A value of None means that it was not possible to assess this part.",
-						   min=0.0,
-						   max=1.0,
-						   default=0.0,
-						   required=False)
+	assessedValue = Float(title="The relative correctness of the submitted response, from 0.0 (entirely wrong) to 1.0 (perfectly correct)",
+						  description="A value of None means that it was not possible to assess this part.",
+						  min=0.0,
+						  max=1.0,
+						  default=0.0,
+						  required=False)
 
 class IQAssessedQuestion(IContained):
 	"""
@@ -929,9 +918,9 @@ class IQAssessedQuestion(IContained):
 	These will typically be persistent values, echoed back to clients.
 	"""
 
-	questionId = TextLine( title="Identifier of the question being responded to." )
-	parts = IndexedIterable( title="Ordered assessed values, one for each part of the question.",
-							 value_type=Object( IQAssessedPart, title="The assessment of a part." ) )
+	questionId = TextLine(title="Identifier of the question being responded to.")
+	parts = IndexedIterable(title="Ordered assessed values, one for each part of the question.",
+							value_type=Object(IQAssessedPart, title="The assessment of a part."))
 
 
 class IQuestionSetSubmission(IQBaseSubmission):
@@ -941,13 +930,13 @@ class IQuestionSetSubmission(IQBaseSubmission):
 	These will generally be transient objects.
 	"""
 
-	questionSetId = TextLine( title="Identifier of the question set being responded to." )
-	questions = IndexedIterable( title="Submissions, one for each question in the set.",
+	questionSetId = TextLine(title="Identifier of the question set being responded to.")
+	questions = IndexedIterable(title="Submissions, one for each question in the set.",
 								 description="""Order is not important. Depending on the question set,
 								 missing answers may or may not be allowed; the set may refuse to grade, or simply consider them wrong.""",
 								 default=(),
-								 value_type=Object( IQuestionSubmission,
-													title="The submission for a particular question.") )
+								 value_type=Object(IQuestionSubmission,
+													title="The submission for a particular question."))
 
 class IQAssessedQuestionSet(IContained, IContextAnnotatable):
 	"""
@@ -956,10 +945,10 @@ class IQAssessedQuestionSet(IContained, IContextAnnotatable):
 	These will usually be persistent values that are also echoed back to clients.
 	"""
 
-	questionSetId = TextLine( title="Identifier of the question set being responded to." )
-	questions = IndexedIterable( title="Assessed questions, one for each question in the set.",
-								 value_type=Object( IQAssessedQuestion,
-													title="The assessed value for a particular question.") )
+	questionSetId = TextLine(title="Identifier of the question set being responded to.")
+	questions = IndexedIterable(title="Assessed questions, one for each question in the set.",
+								value_type=Object(IQAssessedQuestion,
+												  title="The assessed value for a particular question."))
 
 class IQAssignmentSubmission(IQBaseSubmission):
 	"""
@@ -967,13 +956,13 @@ class IQAssignmentSubmission(IQBaseSubmission):
 	"""
 
 	assignmentId = TextLine(title="Identifier of the assignment being responded to.")
-	parts = IndexedIterable( title="Question set submissions, one for each part of the assignment.",
-							 description="""Order is not significant, each question set will be matched
-							 with the corresponding part by ID. However, each part *must* have a
-							 submission.""",
-							 default=(),
-							 value_type=Object(IQuestionSetSubmission,
-											   title="The submission for a particular part.") )
+	parts = IndexedIterable(title="Question set submissions, one for each part of the assignment.",
+							description="""Order is not significant, each question set will be matched
+							with the corresponding part by ID. However, each part *must* have a
+							submission.""",
+							default=(),
+							value_type=Object(IQuestionSetSubmission,
+											  title="The submission for a particular part."))
 
 class IQAssignmentSubmissionPendingAssessment(IQBaseSubmission):
 	"""
@@ -983,10 +972,10 @@ class IQAssignmentSubmissionPendingAssessment(IQBaseSubmission):
 	"""
 
 	assignmentId = TextLine(title="Identifier of the assignment being responded to.")
-	parts = IndexedIterable( title="Either an assessed question set, or the original submission",
-							 value_type=Variant(
+	parts = IndexedIterable(title="Either an assessed question set, or the original submission",
+							value_type=Variant(
 								 (Object(IQAssessedQuestionSet),
-								  Object(IQuestionSetSubmission))) )
+								  Object(IQuestionSetSubmission))))
 
 class IQAssessmentItemContainer(interface.Interface):
 	"""
@@ -998,7 +987,7 @@ class IQAssessmentItemContainer(interface.Interface):
 	typically with annotations).
 	"""
 
-## fill-in-the-blank part
+# fill-in-the-blank part
 
 class IQNonGradableFillInTheBlankPart(IQNonGradablePart):
 	"""
@@ -1011,7 +1000,7 @@ class IQFillInTheBlankPart(IQNonGradableFillInTheBlankPart, IQPart):
 	"""
 IQGradableFillInTheBlankPart = IQFillInTheBlankPart
 
-## fill-in-the-blank short answer part
+# fill-in-the-blank short answer part
 
 class IQNonGradableFillInTheBlankShortAnswerPart(IQNonGradableFillInTheBlankPart):
 	pass
@@ -1053,16 +1042,16 @@ class IQFillInTheBlankWithWordBankGrader(IQPartGrader):
 class IQFillInTheBlankWithWordBankSolution(IQSolution):
 
 	value = Dict(key_type=TextLine(title="input name/id"),
-				 value_type=Variant( (TextLine(title="word id answer"),
+				 value_type=Variant((TextLine(title="word id answer"),
 									  ListOrTuple(TextLine(title="word id answer"))),
-								    title="The word ids"),
+									title="The word ids"),
 				 title="The correct answer selections",
 				 description="The correct word id map.",
 				 min_length=1)
 
 IQFillInTheBlankWithWordBankSolution.setTaggedValue('response_type', IQDictResponse)
 
-## fill-in-the-blank with word bank part
+# # fill-in-the-blank with word bank part
 
 class IWordEntry(interface.Interface):
 	wid = TextLine(title="word identifier")
@@ -1112,42 +1101,42 @@ class IQFillInTheBlankWithWordBankQuestion(IQuestion):
 											  title="A question part"))
 
 
-## Normalizer
+# # Normalizer
 
 class IQPartResponseNormalizer(interface.Interface):
 	"""
-	A marker interface for an adapter that that knows how to normalize a given 
+	A marker interface for an adapter that that knows how to normalize a given
 	:class:`IQResponse` for a :class:`IQNonGradablePart`
 	"""
-	
+
 	def __call__():
 		pass
 
 class IQFreeResponsePartResponseNormalizer(IQPartResponseNormalizer):
 	"""
-	A marker interface for an adapter that that knows how to normalize a given 
+	A marker interface for an adapter that that knows how to normalize a given
 	a :class:`IQResponse` for a :class:`IQNonGradablePart`
 	"""
-	
+
 class IQModeledContentPartResponseNormalizer(IQPartResponseNormalizer):
 	"""
-	A marker interface for an adapter that that knows how to normalize a given 
+	A marker interface for an adapter that that knows how to normalize a given
 	a :class:`IQResponse` for a :class:`IQNonGradableModeledContentPart`
 	"""
 
 class IQMultipleChoicePartResponseNormalizer(IQPartResponseNormalizer):
 	"""
-	A marker interface for an adapter that that knows how to normalize a given 
+	A marker interface for an adapter that that knows how to normalize a given
 	a :class:`IQResponse` for a :class:`IQNonGradableMultipleChoicePart`
 	"""
-	
+
 class IQMultipleChoiceMultipleAnswerPartResponseNormalizer(IQPartResponseNormalizer):
 	"""
-	A marker interface for an adapter that that knows how to normalize a given 
+	A marker interface for an adapter that that knows how to normalize a given
 	a :class:`IQResponse` for a :class:`IQNonGradableMultipleChoiceMultipleAnswerPart`
 	"""
 
-## polls
+# # polls
 
 class IQInquiry(IAnnotatable, IQSubmittable):
 
@@ -1164,13 +1153,12 @@ class IQPoll(IQInquiry):
 	to where questions appear in question sets or other types of content.
 	"""
 
-	content = Text( title="The content to present to the user, if any.",
+	content = Text(title="The content to present to the user, if any.",
 					default='')
 
-	parts = IndexedIterable( title="The ordered parts of the question.",
-							 min_length=1,
-							 value_type=Object( IPollable, title="A pollable question part" ),
-							 )
+	parts = IndexedIterable(title="The ordered parts of the question.",
+							min_length=1,
+							value_type=Object(IPollable, title="A pollable question part") )
 
 class IQSurvey(ITitledContent, IQInquiry):
 	"""
@@ -1179,15 +1167,14 @@ class IQSurvey(ITitledContent, IQInquiry):
 	Surveys sets are annotatable.
 	"""
 
-	questions = IndexedIterable( title="The ordered questions in the set.",
-								 min_length=1,
-								 value_type=Object(IQPoll, title="The poll questions" ),
-								 )
+	questions = IndexedIterable(title="The ordered questions in the set.",
+								min_length=1,
+								value_type=Object(IQPoll, title="The poll questions") )
 
 class IQInquirySubmission(IQPartsSubmission):
-	id = interface.Attribute("Identifier of the inquiry being responded to." )
+	id = interface.Attribute("Identifier of the inquiry being responded to.")
 	id.setTaggedValue('_ext_excluded_out', True)
-	
+
 class IQPollSubmission(IQInquirySubmission):
 	"""
 	A submission in response to a poll.
@@ -1195,26 +1182,26 @@ class IQPollSubmission(IQInquirySubmission):
 	These will typically be transient objects.
 	"""
 
-	pollId = TextLine( title="Identifier of the poll being responded to." )
+	pollId = TextLine(title="Identifier of the poll being responded to.")
 
 class IQSurveySubmission(IQInquirySubmission, IContextAnnotatable):
 	"""
 	A submission in response to a survey
 	"""
 
-	surveyId = TextLine( title="Identifier of the survey being responded to." )
-	questions = IndexedIterable( title="Submissions, one for each poll in the survey.",
-								 default=(),
-								 value_type=Object( IQPollSubmission,
-													title="The submission for a particular poll.") )
-	
+	surveyId = TextLine(title="Identifier of the survey being responded to.")
+	questions = IndexedIterable(title="Submissions, one for each poll in the survey.",
+								default=(),
+								value_type=Object(IQPollSubmission,
+												  title="The submission for a particular poll."))
+
 class IQAggregatedPart(IContained):
-	
+
 	def reset():
 		"""
 		reset this part
 		"""
-		
+
 	def append(response):
 		"""
 		Aggregate the specified response
@@ -1222,41 +1209,41 @@ class IQAggregatedPart(IContained):
 
 	def __iadd__(other):
 		pass
-	
+
 class IQAggregatedMultipleChoicePart(IQAggregatedPart):
-	
-	Results = Dict(	title="The response results",
+
+	Results = Dict(title="The response results",
 				 	key_type=Int(title="The choice index"),
 				 	value_type=Number(title="The aggregated value"),
 				 	readonly=True)
 
 class IQAggregatedMultipleChoiceMultipleAnswerPart(IQAggregatedPart):
-	
-	Results = Dict(	title="The response results",
-				 	key_type=Tuple(	title="The response tuple",
+
+	Results = Dict(title="The response results",
+				 	key_type=Tuple(title="The response tuple",
 									min_length=1,
 				 					value_type=Int(title="The choice index")),
 				 	value_type=Number(title="The aggregated value"),
 				 	readonly=True)
 
 class IQAggregatedFreeResponsePart(IQAggregatedPart):
-	
-	Results = Dict(	title="The response results",
+
+	Results = Dict(title="The response results",
 				 	key_type=TextLine(title="the value"),
 				 	value_type=Number(title="The aggregated value"),
 				 	readonly=True)
 
 class IQAggregatedModeledContentPart(IQAggregatedPart):
-	
-	Results = List(	title="The response results",
+
+	Results = List(title="The response results",
 				 	value_type=Object(IQModeledContentResponse),
 				 	readonly=True)
 
 class IQAggregatedInquiry(IContained, IContextAnnotatable):
-	
-	id = interface.Attribute("Identifier of the inquiry being aggregated." )
+
+	id = interface.Attribute("Identifier of the inquiry being aggregated.")
 	id.setTaggedValue('_ext_excluded_out', True)
-	
+
 	def __iadd__(other):
 		pass
 
@@ -1265,19 +1252,19 @@ class IQAggregatedPoll(IQAggregatedInquiry):
 	Aggregation for a poll
 	"""
 
-	pollId = TextLine( title="Identifier of the poll being aggregated." )
-	parts = IndexedIterable( title="Part aggregations.",
+	pollId = TextLine(title="Identifier of the poll being aggregated.")
+	parts = IndexedIterable(title="Part aggregations.",
 							 default=(),
-							 value_type=Object( IQAggregatedPart,
-												title="The aggregated part.") )
+							 value_type=Object(IQAggregatedPart,
+												title="The aggregated part."))
 
 class IQAggregatedSurvey(IQAggregatedInquiry):
 	"""
 	Aggregation for a survey
 	"""
 
-	surveyId = TextLine( title="Identifier of the survey being aggregated." )
-	questions = IndexedIterable( title="Poll aggregations.",
+	surveyId = TextLine(title="Identifier of the survey being aggregated.")
+	questions = IndexedIterable(title="Poll aggregations.",
 								default=(),
-							 	value_type=Object( 	IQAggregatedPoll,
-													title="The aggregated poll.") )
+							 	value_type=Object(IQAggregatedPoll,
+													title="The aggregated poll."))
