@@ -125,10 +125,6 @@ from nti.namedfile.datastructures import NamedFileObjectIO
 @component.adapter(IQUploadedFile)
 class _QUploadedFileObjectIO(NamedFileObjectIO):
 
-	# Don't validate b/c this class used to derive
-	# from AbstractDynamicObjectIO which does not  enforce validation
-	validate_after_update = False
-
 	_ext_iface_upper_bound = IQUploadedFile
 	_excluded_in_ivars_ = {'download_url'}.union(NamedFileObjectIO._excluded_in_ivars_)
 
