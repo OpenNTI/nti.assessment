@@ -51,9 +51,6 @@ from nti.schema.field import ValidText as Text
 from nti.schema.field import ValidTextLine as TextLine
 from nti.schema.field import ValidDatetime as Datetime
 
-from . import monkey as plonefile_zopefile_patch_on_import
-plonefile_zopefile_patch_on_import.patch()
-
 NTIID_TYPE = 'NAQ'
 SURVEY_MIME_TYPE = u'application/vnd.nextthought.nasurvey'
 QUESTION_SET_MIME_TYPE = u'application/vnd.nextthought.naquestionset'
