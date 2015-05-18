@@ -11,15 +11,11 @@ __docformat__ = "restructuredtext en"
 
 logger = __import__('logging').getLogger(__name__)
 
-import os.path
-
 from zope import interface
 
 from zope.component.interfaces import ComponentLookupError
 
 from zope.container.contained import Contained
-
-from zope.mimetype.interfaces import mimeTypeConstraint
 
 from zope.schema.interfaces import ConstraintNotSatisfied
 
@@ -28,6 +24,8 @@ from persistent import Persistent
 from nti.contentfragments.interfaces import UnicodeContentFragment as _u
 
 from nti.externalization.representation import WithRepr
+
+from nti.namedfile.file import FileConstraints
 
 from nti.schema.schema import EqHash
 from nti.schema.field import SchemaConfigured
@@ -282,45 +280,11 @@ class QFreeResponsePart(QPart, QNonGradableFreeResponsePart):  # order matters
 @EqHash('allowed_mime_types', 'allowed_extensions', 'max_file_size',
 		include_super=True,
 		superhash=True)
-class QNonGradableFilePart(QNonGradablePart):
+class QNonGradableFilePart(FileConstraints, QNonGradablePart):
 
+	max_file_size = None
 	allowed_mime_types = ()
 	allowed_extensions = ()
-	max_file_size = None
-
-	def is_mime_type_allowed(self, mime_type):
-		if mime_type:
-			mime_type = mime_type.lower()  # only all lower case matches the production
-		if (not mime_type  # No input
-			or not mimeTypeConstraint(mime_type)  # Invalid
-			or not self.allowed_mime_types):  # Empty list: all excluded
-			return False
-
-		major, minor = mime_type.split('/')
-		if major == '*' or minor == '*':
-			# Must be concrete
-			return False
-
-		for mt in self.allowed_mime_types:
-			if mt == '*/*':
-				# Total wildcard
-				return True
-			mt = mt.lower()
-			if mt == mime_type:
-				return True
-
-			amajor, aminor = mt.split('/')
-
-			# Wildcards are only reasonable in the minor part,
-			# e.g., text/*.
-			if aminor == minor or aminor == '*':
-				if major == amajor:
-					return True
-
-	def is_filename_allowed(self, filename):
-		return (filename
-				 and (os.path.splitext(filename.lower())[1] in self.allowed_extensions
-					  or '*' in self.allowed_extensions))
 
 @interface.implementer(IQFilePart)
 @EqHash('allowed_mime_types', 'allowed_extensions', 'max_file_size',
