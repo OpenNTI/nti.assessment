@@ -8,7 +8,6 @@ __docformat__ = "restructuredtext en"
 # pylint: disable=W0212,R0904
 
 from hamcrest import is_
-from hamcrest import none
 from hamcrest import is_not
 from hamcrest import all_of
 from hamcrest import has_key
@@ -67,10 +66,7 @@ class TestExternalization(AssessmentTestCase):
 
 		assert_that(internal, externalizes(all_of(	has_key('FileMimeType'),
 													has_key('filename'),
-													has_key('name'),
-													has_entry('url', none()),
-													has_key('CreatedTime'),
-													has_key('Last Modified'))))
+													has_key('name') )))
 		# But we have no URL because we're not in a connection anywhere
 
 	def test_file_upload2(self):
@@ -103,10 +99,7 @@ class TestExternalization(AssessmentTestCase):
 
 		assert_that(internal, externalizes(all_of(	has_key('FileMimeType'),
 													has_key('filename'),
-													has_key('name'),
-													has_entry('url', none()),
-													has_key('CreatedTime'),
-													has_key('Last Modified'))))
+													has_key('name')  )))
 		# But we have no URL because we're not in a connection anywhere
 
 	def test_modeled_response_uploaded(self):

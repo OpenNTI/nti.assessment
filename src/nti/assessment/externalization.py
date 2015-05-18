@@ -14,18 +14,11 @@ logger = __import__('logging').getLogger(__name__)
 from zope import interface
 from zope import component
 
-from nti.dataserver.core.interfaces import ILinkExternalHrefOnly
-
 from nti.externalization.interfaces import IInternalObjectIO
 from nti.externalization.interfaces import StandardExternalFields
 from nti.externalization.interfaces import IInternalObjectExternalizer
 
-from nti.externalization.externalization import to_external_object
-from nti.externalization.externalization import to_external_ntiid_oid
-
 from nti.externalization.datastructures import InterfaceObjectIO
-
-from nti.links.links import Link
 
 from .response import QUploadedFile
 from .response import QUploadedImageFile
@@ -133,23 +126,6 @@ class _QUploadedFileObjectIO(NamedFileObjectIO):
 
 	def toExternalObject(self, mergeFrom=None, **kwargs):
 		ext_dict = super(_QUploadedFileObjectIO, self).toExternalObject(**kwargs)
-		the_file = self._ext_replacement()
-		# TODO: View name. Coupled to the app layer. And this is now in three places.
-		# It's not quite possible to fully traverse to the file sometimes
-		# (TODO: verify this in this case) so we go directly to the file address
-		target = to_external_ntiid_oid(the_file, add_to_connection=True)
-		if target:
-			for element, key in ('view', 'url'), ('download', 'download_url'):
-				link = Link(target=target,
-							 target_mime_type=the_file.contentType,
-							 elements=(element,),
-							 rel="data")
-				interface.alsoProvides(link, ILinkExternalHrefOnly)
-				ext_dict[key] = to_external_object(link)
-		else:
-			ext_dict['url'] = None
-			ext_dict['download_url'] = None
-		ext_dict['value'] = ext_dict['url']
 		return ext_dict
 
 def _QUploadedFileFactory(ext_obj):

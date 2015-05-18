@@ -73,7 +73,6 @@ setup(
  		'nti.dataserver.fragments',
  		'nti.dublincore',
  		'nti.externalization',
- 		'nti.links',
  		'nti.mimetype',
  		'nti.namedfile',
  		'nti.openmath',
