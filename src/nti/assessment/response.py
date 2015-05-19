@@ -16,6 +16,8 @@ from zope import interface
 
 from zope.container.contained import Contained
 
+from zope.location.interfaces import IContained
+
 from persistent import Persistent
 
 from nti.dataserver.core.schema import BodyFieldProperty
@@ -74,15 +76,15 @@ class QDictResponse(TrivialValuedMixin, QResponse):
 	A dictionary response.
 	"""
 
-@interface.implementer(IQUploadedFile)
+@interface.implementer(IQUploadedFile, IContained)
 class QUploadedFile(PersistentCreatedModDateTrackingObject,  # Order matters
 					NamedBlobFile):
-	pass
+	__parent__ = __name__ = None
 
-@interface.implementer(IQUploadedFile)
+@interface.implementer(IQUploadedFile, IContained)
 class QUploadedImageFile(PersistentCreatedModDateTrackingObject,  # Order matters
 						 NamedBlobImage):
-	pass
+	__parent__ = __name__ = None
 
 @interface.implementer(IQFileResponse)
 class QFileResponse(TrivialValuedMixin, QResponse):
