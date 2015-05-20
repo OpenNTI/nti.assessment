@@ -280,7 +280,7 @@ class QFreeResponsePart(QPart, QNonGradableFreeResponsePart):  # order matters
 @EqHash('allowed_mime_types', 'allowed_extensions', 'max_file_size',
 		include_super=True,
 		superhash=True)
-class QNonGradableFilePart(QNonGradablePart, FileConstraints): # order matters
+class QNonGradableFilePart(QNonGradablePart, FileConstraints):  # order matters
 
 	max_file_size = None
 	allowed_mime_types = ()
