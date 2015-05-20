@@ -118,8 +118,7 @@ from nti.namedfile.datastructures import NamedFileObjectIO
 @component.adapter(IQUploadedFile)
 class _QUploadedFileObjectIO(NamedFileObjectIO):
 
-	_ext_iface_upper_bound = IQUploadedFile
-	_excluded_in_ivars_ = {'download_url'}.union(NamedFileObjectIO._excluded_in_ivars_)
+	_excluded_in_ivars_ = {'download_url', 'url', 'value'}.union(NamedFileObjectIO._excluded_in_ivars_)
 
 	def _ext_mimeType(self, obj):
 		return u'application/vnd.nextthought.assessment.uploadedfile'
