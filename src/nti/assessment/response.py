@@ -18,7 +18,7 @@ from zope.container.contained import Contained
 
 from persistent import Persistent
 
-from nti.dataserver.core.schema import BodyFieldProperty
+from nti.dataserver_core.schema import BodyFieldProperty
 
 from nti.dublincore.datastructures import PersistentCreatedModDateTrackingObject
 

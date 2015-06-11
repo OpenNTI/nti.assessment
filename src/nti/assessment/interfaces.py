@@ -28,8 +28,8 @@ from nti.contentfragments.schema import LatexFragmentTextLine as _LatexTextLine
 from nti.contentfragments.schema import HTMLContentFragment as _HTMLContentFragment
 from nti.contentfragments.schema import TextUnicodeContentFragment as _ContentFragment
 
-from nti.dataserver.core.interfaces import IContextAnnotatable
-from nti.dataserver.core.interfaces import INeverStoredInSharedStream
+from nti.dataserver_core.interfaces import IContextAnnotatable
+from nti.dataserver_core.interfaces import INeverStoredInSharedStream
 
 from nti.dataserver_fragments.interfaces import ITitledContent
 from nti.dataserver_fragments.schema import CompoundModeledContentBody

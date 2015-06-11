@@ -23,7 +23,7 @@ from persistent.mapping import PersistentMapping
 
 from nti.common.property import alias
 
-from nti.dataserver.core.mixins import ContainedMixin
+from nti.dataserver_core.mixins import ContainedMixin
 
 from nti.dublincore.datastructures import PersistentCreatedModDateTrackingObject
 

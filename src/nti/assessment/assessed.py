@@ -24,7 +24,7 @@ from persistent.list import PersistentList
 from nti.coremetadata.interfaces import ICreated
 from nti.coremetadata.interfaces import ILastModified
 
-from nti.dataserver.core.mixins import ContainedMixin
+from nti.dataserver_core.mixins import ContainedMixin
 
 from nti.externalization.representation import WithRepr
 
