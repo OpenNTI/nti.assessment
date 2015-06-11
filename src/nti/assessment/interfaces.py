@@ -31,8 +31,8 @@ from nti.contentfragments.schema import TextUnicodeContentFragment as _ContentFr
 from nti.dataserver.core.interfaces import IContextAnnotatable
 from nti.dataserver.core.interfaces import INeverStoredInSharedStream
 
-from nti.dataserver.fragments.interfaces import ITitledContent
-from nti.dataserver.fragments.schema import CompoundModeledContentBody
+from nti.dataserver_fragments.interfaces import ITitledContent
+from nti.dataserver_fragments.schema import CompoundModeledContentBody
 
 from nti.ntiids.schema import ValidNTIID
 
