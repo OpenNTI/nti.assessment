@@ -10,7 +10,7 @@ __docformat__ = "restructuredtext en"
 logger = __import__('logging').getLogger(__name__)
 
 import six
-import functools
+from functools import total_ordering
 
 from zope import interface
 
@@ -44,20 +44,19 @@ def safe_encode(word, encoding="UTF-8"):
 		word = repr(word)
 	return word
 
-@functools.total_ordering
-@interface.implementer(IWordEntry)
+@total_ordering
 @WithRepr
-@EqHash("wid") # XXX: The word isn't included?
-class WordEntry(Contained, SchemaConfigured, Persistent):
-
-	wid = None
-	word = None
-	lang = None
-
+@EqHash("wid")  # XXX: The word isn't included?
+@interface.implementer(IWordEntry)
+class WordEntry(SchemaConfigured, Persistent, Contained):
 	createDirectFieldProperties(IWordEntry)
 
 	__external_can_create__ = True
 	mime_type = mimeType = 'application/vnd.nextthought.naqwordentry'
+
+	wid = None
+	lang = None
+	word = None
 
 	def __init__(self, *args, **kwargs):
 		Persistent.__init__(self)
@@ -75,18 +74,17 @@ class WordEntry(Contained, SchemaConfigured, Persistent):
 		except AttributeError:
 			return NotImplemented
 
-@interface.implementer(IWordBank, ISublocations)
 @WithRepr
 @EqHash("ids", "unique")
+@interface.implementer(IWordBank, ISublocations)
 class WordBank(Contained, SchemaConfigured, Persistent):
-
-	entries = ()
-	unique = None
-
 	createDirectFieldProperties(IWordBank)
 
 	__external_can_create__ = True
 	mime_type = mimeType = 'application/vnd.nextthought.naqwordbank'
+
+	entries = ()
+	unique = None
 
 	def __init__(self, *args, **kwargs):
 		Persistent.__init__(self)

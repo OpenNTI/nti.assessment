@@ -61,48 +61,40 @@ from .interfaces import IQAggregatedMultipleChoiceMultipleAnswerPart
 
 from .interfaces import SURVEY_MIME_TYPE
 
-@interface.implementer(IQPoll,
-					   IFiniteSequence)
+@interface.implementer(IQPoll, IFiniteSequence)
 @EqHash('content', 'parts', superhash=True)
-class QPoll(QSubmittable,
-			Persistent):
-
-	parts = ()
-	content = None
-
+class QPoll(QSubmittable, Persistent):
 	createDirectFieldProperties(IQPoll)
 
 	mimeType = mime_type = 'application/vnd.nextthought.napoll'
 
+	parts = ()
+	content = None
 	id = alias('ntiid')
-	
+
 	def __init__(self, *args, **kwargs):
 		Persistent.__init__(self)
 		SchemaConfigured.__init__(self, *args, **kwargs)
-	
+
 	def __getitem__(self, index):
 		return self.parts[index]
-	
+
 	def __len__(self):
 		return len(self.parts or ())
 
-@interface.implementer(IQSurvey,
-					   ISublocations,
-					   IFiniteSequence)
+@interface.implementer(IQSurvey, ISublocations, IFiniteSequence)
 @EqHash('title', 'questions', superhash=True)
-class QSurvey(QSubmittable,
-			  Persistent):
+class QSurvey(QSubmittable, Persistent):
+	createDirectFieldProperties(IQSurvey)
+
+	mimeType = mime_type = SURVEY_MIME_TYPE
 
 	questions = ()
 
 	id = alias('ntiid')
 	polls = parts = alias('questions')
 
-	createDirectFieldProperties(IQSurvey)
-
 	title = AdaptingFieldProperty(IQSurvey['title'])
-
-	mimeType = mime_type = SURVEY_MIME_TYPE
 
 	def __init__(self, *args, **kwargs):
 		Persistent.__init__(self)
@@ -111,10 +103,10 @@ class QSurvey(QSubmittable,
 	def sublocations(self):
 		for question in self.questions or ():
 			yield question
-			
+
 	def __getitem__(self, index):
 		return self.parts[index]
-	
+
 	def __len__(self):
 		return len(self.parts or ())
 
@@ -127,12 +119,12 @@ class QPollSubmission(ContainedMixin,
 
 	id = alias('pollId')
 	sublocations = _make_sublocations()
-	
+
 	def __init__(self, *args, **kwargs):
 		# schema configured is not cooperative
 		ContainedMixin.__init__(self, *args, **kwargs)
 		PersistentCreatedModDateTrackingObject.__init__(self)
-		
+
 	def __iter__(self):
 		return iter(self.parts)
 
@@ -141,23 +133,23 @@ class QPollSubmission(ContainedMixin,
 
 	def __setitem__(self, idx, value):
 		self.parts[idx] = value
-		
+
 	def __delitem__(self, idx):
 		del self.parts[idx]
-	
+
 	def __len__(self):
 		return len(self.parts)
-	
+
 @WithRepr
 @interface.implementer(IWriteMapping)
 class QBasePollSet(object):
-	
+
 	def get(self, key, default=None):
 		try:
 			return self[key]
 		except KeyError:
 			return default
-		
+
 	def index(self, key):
 		for idx, poll in enumerate(self.polls or ()):
 			if poll.pollId == key:
@@ -172,13 +164,13 @@ class QBasePollSet(object):
 		if idx == -1:
 			raise KeyError(key)
 		return self.polls[idx]
-	
+
 	def __delitem__(self, key):
 		idx = self.index(key)
 		if idx == -1:
 			raise KeyError(key)
 		del self.polls[idx]
-		
+
 	def __setitem__(self, key, value):
 		assert key == value.pollId
 		idx = self.index(key)
@@ -189,15 +181,15 @@ class QBasePollSet(object):
 
 	def __contains__(self, key):
 		return self.index(key) != -1
-		
+
 	def __len__(self):
 		return len(self.polls)
 
 @interface.implementer(IQSurveySubmission, ISublocations)
 class QSurveySubmission(ContainedMixin,
-					    SchemaConfigured,
-					    PersistentCreatedModDateTrackingObject,
-					    QBasePollSet):
+						SchemaConfigured,
+						PersistentCreatedModDateTrackingObject,
+						QBasePollSet):
 	createDirectFieldProperties(IQBaseSubmission)
 	createDirectFieldProperties(IQSurveySubmission)
 
@@ -205,24 +197,24 @@ class QSurveySubmission(ContainedMixin,
 	parts = polls = alias('questions')
 
 	sublocations = _make_sublocations('questions')
-	
+
 	def __init__(self, *args, **kwargs):
 		# schema configured is not cooperative
 		ContainedMixin.__init__(self, *args, **kwargs)
 		PersistentCreatedModDateTrackingObject.__init__(self)
 
-## Aggregation
+# Aggregation
 
 @WithRepr
 @interface.implementer(IQAggregatedPart)
 class QAggregatedPart(ContainedMixin,
 					  SchemaConfigured,
 					  PersistentCreatedModDateTrackingObject):
-	
+
 	createDirectFieldProperties(IQAggregatedPart)
-	
+
 	__external_can_create__ = False
-	
+
 	def __init__(self, *args, **kwargs):
 		# schema configured is not cooperative
 		ContainedMixin.__init__(self, *args, **kwargs)
@@ -234,22 +226,22 @@ class QAggregatedPart(ContainedMixin,
 
 	def append(self, response):
 		raise NotImplementedError()
-		
+
 @interface.implementer(IQAggregatedMultipleChoicePart)
 class QAggregatedMultipleChoicePart(QAggregatedPart):
 	createDirectFieldProperties(IQAggregatedMultipleChoicePart)
-	
+
 	@property
 	def Results(self):
 		return dict(self.results)
 
 	@Results.setter
-	def Results(self,nv):
+	def Results(self, nv):
 		pass
-		
+
 	def reset(self):
 		self.results = PersistentMapping()
-		
+
 	def append(self, response):
 		current = self.results.get(response) or 0
 		self.results[response] = current + 1
@@ -264,22 +256,22 @@ class QAggregatedMultipleChoicePart(QAggregatedPart):
 @interface.implementer(IQAggregatedMultipleChoiceMultipleAnswerPart)
 class QMultipleChoiceMultipleAnswerAggregatedPart(QAggregatedMultipleChoicePart):
 	createDirectFieldProperties(IQAggregatedMultipleChoiceMultipleAnswerPart)
-	
+
 @interface.implementer(IQAggregatedFreeResponsePart)
 class QAggregatedFreeResponsePart(QAggregatedPart):
 	createDirectFieldProperties(IQAggregatedFreeResponsePart)
-	
+
 	@property
 	def Results(self):
 		return dict(self.results)
-	
+
 	@Results.setter
-	def Results(self,nv):
+	def Results(self, nv):
 		pass
-	
+
 	def reset(self):
 		self.results = PersistentMapping()
-		
+
 	def append(self, response):
 		current = self.results.get(response) or 0
 		self.results[response] = current + 1
@@ -294,21 +286,21 @@ class QAggregatedFreeResponsePart(QAggregatedPart):
 @interface.implementer(IQAggregatedModeledContentPart)
 class QAggregatedModeledContentPart(QAggregatedPart):
 	createDirectFieldProperties(IQAggregatedModeledContentPart)
-	
+
 	@property
 	def Results(self):
 		return list(self.results)
-	
+
 	@Results.setter
-	def Results(self,nv):
+	def Results(self, nv):
 		pass
-	
+
 	def reset(self):
 		self.results = PersistentList()
-		
+
 	def append(self, response):
 		self.results.append(response)
-	
+
 	def __iadd__(self, other):
 		assert IQAggregatedModeledContentPart.providedBy(other)
 		self.results.extend(other.results)
@@ -319,17 +311,17 @@ class QAggregatedModeledContentPart(QAggregatedPart):
 class QAggregatedPoll(ContainedMixin,
 					  SchemaConfigured,
 					  PersistentCreatedModDateTrackingObject):
-	
+
 	createDirectFieldProperties(IQAggregatedPoll)
-	
+
 	id = alias('pollId')
 	sublocations = _make_sublocations()
-		
+
 	def __init__(self, *args, **kwargs):
 		# schema configured is not cooperative
 		ContainedMixin.__init__(self, *args, **kwargs)
 		PersistentCreatedModDateTrackingObject.__init__(self)
-	
+
 	def __iter__(self):
 		return iter(self.parts)
 
@@ -338,10 +330,10 @@ class QAggregatedPoll(ContainedMixin,
 
 	def __setitem__(self, idx, value):
 		self.parts[idx] = value
-		
+
 	def __delitem__(self, idx):
 		del self.parts[idx]
-	
+
 	def __len__(self):
 		return len(self.parts)
 
@@ -356,14 +348,14 @@ class QAggregatedSurvey(ContainedMixin,
 					  	SchemaConfigured,
 					  	PersistentCreatedModDateTrackingObject,
 					  	QBasePollSet):
-	
+
 	createDirectFieldProperties(IQAggregatedSurvey)
-		
+
 	id = alias('surveyId')
 	parts = polls = alias('questions')
-	
+
 	sublocations = _make_sublocations('questions')
-		
+
 	def __init__(self, *args, **kwargs):
 		# schema configured is not cooperative
 		ContainedMixin.__init__(self, *args, **kwargs)
@@ -397,7 +389,7 @@ def aggregate_poll_submission(submission, registry=component):
 	:return: An :class:`.interfaces.IQAggregatedPoll`.
 	:param submission: An :class:`.interfaces.IQPollSubmission`.
 		The ``parts`` of this submission must be the same length
-		as the parts of the poll being submitted. 
+		as the parts of the poll being submitted.
 	:param registry: If given, an :class:`.IComponents`. If
 		not given, the current component registry will be used.
 		Used to look up the poll by id.
@@ -411,7 +403,7 @@ def aggregate_poll_submission(submission, registry=component):
 		raise ValueError("Poll (%s) and submission (%s) have different numbers of parts." %
 						 (len(poll.parts), len(submission.parts)))
 
-	aggregated_parts = PersistentList()	
+	aggregated_parts = PersistentList()
 	for sub_part, q_part in zip(submission.parts, poll.parts):
 		__traceback_info__ = sub_part, q_part
 		response = IQResponse(sub_part)
@@ -419,7 +411,7 @@ def aggregate_poll_submission(submission, registry=component):
 		aggregated_part = aggregated_part_factory(q_part)()
 		aggregated_part.append(response)
 		aggregated_parts.append(aggregated_part)
-		
+
 	aggregated = QAggregatedPoll(pollId=pollId, parts=aggregated_parts)
 	return aggregated
 
@@ -439,11 +431,11 @@ def aggregate_survey_submission(submission, registry=component):
 
 	assessed = PersistentList()
 	for sub_poll in submission.questions:
-		poll = registry.getUtility(IQPoll, name=sub_poll.pollId )
+		poll = registry.getUtility(IQPoll, name=sub_poll.pollId)
 		if poll.ntiid in poll_ntiids or poll in survey.questions:
 			sub_aggregated = IQAggregatedPoll(sub_poll)
 			assessed.append(sub_aggregated)
-		else: # pragma: no cover
+		else:  # pragma: no cover
 			logger.debug("Bad input, poll (%s) not in survey (%s) (kownn: %s)",
 						 poll, survey, survey.questions)
 
