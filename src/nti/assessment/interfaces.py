@@ -774,6 +774,18 @@ class IQAssessmentPolicies(interface.Interface):
 		"""
 	assignments = assessments  # alias for BWC
 
+	def size():
+		"""
+		return the number of assessments
+		"""
+
+	def clear():
+		"""
+		clear all policies
+		
+		:return true if policies were cleared
+		"""
+
 	def __bool__():
 		"""
 		Are there any policies registered? If no, return False.
