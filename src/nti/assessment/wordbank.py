@@ -46,7 +46,7 @@ def safe_encode(word, encoding="UTF-8"):
 
 @total_ordering
 @WithRepr
-@EqHash("wid")  # XXX: The word isn't included?
+@EqHash("wid")
 @interface.implementer(IWordEntry)
 class WordEntry(SchemaConfigured, Persistent, Contained):
 	createDirectFieldProperties(IWordEntry)
@@ -55,8 +55,8 @@ class WordEntry(SchemaConfigured, Persistent, Contained):
 	mime_type = mimeType = 'application/vnd.nextthought.naqwordentry'
 
 	wid = None
-	lang = None
 	word = None
+	lang = 'en'
 
 	def __init__(self, *args, **kwargs):
 		Persistent.__init__(self)
