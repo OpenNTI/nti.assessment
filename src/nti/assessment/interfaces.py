@@ -1163,7 +1163,7 @@ class IQPoll(IQInquiry):
 	"""
 
 	content = Text(title="The content to present to the user, if any.",
-					default='')
+				   default='', required=False)
 
 	parts = IndexedIterable(title="The ordered parts of the question.",
 							min_length=1,
