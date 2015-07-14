@@ -63,7 +63,7 @@ class TestAssignment(AssessmentTestCase):
 		
 	def test_signature(self):
 		assert_that(signature(assignment.QAssignment()), 
-					is_('8bb9d88ba578cc33d34e4ee3a7ae40a7aebf53f2579953324dd69c42d0f3c90e') )
+					is_('043abe457c41f5cdca31d6779188c533876e3ca6a1cc1e2af3baa66ed6c30647') )
 
 		path = os.path.join(os.path.dirname(__file__), "questionbank.json")
 		with open(path, "rb") as fp:
