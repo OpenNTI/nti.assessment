@@ -63,10 +63,12 @@ class GradeMatcher(BaseMatcher):
 		return solution.grade(self.response) == self.value
 
 	def describe_to(self, description):
-		description.append_text('solution that grades ').append_text(str(self.response)).append_text(' as ').append_text(str(self.value))
+		description.append_text('solution that grades ').append_text(
+							str(self.response)).append_text(' as ').append_text(str(self.value))
 
 	def describe_mismatch(self, item, mismatch_description):
-		mismatch_description.append_text('solution ').append_text(str(type(item))).append_text(' ').append_text(repr(item))
+		mismatch_description.append_text('solution ').append_text(
+							str(type(item))).append_text(' ').append_text(repr(item))
 		if getattr(item, 'allowed_units', ()):
 			mismatch_description.append_text(" units " + str(item.allowed_units))
 
@@ -96,26 +98,26 @@ from zope.annotation.interfaces import IAttributeAnnotatable
 
 from zope.dublincore.annotatableadapter import ZDCAnnotatableAdapter
 
-def check_old_dublin_core( qaq ):
+def check_old_dublin_core(qaq):
 	"we can read old dublin core metadata"
 
 	del qaq.__dict__['lastModified']
 	del qaq.__dict__['createdTime']
 
-	assert_that( qaq.lastModified, is_( 0 ) )
-	assert_that( qaq.createdTime, is_( 0 ) )
+	assert_that(qaq.lastModified, is_(0))
+	assert_that(qaq.createdTime, is_(0))
 
-	interface.alsoProvides( qaq, IAttributeAnnotatable )
+	interface.alsoProvides(qaq, IAttributeAnnotatable)
 
-	zdc = ZDCAnnotatableAdapter( qaq )
+	zdc = ZDCAnnotatableAdapter(qaq)
 
 	now = datetime.now()
 
 	zdc.created = now
 	zdc.modified = now
 
-	assert_that( qaq.lastModified, is_( time.mktime( now.timetuple() ) ) )
-	assert_that( qaq.createdTime, is_( time.mktime( now.timetuple() ) ) )
+	assert_that(qaq.lastModified, is_(time.mktime(now.timetuple())))
+	assert_that(qaq.createdTime, is_(time.mktime(now.timetuple())))
 
 def lineage(resource):
 	while resource is not None:
