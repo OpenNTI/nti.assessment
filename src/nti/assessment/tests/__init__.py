@@ -21,7 +21,6 @@ class SharedConfiguringTestLayer(ZopeComponentLayer,
 								 ConfiguringLayerMixin):
 
 	set_up_packages = (
-					   'nti.contentrendering',
 					   'nti.assessment',
 					   'nti.externalization',
 					   'nti.mimetype',
@@ -49,13 +48,6 @@ import unittest
 class AssessmentTestCase(unittest.TestCase):
 
 	layer = SharedConfiguringTestLayer
-
-from nti.contentrendering.tests import simpleLatexDocumentText
-
-def _simpleLatexDocument(maths):
-	return simpleLatexDocumentText(preludes=(br'\usepackage{ntiassessment}',),
-									bodies=maths)
-simpleLatexDocument = _simpleLatexDocument
 
 # ==========
 
@@ -132,4 +124,3 @@ def lineage(resource):
 			resource = resource.__parent__
 		except AttributeError:
 			resource = None
-

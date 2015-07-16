@@ -39,7 +39,7 @@ from .interfaces import ISha224RandomizedMultipleChoiceMultipleAnswerPart
 @interface.implementer(IQRandomizedConnectingPart)
 class QRandomizedConnectingPart(QConnectingPart):
 	response_interface = None
-		
+
 @interface.implementer(IQRandomizedMatchingPart)
 class QRandomizedMatchingPart(QRandomizedConnectingPart, QMatchingPart):
 
@@ -49,10 +49,10 @@ class QRandomizedMatchingPart(QRandomizedConnectingPart, QMatchingPart):
 	mimeType = mime_type = "application/vnd.nextthought.assessment.randomizedmatchingpart"
 
 	grader_interface = IQRandomizedMatchingPartGrader
-	
+
 	nonrandomized_interface = INonRandomizedMatchingPart
 	sha224randomized_interface = ISha224RandomizedMatchingPart
-	
+
 @interface.implementer(IQRandomizedOrderingPart)
 class QRandomizedOrderingPart(QRandomizedConnectingPart, QOrderingPart):
 
@@ -60,10 +60,10 @@ class QRandomizedOrderingPart(QRandomizedConnectingPart, QOrderingPart):
 	mimeType = mime_type = "application/vnd.nextthought.assessment.randomizedorderingpart"
 
 	grader_interface = IQRandomizedOrderingPartGrader
-	
+
 	nonrandomized_interface = INonRandomizedOrderingPart
 	sha224randomized_interface = ISha224RandomizedOrderingPart
-	
+
 @interface.implementer(IQRandomizedMultipleChoicePart)
 class QRandomizedMultipleChoicePart(QMultipleChoicePart):
 
@@ -73,7 +73,7 @@ class QRandomizedMultipleChoicePart(QMultipleChoicePart):
 	mimeType = mime_type = "application/vnd.nextthought.assessment.randomizedmultiplechoicepart"
 
 	grader_interface = IQRandomizedMultipleChoicePartGrader
-	
+
 	nonrandomized_interface = INonRandomizedMultipleChoicePart
 	sha224randomized_interface = ISha224RandomizedMultipleChoicePart
 
@@ -86,6 +86,6 @@ class QRandomizedMultipleChoiceMultipleAnswerPart(QMultipleChoiceMultipleAnswerP
 	mimeType = mime_type = "application/vnd.nextthought.assessment.randomizedmultiplechoicemultipleanswerpart"
 
 	grader_interface = IQRandomizedMultipleChoiceMultipleAnswerPartGrader
-	
+
 	nonrandomized_interface = INonRandomizedMultipleChoiceMultipleAnswerPart
 	sha224randomized_interface = ISha224RandomizedMultipleChoiceMultipleAnswerPart

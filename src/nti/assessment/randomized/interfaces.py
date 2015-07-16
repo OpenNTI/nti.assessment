@@ -32,12 +32,12 @@ from ..interfaces import IQMultipleChoiceMultipleAnswerPartGrader
 class ISha224Randomized(interface.Interface):
 	"""
 	marker interface to use the following generator
-	
+
 	hexdigest = hashlib.sha224(bytes(uid)).hexdigest()
-    generator = random.Random(long(hexdigest, 16))
-    
-    where uid is the user int id
-    """
+	generator = random.Random(long(hexdigest, 16))
+
+	where uid is the user int id
+	"""
 
 # parts
 
@@ -53,7 +53,7 @@ class IQRandomizedPartGrader(IQPartGrader):
 		"""
 		unrandomize the specified value
 		"""
-	
+
 # connecting part
 
 class IQRandomizedConnectingPart(IQRandomizedPart, IQConnectingPart):
@@ -78,7 +78,7 @@ class INonRandomizedMatchingPart(IQRandomizedMatchingPart):
 
 class ISha224RandomizedMatchingPart(IQRandomizedMatchingPart, ISha224RandomizedPart):
 	pass
-	
+
 # ordering
 
 class IQRandomizedOrderingPart(IQRandomizedConnectingPart, IQOrderingPart):
@@ -147,34 +147,34 @@ class IQuestionBank(IQuestionSet):
 	"""
 	An group of questions taken at random
 
-	A maximum total of questions of the question set is drawn to be presented and evaluated. 
+	A maximum total of questions of the question set is drawn to be presented and evaluated.
 	"""
-	
-	draw = Int(	title="number of questions to be randomly drawn", min=1, 
+
+	draw = Int(title="number of questions to be randomly drawn", min=1,
 				required=True, default=1)
 
-	ranges = ListOrTuple(Object(IQuestionIndexRange), title="Question index ranges", 
+	ranges = ListOrTuple(Object(IQuestionIndexRange), title="Question index ranges",
 						 required=False, default=())
 
 	srand = Bool(title="always use a different random seed.", required=False,
 				 default=False)
-	
+
 	def copy(questions=None, ranges=None, srand=None):
 		"""
 		make a copy of this object w/ possibly new questions and/or ranges
 		"""
 
-	def copyTo(target, questions=None, ranges=None, srand=None, ):
+	def copyTo(target, questions=None, ranges=None, srand=None,):
 		"""
-		make a copy of this object w/ possibly new questions and/or ranges to 
+		make a copy of this object w/ possibly new questions and/or ranges to
 		target
 		"""
-		
+
 class INonRandomizedQuestionBank(IQuestionBank):
 	"""
 	Marker interface to avoid randomizing an question bank
 	"""
-	
+
 class ISha224RandomizedQuestionBank(IQuestionBank, ISha224Randomized):
 	pass
 

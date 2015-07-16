@@ -39,7 +39,7 @@ class RandomizedConnectingPartGrader(ConnectingPartGrader):
 		return the_dict
 
 	response_converter = _to_response_dict = unshuffle
-	
+
 @interface.implementer(IQRandomizedMatchingPartGrader)
 class RandomizedMatchingPartGrader(RandomizedConnectingPartGrader):
 	pass
@@ -50,11 +50,11 @@ class RandomizedOrderingPartGrader(RandomizedConnectingPartGrader):
 
 @interface.implementer(IQRandomizedMultipleChoicePartGrader)
 class RandomizedMultipleChoiceGrader(EqualityGrader):
-	
+
 	# MultipleChoiceGrader tries really hard to verify correctness,
 	# when we just need something simple. Thus, we inherit from EqualityGrader.
 
-	def __call__( self ):
+	def __call__(self):
 		if hasattr(self.response, 'value'):
 			return self._compare(self.solution.value, self.response.value)
 		else:
