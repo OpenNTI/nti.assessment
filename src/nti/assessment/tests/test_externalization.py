@@ -21,6 +21,8 @@ does_not = is_not
 import os
 import json
 
+import fudge
+
 from nti.assessment.randomized.interfaces import IQuestionBank
 from nti.assessment.randomized.interfaces import IQuestionIndexRange
 from nti.assessment.question import QFillInTheBlankWithWordBankQuestion
@@ -215,7 +217,11 @@ class TestExternalization(AssessmentTestCase):
 		sol = internal.solutions[0]
 		assert_that(sol, has_property('value', has_entry('001', has_property('solution', 'yes, I will'))))
 
-	def test_question_bank(self):
+	@fudge.patch('nti.assessment.randomized.get_seed')
+	def test_question_bank(self, mock_gs):
+		
+		mock_gs.is_callable().with_args().returns(None)
+		
 		path = os.path.join(os.path.dirname(__file__), "questionbank.json")
 		with open(path, "r") as fp:
 			ext_obj = json.load(fp)
