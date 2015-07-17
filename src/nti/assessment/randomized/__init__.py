@@ -18,8 +18,8 @@ from .interfaces import ISha224Randomized
 from .interfaces import IPrincipalSeedSelector
 
 def get_seed(context=None):
-	selector = component.getUtility(IPrincipalSeedSelector)
-	result = selector(context)
+	selector = component.queryUtility(IPrincipalSeedSelector)
+	result = selector(context) if selector is not None else None
 	return result
 
 def randomize(user=None, context=None):
