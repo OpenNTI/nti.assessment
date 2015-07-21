@@ -52,6 +52,7 @@ from nti.schema.field import ValidTextLine as TextLine
 from nti.schema.field import ValidDatetime as Datetime
 
 NTIID_TYPE = 'NAQ'
+POLL_MIME_TYPE = u'application/vnd.nextthought.napoll'
 SURVEY_MIME_TYPE = u'application/vnd.nextthought.nasurvey'
 QUESTION_SET_MIME_TYPE = u'application/vnd.nextthought.naquestionset'
 
