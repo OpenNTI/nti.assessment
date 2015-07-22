@@ -187,6 +187,12 @@
 			 	  .interfaces.IQModeledContentResponse"
 			 provides=".interfaces.IQModeledContentPartResponseNormalizer" />
 
+	<!-- Factories -->
+	<adapter factory=".adapters.NonGradableFreeResponsePartFactory" />
+	<adapter factory=".adapters.NonGradableModeledContentPartFactory" />
+	<adapter factory=".adapters.NonGradableMultipleChoicePartFactory" />
+	<adapter factory=".adapters.NonGradableMultipleChoiceMultipleAnswerPartFactory" />
+
 	<!-- Externalization -->
 	<include package="nti.externalization" file="meta.zcml" />
 	<include package="nti.externalization" />

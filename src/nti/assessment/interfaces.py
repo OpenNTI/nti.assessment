@@ -1205,6 +1205,11 @@ class IQSurveySubmission(IQInquirySubmission, IContextAnnotatable):
 								value_type=Object(IQPollSubmission,
 												  title="The submission for a particular poll."))
 
+class IQAggregatedPartFactory(interface.Interface):
+	
+	def __call__():
+		pass
+
 class IQAggregatedPart(IContained):
 
 	def reset():

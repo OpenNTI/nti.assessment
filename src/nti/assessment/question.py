@@ -12,11 +12,12 @@ __docformat__ = "restructuredtext en"
 logger = __import__('logging').getLogger(__name__)
 
 from zope import interface
-from zope.interface.common.sequence import IFiniteSequence
 
 from zope.annotation.interfaces import IAttributeAnnotatable
 
 from zope.container.contained import Contained
+
+from zope.interface.common.sequence import IFiniteSequence
 
 from zope.location.interfaces import ISublocations
 

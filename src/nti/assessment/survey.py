@@ -46,14 +46,10 @@ from .interfaces import IQBaseSubmission
 from .interfaces import IQPollSubmission
 from .interfaces import IQSurveySubmission
 
-from .interfaces import IQNonGradableFreeResponsePart
-from .interfaces import IQNonGradableModeledContentPart
-from .interfaces import IQNonGradableMultipleChoicePart
-from .interfaces import IQNonGradableMultipleChoiceMultipleAnswerPart
-
 from .interfaces import IQAggregatedPart
 from .interfaces import IQAggregatedPoll
 from .interfaces import IQAggregatedSurvey
+from .interfaces import IQAggregatedPartFactory
 from .interfaces import IQAggregatedFreeResponsePart
 from .interfaces import IQAggregatedModeledContentPart
 from .interfaces import IQAggregatedMultipleChoicePart
@@ -372,15 +368,8 @@ class QAggregatedSurvey(ContainedMixin,
 		return self
 
 def aggregated_part_factory(part):
-	if IQNonGradableFreeResponsePart.providedBy(part):
-		return QAggregatedFreeResponsePart
-	elif IQNonGradableModeledContentPart.providedBy(part):
-		return QAggregatedModeledContentPart
-	elif IQNonGradableMultipleChoicePart.providedBy(part):
-		return QAggregatedMultipleChoicePart
-	elif IQNonGradableMultipleChoiceMultipleAnswerPart.providedBy(part):
-		return QMultipleChoiceMultipleAnswerAggregatedPart
-	raise TypeError("Cannot find aggregated part factory for %s", part)
+	result = IQAggregatedPartFactory(part)
+	return result
 
 def aggregate_poll_submission(submission, registry=component):
 	"""
