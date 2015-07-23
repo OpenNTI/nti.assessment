@@ -309,7 +309,7 @@
 			 provides="nti.externalization.interfaces.IInternalObjectUpdater" />
 
 	<adapter factory=".internalization._QInquiryUpdater"
-			 for=".interfaces.IQInquiry"
+			 for=".interfaces.IQSurvey"
 			 provides="nti.externalization.interfaces.IInternalObjectUpdater" />
 
 	<adapter factory=".regex._regex_str_adapter"
