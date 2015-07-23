@@ -41,6 +41,7 @@ from .common import normalize_response
 
 from .interfaces import IQPoll
 from .interfaces import IQSurvey
+from .interfaces import IQInquiry
 from .interfaces import IQResponse
 from .interfaces import IQBaseSubmission
 from .interfaces import IQPollSubmission
@@ -56,10 +57,24 @@ from .interfaces import IQAggregatedMultipleChoicePart
 from .interfaces import IQAggregatedMultipleChoiceMultipleAnswerPart
 
 from .interfaces import SURVEY_MIME_TYPE
+from .interfaces import DISPLAY_TERMINATION
+
+@interface.implementer(IQInquiry)
+class QInquiry(QSubmittable, Persistent):
+	
+	display = DISPLAY_TERMINATION
+	
+	def __init__(self, *args, **kwargs):
+		Persistent.__init__(self)
+		SchemaConfigured.__init__(self, *args, **kwargs)
+
+	@property
+	def onTermination(self):
+		return not self.display or self.display.lower() == DISPLAY_TERMINATION
 
 @interface.implementer(IQPoll, IFiniteSequence)
 @EqHash('content', 'parts', superhash=True)
-class QPoll(QSubmittable, Persistent):
+class QPoll(QInquiry):
 	createDirectFieldProperties(IQPoll)
 
 	mimeType = mime_type = 'application/vnd.nextthought.napoll'
@@ -67,10 +82,6 @@ class QPoll(QSubmittable, Persistent):
 	parts = ()
 	content = None
 	id = alias('ntiid')
-
-	def __init__(self, *args, **kwargs):
-		Persistent.__init__(self)
-		SchemaConfigured.__init__(self, *args, **kwargs)
 
 	def __getitem__(self, index):
 		return self.parts[index]
@@ -80,7 +91,7 @@ class QPoll(QSubmittable, Persistent):
 
 @interface.implementer(IQSurvey, ISublocations, IFiniteSequence)
 @EqHash('title', 'questions', superhash=True)
-class QSurvey(QSubmittable, Persistent):
+class QSurvey(QInquiry):
 	createDirectFieldProperties(IQSurvey)
 
 	mimeType = mime_type = SURVEY_MIME_TYPE
@@ -91,10 +102,6 @@ class QSurvey(QSubmittable, Persistent):
 	polls = parts = alias('questions')
 
 	title = AdaptingFieldProperty(IQSurvey['title'])
-
-	def __init__(self, *args, **kwargs):
-		Persistent.__init__(self)
-		SchemaConfigured.__init__(self, *args, **kwargs)
 
 	def sublocations(self):
 		for question in self.questions or ():

@@ -24,9 +24,12 @@ from nti.externalization.internalization import find_factory_for
 from nti.externalization.internalization import update_from_external_object
 
 from .interfaces import IRegEx
+from .interfaces import IQInquiry
 from .interfaces import IWordEntry
 from .interfaces import IQModeledContentResponse
 from .interfaces import IQFillInTheBlankShortAnswerSolution
+
+from .interfaces import DISPLAY_TERMINATION
 
 @interface.implementer(IInternalObjectUpdater)
 @component.adapter(IWordEntry)
@@ -63,7 +66,7 @@ class _QFillInTheBlankWithWordBankSolutionUpdater(object):
 				regex = find_factory_for(ext_obj)()
 				update_from_external_object(regex, ext_obj)
 			value[key] = regex
-			
+
 		result = InterfaceObjectIO(
 					self.obj,
 					IQFillInTheBlankShortAnswerSolution).updateFromExternalObject(parsed)
@@ -87,6 +90,23 @@ class _QModeledContentResponseUpdater(object):
 				value[idx] = filter(lambda c: not isctrl(c), value[idx])
 			parsed['value'] = value
 		result = InterfaceObjectIO(
-					self.obj, 
+					self.obj,
 					IQModeledContentResponse).updateFromExternalObject(parsed)
+		return result
+
+@component.adapter(IQInquiry)
+@interface.implementer(IInternalObjectUpdater)
+class _QInquiryUpdater(object):
+
+	__slots__ = ('obj',)
+
+	def __init__(self, obj):
+		self.obj = obj
+
+	def updateFromExternalObject(self, parsed, *args, **kwargs):
+		value = parsed.get('display', None) or DISPLAY_TERMINATION
+		parsed['display'] = value.lower()
+		result = InterfaceObjectIO(
+					self.obj,
+					IQInquiry).updateFromExternalObject(parsed)
 		return result

@@ -8,13 +8,16 @@ from __future__ import unicode_literals, print_function, absolute_import, divisi
 __docformat__ = "restructuredtext en"
 
 from zope import interface
-from zope.interface.common.mapping import IReadMapping
 
 from zope.annotation.interfaces import IAnnotatable
 
 from zope.container.interfaces import IContained
 
+from zope.interface.common.mapping import IReadMapping
+
 from zope.mimetype.interfaces import mimeTypeConstraint
+
+from zope.schema import vocabulary
 
 from dolmen.builtins.interfaces import IDict
 from dolmen.builtins.interfaces import IList
@@ -42,6 +45,7 @@ from nti.schema.field import Dict
 from nti.schema.field import List
 from nti.schema.field import Float
 from nti.schema.field import Tuple
+from nti.schema.field import Choice
 from nti.schema.field import Object
 from nti.schema.field import Number
 from nti.schema.field import Variant
@@ -540,7 +544,7 @@ class IQFilePart(IQNonGradableFilePart, IQPart):
 	"""
 IQGradableFilePart = IQFilePart  # alias
 
-# # modeled content part
+# modeled content part
 
 class IQNonGradableModeledContentPart(IQNonGradablePart, IPollable):
 	"""
@@ -560,14 +564,14 @@ class IQModeledContentPart(IQNonGradableModeledContentPart, IQPart):
 
 IQGradableModeledContentPart = IQModeledContentPart
 
-# # assessment
+# assessment
 
 class IQAssessment(interface.Interface):
 	"""
 	Marker interface for all assessment objects
 	"""
 
-# # question
+# question
 
 class IQuestion(IQAssessment, IAnnotatable):
 	"""
@@ -833,12 +837,11 @@ def convert_response_for_solution(solution, response):
 				break
 	return response
 
-# ##
+
 # Objects having to do with the assessment process itself.
 # There is a three part lifecycle: The source object,
 # the submission, and finally the assessed value. The three
 # parts have similar structure.
-# ##
 
 class IQBaseSubmission(IContained):
 	"""
@@ -1061,7 +1064,7 @@ class IQFillInTheBlankWithWordBankSolution(IQSolution):
 
 IQFillInTheBlankWithWordBankSolution.setTaggedValue('response_type', IQDictResponse)
 
-# # fill-in-the-blank with word bank part
+# fill-in-the-blank with word bank part
 
 class IWordEntry(interface.Interface):
 	wid = TextLine(title="word identifier")
@@ -1111,7 +1114,7 @@ class IQFillInTheBlankWithWordBankQuestion(IQuestion):
 											  title="A question part"))
 
 
-# # Normalizer
+# Normalizer
 
 class IQPartResponseNormalizer(interface.Interface):
 	"""
@@ -1146,11 +1149,20 @@ class IQMultipleChoiceMultipleAnswerPartResponseNormalizer(IQPartResponseNormali
 	a :class:`IQResponse` for a :class:`IQNonGradableMultipleChoiceMultipleAnswerPart`
 	"""
 
-# # polls
+# polls
+
+DISPLAY_NEVER = u'never'
+DISPLAY_ALWAYS = u'always'
+DISPLAY_TERMINATION = u'termination'
+
+DISPLAY_STATES = (DISPLAY_NEVER, DISPLAY_ALWAYS, DISPLAY_TERMINATION)
+DISPLAY_VOCABULARY = vocabulary.SimpleVocabulary([vocabulary.SimpleTerm(_x) for _x in DISPLAY_STATES])
 
 class IQInquiry(IAnnotatable, IQSubmittable):
 
 	ntiid = ValidNTIID(title="Object NTIID", required=False)
+	display = Choice(vocabulary=DISPLAY_VOCABULARY, title='Display state',
+					 required=True, default=DISPLAY_TERMINATION)
 
 class IQPoll(IQInquiry):
 	"""
