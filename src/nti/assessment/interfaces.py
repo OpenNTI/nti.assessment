@@ -798,15 +798,17 @@ class IQAssessmentPolicies(interface.Interface):
 
 IQAssignmentPolicies = IQAssessmentPolicies  # alias for BWC
 
-class IQAssignmentPolicyValidator(interface.Interface):
+class IQAssessmentPolicyValidator(interface.Interface):
 	"""
-	An object that can be validate an assignent policy
+	An object that can be validate an assessment policy
 	"""
 
-	def validate(assignment_ntiid, policy):
+	def validate(assessment_ntiid, policy):
 		"""
 		validates the specfied policy.
 		"""
+
+IQAssignmentPolicyValidator = IQAssessmentPolicyValidator # alias for BWC
 
 # set solutions response types
 
