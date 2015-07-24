@@ -1151,18 +1151,18 @@ class IQMultipleChoiceMultipleAnswerPartResponseNormalizer(IQPartResponseNormali
 
 # polls
 
-DISPLAY_NEVER = u'never'
-DISPLAY_ALWAYS = u'always'
-DISPLAY_TERMINATION = u'termination'
+DISCLOSURE_NEVER = u'never'
+DISCLOSURE_ALWAYS = u'always'
+DISCLOSURE_TERMINATION = u'termination'
 
-DISPLAY_STATES = (DISPLAY_NEVER, DISPLAY_ALWAYS, DISPLAY_TERMINATION)
-DISPLAY_VOCABULARY = vocabulary.SimpleVocabulary([vocabulary.SimpleTerm(_x) for _x in DISPLAY_STATES])
+DISCLOSURE_STATES = (DISCLOSURE_NEVER, DISCLOSURE_ALWAYS, DISCLOSURE_TERMINATION)
+DISCLOSURE_VOCABULARY = vocabulary.SimpleVocabulary([vocabulary.SimpleTerm(_x) for _x in DISCLOSURE_STATES])
 
 class IQInquiry(IAnnotatable, IQSubmittable):
 
 	ntiid = ValidNTIID(title="Object NTIID", required=False)
-	display = Choice(vocabulary=DISPLAY_VOCABULARY, title='Display state',
-					 required=True, default=DISPLAY_TERMINATION)
+	disclosure = Choice(vocabulary=DISCLOSURE_VOCABULARY, title='Disclosure policy',
+					 	required=True, default=DISCLOSURE_TERMINATION)
 
 class IQPoll(IQInquiry):
 	"""

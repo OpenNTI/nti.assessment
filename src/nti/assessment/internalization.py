@@ -29,7 +29,7 @@ from .interfaces import IWordEntry
 from .interfaces import IQModeledContentResponse
 from .interfaces import IQFillInTheBlankShortAnswerSolution
 
-from .interfaces import DISPLAY_TERMINATION
+from .interfaces import DISCLOSURE_TERMINATION
 
 @interface.implementer(IInternalObjectUpdater)
 @component.adapter(IWordEntry)
@@ -104,8 +104,8 @@ class _QInquiryUpdater(object):
 		self.obj = obj
 
 	def updateFromExternalObject(self, parsed, *args, **kwargs):
-		value = parsed.get('display', None) or DISPLAY_TERMINATION
-		parsed['display'] = value.lower()
+		value = parsed.get('disclosure', None) or DISCLOSURE_TERMINATION
+		parsed['disclosure'] = value.lower()
 		result = InterfaceObjectIO(
 					self.obj,
 					IQInquiry).updateFromExternalObject(parsed)

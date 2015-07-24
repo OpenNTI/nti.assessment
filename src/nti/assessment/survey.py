@@ -57,12 +57,12 @@ from .interfaces import IQAggregatedMultipleChoicePart
 from .interfaces import IQAggregatedMultipleChoiceMultipleAnswerPart
 
 from .interfaces import SURVEY_MIME_TYPE
-from .interfaces import DISPLAY_TERMINATION
+from .interfaces import DISCLOSURE_TERMINATION
 
 @interface.implementer(IQInquiry)
 class QInquiry(QSubmittable, Persistent):
 	
-	display = DISPLAY_TERMINATION
+	disclosure = DISCLOSURE_TERMINATION
 	
 	def __init__(self, *args, **kwargs):
 		Persistent.__init__(self)
@@ -70,7 +70,7 @@ class QInquiry(QSubmittable, Persistent):
 
 	@property
 	def onTermination(self):
-		return not self.display or self.display.lower() == DISPLAY_TERMINATION
+		return not self.disclosure or self.disclosure.lower() == DISCLOSURE_TERMINATION
 
 @interface.implementer(IQPoll, IFiniteSequence)
 @EqHash('content', 'parts', superhash=True)
