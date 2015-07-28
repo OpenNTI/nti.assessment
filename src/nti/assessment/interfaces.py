@@ -5,7 +5,6 @@
 """
 
 from __future__ import unicode_literals, print_function, absolute_import, division
-from IPython.parallel.controller.dependency import require
 __docformat__ = "restructuredtext en"
 
 from zope import interface
