@@ -1165,7 +1165,7 @@ class IQInquiry(IAnnotatable, IQSubmittable):
 	ntiid = ValidNTIID(title="Object NTIID", required=False)
 	disclosure = Choice(vocabulary=DISCLOSURE_VOCABULARY, title='Disclosure policy',
 					 	required=True, default=DISCLOSURE_TERMINATION)
-	closed = Bool(title="Close flag", require=False, default=False)
+	closed = Bool(title="Close flag", required=False, default=False)
 	closed.setTaggedValue('_ext_excluded_out', True)
 	
 class IQPoll(IQInquiry):
