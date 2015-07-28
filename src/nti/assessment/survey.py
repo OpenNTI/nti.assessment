@@ -302,7 +302,8 @@ class QAggregatedModeledContentPart(QAggregatedPart):
 		self.results = PersistentList()
 
 	def append(self, response):
-		self.results.append(response)
+		if response is not None:
+			self.results.append(response)
 
 	def __iadd__(self, other):
 		assert IQAggregatedModeledContentPart.providedBy(other)
