@@ -361,7 +361,12 @@
 		provides="nti.externalization.interfaces.IExternalObjectDecorator" />
 
 	<subscriber
-		factory=".decorators._QAssessmentObjectDecorator"
+		factory=".decorators._QInquiryObjectDecorator"
+		for=".interfaces.IQInquiry"
+		provides="nti.externalization.interfaces.IExternalObjectDecorator" />
+
+	<subscriber
+		factory=".decorators._QAssignmentObjectDecorator"
 		for=".interfaces.IQAssignment"
 		provides="nti.externalization.interfaces.IExternalObjectDecorator" />
 		

@@ -96,9 +96,9 @@ class _MathPartDecorator(object):
 		# units.  So we just give them the flattened units.
 		all_allowed_units = []
 		for solution in self.part.solutions:
-			allowed_units = getattr( solution, 'allowed_units', None )
+			allowed_units = getattr(solution, 'allowed_units', None)
 			if allowed_units:
-				all_allowed_units.extend( [x for x in allowed_units] )
+				all_allowed_units.extend([x for x in allowed_units])
 		external['allowed_units'] = all_allowed_units
 		return external
 
@@ -124,20 +124,29 @@ class _QAssessmentObjectIContainedAdder(object):
 
 	__metaclass__ = SingletonDecorator
 
-	def decorateExternalObject( self, context, mapping ):
+	def decorateExternalObject(self, context, mapping):
 		if not mapping.get('containerId'):
 			# Be careful not to write this out at rendering time
 			# with a None value, but if it does happen overwrite it
 			containerId = None
-			containerId = getattr(context.__parent__, 'ntiid', None )
+			containerId = getattr(context.__parent__, 'ntiid', None)
 			if containerId:
 				mapping['containerId'] = containerId
 
 @interface.implementer(IExternalObjectDecorator)
-class _QAssessmentObjectDecorator(object):
-	
+class _QAssignmentObjectDecorator(object):
+
 	__metaclass__ = SingletonDecorator
 
-	def decorateExternalObject( self, context, mapping ):
+	def decorateExternalObject(self, context, mapping):
 		mapping['NoSubmit'] = bool(context.no_submit)
 		mapping['CategoryName'] = context.category_name
+
+@interface.implementer(IExternalObjectDecorator)
+class _QInquiryObjectDecorator(object):
+
+	__metaclass__ = SingletonDecorator
+
+	def decorateExternalObject(self, context, mapping):
+		mapping.pop('no_submit', None)
+		mapping['isClosed'] = bool(context.closed)

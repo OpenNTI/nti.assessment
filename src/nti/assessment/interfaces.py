@@ -645,7 +645,7 @@ class IQSubmittable(interface.Interface):
 		required=False)
 
 	no_submit = Bool(title="Whether this object accept submissions",
-					  default=False)
+					 default=False)
 
 class IQAssignment(IQAssessment, ITitledContent, IAnnotatable, IQSubmittable):
 	"""
@@ -1163,10 +1163,16 @@ DISCLOSURE_VOCABULARY = vocabulary.SimpleVocabulary([vocabulary.SimpleTerm(_x) f
 class IQInquiry(IAnnotatable, IQSubmittable):
 
 	ntiid = ValidNTIID(title="Object NTIID", required=False)
+
 	disclosure = Choice(vocabulary=DISCLOSURE_VOCABULARY, title='Disclosure policy',
 					 	required=True, default=DISCLOSURE_TERMINATION)
+
 	closed = Bool(title="Close flag", required=False, default=False)
 	closed.setTaggedValue('_ext_excluded_out', True)
+	
+	no_submit = Bool(title="Whether this object accept submissions",
+					 default=False, required=False)
+	no_submit.setTaggedValue('_ext_excluded_out', True)
 	
 class IQPoll(IQInquiry):
 	"""
