@@ -5,6 +5,7 @@
 """
 
 from __future__ import unicode_literals, print_function, absolute_import, division
+from IPython.parallel.controller.dependency import require
 __docformat__ = "restructuredtext en"
 
 from zope import interface
@@ -1165,7 +1166,9 @@ class IQInquiry(IAnnotatable, IQSubmittable):
 	ntiid = ValidNTIID(title="Object NTIID", required=False)
 	disclosure = Choice(vocabulary=DISCLOSURE_VOCABULARY, title='Disclosure policy',
 					 	required=True, default=DISCLOSURE_TERMINATION)
-
+	closed = Bool(title="Close flag", require=False, default=False)
+	closed.setTaggedValue('_ext_excluded_out', True)
+	
 class IQPoll(IQInquiry):
 	"""
 	A poll question consists of one or more parts (typically one).

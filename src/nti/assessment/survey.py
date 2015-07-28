@@ -69,6 +69,10 @@ class QInquiry(QSubmittable, Persistent):
 		SchemaConfigured.__init__(self, *args, **kwargs)
 
 	@property
+	def isClosed(self):
+		return bool(self.closed)
+
+	@property
 	def onTermination(self):
 		return not self.disclosure or self.disclosure.lower() == DISCLOSURE_TERMINATION
 
