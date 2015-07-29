@@ -1199,7 +1199,7 @@ class IQSurvey(ITitledContent, IQInquiry):
 	Surveys sets are annotatable.
 	"""
 
-	questions = IndexedIterable(title="The ordered questions in the set.",
+	questions = IndexedIterable(title="The ordered polls in the set.",
 								min_length=1,
 								value_type=Object(IQPoll, title="The poll questions") )
 
@@ -1258,8 +1258,8 @@ class IQAggregatedMultipleChoiceMultipleAnswerPart(IQAggregatedPart):
 
 	Results = Dict(title="The response results",
 				 	key_type=Tuple(title="The response tuple",
-									min_length=1,
-				 					value_type=Int(title="The choice index")),
+								   min_length=1,
+				 				   value_type=Int(title="The choice index")),
 				 	value_type=Number(title="The aggregated value"),
 				 	readonly=True)
 
@@ -1273,8 +1273,8 @@ class IQAggregatedFreeResponsePart(IQAggregatedPart):
 class IQAggregatedModeledContentPart(IQAggregatedPart):
 
 	Results = List(title="The response results",
-				 	value_type=Object(IQModeledContentResponse),
-				 	readonly=True)
+				   value_type=Object(IQModeledContentResponse),
+				   readonly=True)
 
 class IQAggregatedInquiry(IContained, IContextAnnotatable):
 
@@ -1291,9 +1291,9 @@ class IQAggregatedPoll(IQAggregatedInquiry):
 
 	pollId = TextLine(title="Identifier of the poll being aggregated.")
 	parts = IndexedIterable(title="Part aggregations.",
-							 default=(),
-							 value_type=Object(IQAggregatedPart,
-												title="The aggregated part."))
+							default=(),
+							value_type=Object(IQAggregatedPart,
+											  title="The aggregated part."))
 
 class IQAggregatedSurvey(IQAggregatedInquiry):
 	"""
@@ -1304,4 +1304,4 @@ class IQAggregatedSurvey(IQAggregatedInquiry):
 	questions = IndexedIterable(title="Poll aggregations.",
 								default=(),
 							 	value_type=Object(IQAggregatedPoll,
-													title="The aggregated poll."))
+												  title="The aggregated poll."))
