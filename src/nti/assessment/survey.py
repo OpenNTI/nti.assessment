@@ -62,6 +62,7 @@ from .interfaces import DISCLOSURE_TERMINATION
 @interface.implementer(IQInquiry)
 class QInquiry(QSubmittable, Persistent):
 	
+	closed = False
 	disclosure = DISCLOSURE_TERMINATION
 	
 	def __init__(self, *args, **kwargs):
