@@ -16,9 +16,7 @@ from nti.externalization.singleton import SingletonDecorator
 from nti.externalization.externalization import to_external_object
 from nti.externalization.interfaces import IExternalObjectDecorator
 
-from . import randomize
-from . import shuffle_list
-from . import questionbank_question_chooser
+from ..interfaces import IQPartSolutionsExternalizer
 
 from .interfaces import IQuestionBank
 from .interfaces import IRandomizedQuestionSet
@@ -27,7 +25,9 @@ from .interfaces import IQRandomizedOrderingPart
 from .interfaces import IQRandomizedMultipleChoicePart
 from .interfaces import IQRandomizedMultipleChoiceMultipleAnswerPart
 
-from ..interfaces import IQPartSolutionsExternalizer
+from . import randomize
+from . import shuffle_list
+from . import questionbank_question_chooser
 
 def _must_randomized(context):
 	iface = getattr(context, 'nonrandomized_interface', None)

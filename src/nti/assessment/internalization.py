@@ -13,8 +13,8 @@ import six
 import collections
 from curses.ascii import isctrl
 
-from zope import interface
 from zope import component
+from zope import interface
 
 from nti.externalization.datastructures import InterfaceObjectIO
 
@@ -31,8 +31,8 @@ from .interfaces import IQFillInTheBlankShortAnswerSolution
 
 from .interfaces import DISCLOSURE_TERMINATION
 
-@interface.implementer(IInternalObjectUpdater)
 @component.adapter(IWordEntry)
+@interface.implementer(IInternalObjectUpdater)
 class _WordEntryUpdater(object):
 
 	__slots__ = ('obj',)

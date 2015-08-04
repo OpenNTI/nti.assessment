@@ -14,8 +14,8 @@ from collections import Mapping
 
 import simplejson as json
 
-from zope import interface
 from zope import component
+from zope import interface
 
 from zope.annotation.interfaces import IAttributeAnnotatable
 
@@ -50,7 +50,7 @@ from .interfaces import IQTimedAssignment
 from .interfaces import IQPartResponseNormalizer
 from .interfaces import IQLatexSymbolicMathSolution
 
-## functions
+# functions
 
 def grade_one_response(questionResponse, possible_answers):
 	"""
@@ -82,7 +82,7 @@ def grader_for_solution_and_response(part, solution, response):
 										  part.grader_interface,
 										  name=part.grader_name)
 	return result
-grader = grader_for_solution_and_response # alias BWC
+grader = grader_for_solution_and_response  # alias BWC
 
 def grader_for_response(part, response):
 	for solution in part.solutions or ():
@@ -93,12 +93,12 @@ def grader_for_response(part, response):
 
 def normalize_response(part, response):
 	normalizer = component.queryMultiAdapter((part, response),
-										 	 IQPartResponseNormalizer )
+										 	 IQPartResponseNormalizer)
 	result = normalizer()
 	return result
 
 def hexdigest(data, hasher=None):
-	hasher = hashlib.sha256() if hasher is None else hasher	
+	hasher = hashlib.sha256() if hasher is None else hasher
 	hasher.update(data)
 	result = hasher.hexdigest()
 	return result
@@ -118,41 +118,41 @@ def hashfile(afile, hasher=None, blocksize=65536):
 	return hasher.hexdigest()
 
 def iface_of_assessment(thing):
-	for iface in (IQPoll, IQuestion, 
-				  IQSurvey, IQuestionSet, 
+	for iface in (IQPoll, IQuestion,
+				  IQSurvey, IQuestionSet,
 				  IQTimedAssignment, IQAssignment,
-				  IQPart, IQNonGradablePart): # order matters
+				  IQPart, IQNonGradablePart):  # order matters
 		if iface.providedBy(thing):
 			return iface
-	return IQuestion # default
+	return IQuestion  # default
 
-## classes
+# classes
 
 @WithRepr
 @interface.implementer(	IQSubmittable,
 						IContentTypeAware,
 						IAttributeAnnotatable)
 class QSubmittable(SchemaConfigured, Contained):
-	
+
 	ntiid = None
 
 	available_for_submission_ending = AdaptingFieldProperty(IQAssignment['available_for_submission_ending'])
 	available_for_submission_beginning = AdaptingFieldProperty(IQAssignment['available_for_submission_beginning'])
-	
+
 	not_after = alias('available_for_submission_ending')
 	not_before = alias('available_for_submission_beginning')
-	
+
 @WithRepr
 @interface.implementer(IQSubmittedPart, ISublocations)
 @EqHash('submittedResponse', superhash=True)
 class QSubmittedPart(SchemaConfigured, Contained, Persistent):
 
 	submittedResponse = None
-	
+
 	__external_can_create__ = False
-	
+
 	createDirectFieldProperties(IQSubmittedPart)
-	
+
 	def sublocations(self):
 		part = self.submittedResponse
 		if hasattr(part, '__parent__'):

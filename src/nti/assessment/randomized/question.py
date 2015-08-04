@@ -19,6 +19,8 @@ from nti.schema.schema import EqHash
 from nti.schema.field import SchemaConfigured
 from nti.schema.fieldproperty import createDirectFieldProperties
 
+from ..question import QQuestionSet
+
 from .interfaces import IQuestionBank
 from .interfaces import IQuestionIndexRange
 from .interfaces import IRandomizedQuestionSet
@@ -26,8 +28,6 @@ from .interfaces import INonRandomizedQuestionSet
 from .interfaces import INonRandomizedQuestionBank
 from .interfaces import ISha224RandomizedQuestionSet
 from .interfaces import ISha224RandomizedQuestionBank
-
-from ..question import QQuestionSet
 
 @interface.implementer(IRandomizedQuestionSet)
 class QRandomizedQuestionSet(QQuestionSet):

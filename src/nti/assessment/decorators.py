@@ -14,8 +14,8 @@ logger = __import__('logging').getLogger(__name__)
 import six
 import collections
 
-from zope import interface
 from zope import component
+from zope import interface
 
 from nti.externalization.singleton import SingletonDecorator
 from nti.externalization.externalization import to_external_object
@@ -31,8 +31,8 @@ from .interfaces import IQFillInTheBlankWithWordBankPart
 from .interfaces import IQFillInTheBlankShortAnswerSolution
 from .interfaces import IQFillInTheBlankWithWordBankSolution
 
-@interface.implementer(IQPartSolutionsExternalizer)
 @component.adapter(IQPart)
+@interface.implementer(IQPartSolutionsExternalizer)
 class _DefaultPartSolutionsExternalizer(object):
 
 	def __init__(self, part):
@@ -81,8 +81,8 @@ class _FillInTheBlankWithWordBankPartSolutionsExternalizer(object):
 			result.append(ext)
 		return result
 
-@interface.implementer(IExternalMappingDecorator)
 @component.adapter(IQMathPart)
+@interface.implementer(IExternalMappingDecorator)
 class _MathPartDecorator(object):
 	"""
 	Display the allowed_units sans solutions in the math part.

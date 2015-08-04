@@ -16,6 +16,7 @@ import six
 import numbers
 
 from zope import interface
+
 from zope.location import LocationIterator
 
 import repoze.lru

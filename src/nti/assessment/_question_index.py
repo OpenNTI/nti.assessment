@@ -278,7 +278,6 @@ def _load_question_map_json(asm_index_text):
 				if v not in _fragment_cache:
 					_fragment_cache[v] = v
 				v = _fragment_cache[v]
-
 		return v
 
 	def hook(o):

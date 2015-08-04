@@ -17,6 +17,11 @@ from ..parts import QConnectingPart
 from ..parts import QMultipleChoicePart
 from ..parts import QMultipleChoiceMultipleAnswerPart
 
+from .interfaces import ISha224RandomizedMatchingPart
+from .interfaces import ISha224RandomizedOrderingPart
+from .interfaces import ISha224RandomizedMultipleChoicePart
+from .interfaces import ISha224RandomizedMultipleChoiceMultipleAnswerPart
+
 from .interfaces import IQRandomizedMatchingPart
 from .interfaces import IQRandomizedOrderingPart
 from .interfaces import INonRandomizedMatchingPart
@@ -30,11 +35,6 @@ from .interfaces import IQRandomizedMultipleChoicePartGrader
 from .interfaces import IQRandomizedMultipleChoiceMultipleAnswerPart
 from .interfaces import INonRandomizedMultipleChoiceMultipleAnswerPart
 from .interfaces import IQRandomizedMultipleChoiceMultipleAnswerPartGrader
-
-from .interfaces import ISha224RandomizedMatchingPart
-from .interfaces import ISha224RandomizedOrderingPart
-from .interfaces import ISha224RandomizedMultipleChoicePart
-from .interfaces import ISha224RandomizedMultipleChoiceMultipleAnswerPart
 
 @interface.implementer(IQRandomizedConnectingPart)
 class QRandomizedConnectingPart(QConnectingPart):

@@ -11,9 +11,6 @@ logger = __import__('logging').getLogger(__name__)
 
 from zope import interface
 
-from . import randomize
-from . import shuffle_list
-
 from ..graders import EqualityGrader
 from ..graders import ConnectingPartGrader
 from ..graders import MultipleChoiceMultipleAnswerGrader
@@ -22,6 +19,9 @@ from .interfaces import IQRandomizedMatchingPartGrader
 from .interfaces import IQRandomizedOrderingPartGrader
 from .interfaces import IQRandomizedMultipleChoicePartGrader
 from .interfaces import IQRandomizedMultipleChoiceMultipleAnswerPartGrader
+
+from . import randomize
+from . import shuffle_list
 
 class RandomizedConnectingPartGrader(ConnectingPartGrader):
 

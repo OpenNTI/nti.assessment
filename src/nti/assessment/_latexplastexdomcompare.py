@@ -11,8 +11,8 @@ __docformat__ = "restructuredtext en"
 
 logger = __import__('logging').getLogger(__name__)
 
-from zope import interface
 from zope import component
+from zope import interface
 
 from zope.component.interfaces import ComponentLookupError
 
@@ -132,7 +132,8 @@ def _sanitizeTextNodeContent(textNode):
 def grade( solution, response ):
 	__traceback_info__ = solution, response
 	try:
-		converter = component.getMultiAdapter( (solution,response), IResponseToSymbolicMathConverter )
+		converter = component.getMultiAdapter((solution,response), 
+											  IResponseToSymbolicMathConverter )
 	except ComponentLookupError: # pragma: no cover
 		logger.warning( "Unable to grade math, assuming wrong", exc_info=True )
 		return False
@@ -160,7 +161,8 @@ def grade( solution, response ):
 	# so that we can check for units
 	# Only do this if *both* were provided
 	response_value = response.value
-	if response_value and response_value.startswith( '$' ) and response_value.endswith( '$' ) and len(response_value) > 2:
+	if 	response_value and response_value.startswith( '$' ) and \
+		response_value.endswith( '$' ) and len(response_value) > 2:
 		response_value = response_value[1:-1]
 
 	for unit in allowed_units:
