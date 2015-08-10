@@ -125,7 +125,7 @@ class QPollSubmission(ContainedMixin,
 					  PersistentCreatedModDateTrackingObject):
 	createDirectFieldProperties(IQPollSubmission)
 
-	id = alias('pollId')
+	inquiryId = alias('pollId')
 	sublocations = _make_sublocations()
 
 	def __init__(self, *args, **kwargs):
@@ -201,7 +201,7 @@ class QSurveySubmission(ContainedMixin,
 	createDirectFieldProperties(IQBaseSubmission)
 	createDirectFieldProperties(IQSurveySubmission)
 
-	id = alias('surveyId')
+	inquiryId = alias('surveyId')
 	parts = polls = alias('questions')
 
 	sublocations = _make_sublocations('questions')
@@ -323,7 +323,7 @@ class QAggregatedPoll(ContainedMixin,
 
 	createDirectFieldProperties(IQAggregatedPoll)
 
-	id = alias('pollId')
+	inquiryId = alias('pollId')
 	sublocations = _make_sublocations()
 
 	def __init__(self, *args, **kwargs):
@@ -360,7 +360,7 @@ class QAggregatedSurvey(ContainedMixin,
 
 	createDirectFieldProperties(IQAggregatedSurvey)
 
-	id = alias('surveyId')
+	inquiryId = alias('surveyId')
 	parts = polls = alias('questions')
 
 	sublocations = _make_sublocations('questions')

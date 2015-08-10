@@ -1204,8 +1204,8 @@ class IQSurvey(ITitledContent, IQInquiry):
 								value_type=Object(IQPoll, title="The poll questions") )
 
 class IQInquirySubmission(IQPartsSubmission):
-	id = interface.Attribute("Identifier of the inquiry being responded to.")
-	id.setTaggedValue('_ext_excluded_out', True)
+	inquiryId = interface.Attribute("Identifier of the inquiry being responded to.")
+	inquiryId.setTaggedValue('_ext_excluded_out', True)
 
 class IQPollSubmission(IQInquirySubmission):
 	"""

@@ -72,9 +72,9 @@ class _QContainedObjectExternalizer(object):
 
 	def toExternalObject(self, **kwargs):
 		if hasattr(self.item, 'sublocations'):
-			# # sets the full parent lineage for these objects.
-			# # we wrapp the execution of it in a tuple in case it
-			# # returns a generator
+			# sets the full parent lineage for these objects.
+			# we wrapp the execution of it in a tuple in case it
+			# returns a generator
 			tuple(self.item.sublocations())
 		return InterfaceObjectIO(self.item, self.interface).toExternalObject(**kwargs)
 
