@@ -149,4 +149,3 @@ class _QInquiryObjectDecorator(object):
 
 	def decorateExternalObject(self, context, mapping):
 		mapping.pop('no_submit', None)
-		mapping['isClosed'] = bool(context.closed)
