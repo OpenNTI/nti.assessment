@@ -257,7 +257,7 @@ class QAggregatedMultipleChoicePart(QAggregatedPart):
 	def __iadd__(self, other):
 		assert IQAggregatedMultipleChoicePart.providedBy(other)
 		for k, v in other.results.items():
-			current = v + self.results.get(k) or 0
+			current = v + (self.results.get(k) or 0)
 			self.results[k] = current
 		return self
 
@@ -287,7 +287,7 @@ class QAggregatedFreeResponsePart(QAggregatedPart):
 	def __iadd__(self, other):
 		assert IQAggregatedFreeResponsePart.providedBy(other)
 		for k, v in other.results.items():
-			current = v + self.results.get(k) or 0
+			current = v + (self.results.get(k) or 0)
 			self.results[k] = current
 		return self
 
