@@ -408,7 +408,7 @@ class QAggregatedSurvey(ContainedMixin,
 
 	def __iadd__(self, other):
 		assert IQAggregatedSurvey.providedBy(other) and self.surveyId == other.surveyId
-		for agg_poll in enumerate(other.questions):
+		for agg_poll in other.questions:
 			this_poll = self.get(agg_poll.pollId)
 			if this_poll is None:
 				self.append(agg_poll)
