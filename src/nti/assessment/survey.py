@@ -89,7 +89,7 @@ class QPoll(QInquiry):
 
 	parts = ()
 	content = None
-	id = alias('ntiid')
+	pollId = id = alias('ntiid')
 
 	def __getitem__(self, index):
 		return self.parts[index]
@@ -106,7 +106,7 @@ class QSurvey(QInquiry):
 
 	questions = ()
 
-	id = alias('ntiid')
+	surveyId = id = alias('ntiid')
 	polls = parts = alias('questions')
 
 	title = AdaptingFieldProperty(IQSurvey['title'])
@@ -464,7 +464,8 @@ def aggregate_survey_submission(submission, registry=component):
 		Used to look up the survey and pools by id.
 	:raises LookupError: If no poll/survey can be found for the submission.
 	"""
-	survey = registry.getUtility(IQSurvey, name=submission.surveyId)
+	surveyId = submission.surveyId
+	survey = registry.getUtility(IQSurvey, name=surveyId)
 	poll_ntiids = {q.ntiid for q in survey.questions}
 
 	assessed = PersistentList()
@@ -477,5 +478,5 @@ def aggregate_survey_submission(submission, registry=component):
 			logger.debug("Bad input, poll (%s) not in survey (%s) (kownn: %s)",
 						 poll, survey, survey.questions)
 
-	result = QAggregatedSurvey(surveyId=survey.surveyId, questions=assessed)
+	result = QAggregatedSurvey(surveyId=surveyId, questions=assessed)
 	return result
