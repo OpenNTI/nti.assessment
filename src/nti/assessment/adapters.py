@@ -92,7 +92,8 @@ class ConnectingPartResponseNormalizer(AbstractResponseNormalizer):
 
 	def __call__(self):
 		if self.response.value:
-			result = tuple(sorted(self.response.value.items()))
+			items = tuple(sorted(self.response.value.items()))
+			result = repr(items) # this will be keys
 		else:
 			result = ()
 		return result
