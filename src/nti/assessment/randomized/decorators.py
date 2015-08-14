@@ -74,8 +74,10 @@ class _QRandomizedMatchingPartDecorator(object):
 			generator = randomize(context=context)
 			if generator is not None:
 				values = list(result['values'])
-				generator.shuffle(result['values'])
-				_shuffle_matching_part_solutions(generator, values, result['solutions'])
+				shuffle_list(generator, result['values'])
+				_shuffle_matching_part_solutions(randomize(context=context), # new generator
+												 values,
+												 result['solutions'])
 
 # === ordering
 
@@ -127,10 +129,12 @@ class _QRandomizedMultipleChoicePartDecorator(object):
 		if _must_randomized(context):
 			generator = randomize(context=context)
 			if generator is not None:
-				choices = list(result['choices'])
-				generator.shuffle(result['choices'])
 				solutions = result['solutions']
-				_shuffle_multiple_choice_part_solutions(generator, choices, solutions)
+				choices = list(result['choices'])
+				shuffle_list(generator, result['choices'])
+				_shuffle_multiple_choice_part_solutions(randomize(context=context), #  new generator
+														choices,
+														solutions)
 
 # === multiple choice, multiple answer part
 
@@ -177,8 +181,8 @@ class _QRandomizedMultipleChoiceMultipleAnswerPartDecorator(object):
 			generator = randomize(context=context)
 			if generator is not None:
 				choices = list(result['choices'])
-				generator.shuffle(result['choices'])
-				_shuffle_multiple_choice_multiple_answer_part_solutions(generator,
+				shuffle_list(generator, result['choices'])
+				_shuffle_multiple_choice_multiple_answer_part_solutions(randomize(context=context), #  new generator
 																		choices,
 																		result['solutions'])
 
