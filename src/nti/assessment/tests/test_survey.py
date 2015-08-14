@@ -42,6 +42,8 @@ from nti.assessment.survey import QSurveySubmission
 from nti.assessment.interfaces import IQAggregatedPoll
 from nti.assessment.survey import QAggregatedMultipleChoicePart
 
+from nti.assessment.response import QModeledContentResponse
+
 from nti.externalization.externalization import toExternalObject
 from nti.externalization.internalization import find_factory_for
 from nti.externalization.internalization import update_from_external_object
@@ -161,6 +163,46 @@ class TestSurvey(AssessmentTestCase):
 		del ssub['foo-ps']
 		assert_that(ssub, has_length(1))
 		assert_that(ssub.index('foo-ps'), is_(-1))
+		
+	def test_parsing(self):
+		external = \
+		{u'CreatorRecordedEffortDuration': 329870,
+ 		 u'MimeType': u'application/vnd.nextthought.assessment.surveysubmission',
+ 		 u'parts': [],
+ 		 u'questions': [{u'CreatorRecordedEffortDuration': None,
+                 u'MimeType': u'application/vnd.nextthought.assessment.pollsubmission',
+                 u'NTIID': u'tag:nextthought.com,2011-10:NTIAlpha-NAQ-NTI1000_TestCourse.naq.qid.poll_test.01',
+                 u'parts': [{u'0': 2, u'1': 0, u'2': 1, u'3': 3}],
+                 u'pollId': u'tag:nextthought.com,2011-10:NTIAlpha-NAQ-NTI1000_TestCourse.naq.qid.poll_test.01'},
+                {u'CreatorRecordedEffortDuration': None,
+                 u'MimeType': u'application/vnd.nextthought.assessment.pollsubmission',
+                 u'NTIID': u'tag:nextthought.com,2011-10:NTIAlpha-NAQ-NTI1000_TestCourse.naq.qid.poll_test.02',
+                 u'parts': [{u'0': 1, u'1': 0, u'2': 2, u'3': 3}],
+                 u'pollId': u'tag:nextthought.com,2011-10:NTIAlpha-NAQ-NTI1000_TestCourse.naq.qid.poll_test.02'},
+                {u'CreatorRecordedEffortDuration': None,
+                 u'MimeType': u'application/vnd.nextthought.assessment.pollsubmission',
+                 u'NTIID': u'tag:nextthought.com,2011-10:NTIAlpha-NAQ-NTI1000_TestCourse.naq.qid.poll_test.03',
+                 u'parts': [0],
+                 u'pollId': u'tag:nextthought.com,2011-10:NTIAlpha-NAQ-NTI1000_TestCourse.naq.qid.poll_test.03'},
+                {u'CreatorRecordedEffortDuration': None,
+                 u'MimeType': u'application/vnd.nextthought.assessment.pollsubmission',
+                 u'NTIID': u'tag:nextthought.com,2011-10:NTIAlpha-NAQ-NTI1000_TestCourse.naq.qid.poll_test.04',
+                 u'parts': [{u'MimeType': u'application/vnd.nextthought.assessment.modeledcontentresponse',
+                             u'value': [u'\u200bCoco']}],
+                 u'pollId': u'tag:nextthought.com,2011-10:NTIAlpha-NAQ-NTI1000_TestCourse.naq.qid.poll_test.04'}],
+		 u'surveyId': u'tag:nextthought.com,2011-10:NTIAlpha-NAQ-NTI1000_TestCourse.naq.survey.survey_test'}
+
+		factory = find_factory_for(external)
+		assert_that(factory, is_not(none()))
+		submission = factory()
+		update_from_external_object(submission, external,  require_updater=True)
+		assert_that(submission, has_length(4))
+		
+		psub = submission.get('tag:nextthought.com,2011-10:NTIAlpha-NAQ-NTI1000_TestCourse.naq.qid.poll_test.04')
+		assert_that(psub, is_not(none()))
+		assert_that(psub, has_length(1))
+		assert_that(psub[0], is_(QModeledContentResponse))
+		assert_that(psub[0], has_property('value', is_((u'\u200bCoco',))))
 
 class TestAggregation(AssessmentTestCase):
 
