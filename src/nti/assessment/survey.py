@@ -51,6 +51,9 @@ from .interfaces import IQAggregatedPart
 from .interfaces import IQAggregatedPoll
 from .interfaces import IQAggregatedSurvey
 from .interfaces import IQAggregatedPartFactory
+from .interfaces import IQAggregatedMatchingPart
+from .interfaces import IQAggregatedOrderingPart
+from .interfaces import IQAggregatedConnectingPart
 from .interfaces import IQAggregatedFreeResponsePart
 from .interfaces import IQAggregatedModeledContentPart
 from .interfaces import IQAggregatedMultipleChoicePart
@@ -262,8 +265,9 @@ class QAggregatedMultipleChoicePart(QAggregatedPart):
 		return self
 
 @interface.implementer(IQAggregatedMultipleChoiceMultipleAnswerPart)
-class QMultipleChoiceMultipleAnswerAggregatedPart(QAggregatedMultipleChoicePart):
+class QAggregatedMultipleChoiceMultipleAnswerPart(QAggregatedMultipleChoicePart):
 	createDirectFieldProperties(IQAggregatedMultipleChoiceMultipleAnswerPart)
+QMultipleChoiceMultipleAnswerAggregatedPart = QAggregatedMultipleChoiceMultipleAnswerPart # BWC
 
 @interface.implementer(IQAggregatedFreeResponsePart)
 class QAggregatedFreeResponsePart(QAggregatedPart):
@@ -315,6 +319,38 @@ class QAggregatedModeledContentPart(QAggregatedPart):
 		self.results.extend(other.results)
 		return self
 
+class QAggregatedConnectingPart(QAggregatedPart):
+
+	@property
+	def Results(self):
+		return dict(self.results)
+
+	@Results.setter
+	def Results(self, nv):
+		pass
+
+	def reset(self):
+		self.results = PersistentMapping()
+
+	def append(self, response):
+		current = self.results.get(response) or 0
+		self.results[response] = current + 1
+
+	def __iadd__(self, other):
+		assert IQAggregatedConnectingPart.providedBy(other)
+		for k, v in other.results.items():
+			current = v + (self.results.get(k) or 0)
+			self.results[k] = current
+		return self
+	
+@interface.implementer(IQAggregatedMatchingPart)
+class QAggregatedMatchingPart(QAggregatedConnectingPart):
+	createDirectFieldProperties(IQAggregatedMatchingPart)
+
+@interface.implementer(IQAggregatedOrderingPart)
+class QAggregatedOrderingPart(QAggregatedConnectingPart):
+	createDirectFieldProperties(IQAggregatedOrderingPart)
+	
 @WithRepr
 @interface.implementer(IQAggregatedPoll, ISublocations, IFiniteSequence)
 class QAggregatedPoll(ContainedMixin,

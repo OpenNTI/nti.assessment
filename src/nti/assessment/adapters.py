@@ -14,19 +14,25 @@ from zope import interface
 
 from .interfaces import IQAggregatedPartFactory
 from .interfaces import IQPartResponseNormalizer
+from .interfaces import IQNonGradableMatchingPart
+from .interfaces import IQNonGradableOrderingPart
 from .interfaces import IQNonGradableFreeResponsePart
 from .interfaces import IQNonGradableModeledContentPart
 from .interfaces import IQNonGradableMultipleChoicePart
+from .interfaces import IQMatchingPartResponseNormalizer
+from .interfaces import IQOrderingPartResponseNormalizer
 from .interfaces import IQFreeResponsePartResponseNormalizer
 from .interfaces import IQModeledContentPartResponseNormalizer
 from .interfaces import IQMultipleChoicePartResponseNormalizer
 from .interfaces import IQNonGradableMultipleChoiceMultipleAnswerPart
 from .interfaces import IQMultipleChoiceMultipleAnswerPartResponseNormalizer
 
+from .survey import QAggregatedMatchingPart
+from .survey import QAggregatedOrderingPart
 from .survey import QAggregatedFreeResponsePart
 from .survey import QAggregatedModeledContentPart
 from .survey import QAggregatedMultipleChoicePart
-from .survey import QMultipleChoiceMultipleAnswerAggregatedPart
+from .survey import QAggregatedMultipleChoiceMultipleAnswerPart
 
 @interface.implementer(IQPartResponseNormalizer)
 class AbstractResponseNormalizer(object):
@@ -82,6 +88,23 @@ class ModeledContentPartResponseNormalizer(AbstractResponseNormalizer):
 		result = self.response.value if self.response.value else None
 		return result
 
+class ConnectingPartResponseNormalizer(AbstractResponseNormalizer):
+
+	def __call__(self):
+		if self.response.value:
+			result = tuple(sorted(self.response.items()))
+		else:
+			result = ()
+		return result
+	
+@interface.implementer(IQMatchingPartResponseNormalizer)
+class MatchingPartResponseNormalizer(ConnectingPartResponseNormalizer):
+	pass
+
+@interface.implementer(IQOrderingPartResponseNormalizer)
+class OrderingPartResponseNormalizer(ConnectingPartResponseNormalizer):
+	pass
+
 @interface.implementer(IQAggregatedPartFactory)
 @component.adapter(IQNonGradableFreeResponsePart)
 def NonGradableFreeResponsePartFactory(part):
@@ -100,4 +123,14 @@ def NonGradableMultipleChoicePartFactory(part):
 @interface.implementer(IQAggregatedPartFactory)
 @component.adapter(IQNonGradableMultipleChoiceMultipleAnswerPart)
 def NonGradableMultipleChoiceMultipleAnswerPartFactory(part):
-	return QMultipleChoiceMultipleAnswerAggregatedPart
+	return QAggregatedMultipleChoiceMultipleAnswerPart
+
+@interface.implementer(IQAggregatedPartFactory)
+@component.adapter(IQNonGradableMatchingPart)
+def NonGradableMatchingPartFactory(part):
+	return QAggregatedMatchingPart
+
+@interface.implementer(IQAggregatedPartFactory)
+@component.adapter(IQNonGradableOrderingPart)
+def NonGradableOrderingPartFactory(part):
+	return QAggregatedOrderingPart

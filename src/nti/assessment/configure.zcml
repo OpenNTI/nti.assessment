@@ -167,6 +167,17 @@
 			 provides=".interfaces.IQAggregatedSurvey" />
 
 	<!-- Normalizers -->
+	
+	<adapter factory=".adapters.MatchingPartResponseNormalizer"
+			 for=".interfaces.IQNonGradableMatchingPart 
+			 	  .interfaces.IQDictResponse"
+			 provides=".interfaces.IQMatchingPartResponseNormalizer" />
+			 		
+	<adapter factory=".adapters.OrderingPartResponseNormalizer"
+			 for=".interfaces.IQNonGradableOrderingPart 
+			 	  .interfaces.IQDictResponse"
+			 provides=".interfaces.IQOrderingPartResponseNormalizer" />
+
 	<adapter factory=".adapters.MultipleChoicePartResponseNormalizer"
 			 for=".interfaces.IQNonGradableMultipleChoicePart 
 			 	  .interfaces.IQTextResponse"
@@ -188,6 +199,8 @@
 			 provides=".interfaces.IQModeledContentPartResponseNormalizer" />
 
 	<!-- Factories -->
+	<adapter factory=".adapters.NonGradableMatchingPartFactory" />
+	<adapter factory=".adapters.NonGradableOrderingPartFactory" />
 	<adapter factory=".adapters.NonGradableFreeResponsePartFactory" />
 	<adapter factory=".adapters.NonGradableModeledContentPartFactory" />
 	<adapter factory=".adapters.NonGradableMultipleChoicePartFactory" />

@@ -1151,6 +1151,18 @@ class IQMultipleChoiceMultipleAnswerPartResponseNormalizer(IQPartResponseNormali
 	a :class:`IQResponse` for a :class:`IQNonGradableMultipleChoiceMultipleAnswerPart`
 	"""
 
+class IQMatchingPartResponseNormalizer(IQPartResponseNormalizer):
+	"""
+	A marker interface for an adapter that that knows how to normalize a given
+	a :class:`IQResponse` for a :class:`IQNonGradableMatchingPart`
+	"""
+	
+class IQOrderingPartResponseNormalizer(IQPartResponseNormalizer):
+	"""
+	A marker interface for an adapter that that knows how to normalize a given
+	a :class:`IQResponse` for a :class:`IQNonGradableOrderingPart`
+	"""
+
 # polls
 
 DISCLOSURE_NEVER = u'never'
@@ -1247,25 +1259,40 @@ class IQAggregatedPart(IContained):
 	def __iadd__(other):
 		pass
 
+class IQAggregatedConnectingPart(IQAggregatedPart):
+
+	Results = Dict( title="The response results",
+				 	key_type=Tuple(title="The response tuples",
+								   min_length=1,
+				 				   value_type=Tuple(title="The choices")),
+				 	value_type=Number(title="The aggregated value"),
+				 	readonly=True)
+
+class IQAggregatedMatchingPart(IQAggregatedConnectingPart):
+	pass
+	
+class IQAggregatedOrderingPart(IQAggregatedConnectingPart):
+	pass
+
 class IQAggregatedMultipleChoicePart(IQAggregatedPart):
 
-	Results = Dict(title="The response results",
+	Results = Dict( title="The response results",
 				 	key_type=Int(title="The choice index"),
 				 	value_type=Number(title="The aggregated value"),
 				 	readonly=True)
 
 class IQAggregatedMultipleChoiceMultipleAnswerPart(IQAggregatedPart):
 
-	Results = Dict(title="The response results",
+	Results = Dict( title="The response results",
 				 	key_type=Tuple(title="The response tuple",
 								   min_length=1,
-				 				   value_type=Int(title="The choice index")),
+				 				   value_type=Int(title="The choice indices")),
 				 	value_type=Number(title="The aggregated value"),
 				 	readonly=True)
 
 class IQAggregatedFreeResponsePart(IQAggregatedPart):
 
-	Results = Dict(title="The response results",
+	Results = Dict( title="The response results",
 				 	key_type=TextLine(title="the value"),
 				 	value_type=Number(title="The aggregated value"),
 				 	readonly=True)
