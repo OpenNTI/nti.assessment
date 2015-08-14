@@ -167,7 +167,6 @@
 			 provides=".interfaces.IQAggregatedSurvey" />
 
 	<!-- Normalizers -->
-	
 	<adapter factory=".adapters.MatchingPartResponseNormalizer"
 			 for=".interfaces.IQNonGradableMatchingPart 
 			 	  .interfaces.IQDictResponse"
