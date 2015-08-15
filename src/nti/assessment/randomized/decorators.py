@@ -55,6 +55,9 @@ class _RandomizedMatchingPartSolutionsExternalizer(object):
 		self.part = part
 
 	def to_external_object(self):
+		# CS: 20150815 make sure we skip the externalization cache
+		# since this method may be called from a decorator and the state 
+		# cache may have been set
 		solutions = to_external_object(self.part.solutions, useCache=False)
 		if _must_randomized(self.part):
 			generator = randomize(context=self.part)
