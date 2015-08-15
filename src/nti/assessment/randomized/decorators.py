@@ -55,11 +55,11 @@ class _RandomizedMatchingPartSolutionsExternalizer(object):
 		self.part = part
 
 	def to_external_object(self):
-		solutions = to_external_object(self.part.solutions)
+		solutions = to_external_object(self.part.solutions, useCache=False)
 		if _must_randomized(self.part):
 			generator = randomize(context=self.part)
 			if generator is not None:
-				values = to_external_object(self.part.values)
+				values = to_external_object(self.part.values, useCache=False)
 				_shuffle_matching_part_solutions(generator, values, solutions)
 		return solutions
 
@@ -111,11 +111,11 @@ class _RandomizedMultipleChoicePartSolutionsExternalizer(object):
 		self.part = part
 
 	def to_external_object(self):
-		solutions = to_external_object(self.part.solutions)
+		solutions = to_external_object(self.part.solutions, useCache=False)
 		if _must_randomized(self.part):
 			generator = randomize(context=self.part)
 			if generator is not None:
-				choices = to_external_object(self.part.choices)
+				choices = to_external_object(self.part.choices, useCache=False)
 				_shuffle_multiple_choice_part_solutions(generator, choices, solutions)
 		return solutions
 
@@ -160,11 +160,11 @@ class _RandomizedMultipleChoiceMultipleAnswerPartSolutionsExternalizer(object):
 		self.part = part
 
 	def to_external_object(self):
-		solutions = to_external_object(self.part.solutions)
+		solutions = to_external_object(self.part.solutions, useCache=False)
 		if _must_randomized(self.part):
 			generator = randomize(context=self.part)
 			if generator is not None:
-				choices = to_external_object(self.part.choices)
+				choices = to_external_object(self.part.choices, useCache=False)
 				_shuffle_multiple_choice_multiple_answer_part_solutions(generator,
 																		choices,
 																		solutions)
