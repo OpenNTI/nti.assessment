@@ -324,10 +324,6 @@
 			 for=".interfaces.IQSurvey"
 			 provides="nti.externalization.interfaces.IInternalObjectUpdater" />
 
-	<adapter factory=".internalization._QSurveySubmissionUpdater"
-			 for=".interfaces.IQSurveySubmission"
-			 provides="nti.externalization.interfaces.IInternalObjectUpdater" />
-
 	<adapter factory=".regex._regex_str_adapter"
 			 provides=".interfaces.IRegEx"
 			 for="basestring" />

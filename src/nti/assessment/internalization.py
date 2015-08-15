@@ -5,7 +5,6 @@
 """
 
 from __future__ import print_function, unicode_literals, absolute_import, division
-from nti.assessment.interfaces import IQPollSubmission
 __docformat__ = "restructuredtext en"
 
 logger = __import__('logging').getLogger(__name__)
@@ -27,7 +26,6 @@ from nti.externalization.internalization import update_from_external_object
 from .interfaces import IRegEx
 from .interfaces import IQInquiry
 from .interfaces import IWordEntry
-from .interfaces import IQSurveySubmission
 from .interfaces import IQModeledContentResponse
 from .interfaces import IQFillInTheBlankShortAnswerSolution
 
@@ -112,26 +110,3 @@ class _QInquiryUpdater(object):
 					self.obj,
 					IQInquiry).updateFromExternalObject(parsed)
 		return result
-
-@component.adapter(IQSurveySubmission)
-@interface.implementer(IInternalObjectUpdater)
-class _QSurveySubmissionUpdater(object):
-
-	__slots__ = ('obj',)
-
-	def __init__(self, obj):
-		self.obj = obj
-
-	def updateFromExternalObject(self, parsed, *args, **kwargs):
-		questions = []
-		for idx, question in enumerate(parsed.get('questions') or ()):
-			if isinstance(question, collections.Mapping):
-				__traceback_info__ = idx, question
-				pub = find_factory_for(question)()
-				assert IQPollSubmission.providedBy(pub)
-				update_from_external_object(pub, question)
-				questions.append(pub)
-			else:
-				questions.append(question)
-		self.obj.questions = questions or None
-		self.obj.surveyId = parsed.get('surveyId')
