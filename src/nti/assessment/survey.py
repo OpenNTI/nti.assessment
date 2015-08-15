@@ -444,6 +444,8 @@ def aggregate_poll_submission(submission, registry=component):
 	aggregated_parts = PersistentList()
 	for sub_part, q_part in zip(submission.parts, poll.parts):
 		if sub_part is None: # null responses
+			logger.debug("Null response for part (%s) in poll (%s)",
+						 q_part, pollId)
 			continue
 		__traceback_info__ = sub_part, q_part
 		response = IQResponse(sub_part)
