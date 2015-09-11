@@ -73,6 +73,10 @@ class QAssignment(QSubmittable,
 	def no_submit(self):
 		return self.category_name == 'no_submit'
 	
+	def iter_question_sets(self):
+		for part in self.parts:
+			yield part.question_set
+
 @interface.implementer(IQTimedAssignment)
 @WithRepr
 class QTimedAssignment(QAssignment):
