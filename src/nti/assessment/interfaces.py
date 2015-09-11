@@ -1311,7 +1311,7 @@ class IQAggregatedInquiry(IContained, IContextAnnotatable):
 	def __iadd__(other):
 		pass
 
-class IQAggregatedPoll(IQAggregatedInquiry):
+class IQAggregatedPoll(IQAggregatedInquiry, IIterable):
 	"""
 	Aggregation for a poll
 	"""
@@ -1322,7 +1322,7 @@ class IQAggregatedPoll(IQAggregatedInquiry):
 							value_type=Object(IQAggregatedPart,
 											  title="The aggregated part."))
 
-class IQAggregatedSurvey(IQAggregatedInquiry):
+class IQAggregatedSurvey(IQAggregatedInquiry, IIterable):
 	"""
 	Aggregation for a survey
 	"""

@@ -405,6 +405,9 @@ class QAggregatedSurvey(ContainedMixin,
 		# schema configured is not cooperative
 		ContainedMixin.__init__(self, *args, **kwargs)
 		PersistentCreatedModDateTrackingObject.__init__(self)
+	
+	def __iter__(self):
+		return iter(self.questions)
 
 	def __iadd__(self, other):
 		assert IQAggregatedSurvey.providedBy(other) and self.surveyId == other.surveyId
