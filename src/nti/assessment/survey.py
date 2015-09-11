@@ -225,6 +225,9 @@ class QAggregatedPart(ContainedMixin,
 	createDirectFieldProperties(IQAggregatedPart)
 
 	__external_can_create__ = False
+	
+	total = 0
+	Total = alias('total')
 
 	def __init__(self, *args, **kwargs):
 		# schema configured is not cooperative
@@ -251,9 +254,11 @@ class QAggregatedMultipleChoicePart(QAggregatedPart):
 		pass
 
 	def reset(self):
+		self.total = 0
 		self.results = PersistentMapping()
 
 	def append(self, response):
+		self.total += 1
 		current = self.results.get(response) or 0
 		self.results[response] = current + 1
 
@@ -262,6 +267,7 @@ class QAggregatedMultipleChoicePart(QAggregatedPart):
 		for k, v in other.results.items():
 			current = v + (self.results.get(k) or 0)
 			self.results[k] = current
+		self.total += other.total
 		return self
 
 @interface.implementer(IQAggregatedMultipleChoiceMultipleAnswerPart)
@@ -282,9 +288,11 @@ class QAggregatedFreeResponsePart(QAggregatedPart):
 		pass
 
 	def reset(self):
+		self.total = 0
 		self.results = PersistentMapping()
 
 	def append(self, response):
+		self.total += 1
 		current = self.results.get(response) or 0
 		self.results[response] = current + 1
 
@@ -293,6 +301,7 @@ class QAggregatedFreeResponsePart(QAggregatedPart):
 		for k, v in other.results.items():
 			current = v + (self.results.get(k) or 0)
 			self.results[k] = current
+		self.total += other.total
 		return self
 
 @interface.implementer(IQAggregatedModeledContentPart)
@@ -308,15 +317,18 @@ class QAggregatedModeledContentPart(QAggregatedPart):
 		pass
 
 	def reset(self):
+		self.total = 0
 		self.results = PersistentList()
 
 	def append(self, response):
+		self.total += 1
 		if response is not None:
 			self.results.append(response)
 
 	def __iadd__(self, other):
 		assert IQAggregatedModeledContentPart.providedBy(other)
 		self.results.extend(other.results)
+		self.total += other.total
 		return self
 
 class QAggregatedConnectingPart(QAggregatedPart):
@@ -330,9 +342,11 @@ class QAggregatedConnectingPart(QAggregatedPart):
 		pass
 
 	def reset(self):
+		self.total = 0
 		self.results = PersistentMapping()
 
 	def append(self, response):
+		self.total += 1
 		current = self.results.get(response) or 0
 		self.results[response] = current + 1
 
@@ -341,6 +355,7 @@ class QAggregatedConnectingPart(QAggregatedPart):
 		for k, v in other.results.items():
 			current = v + (self.results.get(k) or 0)
 			self.results[k] = current
+		self.total += other.total
 		return self
 	
 @interface.implementer(IQAggregatedMatchingPart)
