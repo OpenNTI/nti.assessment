@@ -1247,6 +1247,8 @@ class IQAggregatedPartFactory(interface.Interface):
 
 class IQAggregatedPart(IContained):
 
+	Results = interface.Attribute("Aggregated part results")
+
 	def reset():
 		"""
 		reset this part
