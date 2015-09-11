@@ -14,6 +14,7 @@ from zope.annotation.interfaces import IAnnotatable
 from zope.container.interfaces import IContained
 
 from zope.interface.common.mapping import IReadMapping
+from zope.interface.common.sequence import IFiniteSequence
 
 from zope.mimetype.interfaces import mimeTypeConstraint
 
@@ -1186,7 +1187,7 @@ class IQInquiry(IAnnotatable, IQSubmittable):
 					 default=False, required=False)
 	no_submit.setTaggedValue('_ext_excluded_out', True)
 	
-class IQPoll(IQInquiry):
+class IQPoll(IQInquiry, IFiniteSequence):
 	"""
 	A poll question consists of one or more parts (typically one).
 	It may have prefacing text. It may have other metadata, such as what
@@ -1204,7 +1205,7 @@ class IQPoll(IQInquiry):
 							min_length=1,
 							value_type=Object(IPollable, title="A pollable question part") )
 
-class IQSurvey(ITitledContent, IQInquiry):
+class IQSurvey(ITitledContent, IQInquiry, IFiniteSequence):
 	"""
 	An ordered group of poll questions.
 
@@ -1311,7 +1312,7 @@ class IQAggregatedInquiry(IContained, IContextAnnotatable):
 	def __iadd__(other):
 		pass
 
-class IQAggregatedPoll(IQAggregatedInquiry, IIterable):
+class IQAggregatedPoll(IQAggregatedInquiry, IIterable, IFiniteSequence):
 	"""
 	Aggregation for a poll
 	"""
@@ -1322,7 +1323,7 @@ class IQAggregatedPoll(IQAggregatedInquiry, IIterable):
 							value_type=Object(IQAggregatedPart,
 											  title="The aggregated part."))
 
-class IQAggregatedSurvey(IQAggregatedInquiry, IIterable):
+class IQAggregatedSurvey(IQAggregatedInquiry, IIterable, IFiniteSequence):
 	"""
 	Aggregation for a survey
 	"""

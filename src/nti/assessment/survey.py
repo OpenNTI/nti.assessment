@@ -80,7 +80,7 @@ class QInquiry(QSubmittable, Persistent):
 	def onTermination(self):
 		return not self.disclosure or self.disclosure.lower() == DISCLOSURE_TERMINATION
 
-@interface.implementer(IQPoll, IFiniteSequence)
+@interface.implementer(IQPoll)
 @EqHash('content', 'parts', superhash=True)
 class QPoll(QInquiry):
 	createDirectFieldProperties(IQPoll)
@@ -97,7 +97,7 @@ class QPoll(QInquiry):
 	def __len__(self):
 		return len(self.parts or ())
 
-@interface.implementer(IQSurvey, ISublocations, IFiniteSequence)
+@interface.implementer(IQSurvey, ISublocations)
 @EqHash('title', 'questions', superhash=True)
 class QSurvey(QInquiry):
 	createDirectFieldProperties(IQSurvey)
@@ -352,7 +352,7 @@ class QAggregatedOrderingPart(QAggregatedConnectingPart):
 	createDirectFieldProperties(IQAggregatedOrderingPart)
 	
 @WithRepr
-@interface.implementer(IQAggregatedPoll, ISublocations, IFiniteSequence)
+@interface.implementer(IQAggregatedPoll, ISublocations)
 class QAggregatedPoll(ContainedMixin,
 					  SchemaConfigured,
 					  PersistentCreatedModDateTrackingObject):
@@ -408,6 +408,18 @@ class QAggregatedSurvey(ContainedMixin,
 	
 	def __iter__(self):
 		return iter(self.questions)
+
+	def __getitem__(self, idx):
+		return self.questions[idx]
+
+	def __setitem__(self, idx, value):
+		self.questions[idx] = value
+
+	def __delitem__(self, idx):
+		del self.questions[idx]
+
+	def __len__(self):
+		return len(self.questions)
 
 	def __iadd__(self, other):
 		assert IQAggregatedSurvey.providedBy(other) and self.surveyId == other.surveyId
