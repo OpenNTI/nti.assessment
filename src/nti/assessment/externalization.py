@@ -30,7 +30,6 @@ from .interfaces import IQAssessedQuestion
 from .interfaces import IQuestionSubmission
 from .interfaces import IQAssessedQuestionSet
 from .interfaces import IQuestionSetSubmission
-from .interfaces import IQAggregatedMultipleChoiceMultipleAnswerPart
 
 from .interfaces import IQPollSubmission
 from .interfaces import IQSurveySubmission
@@ -110,23 +109,6 @@ class _QPollSubmissionExternalizer(_QContainedObjectExternalizer):
 @component.adapter(IQSurveySubmission)
 class _QSurveySubmissionSubmissionExternalizer(_QContainedObjectExternalizer):
 	interface = IQSurveySubmission
-
-@interface.implementer(IInternalObjectExternalizer)
-class _QAggregatedMultipleChoiceMultipleAnswerPartExternalizer(object):
-
-	interface = IQAggregatedMultipleChoiceMultipleAnswerPart
-
-	def __init__(self, item):
-		self.item = item
-
-	def toExternalObject(self, **kwargs):
-		ext_obj = InterfaceObjectIO(self.item, self.interface).toExternalObject(**kwargs)
-		results = ext_obj.get('Results')
-		if results:
-			for k, v in list(results.items()):
-				results.pop(k)
-				results[str(k)] = v
-		return ext_obj
 	
 # File uploads
 

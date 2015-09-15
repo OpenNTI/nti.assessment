@@ -69,7 +69,7 @@ class MultipleChoiceMultipleAnswerPartResponseNormalizer(AbstractResponseNormali
 
 	def __call__(self):
 		if self.response.value:
-			result = tuple(sorted(self.response.value))
+			result = repr(tuple(sorted(self.response.value))) # this will be keys
 		else:
 			result = ()
 		return result

@@ -225,7 +225,7 @@ class TestAggregation(AssessmentTestCase):
 
 	def test_multiple_choice_multple_answer(self):
 		p = QAggregatedMultipleChoiceMultipleAnswerPart()
-		p.append((2,3,5))
+		p.append(repr((2,3,5)))
 		ext_obj = toExternalObject(p)
 		assert_that(ext_obj, has_entry('Results', has_entry('(2, 3, 5)', 1)))
 		

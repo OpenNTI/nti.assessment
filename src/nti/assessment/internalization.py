@@ -28,7 +28,6 @@ from .interfaces import IQInquiry
 from .interfaces import IWordEntry
 from .interfaces import IQModeledContentResponse
 from .interfaces import IQFillInTheBlankShortAnswerSolution
-from .interfaces import IQAggregatedMultipleChoiceMultipleAnswerPart
 
 from .interfaces import DISCLOSURE_TERMINATION
 
@@ -110,26 +109,4 @@ class _QInquiryUpdater(object):
 		result = InterfaceObjectIO(
 					self.obj,
 					IQInquiry).updateFromExternalObject(parsed)
-		return result
-
-@interface.implementer(IInternalObjectUpdater)
-@component.adapter(IQAggregatedMultipleChoiceMultipleAnswerPart)
-class _QAggregatedMultipleChoiceMultipleAnswerPartUpdater(object):
-
-	__slots__ = ('obj',)
-
-	def __init__(self, obj):
-		self.obj = obj
-
-	def updateFromExternalObject(self, parsed, *args, **kwargs):
-		results = parsed.get('Results', None)
-		if results:
-			for k, v in list(results.items()):
-				if isinstance(k, six.string_types):
-					results.pop(k)
-					results[eval(k)] = v
-
-		result = InterfaceObjectIO(
-					self.obj,
-					IQAggregatedMultipleChoiceMultipleAnswerPart).updateFromExternalObject(parsed)
 		return result
