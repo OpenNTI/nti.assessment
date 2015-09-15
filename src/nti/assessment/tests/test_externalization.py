@@ -43,7 +43,7 @@ class TestExternalization(AssessmentTestCase):
 		ext_obj = {
 			'MimeType': 'application/vnd.nextthought.assessment.uploadedfile',
 			'value': GIF_DATAURL,
-			'filename': r'c:\dir\file.gif',
+			'filename': r'file.gif',
 			'name':'ichigo'
 		}
 
@@ -76,7 +76,7 @@ class TestExternalization(AssessmentTestCase):
 		ext_obj = {
 			'MimeType': 'application/vnd.nextthought.assessment.quploadedfile',
 			'value': GIF_DATAURL,
-			'filename': r'c:\dir\file.gif',
+			'filename': r'file.gif',
 			'name':'ichigo'
 		}
 
