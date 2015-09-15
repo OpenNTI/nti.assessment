@@ -30,6 +30,7 @@ from nti.assessment.interfaces import IQSurveySubmission
 from nti.assessment.interfaces import IQNonGradableMultipleChoicePart
 
 from nti.assessment.interfaces import IQAggregatedMultipleChoicePart
+from nti.assessment.interfaces import IQAggregatedMultipleChoiceMultipleAnswerPart
 
 from nti.assessment.parts import QNonGradableFreeResponsePart
 from nti.assessment.parts import QNonGradableMultipleChoicePart
@@ -41,6 +42,7 @@ from nti.assessment.survey import QSurveySubmission
 
 from nti.assessment.interfaces import IQAggregatedPoll
 from nti.assessment.survey import QAggregatedMultipleChoicePart
+from nti.assessment.survey import QAggregatedMultipleChoiceMultipleAnswerPart
 
 from nti.assessment.response import QModeledContentResponse
 
@@ -212,8 +214,21 @@ class TestAggregation(AssessmentTestCase):
 					externalizes(has_entries('Class', 'AggregatedMultipleChoicePart',
 								 			 'MimeType', 'application/vnd.nextthought.assessment.aggregatedmultiplechoicepart')))
 		assert_that(find_factory_for(toExternalObject(QAggregatedMultipleChoicePart())),
-					 is_(none()))
+					is_(none()))
+		
+		assert_that(QAggregatedMultipleChoiceMultipleAnswerPart(), verifiably_provides(IQAggregatedMultipleChoiceMultipleAnswerPart))
+		assert_that(QAggregatedMultipleChoiceMultipleAnswerPart(),
+					externalizes(has_entries('Class', 'AggregatedMultipleChoiceMultipleAnswerPart',
+								 			 'MimeType', 'application/vnd.nextthought.assessment.aggregatedmultiplechoicemultipleanswerpart')))
+		assert_that(find_factory_for(toExternalObject(QAggregatedMultipleChoiceMultipleAnswerPart())),
+					is_(none()))
 
+	def test_multiple_choice_multple_answer(self):
+		p = QAggregatedMultipleChoiceMultipleAnswerPart()
+		p.append((2,3,5))
+		ext_obj = toExternalObject(p)
+		assert_that(ext_obj, has_entry('Results', has_entry((2,3,5), 1)))
+		
 	def test_aggregation_poll(self):
 		part = QNonGradableMultipleChoicePart(choices=[u'a', 'b', 'c'], content=u'here')
 		poll = QPoll(parts=(part,))

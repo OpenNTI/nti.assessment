@@ -273,6 +273,15 @@ class QAggregatedMultipleChoicePart(QAggregatedPart):
 @interface.implementer(IQAggregatedMultipleChoiceMultipleAnswerPart)
 class QAggregatedMultipleChoiceMultipleAnswerPart(QAggregatedMultipleChoicePart):
 	createDirectFieldProperties(IQAggregatedMultipleChoiceMultipleAnswerPart)
+	
+	@property
+	def Results(self):
+		return dict(self.results)
+
+	@Results.setter
+	def Results(self, nv):
+		pass
+
 QMultipleChoiceMultipleAnswerAggregatedPart = QAggregatedMultipleChoiceMultipleAnswerPart # BWC
 
 @interface.implementer(IQAggregatedFreeResponsePart)
