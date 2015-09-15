@@ -1285,7 +1285,7 @@ class IQAggregatedMultipleChoicePart(IQAggregatedPart):
 				 	value_type=Number(title="The aggregated value"),
 				 	readonly=True)
 
-class IQAggregatedMultipleChoiceMultipleAnswerPart(IQAggregatedPart):
+class IQAggregatedMultipleChoiceMultipleAnswerPart(IQAggregatedMultipleChoicePart):
 
 	Results = Dict( title="The response results",
 				 	key_type=Tuple(title="The response tuple",
