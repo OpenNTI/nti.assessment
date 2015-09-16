@@ -14,6 +14,7 @@ from zope.annotation.interfaces import IAnnotatable
 from zope.container.interfaces import IContained
 
 from zope.interface.common.mapping import IReadMapping
+from zope.interface.common.mapping import IWriteMapping
 from zope.interface.common.sequence import IFiniteSequence
 
 from zope.mimetype.interfaces import mimeTypeConstraint
@@ -1229,7 +1230,7 @@ class IQPollSubmission(IQInquirySubmission):
 
 	pollId = TextLine(title="Identifier of the poll being responded to.")
 
-class IQSurveySubmission(IQInquirySubmission, IContextAnnotatable):
+class IQSurveySubmission(IQInquirySubmission, IContextAnnotatable, IWriteMapping):
 	"""
 	A submission in response to a survey
 	"""
@@ -1326,7 +1327,7 @@ class IQAggregatedPoll(IQAggregatedInquiry, IIterable, IFiniteSequence):
 							value_type=Object(IQAggregatedPart,
 											  title="The aggregated part."))
 
-class IQAggregatedSurvey(IQAggregatedInquiry, IIterable, IFiniteSequence):
+class IQAggregatedSurvey(IQAggregatedInquiry, IIterable, IWriteMapping):
 	"""
 	Aggregation for a survey
 	"""

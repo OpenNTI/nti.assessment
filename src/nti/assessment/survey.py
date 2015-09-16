@@ -189,6 +189,9 @@ class QBasePollSet(object):
 			self.polls.append(value)
 		else:
 			self.polls[idx] = value
+	
+	def __iter__(self):
+		return iter(self.polls)
 
 	def __contains__(self, key):
 		return self.index(key) != -1
@@ -412,7 +415,7 @@ class QAggregatedPoll(ContainedMixin,
 			self.parts[idx] += part
 		return self
 
-@interface.implementer(IQAggregatedSurvey, ISublocations, IWriteMapping)
+@interface.implementer(IQAggregatedSurvey, ISublocations)
 class QAggregatedSurvey(ContainedMixin,
 					  	SchemaConfigured,
 					  	PersistentCreatedModDateTrackingObject,
@@ -429,21 +432,6 @@ class QAggregatedSurvey(ContainedMixin,
 		# schema configured is not cooperative
 		ContainedMixin.__init__(self, *args, **kwargs)
 		PersistentCreatedModDateTrackingObject.__init__(self)
-	
-	def __iter__(self):
-		return iter(self.questions)
-
-	def __getitem__(self, idx):
-		return self.questions[idx]
-
-	def __setitem__(self, idx, value):
-		self.questions[idx] = value
-
-	def __delitem__(self, idx):
-		del self.questions[idx]
-
-	def __len__(self):
-		return len(self.questions)
 
 	def __iadd__(self, other):
 		assert IQAggregatedSurvey.providedBy(other) and self.surveyId == other.surveyId
