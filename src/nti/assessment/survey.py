@@ -21,7 +21,7 @@ from persistent import Persistent
 from persistent.list import PersistentList
 from persistent.mapping import PersistentMapping
 
-from nti.common.property import alias
+from nti.common.property import alias, CachedProperty
 
 from nti.dataserver_core.mixins import ContainedMixin
 
@@ -155,26 +155,37 @@ class QPollSubmission(ContainedMixin,
 @interface.implementer(IWriteMapping)
 class QBasePollSet(object):
 
+	def append(self, value):
+		self.polls.append(value)
+
+	@property
+	def length(self):
+		return len(self.polls)
+
+	def __len__(self):
+		return self.length
+	
+	@CachedProperty('length')
+	def _v_map(self):
+		result = {}
+		for poll in self.polls or ():
+			result[poll.pollId] = poll
+		return result
+
 	def get(self, key, default=None):
-		try:
-			return self[key]
-		except KeyError:
-			return default
+		return self._v_map.get(key, default)
+
+	def __getitem__(self, key):
+		return self._v_map[key]
+
+	def __contains__(self, key):
+		return key in self._v_map
 
 	def index(self, key):
 		for idx, poll in enumerate(self.polls or ()):
 			if poll.pollId == key:
 				return idx
 		return -1
-
-	def append(self, value):
-		self.polls.append(value)
-
-	def __getitem__(self, key):
-		idx = self.index(key)
-		if idx == -1:
-			raise KeyError(key)
-		return self.polls[idx]
 
 	def __delitem__(self, key):
 		idx = self.index(key)
@@ -192,12 +203,6 @@ class QBasePollSet(object):
 	
 	def __iter__(self):
 		return iter(self.polls)
-
-	def __contains__(self, key):
-		return self.index(key) != -1
-
-	def __len__(self):
-		return len(self.polls)
 
 @interface.implementer(IQSurveySubmission, ISublocations)
 class QSurveySubmission(ContainedMixin,
