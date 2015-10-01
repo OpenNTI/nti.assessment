@@ -69,7 +69,7 @@ class MultipleChoiceMultipleAnswerPartResponseNormalizer(AbstractResponseNormali
 
 	def __call__(self):
 		if self.response.value:
-			result = repr(tuple(sorted(self.response.value))) # this will be keys
+			result = tuple(sorted(self.response.value))
 		else:
 			result = ()
 		return result
@@ -91,11 +91,7 @@ class ModeledContentPartResponseNormalizer(AbstractResponseNormalizer):
 class ConnectingPartResponseNormalizer(AbstractResponseNormalizer):
 
 	def __call__(self):
-		if self.response.value:
-			items = tuple(sorted(self.response.value.items()))
-			result = repr(items) # this will be keys
-		else:
-			result = ()
+		result = self.response.value if self.response.value is not None else None
 		return result
 	
 @interface.implementer(IQMatchingPartResponseNormalizer)

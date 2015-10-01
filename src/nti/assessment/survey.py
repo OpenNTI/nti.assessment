@@ -265,10 +265,11 @@ class QAggregatedMultipleChoicePart(QAggregatedPart):
 		self.total = 0
 		self.results = PersistentMapping()
 
-	def append(self, response):
+	def append(self, response=None):
 		self.total += 1
-		current = self.results.get(response) or 0
-		self.results[response] = current + 1
+		if response is not None:
+			current = self.results.get(response) or 0
+			self.results[response] = current + 1
 
 	def __iadd__(self, other):
 		assert IQAggregatedMultipleChoicePart.providedBy(other)
@@ -290,6 +291,12 @@ class QAggregatedMultipleChoiceMultipleAnswerPart(QAggregatedMultipleChoicePart)
 	def Results(self, nv):
 		pass
 
+	def append(self, responses=()):
+		self.total += 1
+		for response in responses or ():
+			current = self.results.get(response) or 0
+			self.results[response] = current + 1
+
 QMultipleChoiceMultipleAnswerAggregatedPart = QAggregatedMultipleChoiceMultipleAnswerPart # BWC
 
 @interface.implementer(IQAggregatedFreeResponsePart)
@@ -308,10 +315,11 @@ class QAggregatedFreeResponsePart(QAggregatedPart):
 		self.total = 0
 		self.results = PersistentMapping()
 
-	def append(self, response):
+	def append(self, response=None):
 		self.total += 1
-		current = self.results.get(response) or 0
-		self.results[response] = current + 1
+		if response is not None:
+			current = self.results.get(response) or 0
+			self.results[response] = current + 1
 
 	def __iadd__(self, other):
 		assert IQAggregatedFreeResponsePart.providedBy(other)
@@ -337,7 +345,7 @@ class QAggregatedModeledContentPart(QAggregatedPart):
 		self.total = 0
 		self.results = PersistentList()
 
-	def append(self, response):
+	def append(self, response=None):
 		self.total += 1
 		if response is not None:
 			self.results.append(response)
@@ -362,16 +370,27 @@ class QAggregatedConnectingPart(QAggregatedPart):
 		self.total = 0
 		self.results = PersistentMapping()
 
-	def append(self, response):
+	def _entry(self, k):
+		m = self.results.get(k)
+		if m is None:
+			self.results[k] = m = PersistentMapping()
+		return m
+			
+	def append(self, responses=None):
 		self.total += 1
-		current = self.results.get(response) or 0
-		self.results[response] = current + 1
+		if responses is not None:
+			for k, v in responses.items():
+				m = self._entry(k)
+				current = m.get(v) or 0
+				m[v] = current + 1
 
 	def __iadd__(self, other):
 		assert IQAggregatedConnectingPart.providedBy(other)
-		for k, v in other.results.items():
-			current = v + (self.results.get(k) or 0)
-			self.results[k] = current
+		for k, m in other.results.items():
+			entry = self._entry(k)
+			for v, count in m.items():
+				current = count + (entry.get(v) or 0)
+				entry[v] = current
 		self.total += other.total
 		return self
 	
