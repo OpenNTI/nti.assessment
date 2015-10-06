@@ -85,7 +85,7 @@ class FreeResponsePartResponseNormalizer(AbstractResponseNormalizer):
 class ModeledContentPartResponseNormalizer(AbstractResponseNormalizer):
 
 	def __call__(self):
-		result = self.response.value if self.response.value else None
+		result = self.response.value if self.response.value else u''
 		return result
 
 class ConnectingPartResponseNormalizer(AbstractResponseNormalizer):
