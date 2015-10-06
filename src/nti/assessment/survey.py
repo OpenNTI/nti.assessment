@@ -489,13 +489,11 @@ def aggregate_poll_submission(submission, registry=component):
 
 	aggregated_parts = PersistentList()
 	for sub_part, q_part in zip(submission.parts, poll.parts):
-		if sub_part is None: # null responses
-			logger.debug("Null response for part (%s) in poll (%s)",
-						 q_part, pollId)
-			continue
 		__traceback_info__ = sub_part, q_part
-		response = IQResponse(sub_part)
-		response = normalize_response(q_part, response)
+		if sub_part is None: # null responses
+			logger.debug("Null response for part (%s) in poll (%s)", q_part, pollId)
+		response = IQResponse(sub_part) if sub_part is not None else None
+		response = normalize_response(q_part, response) if response is not None else None
 		aggregated_part = aggregated_part_factory(q_part)()
 		aggregated_part.append(response)
 		aggregated_parts.append(aggregated_part)

@@ -78,14 +78,14 @@ class MultipleChoiceMultipleAnswerPartResponseNormalizer(AbstractResponseNormali
 class FreeResponsePartResponseNormalizer(AbstractResponseNormalizer):
 
 	def __call__(self):
-		result = self.response.value.lower() if self.response.value else u''
+		result = self.response.value.lower() if self.response.value else None
 		return result
 
 @interface.implementer(IQModeledContentPartResponseNormalizer)
 class ModeledContentPartResponseNormalizer(AbstractResponseNormalizer):
 
 	def __call__(self):
-		result = self.response.value if self.response.value else u''
+		result = self.response.value if self.response.value else None
 		return result
 
 class ConnectingPartResponseNormalizer(AbstractResponseNormalizer):
