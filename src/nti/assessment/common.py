@@ -29,6 +29,8 @@ from persistent import Persistent
 
 from nti.common.property import alias
 
+from nti.dublincore.datastructures import PersistentCreatedModDateTrackingObject
+
 from nti.externalization.representation import WithRepr
 from nti.externalization.externalization import toExternalObject
 
@@ -141,6 +143,18 @@ class QSubmittable(SchemaConfigured, Contained):
 
 	not_after = alias('available_for_submission_ending')
 	not_before = alias('available_for_submission_beginning')
+
+	def __init__(self, *args, **kwargs):
+		SchemaConfigured.__init__(self, *args, **kwargs)
+
+class QPersistentSubmittable(QSubmittable, PersistentCreatedModDateTrackingObject):
+
+	createdTime = 0
+
+	def __init__(self, *args, **kwargs):
+		# schema configured is not cooperative
+		QSubmittable.__init__(self, *args, **kwargs)
+		PersistentCreatedModDateTrackingObject.__init__(self)
 
 @WithRepr
 @interface.implementer(IQSubmittedPart, ISublocations)

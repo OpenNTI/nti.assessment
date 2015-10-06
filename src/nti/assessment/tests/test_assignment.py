@@ -62,8 +62,10 @@ class TestAssignment(AssessmentTestCase):
 					 externalizes( has_entry( 'Class', 'AssignmentSubmissionPendingAssessment' )))
 		
 	def test_signature(self):
-		assert_that(signature(assignment.QAssignment()), 
-					is_('043abe457c41f5cdca31d6779188c533876e3ca6a1cc1e2af3baa66ed6c30647') )
+		a = assignment.QAssignment()
+		a.lastModified = a.createdTime = 0
+		assert_that(signature(a), 
+					is_('8fc9a6b332d39e852a55dbf6a32f64db015feb1d850c8e1ed4dd38aa17374616') )
 
 		path = os.path.join(os.path.dirname(__file__), "questionbank.json")
 		with open(path, "rb") as fp:

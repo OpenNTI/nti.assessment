@@ -17,7 +17,6 @@ from zope.interface.common.sequence import IFiniteSequence
 
 from zope.location.interfaces import ISublocations
 
-from persistent import Persistent
 from persistent.list import PersistentList
 from persistent.mapping import PersistentMapping
 
@@ -36,8 +35,8 @@ from nti.schema.fieldproperty import createDirectFieldProperties
 
 from ._util import make_sublocations as _make_sublocations
 
-from .common import QSubmittable
 from .common import normalize_response
+from .common import QPersistentSubmittable
 
 from .interfaces import IQPoll
 from .interfaces import IQSurvey
@@ -63,14 +62,10 @@ from .interfaces import SURVEY_MIME_TYPE
 from .interfaces import DISCLOSURE_TERMINATION
 
 @interface.implementer(IQInquiry)
-class QInquiry(QSubmittable, Persistent):
+class QInquiry(QPersistentSubmittable):
 	
 	closed = False
 	disclosure = DISCLOSURE_TERMINATION
-	
-	def __init__(self, *args, **kwargs):
-		Persistent.__init__(self)
-		SchemaConfigured.__init__(self, *args, **kwargs)
 
 	@property
 	def isClosed(self):

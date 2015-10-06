@@ -37,7 +37,7 @@ from nti.schema.fieldproperty import createDirectFieldProperties
 
 from ._util import make_sublocations as _make_sublocations
 
-from .common import QSubmittable
+from .common import QPersistentSubmittable
 
 from .interfaces import IQAssignment
 from .interfaces import IQAssignmentPart
@@ -60,8 +60,7 @@ class QAssignmentPart(SchemaConfigured,
 
 @interface.implementer(IQAssignment)
 @WithRepr
-class QAssignment(QSubmittable,
-				  Persistent):
+class QAssignment(QPersistentSubmittable):
 
 	createDirectFieldProperties(IQAssignment)
 

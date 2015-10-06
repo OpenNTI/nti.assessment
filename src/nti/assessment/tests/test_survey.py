@@ -222,12 +222,6 @@ class TestAggregation(AssessmentTestCase):
 								 			 'MimeType', 'application/vnd.nextthought.assessment.aggregatedmultiplechoicemultipleanswerpart')))
 		assert_that(find_factory_for(toExternalObject(QAggregatedMultipleChoiceMultipleAnswerPart())),
 					is_(none()))
-
-	def test_multiple_choice_multple_answer(self):
-		p = QAggregatedMultipleChoiceMultipleAnswerPart()
-		p.append(repr((2,3,5)))
-		ext_obj = toExternalObject(p)
-		assert_that(ext_obj, has_entry('Results', has_entry('(2, 3, 5)', 1)))
 		
 	def test_aggregation_poll(self):
 		part = QNonGradableMultipleChoicePart(choices=[u'a', 'b', 'c'], content=u'here')
