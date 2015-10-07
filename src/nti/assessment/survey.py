@@ -523,7 +523,7 @@ def aggregate_survey_submission(submission, registry=component):
 			sub_aggregated = IQAggregatedPoll(sub_poll)
 			assessed.append(sub_aggregated)
 		else:  # pragma: no cover
-			logger.debug("Bad input, poll (%s) not in survey (%s) (kownn: %s)",
+			logger.debug("Bad input, poll (%s) not in survey (%s) (known: %s)",
 						 poll, survey, survey.questions)
 
 	result = QAggregatedSurvey(surveyId=surveyId, questions=assessed)

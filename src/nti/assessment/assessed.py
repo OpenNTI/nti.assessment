@@ -177,7 +177,7 @@ def assess_question_set_submission(set_submission, registry=component):
 			sub_assessed = IQAssessedQuestion(sub_question)  # Raises ComponentLookupError
 			assessed.append(sub_assessed)
 		else: # pragma: no cover
-			logger.debug("Bad input, question (%s) not in question set (%s) (kownn: %s)",
+			logger.debug("Bad input, question (%s) not in question set (%s) (known: %s)",
 						 question, question_set, question_set.questions)
 
 	# NOTE: We're not really creating some sort of aggregate grade here
