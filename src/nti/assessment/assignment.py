@@ -17,6 +17,8 @@ from zope.annotation.interfaces import IAttributeAnnotatable
 
 from zope.container.contained import Contained
 
+from zope.location.interfaces import ISublocations
+
 from zope.mimetype.interfaces import IContentTypeAware
 
 from zope.schema.fieldproperty import FieldPropertyStoredThroughField as FP
@@ -45,10 +47,9 @@ from .interfaces import IQBaseSubmission
 from .interfaces import IQTimedAssignment
 from .interfaces import IQAssignmentSubmissionPendingAssessment
 
-@interface.implementer(IQAssignmentPart,
-					   IContentTypeAware,
-					   IAttributeAnnotatable)
 @WithRepr
+@interface.implementer(IQAssignmentPart,
+					   IContentTypeAware)
 class QAssignmentPart(SchemaConfigured,
 					  Contained,
 					  Persistent):
@@ -58,8 +59,8 @@ class QAssignmentPart(SchemaConfigured,
 	
 	mime_type = 'application/vnd.nextthought.assessment.assignmentpart'
 
-@interface.implementer(IQAssignment)
 @WithRepr
+@interface.implementer(IQAssignment)
 class QAssignment(QPersistentSubmittable):
 
 	createDirectFieldProperties(IQAssignment)
@@ -76,8 +77,8 @@ class QAssignment(QPersistentSubmittable):
 		for part in self.parts:
 			yield part.question_set
 
-@interface.implementer(IQTimedAssignment)
 @WithRepr
+@interface.implementer(IQTimedAssignment)
 class QTimedAssignment(QAssignment):
 	createDirectFieldProperties(IQTimedAssignment)
 	
@@ -85,13 +86,12 @@ class QTimedAssignment(QAssignment):
 	
 	mime_type = 'application/vnd.nextthought.assessment.timedassignment'
 
-from zope.location.interfaces import ISublocations
 
+@WithRepr
 @interface.implementer(IQAssignmentSubmissionPendingAssessment,
 					   IContentTypeAware,
 					   IAttributeAnnotatable,
 					   ISublocations)
-@WithRepr
 class QAssignmentSubmissionPendingAssessment(ContainedMixin,
 											 SchemaConfigured,
 											 PersistentCreatedModDateTrackingObject):

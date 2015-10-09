@@ -9,10 +9,11 @@ __docformat__ = "restructuredtext en"
 
 from zope import interface
 
-from zope.annotation.interfaces import IAnnotatable
+from zope.annotation.interfaces import IAttributeAnnotatable
 
 from zope.container.interfaces import IContained
 
+from zope.interface.interfaces import IMethod
 from zope.interface.common.mapping import IReadMapping
 from zope.interface.common.mapping import IWriteMapping
 from zope.interface.common.sequence import IFiniteSequence
@@ -56,6 +57,9 @@ from nti.schema.field import IndexedIterable
 from nti.schema.field import ValidText as Text
 from nti.schema.field import ValidTextLine as TextLine
 from nti.schema.field import ValidDatetime as Datetime
+
+from nti.schema.jsonschema import TAG_HIDDEN_IN_UI
+from nti.schema.jsonschema import TAG_REQUIRED_IN_UI
 
 NTIID_TYPE = 'NAQ'
 POLL_MIME_TYPE = u'application/vnd.nextthought.napoll'
@@ -575,7 +579,7 @@ class IQAssessment(interface.Interface):
 
 # question
 
-class IQuestion(IQAssessment, IAnnotatable):
+class IQuestion(IQAssessment, IAttributeAnnotatable):
 	"""
 	A question consists of one or more parts (typically one) that require answers.
 	It may have prefacing text. It may have other metadata, such as what
@@ -595,7 +599,7 @@ class IQuestion(IQAssessment, IAnnotatable):
 							min_length=1,
 							value_type=Object(IQPart, title="A question part") )
 
-class IQuestionSet(IQAssessment, ITitledContent, IAnnotatable):
+class IQuestionSet(IQAssessment, ITitledContent, IAttributeAnnotatable):
 	"""
 	An ordered group of related questions generally intended to be
 	completed as a unit (aka, a Quiz or worksheet).
@@ -649,7 +653,7 @@ class IQSubmittable(interface.Interface):
 	no_submit = Bool(title="Whether this object accept submissions",
 					 default=False)
 
-class IQAssignment(IQAssessment, ITitledContent, IAnnotatable, IQSubmittable):
+class IQAssignment(IQAssessment, ITitledContent, IAttributeAnnotatable, IQSubmittable):
 	"""
 	An assignment differs from either plain questions or question sets
 	in that there is an expectation that it must be completed,
@@ -730,12 +734,26 @@ class IQAssignment(IQAssessment, ITitledContent, IAnnotatable, IQSubmittable):
 	# Depending on the policy and context, submission will either be blocked,
 	# or the elapsed time will simply be recorded.
 
+IQAssignment['title'].setTaggedValue(TAG_HIDDEN_IN_UI, False)
+IQAssignment['title'].setTaggedValue(TAG_REQUIRED_IN_UI, False)
+IQAssignment['available_for_submission_ending'].setTaggedValue(TAG_HIDDEN_IN_UI, False)
+IQAssignment['available_for_submission_ending'].setTaggedValue(TAG_REQUIRED_IN_UI, False)
+IQAssignment['available_for_submission_beginning'].setTaggedValue(TAG_HIDDEN_IN_UI, False)
+IQAssignment['available_for_submission_beginning'].setTaggedValue(TAG_REQUIRED_IN_UI, False)
+
 class IQTimedAssignment(IQAssignment):
 
-	maximum_time_allowed = Int(title="Maximum Time Allowed (Seconds)",
+	maximum_time_allowed = Int(	title="Maximum Time Allowed (Seconds)",
 						 		description="""When present, this specifies the maximum time allowed (in
 								seconds) students have to submit the assignments""",
 								required=True)
+
+IQTimedAssignment['title'].setTaggedValue(TAG_HIDDEN_IN_UI, False)
+IQTimedAssignment['title'].setTaggedValue(TAG_REQUIRED_IN_UI, False)
+IQTimedAssignment['available_for_submission_ending'].setTaggedValue(TAG_HIDDEN_IN_UI, False)
+IQTimedAssignment['available_for_submission_ending'].setTaggedValue(TAG_REQUIRED_IN_UI, False)
+IQTimedAssignment['available_for_submission_beginning'].setTaggedValue(TAG_HIDDEN_IN_UI, False)
+IQTimedAssignment['available_for_submission_beginning'].setTaggedValue(TAG_REQUIRED_IN_UI, False)
 
 class IQAssessmentDateContext(interface.Interface):
 	"""
@@ -1174,7 +1192,7 @@ DISCLOSURE_TERMINATION = u'termination'
 DISCLOSURE_STATES = (DISCLOSURE_NEVER, DISCLOSURE_ALWAYS, DISCLOSURE_TERMINATION)
 DISCLOSURE_VOCABULARY = vocabulary.SimpleVocabulary([vocabulary.SimpleTerm(_x) for _x in DISCLOSURE_STATES])
 
-class IQInquiry(IAnnotatable, IQSubmittable):
+class IQInquiry(IAttributeAnnotatable, IQSubmittable):
 
 	ntiid = ValidNTIID(title="Object NTIID", required=False)
 
@@ -1206,6 +1224,11 @@ class IQPoll(IQInquiry, IFiniteSequence):
 							min_length=1,
 							value_type=Object(IPollable, title="A pollable question part") )
 
+IQPoll['available_for_submission_ending'].setTaggedValue(TAG_HIDDEN_IN_UI, False)
+IQPoll['available_for_submission_ending'].setTaggedValue(TAG_REQUIRED_IN_UI, False)
+IQPoll['available_for_submission_beginning'].setTaggedValue(TAG_HIDDEN_IN_UI, False)
+IQPoll['available_for_submission_beginning'].setTaggedValue(TAG_REQUIRED_IN_UI, False)
+
 class IQSurvey(ITitledContent, IQInquiry, IFiniteSequence):
 	"""
 	An ordered group of poll questions.
@@ -1216,6 +1239,11 @@ class IQSurvey(ITitledContent, IQInquiry, IFiniteSequence):
 	questions = IndexedIterable(title="The ordered polls in the set.",
 								min_length=1,
 								value_type=Object(IQPoll, title="The poll questions") )
+
+IQPoll['available_for_submission_ending'].setTaggedValue(TAG_HIDDEN_IN_UI, False)
+IQPoll['available_for_submission_ending'].setTaggedValue(TAG_REQUIRED_IN_UI, False)
+IQPoll['available_for_submission_beginning'].setTaggedValue(TAG_HIDDEN_IN_UI, False)
+IQPoll['available_for_submission_beginning'].setTaggedValue(TAG_REQUIRED_IN_UI, False)
 
 class IQInquirySubmission(IQPartsSubmission):
 	inquiryId = interface.Attribute("Identifier of the inquiry being responded to.")
@@ -1337,3 +1365,13 @@ class IQAggregatedSurvey(IQAggregatedInquiry, IIterable, IWriteMapping):
 								default=(),
 							 	value_type=Object(IQAggregatedPoll,
 												  title="The aggregated poll."))
+
+def _set_ifaces():
+	for iSchema in (IQAssignment, IQuestion, IQuestionSet, IQPoll, IQSurvey):
+		for k, v in iSchema.namesAndDescriptions(all=True):
+			if IMethod.providedBy(v) or v.queryTaggedValue(TAG_HIDDEN_IN_UI) is not None:
+				continue
+			iSchema[k].setTaggedValue(TAG_HIDDEN_IN_UI, True)
+
+_set_ifaces()
+del _set_ifaces
