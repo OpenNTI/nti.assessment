@@ -86,7 +86,6 @@ class QTimedAssignment(QAssignment):
 	
 	mime_type = 'application/vnd.nextthought.assessment.timedassignment'
 
-
 @WithRepr
 @interface.implementer(IQAssignmentSubmissionPendingAssessment,
 					   IContentTypeAware,

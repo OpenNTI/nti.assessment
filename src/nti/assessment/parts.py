@@ -112,14 +112,14 @@ class QPart(QNonGradablePart):
 	of an appropriate type.
 	"""
 
-	# : The interface to which we will attempt to adapt ourself, the
-	# : solution and the response when grading. Should be a
-	# : class:`.IQPartGrader`. The response will have first been converted
-	# : for the solution.
+	#: The interface to which we will attempt to adapt ourself, the
+	#: solution and the response when grading. Should be a
+	#: class:`.IQPartGrader`. The response will have first been converted
+	#: for the solution.
 	grader_interface = IQPartGrader
 
-	# : The name of the grader we will attempt to adapt to. Defaults to the default,
-	# : unnamed, adapter
+	#: The name of the grader we will attempt to adapt to. Defaults to the default,
+	#: unnamed, adapter
 	grader_name = _u('')
 
 	solutions = ()
