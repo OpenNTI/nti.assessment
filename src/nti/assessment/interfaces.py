@@ -34,6 +34,8 @@ from nti.contentfragments.schema import LatexFragmentTextLine as _LatexTextLine
 from nti.contentfragments.schema import HTMLContentFragment as _HTMLContentFragment
 from nti.contentfragments.schema import TextUnicodeContentFragment as _ContentFragment
 
+from nti.coremetadata.interfaces import IRecordable
+
 from nti.dataserver_core.interfaces import IContextAnnotatable
 from nti.dataserver_core.interfaces import INeverStoredInSharedStream
 
@@ -630,7 +632,7 @@ class IQAssignmentPart(ITitledContent):
 	auto_grade = Bool(title="Should this part be run through the grading machinery?",
 					  default=False)
 
-class IQSubmittable(interface.Interface):
+class IQSubmittable(IRecordable):
 
 	available_for_submission_beginning = Datetime(
 		title="Submissions are accepted no earlier than this.",
