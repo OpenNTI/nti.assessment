@@ -29,6 +29,8 @@ from persistent import Persistent
 
 from nti.common.property import alias
 
+from nti.coremetadata.mixins import RecordableMixin
+
 from nti.dublincore.datastructures import PersistentCreatedModDateTrackingObject
 
 from nti.externalization.representation import WithRepr
@@ -134,7 +136,7 @@ def iface_of_assessment(thing):
 @interface.implementer(	IQSubmittable,
 						IContentTypeAware,
 						IAttributeAnnotatable)
-class QSubmittable(SchemaConfigured, Contained):
+class QSubmittable(SchemaConfigured, Contained, RecordableMixin):
 
 	ntiid = None
 
