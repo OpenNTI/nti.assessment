@@ -1368,8 +1368,10 @@ class IQAggregatedSurvey(IQAggregatedInquiry, IIterable, IWriteMapping):
 							 	value_type=Object(IQAggregatedPoll,
 												  title="The aggregated poll."))
 
+ASSESSMENT_INTERFACES = (IQAssignment, IQuestion, IQuestionSet, IQPoll, IQSurvey)
+
 def _set_ifaces():
-	for iSchema in (IQAssignment, IQuestion, IQuestionSet, IQPoll, IQSurvey):
+	for iSchema in ASSESSMENT_INTERFACES:
 		for k, v in iSchema.namesAndDescriptions(all=True):
 			if IMethod.providedBy(v) or v.queryTaggedValue(TAG_HIDDEN_IN_UI) is not None:
 				continue
