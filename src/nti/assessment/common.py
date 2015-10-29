@@ -31,6 +31,8 @@ from nti.common.property import alias
 
 from nti.coremetadata.mixins import RecordableMixin
 
+from nti.dataserver_core.interfaces import SYSTEM_USER_ID
+
 from nti.dublincore.datastructures import PersistentCreatedModDateTrackingObject
 
 from nti.externalization.representation import WithRepr
@@ -139,7 +141,7 @@ def iface_of_assessment(thing):
 class QSubmittable(SchemaConfigured, Contained, RecordableMixin):
 
 	ntiid = None
-
+	
 	available_for_submission_ending = AdaptingFieldProperty(IQAssignment['available_for_submission_ending'])
 	available_for_submission_beginning = AdaptingFieldProperty(IQAssignment['available_for_submission_beginning'])
 
@@ -152,7 +154,8 @@ class QSubmittable(SchemaConfigured, Contained, RecordableMixin):
 class QPersistentSubmittable(QSubmittable, PersistentCreatedModDateTrackingObject):
 
 	createdTime = 0
-
+	creator = SYSTEM_USER_ID
+		
 	def __init__(self, *args, **kwargs):
 		# schema configured is not cooperative
 		QSubmittable.__init__(self, *args, **kwargs)
