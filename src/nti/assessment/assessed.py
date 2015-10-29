@@ -13,8 +13,8 @@ logger = __import__('logging').getLogger(__name__)
 
 import time
 
-from zope import interface
 from zope import component
+from zope import interface
 
 from zope.location.interfaces import ISublocations
 
@@ -45,20 +45,18 @@ from ._util import dctimes_property_fallback as _dctimes_property_fallback
 
 from .common import QSubmittedPart
 
-@interface.implementer(IQAssessedPart, ISublocations)
-@EqHash('assessedValue', 'submittedResponse',
-		superhash=True)
 @WithRepr
+@interface.implementer(IQAssessedPart, ISublocations)
+@EqHash('assessedValue', 'submittedResponse', superhash=True)
 class QAssessedPart(QSubmittedPart):
 	createDirectFieldProperties(IQAssessedPart)
 
+@WithRepr
 @interface.implementer(IQAssessedQuestion,
 					   ICreated,
 					   ILastModified,
 					   ISublocations)
-@EqHash('questionId', 'parts',
-		superhash=True)
-@WithRepr
+@EqHash('questionId', 'parts', superhash=True)
 class QAssessedQuestion(SchemaConfigured,
 						ContainedMixin,
 						Persistent):
@@ -80,12 +78,11 @@ class QAssessedQuestion(SchemaConfigured,
 
 	sublocations = _make_sublocations()
 
+@WithRepr
 @interface.implementer(IQAssessedQuestionSet,
 					   ICreated,
 					   ILastModified)
-@EqHash('questionSetId', 'questions',
-		superhash=True)
-@WithRepr
+@EqHash('questionSetId', 'questions', superhash=True)
 class QAssessedQuestionSet(SchemaConfigured,
 						   ContainedMixin,
 						   Persistent):
@@ -177,8 +174,8 @@ def assess_question_set_submission(set_submission, registry=component):
 			sub_assessed = IQAssessedQuestion(sub_question)  # Raises ComponentLookupError
 			assessed.append(sub_assessed)
 		else: # pragma: no cover
-			logger.debug("Bad input, question (%s) not in question set (%s) (known: %s)",
-						 question, question_set, question_set.questions)
+			logger.warn("Bad input, question (%s) not in question set (%s) (known: %s)",
+						question, question_set, question_set.questions)
 
 	# NOTE: We're not really creating some sort of aggregate grade here
 	result = QAssessedQuestionSet(questionSetId=set_submission.questionSetId,

@@ -44,8 +44,8 @@ from .interfaces import IQMultipleChoiceMultipleAnswerSolution
 
 from ._util import TrivialValuedMixin as _TrivialValuedMixin
 
-@interface.implementer(IQSolution)
 @WithRepr
+@interface.implementer(IQSolution)
 class QSolution(Persistent):
 	"""
 	Base class for solutions. Its :meth:`grade` method

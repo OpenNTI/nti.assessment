@@ -44,9 +44,9 @@ def safe_encode(word, encoding="UTF-8"):
 		word = repr(word)
 	return word
 
-@total_ordering
 @WithRepr
 @EqHash("wid")
+@total_ordering
 @interface.implementer(IWordEntry)
 class WordEntry(SchemaConfigured, Persistent, Contained):
 	createDirectFieldProperties(IWordEntry)

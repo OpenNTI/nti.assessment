@@ -28,9 +28,9 @@ from nti.schema.fieldproperty import createDirectFieldProperties
 
 from .interfaces import IRegEx
 
-@interface.implementer(IRegEx)
 @WithRepr
 @EqHash("pattern",)
+@interface.implementer(IRegEx)
 class RegEx(Contained, SchemaConfigured, Persistent):
 	createDirectFieldProperties(IRegEx)
 

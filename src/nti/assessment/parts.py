@@ -77,8 +77,8 @@ from .interfaces import convert_response_for_solution
 
 from .common import grader_for_solution_and_response
 
-@interface.implementer(IQNonGradablePart)
 @WithRepr
+@interface.implementer(IQNonGradablePart)
 @EqHash('content', 'hints', 'explanation',
 		superhash=True,
 		include_type=True)
@@ -159,24 +159,21 @@ class QPart(QNonGradablePart):
 # Math
 
 @interface.implementer(IQNonGradableMathPart)
-@EqHash(include_super=True,
-		include_type=True)
+@EqHash(include_super=True, include_type=True)
 class QNonGradableMathPart(QNonGradablePart):
 
 	def _eq_instance(self, other):
 		return isinstance(other, QNonGradableMathPart)
 
 @interface.implementer(IQMathPart)
-@EqHash(include_super=True,
-		include_type=True)
+@EqHash(include_super=True, include_type=True)
 class QMathPart(QPart, QNonGradableMathPart):  # order matters
 
 	def _eq_instance(self, other):
 		return isinstance(other, QMathPart)
 
 @interface.implementer(IQSymbolicMathPart)
-@EqHash(include_super=True,
-		include_type=True)
+@EqHash(include_super=True, include_type=True)
 class QSymbolicMathPart(QMathPart):
 	grader_interface = IQSymbolicMathGrader
 
