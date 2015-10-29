@@ -106,7 +106,7 @@ class QuestionIndex(object):
 								 event=event)
 
 	def _register_and_canonicalize(self, things_to_register, registry):
-
+		registered = []
 		for thing_to_register in things_to_register:
 			provided = _iface_to_register(thing_to_register)
 
@@ -126,14 +126,16 @@ class QuestionIndex(object):
 			# 	continue
 
 			name = thing_to_register.ntiid
-			self._registry_utility(	registry,
-									thing_to_register,
-									provided=provided,
-									name=name,
-									event=False)
+			if registry.queryUtility(provided, name=name) == None:
+				self._registry_utility(registry,
+										thing_to_register,
+										provided=provided,
+										name=name,
+										event=False)
+				registered.append(thing_to_register)
 
 		# Now that everything is in place, we can canonicalize
-		for o in things_to_register:
+		for o in registered:
 			self._canonicalize_object(o, registry)
 
 	def _process_assessments(self,
@@ -183,9 +185,9 @@ class QuestionIndex(object):
 
 		things_to_register.update(i)
 		for child_item in index.get('Items', {}).values():
-			i = self._from_index_entry(	child_item,
-										nearest_containing_key=key_for_this_level,
-										nearest_containing_ntiid=level_ntiid)
+			i = self._from_index_entry(child_item,
+									   nearest_containing_key=key_for_this_level,
+									   nearest_containing_ntiid=level_ntiid)
 			things_to_register.update(i)
 
 		return things_to_register
@@ -217,7 +219,7 @@ class QuestionIndex(object):
 					'Child must contain valid filename to contain assessments'
 
 			i = self._from_index_entry(child_index,
-										nearest_containing_ntiid=child_ntiid)
+									   nearest_containing_ntiid=child_ntiid)
 			things_to_register.update(i)
 
 		# register assessment items
