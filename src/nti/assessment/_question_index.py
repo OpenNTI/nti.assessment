@@ -128,15 +128,16 @@ class QuestionIndex(object):
 			name = thing_to_register.ntiid
 			if registry.queryUtility(provided, name=name) == None:
 				self._registry_utility(registry,
-										thing_to_register,
-										provided=provided,
-										name=name,
-										event=False)
+									   thing_to_register,
+									   provided=provided,
+									   name=name,
+									   event=False)
 				registered.append(thing_to_register)
 
 		# Now that everything is in place, we can canonicalize
 		for o in registered:
 			self._canonicalize_object(o, registry)
+		return registered
 
 	def _process_assessments(self,
 							 assessment_item_dict,
