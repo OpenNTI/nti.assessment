@@ -135,13 +135,13 @@ def iface_of_assessment(thing):
 # classes
 
 @WithRepr
-@interface.implementer(	IQSubmittable,
+@interface.implementer(IQSubmittable,
 						IContentTypeAware,
 						IAttributeAnnotatable)
 class QSubmittable(SchemaConfigured, Contained, RecordableMixin):
 
 	ntiid = None
-	
+
 	available_for_submission_ending = AdaptingFieldProperty(IQAssignment['available_for_submission_ending'])
 	available_for_submission_beginning = AdaptingFieldProperty(IQAssignment['available_for_submission_beginning'])
 
@@ -155,7 +155,7 @@ class QPersistentSubmittable(QSubmittable, PersistentCreatedModDateTrackingObjec
 
 	createdTime = 0
 	creator = SYSTEM_USER_ID
-		
+
 	def __init__(self, *args, **kwargs):
 		# schema configured is not cooperative
 		QSubmittable.__init__(self, *args, **kwargs)
