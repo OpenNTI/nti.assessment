@@ -135,9 +135,7 @@ def iface_of_assessment(thing):
 # classes
 
 @WithRepr
-@interface.implementer(IQSubmittable,
-						IContentTypeAware,
-						IAttributeAnnotatable)
+@interface.implementer(IQSubmittable, IContentTypeAware, IAttributeAnnotatable)
 class QSubmittable(SchemaConfigured, Contained, RecordableMixin):
 
 	ntiid = None
@@ -162,8 +160,8 @@ class QPersistentSubmittable(QSubmittable, PersistentCreatedModDateTrackingObjec
 		PersistentCreatedModDateTrackingObject.__init__(self)
 
 @WithRepr
-@interface.implementer(IQSubmittedPart, ISublocations)
 @EqHash('submittedResponse', superhash=True)
+@interface.implementer(IQSubmittedPart, ISublocations)
 class QSubmittedPart(SchemaConfigured, Contained, Persistent):
 
 	submittedResponse = None
