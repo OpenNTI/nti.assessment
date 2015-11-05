@@ -30,6 +30,7 @@ from persistent import Persistent
 from nti.common.property import alias
 
 from nti.coremetadata.mixins import RecordableMixin
+from nti.coremetadata.mixins import PublishableMixin
 
 from nti.dataserver_core.interfaces import SYSTEM_USER_ID
 
@@ -136,7 +137,7 @@ def iface_of_assessment(thing):
 
 @WithRepr
 @interface.implementer(IQSubmittable, IContentTypeAware, IAttributeAnnotatable)
-class QSubmittable(SchemaConfigured, Contained, RecordableMixin):
+class QSubmittable(SchemaConfigured, Contained, RecordableMixin, PublishableMixin):
 
 	ntiid = None
 
