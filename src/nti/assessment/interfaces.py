@@ -1024,6 +1024,11 @@ class IQAssessmentItemContainer(interface.Interface):
 	typically with annotations).
 	"""
 
+	def items():
+		"""
+		return an iterable of pairs (name, assesment) objects
+		"""
+		
 	def assessments():
 		"""
 		return an iterable with all assessmentsi this container
