@@ -14,8 +14,11 @@ from zope.annotation.interfaces import IAttributeAnnotatable
 from zope.container.interfaces import IContained
 
 from zope.interface.interfaces import IMethod
+
 from zope.interface.common.mapping import IReadMapping
 from zope.interface.common.mapping import IWriteMapping
+from zope.interface.common.mapping import IEnumerableMapping
+
 from zope.interface.common.sequence import IFiniteSequence
 
 from zope.mimetype.interfaces import mimeTypeConstraint
@@ -1014,7 +1017,7 @@ class IQAssignmentSubmissionPendingAssessment(IQBaseSubmission):
 								 (Object(IQAssessedQuestionSet),
 								  Object(IQuestionSetSubmission))))
 
-class IQAssessmentItemContainer(interface.Interface):
+class IQAssessmentItemContainer(IEnumerableMapping):
 	"""
 	Something that is an unordered bag of assessment items (such as
 	questions, question sets, and assignments).
@@ -1023,11 +1026,6 @@ class IQAssessmentItemContainer(interface.Interface):
 	something like the content library package may be adaptable to this,
 	typically with annotations).
 	"""
-
-	def items():
-		"""
-		return an iterable of pairs (name, assesment) objects
-		"""
 		
 	def assessments():
 		"""
