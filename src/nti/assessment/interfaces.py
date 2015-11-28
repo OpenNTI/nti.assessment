@@ -184,8 +184,7 @@ class IQFileResponse(IQResponse):
 	value = Object(IQUploadedFile,
 					title="The uploaded file")
 
-# It seems like the concepts of domain and range may come into play here,
-# somewhere
+# It seems like the concepts of domain and range may come into play here somewhere
 
 class IQNonGradablePart(interface.Interface):
 
@@ -864,7 +863,6 @@ def convert_response_for_solution(solution, response):
 				break
 	return response
 
-
 # Objects having to do with the assessment process itself.
 # There is a three part lifecycle: The source object,
 # the submission, and finally the assessed value. The three
@@ -1144,7 +1142,6 @@ class IQFillInTheBlankWithWordBankQuestion(IQuestion):
 							min_length=1,
 							value_type=Object(IQFillInTheBlankWithWordBankPart,
 											  title="A question part"))
-
 
 # Normalizer
 
