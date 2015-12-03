@@ -49,35 +49,43 @@ def _ntiid_object_hook(k, v, x):
 
 class QuestionIndex(object):
 
-	def _explode_assignment_to_register(self, assignment):
+	@classmethod
+	def explode_assignment_to_register(cls, assignment):
 		things_to_register = set([assignment])
 		for part in assignment.parts:
 			qset = part.question_set
-			things_to_register.update(self._explode_object_to_register(qset))
+			things_to_register.update(cls._explode_object_to_register(qset))
 		return things_to_register
-
-	def _explode_question_set_to_register(self, question_set):
+	_explode_assignment_to_register = explode_assignment_to_register
+	
+	@classmethod
+	def explode_question_set_to_register(cls, question_set):
 		things_to_register = set([question_set])
 		for child_question in question_set.questions:
 			things_to_register.add(child_question)
 		return things_to_register
+	_explode_question_set_to_register = explode_question_set_to_register
 
-	def _explode_survey_to_register(self, survey):
+	@classmethod
+	def explode_survey_to_register(cls, survey):
 		things_to_register = set([survey])
 		for child_poll in survey.questions:
 			things_to_register.add(child_poll)
 		return things_to_register
-
-	def _explode_object_to_register(self, obj):
+	_explode_survey_to_register = explode_survey_to_register
+	
+	@classmethod
+	def explode_object_to_register(cls, obj):
 		things_to_register = set([obj])
 		if IQAssignment.providedBy(obj):
-			things_to_register.update(self._explode_assignment_to_register(obj))
+			things_to_register.update(cls._explode_assignment_to_register(obj))
 		elif IQuestionSet.providedBy(obj):
-			things_to_register.update(self._explode_question_set_to_register(obj))
+			things_to_register.update(cls._explode_question_set_to_register(obj))
 		elif IQSurvey.providedBy(obj):
-			things_to_register.update(self._explode_survey_to_register(obj))
+			things_to_register.update(cls._explode_survey_to_register(obj))
 		return things_to_register
-
+	_explode_object_to_register = explode_object_to_register
+	
 	def _canonicalize_question_set(self, obj, registry):
 		obj.questions = [registry.getUtility(IQuestion, name=x.ntiid)
 						 for x
