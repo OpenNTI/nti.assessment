@@ -40,7 +40,6 @@ def _mathChildrenAreEqual(solution, response):
 	for math1child, math2child in zip(math1children, math2children):
 		if not _mathChildIsEqual(math1child, math2child):
 			return False
-
 	return True
 
 def _importantChildNodes( childNodes ):
@@ -108,10 +107,13 @@ def _mathChildIsEqual(child1, child2):
 
 	if child1.nodeType == child1.ELEMENT_NODE:
 		# Check that the arguments and the children are equal
-		return	len(child1.arguments) == len(child2.arguments) and \
-				all( (_mathChildIsEqual(child1.attributes[k.name],child2.attributes[k.name]) for k in child1.arguments) ) and \
-				( (_all_text_children(child1) and _all_text_children(child2) and _text_content_equal(child1, child2)) or
-				  _mathChildrenAreEqual(child1.childNodes, child2.childNodes) )
+		return	(		len(child1.arguments) == len(child2.arguments) 
+				 and	all( (_mathChildIsEqual(child1.attributes[k.name],child2.attributes[k.name]) for k in child1.arguments) ) 
+				 and	( (		_all_text_children(child1) 
+							and _all_text_children(child2) 
+							and _text_content_equal(child1, child2)) 
+						 or
+				  		 	_mathChildrenAreEqual(child1.childNodes, child2.childNodes) ) )
 
 	if child1.nodeType == child1.DOCUMENT_FRAGMENT_NODE:
 		return _mathChildrenAreEqual(child1.childNodes, child2.childNodes)
@@ -212,5 +214,4 @@ class Grader(object):
 			elif self.response.value.endswith( '\\%$' ) and \
 				 self.response.value.startswith( '$' ):
 				result = _regrade( self.response.value[1:-3] )
-
 		return result

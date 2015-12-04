@@ -35,8 +35,8 @@ def _buildDomFromString(docString):
 	document.userdata['jobname'] = 'temp%s' % _counter
 	_counter += 1
 	document.userdata['working-dir'] = tempfile.gettempdir()
-	# ## FIXME: There's some global state in these objects somewhere (still?)
-	# ## See comments in test_latex
+	# FIXME: There's some global state in these objects somewhere (still?)
+	# See comments in test_latex
 	tex.parse()
 	return document
 
@@ -76,7 +76,6 @@ def _response_text_to_latex(response):
 	else:
 		if response.startswith('\\text{') and response.endswith('}'):
 			response = response[6:-1]
-
 		response = response.replace('\\left(', '(')
 		response = response.replace('\\right)', ')')
 		# old versions of mathquill emit \: instead of \;
