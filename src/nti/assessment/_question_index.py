@@ -115,7 +115,7 @@ class QuestionIndex(object):
 
 	def _register_and_canonicalize(self, things_to_register, registry):
 		registered = []
-		for thing_to_register in things_to_register:
+		for thing_to_register in things_to_register or ():
 			provided = _iface_to_register(thing_to_register)
 
 			# Previously, we were very careful not to re-register things
@@ -143,7 +143,8 @@ class QuestionIndex(object):
 				registered.append(thing_to_register)
 
 		# Now that everything is in place, we can canonicalize
-		for o in registered:
+		# check all incoming
+		for o in things_to_register or ():
 			self._canonicalize_object(o, registry)
 		return registered
 

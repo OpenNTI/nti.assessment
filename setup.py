@@ -64,6 +64,7 @@ setup(
  		'zope.file',
  		'zope.location',
  		'zope.mimetype',
+ 		'zope.proxy',
  		'zope.schema',
  		'zope.security',
  		'nti.common',
