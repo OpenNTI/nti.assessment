@@ -780,6 +780,11 @@ class IQAssessmentDateContext(interface.Interface):
 		of this object. If no changes are required, can return the assessment
 		itself.
 		"""
+	
+	def set(assessment, name, value):
+		"""
+		Set the attribute value for the specified assessment
+		"""
 IQAssignmentDateContext = IQAssessmentDateContext  # alias for BWC
 
 class IQAssessmentPolicies(interface.Interface):
