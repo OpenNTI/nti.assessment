@@ -619,6 +619,11 @@ class IQuestionSet(IQAssessment, ITitledContent, IAttributeAnnotatable):
 								description="For convenience, this should also be aliased to `parts`",
 								min_length=1,
 								value_type=Object(IQuestion, title="The questions") )
+	
+	def __len__():
+		"""
+		return the number of questions in this set
+		"""
 
 class IQAssignmentPart(ITitledContent):
 	"""
@@ -1251,6 +1256,11 @@ class IQSurvey(ITitledContent, IQInquiry, IFiniteSequence):
 	questions = IndexedIterable(title="The ordered polls in the set.",
 								min_length=1,
 								value_type=Object(IQPoll, title="The poll questions") )
+	
+	def __len__():
+		"""
+		return the number of questions in this survey
+		"""
 
 IQPoll['available_for_submission_ending'].setTaggedValue(TAG_HIDDEN_IN_UI, False)
 IQPoll['available_for_submission_ending'].setTaggedValue(TAG_REQUIRED_IN_UI, False)

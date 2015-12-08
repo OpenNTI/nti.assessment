@@ -63,7 +63,7 @@ from .interfaces import DISCLOSURE_TERMINATION
 
 @interface.implementer(IQInquiry)
 class QInquiry(QPersistentSubmittable):
-	
+
 	closed = False
 	disclosure = DISCLOSURE_TERMINATION
 
@@ -111,10 +111,10 @@ class QSurvey(QInquiry):
 			yield question
 
 	def __getitem__(self, index):
-		return self.parts[index]
+		return self.questions[index]
 
 	def __len__(self):
-		return len(self.parts or ())
+		return len(self.questions or ())
 
 @WithRepr
 @interface.implementer(IQPollSubmission, ISublocations, IFiniteSequence)
@@ -159,7 +159,7 @@ class QBasePollSet(object):
 
 	def __len__(self):
 		return self.length
-	
+
 	@CachedProperty('length')
 	def _v_map(self):
 		result = {}
@@ -195,7 +195,7 @@ class QBasePollSet(object):
 			self.polls.append(value)
 		else:
 			self.polls[idx] = value
-	
+
 	def __iter__(self):
 		return iter(self.polls)
 
@@ -228,7 +228,7 @@ class QAggregatedPart(ContainedMixin,
 	createDirectFieldProperties(IQAggregatedPart)
 
 	__external_can_create__ = False
-	
+
 	total = 0
 	Total = alias('total')
 
@@ -277,7 +277,7 @@ class QAggregatedMultipleChoicePart(QAggregatedPart):
 @interface.implementer(IQAggregatedMultipleChoiceMultipleAnswerPart)
 class QAggregatedMultipleChoiceMultipleAnswerPart(QAggregatedMultipleChoicePart):
 	createDirectFieldProperties(IQAggregatedMultipleChoiceMultipleAnswerPart)
-	
+
 	@property
 	def Results(self):
 		return dict(self.results)
@@ -292,7 +292,7 @@ class QAggregatedMultipleChoiceMultipleAnswerPart(QAggregatedMultipleChoicePart)
 			current = self.results.get(response) or 0
 			self.results[response] = current + 1
 
-QMultipleChoiceMultipleAnswerAggregatedPart = QAggregatedMultipleChoiceMultipleAnswerPart # BWC
+QMultipleChoiceMultipleAnswerAggregatedPart = QAggregatedMultipleChoiceMultipleAnswerPart  # BWC
 
 @interface.implementer(IQAggregatedFreeResponsePart)
 class QAggregatedFreeResponsePart(QAggregatedPart):
@@ -370,7 +370,7 @@ class QAggregatedConnectingPart(QAggregatedPart):
 		if m is None:
 			self.results[k] = m = PersistentMapping()
 		return m
-			
+
 	def append(self, responses=None):
 		self.total += 1
 		if responses is not None:
@@ -388,7 +388,7 @@ class QAggregatedConnectingPart(QAggregatedPart):
 				entry[v] = current
 		self.total += other.total
 		return self
-	
+
 @interface.implementer(IQAggregatedMatchingPart)
 class QAggregatedMatchingPart(QAggregatedConnectingPart):
 	createDirectFieldProperties(IQAggregatedMatchingPart)
@@ -396,7 +396,7 @@ class QAggregatedMatchingPart(QAggregatedConnectingPart):
 @interface.implementer(IQAggregatedOrderingPart)
 class QAggregatedOrderingPart(QAggregatedConnectingPart):
 	createDirectFieldProperties(IQAggregatedOrderingPart)
-	
+
 @WithRepr
 @interface.implementer(IQAggregatedPoll, ISublocations)
 class QAggregatedPoll(ContainedMixin,
@@ -490,7 +490,7 @@ def aggregate_poll_submission(submission, registry=component):
 	aggregated_parts = PersistentList()
 	for sub_part, q_part in zip(submission.parts, poll.parts):
 		__traceback_info__ = sub_part, q_part
-		if sub_part is None: # null responses
+		if sub_part is None:  # null responses
 			logger.debug("Null response for part (%s) in poll (%s)", q_part, pollId)
 		response = IQResponse(sub_part) if sub_part is not None else None
 		response = normalize_response(q_part, response) if response is not None else None

@@ -59,10 +59,10 @@ class QQuestion(Contained,
 	def __init__(self, *args, **kwargs):
 		Persistent.__init__(self)
 		SchemaConfigured.__init__(self, *args, **kwargs)
-	
+
 	def __getitem__(self, index):
 		return self.parts[index]
-	
+
 	def __len__(self):
 		return len(self.parts or ())
 
@@ -93,12 +93,12 @@ class QQuestionSet(Contained,
 	def sublocations(self):
 		for question in self.questions or ():
 			yield question
-			
+
 	def __getitem__(self, index):
-		return self.parts[index]
-	
+		return self.questions[index]
+
 	def __len__(self):
-		return len(self.parts or ())
+		return len(self.questions or ())
 
 @interface.implementer(IQFillInTheBlankWithWordBankQuestion)
 @EqHash('wordbank', include_super=True)
@@ -109,7 +109,7 @@ class QFillInTheBlankWithWordBankQuestion(QQuestion):
 	mime_type = mimeType = 'application/vnd.nextthought.naquestionfillintheblankwordbank'
 
 	wordBank = alias('wordbank')
-	
+
 	def __setattr__(self, name, value):
 		super(QFillInTheBlankWithWordBankQuestion, self).__setattr__(name, value)
 		if name == "parts":
