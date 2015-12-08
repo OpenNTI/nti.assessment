@@ -14,6 +14,8 @@ import simplejson
 
 from zope.interface.registry import Components
 
+from zope.proxy import ProxyBase
+
 from nti.contentfragments.interfaces import LatexContentFragment
 from nti.contentfragments.interfaces import PlainTextContentFragment
 from nti.contentfragments.interfaces import SanitizedHTMLContentFragment
@@ -47,35 +49,58 @@ def _ntiid_object_hook(k, v, x):
 		v.value = LatexContentFragment(x['value'].replace(u'\u2212', '-'))
 	return v
 
+class AssestmentProxy(ProxyBase):
+	
+	__container__ = property(
+					lambda s: s.__dict__.get('_v__container__'),
+					lambda s, v: s.__dict__.__setitem__('_v__container__', v))
+	
+	def __new__(cls, base, *args, **kwargs):
+		return ProxyBase.__new__(cls, base)
+
+	def __init__(self, base, container=None):
+		ProxyBase.__init__(self, base)
+		self.__container__ = container
+
 class QuestionIndex(object):
 
 	@classmethod
 	def explode_assignment_to_register(cls, assignment):
+		if type(assignment) != AssestmentProxy:
+			assignment = AssestmentProxy(assignment)
 		things_to_register = set([assignment])
 		for part in assignment.parts:
-			qset = part.question_set
+			qset = AssestmentProxy(part.question_set, assignment) 
 			things_to_register.update(cls._explode_object_to_register(qset))
 		return things_to_register
 	_explode_assignment_to_register = explode_assignment_to_register
 	
 	@classmethod
 	def explode_question_set_to_register(cls, question_set):
+		if type(question_set) != AssestmentProxy:
+			question_set = AssestmentProxy(question_set)
 		things_to_register = set([question_set])
 		for child_question in question_set.questions:
+			child_question = AssestmentProxy(child_question, question_set)
 			things_to_register.add(child_question)
 		return things_to_register
 	_explode_question_set_to_register = explode_question_set_to_register
 
 	@classmethod
 	def explode_survey_to_register(cls, survey):
+		if type(survey) != AssestmentProxy:
+			survey = AssestmentProxy(survey)
 		things_to_register = set([survey])
 		for child_poll in survey.questions:
+			child_poll = AssestmentProxy(child_poll, survey)
 			things_to_register.add(child_poll)
 		return things_to_register
 	_explode_survey_to_register = explode_survey_to_register
 	
 	@classmethod
 	def explode_object_to_register(cls, obj):
+		if type(obj) != AssestmentProxy:
+			obj = AssestmentProxy(obj)
 		things_to_register = set([obj])
 		if IQAssignment.providedBy(obj):
 			things_to_register.update(cls._explode_assignment_to_register(obj))
