@@ -829,6 +829,11 @@ class IQAssessmentPolicies(interface.Interface):
 		"""
 		Are there any policies registered? If no, return False.
 		"""
+	
+	def set(assessment, name, value):
+		"""
+		Set the attribute value for the specified assessment
+		"""
 
 IQAssignmentPolicies = IQAssessmentPolicies  # alias for BWC
 
