@@ -1228,6 +1228,9 @@ class IQInquiry(IAttributeAnnotatable, IQSubmittable):
 					 default=False, required=False)
 	no_submit.setTaggedValue('_ext_excluded_out', True)
 	
+	is_non_public = Bool(title="Whether this inquiry should be public or restricted",
+						 default=False)
+	
 class IQPoll(IQInquiry, IFiniteSequence):
 	"""
 	A poll question consists of one or more parts (typically one).

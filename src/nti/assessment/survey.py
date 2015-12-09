@@ -65,6 +65,7 @@ from .interfaces import DISCLOSURE_TERMINATION
 class QInquiry(QPersistentSubmittable):
 
 	closed = False
+	is_non_public = False
 	disclosure = DISCLOSURE_TERMINATION
 
 	@property
