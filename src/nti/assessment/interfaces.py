@@ -21,6 +21,9 @@ from zope.interface.common.mapping import IEnumerableMapping
 
 from zope.interface.common.sequence import IFiniteSequence
 
+from zope.lifecycleevent import ObjectModifiedEvent
+from zope.lifecycleevent.interfaces import IObjectModifiedEvent
+
 from zope.mimetype.interfaces import mimeTypeConstraint
 
 from zope.schema import vocabulary
@@ -872,6 +875,26 @@ class IQAssessmentPolicyValidator(interface.Interface):
 		"""
 
 IQAssignmentPolicyValidator = IQAssessmentPolicyValidator # alias for BWC
+
+class IQAssessmentDateContextModified(IObjectModifiedEvent):
+	assesment = interface.Attribute("Assesment identifier")
+
+@interface.implementer(IQAssessmentDateContextModified)
+class QAssessmentDateContextModified(ObjectModifiedEvent):
+
+	def __init__(self, obj, assesment=None, *descriptions):
+		super(QAssessmentDateContextModified, self).__init__(obj, *descriptions)
+		self.assesment = assesment
+
+class IQAssessmentPoliciesModified(IObjectModifiedEvent):
+	assesment = interface.Attribute("Assesment identifier")
+
+@interface.implementer(IQAssessmentPoliciesModified)
+class QAssessmentPoliciesModified(ObjectModifiedEvent):
+
+	def __init__(self, obj, assesment=None, *descriptions):
+		super(QAssessmentPoliciesModified, self).__init__(obj, *descriptions)
+		self.assesment = assesment
 
 # set solutions response types
 
