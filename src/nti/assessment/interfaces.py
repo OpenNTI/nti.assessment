@@ -785,10 +785,25 @@ class IQAssessmentDateContext(interface.Interface):
 		of this object. If no changes are required, can return the assessment
 		itself.
 		"""
-	
+
+	def get(assessment, name, default=None):
+		"""
+		Return the attribute value for the specified assessment
+		"""
+
 	def set(assessment, name, value):
 		"""
 		Set the attribute value for the specified assessment
+		"""
+
+	def size():
+		"""
+		return the number of assessments
+		"""
+		
+	def __len__():
+		"""
+		return the number of assessments
 		"""
 IQAssignmentDateContext = IQAssessmentDateContext  # alias for BWC
 
@@ -830,11 +845,20 @@ class IQAssessmentPolicies(interface.Interface):
 		Are there any policies registered? If no, return False.
 		"""
 	
+	def __len__():
+		"""
+		return the number of assessments
+		"""
+
+	def get(assessment, name, default=None):
+		"""
+		Return the attribute value for the specified assessment
+		"""
+
 	def set(assessment, name, value):
 		"""
 		Set the attribute value for the specified assessment
 		"""
-
 IQAssignmentPolicies = IQAssessmentPolicies  # alias for BWC
 
 class IQAssessmentPolicyValidator(interface.Interface):
