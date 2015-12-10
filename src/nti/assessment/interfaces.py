@@ -767,13 +767,7 @@ IQTimedAssignment['available_for_submission_ending'].setTaggedValue(TAG_REQUIRED
 IQTimedAssignment['available_for_submission_beginning'].setTaggedValue(TAG_HIDDEN_IN_UI, False)
 IQTimedAssignment['available_for_submission_beginning'].setTaggedValue(TAG_REQUIRED_IN_UI, False)
 
-class IQAssessmentDateContext(interface.Interface):
-	"""
-	An object that can be used as context to adapt an assessment
-	date.
-
-	This package provides no implementations of this interface.
-	"""
+class IQAssessmentContextMixin(interface.Interface):
 
 	def assessments():
 		"""
@@ -781,14 +775,13 @@ class IQAssessmentDateContext(interface.Interface):
 		"""
 	assignments = assessments  # alias for BWC
 
-	def of(assessment):
+	def clear():
 		"""
-		Given an assessment, return an object having the same date
-		attributes as the assessment, but interpreted in the context
-		of this object. If no changes are required, can return the assessment
-		itself.
+		clear all policies
+		
+		:return true if policies were cleared
 		"""
-
+		
 	def get(assessment, name, default=None):
 		"""
 		Return the attribute value for the specified assessment
@@ -808,9 +801,25 @@ class IQAssessmentDateContext(interface.Interface):
 		"""
 		return the number of assessments
 		"""
+		
+class IQAssessmentDateContext(IQAssessmentContextMixin):
+	"""
+	An object that can be used as context to adapt an assessment
+	date.
+
+	This package provides no implementations of this interface.
+	"""
+
+	def of(assessment):
+		"""
+		Given an assessment, return an object having the same date
+		attributes as the assessment, but interpreted in the context
+		of this object. If no changes are required, can return the assessment
+		itself.
+		"""
 IQAssignmentDateContext = IQAssessmentDateContext  # alias for BWC
 
-class IQAssessmentPolicies(interface.Interface):
+class IQAssessmentPolicies(IQAssessmentContextMixin):
 
 	"""
 	An object that can be used to hold (uninterpreted) policy
@@ -825,42 +834,9 @@ class IQAssessmentPolicies(interface.Interface):
 		"""
 	getPolicyForAssignment = getPolicyForAssessment  # alias for BWC
 
-	def assessments():
-		"""
-		return a [new] list of assessments ids in this object
-		"""
-	assignments = assessments  # alias for BWC
-
-	def size():
-		"""
-		return the number of assessments
-		"""
-
-	def clear():
-		"""
-		clear all policies
-		
-		:return true if policies were cleared
-		"""
-
 	def __bool__():
 		"""
 		Are there any policies registered? If no, return False.
-		"""
-	
-	def __len__():
-		"""
-		return the number of assessments
-		"""
-
-	def get(assessment, name, default=None):
-		"""
-		Return the attribute value for the specified assessment
-		"""
-
-	def set(assessment, name, value):
-		"""
-		Set the attribute value for the specified assessment
 		"""
 IQAssignmentPolicies = IQAssessmentPolicies  # alias for BWC
 
