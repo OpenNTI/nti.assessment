@@ -774,7 +774,7 @@ class IQAssessmentDateContext(interface.Interface):
 
 	def assessments():
 		"""
-		return the list of assessment ids in this context
+		return a [new] list of assessment ids in this context.
 		"""
 	assignments = assessments  # alias for BWC
 
@@ -824,7 +824,7 @@ class IQAssessmentPolicies(interface.Interface):
 
 	def assessments():
 		"""
-		return the list of assessments ids in this object
+		return a [new] list of assessments ids in this object
 		"""
 	assignments = assessments  # alias for BWC
 
