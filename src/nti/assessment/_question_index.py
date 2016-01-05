@@ -50,11 +50,11 @@ def _ntiid_object_hook(k, v, x):
 	return v
 
 class AssestmentProxy(ProxyBase):
-	
+
 	__container__ = property(
 					lambda s: s.__dict__.get('_v__container__'),
 					lambda s, v: s.__dict__.__setitem__('_v__container__', v))
-	
+
 	def __new__(cls, base, *args, **kwargs):
 		return ProxyBase.__new__(cls, base)
 
@@ -70,11 +70,11 @@ class QuestionIndex(object):
 			assignment = AssestmentProxy(assignment)
 		things_to_register = set([assignment])
 		for part in assignment.parts:
-			qset = AssestmentProxy(part.question_set, assignment) 
+			qset = AssestmentProxy(part.question_set, assignment)
 			things_to_register.update(cls._explode_object_to_register(qset))
 		return things_to_register
 	_explode_assignment_to_register = explode_assignment_to_register
-	
+
 	@classmethod
 	def explode_question_set_to_register(cls, question_set):
 		if type(question_set) != AssestmentProxy:
@@ -96,7 +96,7 @@ class QuestionIndex(object):
 			things_to_register.add(child_poll)
 		return things_to_register
 	_explode_survey_to_register = explode_survey_to_register
-	
+
 	@classmethod
 	def explode_object_to_register(cls, obj):
 		if type(obj) != AssestmentProxy:
@@ -110,7 +110,7 @@ class QuestionIndex(object):
 			things_to_register.update(cls._explode_survey_to_register(obj))
 		return things_to_register
 	_explode_object_to_register = explode_object_to_register
-	
+
 	def _canonicalize_question_set(self, obj, registry):
 		obj.questions = [registry.getUtility(IQuestion, name=x.ntiid)
 						 for x
@@ -139,7 +139,7 @@ class QuestionIndex(object):
 								 event=event)
 
 	def _register_and_canonicalize(self, things_to_register, registry):
-		registered = []
+		registered = set()
 		for thing_to_register in things_to_register or ():
 			provided = _iface_to_register(thing_to_register)
 
@@ -165,13 +165,14 @@ class QuestionIndex(object):
 									   provided=provided,
 									   name=name,
 									   event=False)
-				registered.append(thing_to_register)
+			# keep unique
+			registered.add(thing_to_register)
 
 		# Now that everything is in place, we can canonicalize
 		# check all incoming
 		for o in things_to_register or ():
 			self._canonicalize_object(o, registry)
-		return registered
+		return list(registered)
 
 	def _process_assessments(self,
 							 assessment_item_dict,
