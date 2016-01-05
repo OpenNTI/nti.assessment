@@ -58,6 +58,7 @@ from .interfaces import IQAggregatedModeledContentPart
 from .interfaces import IQAggregatedMultipleChoicePart
 from .interfaces import IQAggregatedMultipleChoiceMultipleAnswerPart
 
+from .interfaces import POLL_MIME_TYPE
 from .interfaces import SURVEY_MIME_TYPE
 from .interfaces import DISCLOSURE_TERMINATION
 
@@ -81,7 +82,7 @@ class QInquiry(QPersistentSubmittable):
 class QPoll(QInquiry):
 	createDirectFieldProperties(IQPoll)
 
-	mimeType = mime_type = 'application/vnd.nextthought.napoll'
+	mimeType = mime_type = POLL_MIME_TYPE
 
 	parts = ()
 	content = None

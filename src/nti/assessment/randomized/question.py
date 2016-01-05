@@ -19,6 +19,9 @@ from nti.schema.schema import EqHash
 from nti.schema.field import SchemaConfigured
 from nti.schema.fieldproperty import createDirectFieldProperties
 
+from ..interfaces import QUESTION_BANK_MIME_TYPE
+from ..interfaces import RANDOMIZED_QUESTION_SET_MIME_TYPE
+
 from ..question import QQuestionSet
 
 from .interfaces import IQuestionBank
@@ -34,7 +37,7 @@ class QRandomizedQuestionSet(QQuestionSet):
 	createDirectFieldProperties(IRandomizedQuestionSet)
 
 	__external_class_name__ = "QuestionSet"
-	mimeType = mime_type = 'application/vnd.nextthought.narandomizedquestionset'
+	mimeType = mime_type = RANDOMIZED_QUESTION_SET_MIME_TYPE
 
 	nonrandomized_interface = INonRandomizedQuestionSet
 	sha224randomized_interface = ISha224RandomizedQuestionSet
@@ -45,7 +48,7 @@ class QQuestionBank(QQuestionSet):
 	createDirectFieldProperties(IQuestionBank)
 
 	__external_class_name__ = "QuestionSet"
-	mimeType = mime_type = 'application/vnd.nextthought.naquestionbank'
+	mimeType = mime_type = QUESTION_BANK_MIME_TYPE
 
 	nonrandomized_interface = INonRandomizedQuestionBank
 	sha224randomized_interface = ISha224RandomizedQuestionBank

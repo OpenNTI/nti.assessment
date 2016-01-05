@@ -140,6 +140,7 @@ def iface_of_assessment(thing):
 class QSubmittable(SchemaConfigured, Contained, RecordableMixin, CalendarPublishableMixin):
 
 	ntiid = None
+	parameters = {} # IContentTypeAware
 
 	available_for_submission_ending = AdaptingFieldProperty(IQAssignment['available_for_submission_ending'])
 	available_for_submission_beginning = AdaptingFieldProperty(IQAssignment['available_for_submission_beginning'])
@@ -173,7 +174,7 @@ class QSubmittedPart(SchemaConfigured, Contained, Persistent):
 
 	def sublocations(self):
 		part = self.submittedResponse
-		if hasattr(part, '__parent__'):
+		if hasattr(part, '__parent__'): # take ownership
 			if part.__parent__ is None:
 				part.__parent__ = self
 			if part.__parent__ is self:

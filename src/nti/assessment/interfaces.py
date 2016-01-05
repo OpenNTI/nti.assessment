@@ -72,7 +72,22 @@ from nti.schema.jsonschema import TAG_REQUIRED_IN_UI
 NTIID_TYPE = 'NAQ'
 POLL_MIME_TYPE = u'application/vnd.nextthought.napoll'
 SURVEY_MIME_TYPE = u'application/vnd.nextthought.nasurvey'
+QUESTION_MIME_TYPE = u'application/vnd.nextthought.naquestion'
 QUESTION_SET_MIME_TYPE = u'application/vnd.nextthought.naquestionset'
+QUESTION_BANK_MIME_TYPE = u'application/vnd.nextthought.naquestionbank'
+ASSIGNMENT_MIME_TYPE = u'application/vnd.nextthought.assessment.assignment'
+TIMED_ASSIGNMENT_MIME_TYPE = u'application/vnd.nextthought.assessment.timedassignment'
+RANDOMIZED_QUESTION_SET_MIME_TYPE = u'application/vnd.nextthought.narandomizedquestionset'
+QUESTION_FILL_IN_THE_BLANK_MIME_TYPE = u'application/vnd.nextthought.naquestionfillintheblankwordbank'
+
+ASSESSMENT_MIME_TYPES = (QUESTION_MIME_TYPE, QUESTION_SET_MIME_TYPE, 
+						 QUESTION_FILL_IN_THE_BLANK_MIME_TYPE, QUESTION_BANK_MIME_TYPE, 
+						 RANDOMIZED_QUESTION_SET_MIME_TYPE, ASSIGNMENT_MIME_TYPE,
+						 TIMED_ASSIGNMENT_MIME_TYPE)
+
+INQUIRY_MIME_TYPES = (POLL_MIME_TYPE, SURVEY_MIME_TYPE)
+
+ALL_EVALUATION_MIME_TYPES = ASSESSMENT_MIME_TYPES + INQUIRY_MIME_TYPES
 
 class IPollable(interface.Interface):
 	"""

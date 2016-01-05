@@ -37,28 +37,34 @@ from .interfaces import IQuestion
 from .interfaces import IQuestionSet
 from .interfaces import IQFillInTheBlankWithWordBankQuestion
 
+from .interfaces import QUESTION_MIME_TYPE
 from .interfaces import QUESTION_SET_MIME_TYPE
+from .interfaces import QUESTION_FILL_IN_THE_BLANK_MIME_TYPE
 
-@interface.implementer(IQuestion,
-					   IFiniteSequence,
+@interface.implementer(IFiniteSequence,
 					   IContentTypeAware,
 					   IAttributeAnnotatable)
-@EqHash('content', 'parts', superhash=True)
-class QQuestion(Contained,
-				SchemaConfigured,
-				Persistent):
-
-	parts = ()
+class QBaseMixin(Contained,
+				 SchemaConfigured,
+				 Persistent):
+	
 	ntiid = None
-	content = None
-
-	createDirectFieldProperties(IQuestion)
-
-	mimeType = mime_type = 'application/vnd.nextthought.naquestion'
+	parameters = {} # IContentTypeAware
 
 	def __init__(self, *args, **kwargs):
 		Persistent.__init__(self)
 		SchemaConfigured.__init__(self, *args, **kwargs)
+		
+@interface.implementer(IQuestion)
+@EqHash('content', 'parts', superhash=True)
+class QQuestion(QBaseMixin):
+
+	parts = ()
+	content = None
+
+	createDirectFieldProperties(IQuestion)
+
+	mimeType = mime_type = QUESTION_MIME_TYPE
 
 	def __getitem__(self, index):
 		return self.parts[index]
@@ -67,16 +73,10 @@ class QQuestion(Contained,
 		return len(self.parts or ())
 
 @interface.implementer(IQuestionSet,
-					   ISublocations,
-					   IFiniteSequence,
-					   IContentTypeAware,
-					   IAttributeAnnotatable)
+					   ISublocations)
 @EqHash('title', 'questions', superhash=True)
-class QQuestionSet(Contained,
-				   SchemaConfigured,
-				   Persistent):
+class QQuestionSet(QBaseMixin):
 
-	ntiid = None
 	questions = ()
 	parts = alias('questions')
 
@@ -85,10 +85,6 @@ class QQuestionSet(Contained,
 	title = AdaptingFieldProperty(IQuestionSet['title'])
 
 	mimeType = mime_type = QUESTION_SET_MIME_TYPE
-
-	def __init__(self, *args, **kwargs):
-		Persistent.__init__(self)
-		SchemaConfigured.__init__(self, *args, **kwargs)
 
 	def sublocations(self):
 		for question in self.questions or ():
@@ -103,10 +99,11 @@ class QQuestionSet(Contained,
 @interface.implementer(IQFillInTheBlankWithWordBankQuestion)
 @EqHash('wordbank', include_super=True)
 class QFillInTheBlankWithWordBankQuestion(QQuestion):
-	createDirectFieldProperties(IQFillInTheBlankWithWordBankQuestion)
 
 	__external_class_name__ = "Question"
-	mime_type = mimeType = 'application/vnd.nextthought.naquestionfillintheblankwordbank'
+	mime_type = mimeType = QUESTION_FILL_IN_THE_BLANK_MIME_TYPE
+
+	createDirectFieldProperties(IQFillInTheBlankWithWordBankQuestion)
 
 	wordBank = alias('wordbank')
 

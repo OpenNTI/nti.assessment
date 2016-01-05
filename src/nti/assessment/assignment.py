@@ -41,6 +41,9 @@ from ._util import make_sublocations as _make_sublocations
 
 from .common import QPersistentSubmittable
 
+from .interfaces import ASSIGNMENT_MIME_TYPE
+from .interfaces import TIMED_ASSIGNMENT_MIME_TYPE
+
 from .interfaces import IQAssignment
 from .interfaces import IQAssignmentPart
 from .interfaces import IQBaseSubmission
@@ -57,7 +60,7 @@ class QAssignmentPart(SchemaConfigured,
 
 	title = AdaptingFieldProperty(IQAssignmentPart['title'])
 	
-	mime_type = 'application/vnd.nextthought.assessment.assignmentpart'
+	mimeType = mime_type = 'application/vnd.nextthought.assessment.assignmentpart'
 
 @WithRepr
 @interface.implementer(IQAssignment)
@@ -67,7 +70,7 @@ class QAssignment(QPersistentSubmittable):
 
 	title = AdaptingFieldProperty(IQAssignment['title'])
 	
-	mime_type = 'application/vnd.nextthought.assessment.assignment'
+	mimeType = mime_type = ASSIGNMENT_MIME_TYPE
 	
 	@readproperty
 	def no_submit(self):
@@ -84,7 +87,7 @@ class QTimedAssignment(QAssignment):
 	
 	maximum_time_allowed = FP(IQTimedAssignment['maximum_time_allowed'])
 	
-	mime_type = 'application/vnd.nextthought.assessment.timedassignment'
+	mimeType = mime_type = TIMED_ASSIGNMENT_MIME_TYPE
 
 @WithRepr
 @interface.implementer(IQAssignmentSubmissionPendingAssessment,
