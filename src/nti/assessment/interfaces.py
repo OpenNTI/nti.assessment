@@ -1083,6 +1083,14 @@ class IQAssessmentItemContainer(IEnumerableMapping):
 		return an iterable with all assessmentsi this container
 		"""
 
+	def pop(k, *args):
+		"""
+		remove specified key and return the corresponding value
+		*args may contain a single default value, or may not be supplied.
+		If key is not found, default is returned if given, otherwise 
+		KeyError is raised
+		"""
+
 # fill-in-the-blank part
 
 class IQNonGradableFillInTheBlankPart(IQNonGradablePart):
