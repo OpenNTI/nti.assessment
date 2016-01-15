@@ -110,28 +110,32 @@ class QuestionIndex(object):
 			things_to_register.update(cls._explode_survey_to_register(obj))
 		return things_to_register
 	_explode_object_to_register = explode_object_to_register
-
-	def _canonicalize_question_set(self, obj, registry):
+	
+	@classmethod
+	def _canonicalize_question_set(cls, obj, registry):
 		obj.questions = [registry.getUtility(IQuestion, name=x.ntiid)
 						 for x
 						 in obj.questions]
 
-	def _canonicalize_survey(self, obj, registry):
+	@classmethod
+	def _canonicalize_survey(cls, obj, registry):
 		obj.questions = [registry.getUtility(IQPoll, name=x.ntiid)
 						 for x
 						 in obj.questions]
 
-	def _canonicalize_object(self, obj, registry):
+	@classmethod
+	def _canonicalize_object(cls, obj, registry):
 		if IQAssignment.providedBy(obj):
 			for part in obj.parts:
 				ntiid = part.question_set.ntiid
 				part.question_set = registry.getUtility(IQuestionSet, name=ntiid)
-				self._canonicalize_question_set(part.question_set, registry)
+				cls._canonicalize_question_set(part.question_set, registry)
 		elif IQuestionSet.providedBy(obj):
-			self._canonicalize_question_set(obj, registry)
+			cls._canonicalize_question_set(obj, registry)
 		elif IQSurvey.providedBy(obj):
-			self._canonicalize_survey(obj, registry)
-
+			cls._canonicalize_survey(obj, registry)
+	canonicalize_object = _canonicalize_object
+	
 	def _registry_utility(self, registry, component, provided, name, event=False):
 		registry.registerUtility(component,
 								 provided=provided,
