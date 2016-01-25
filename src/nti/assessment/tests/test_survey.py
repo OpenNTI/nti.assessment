@@ -165,12 +165,11 @@ class TestSurvey(AssessmentTestCase):
 		del ssub['foo-ps']
 		assert_that(ssub, has_length(1))
 		assert_that(ssub.index('foo-ps'), is_(-1))
-		
+
 	def test_parsing(self):
 		external = \
 		{u'CreatorRecordedEffortDuration': 329870,
  		 u'MimeType': u'application/vnd.nextthought.assessment.surveysubmission',
- 		 u'parts': [],
  		 u'questions': [{u'CreatorRecordedEffortDuration': None,
                  u'MimeType': u'application/vnd.nextthought.assessment.pollsubmission',
                  u'NTIID': u'tag:nextthought.com,2011-10:NTIAlpha-NAQ-NTI1000_TestCourse.naq.qid.poll_test.01',
@@ -197,9 +196,9 @@ class TestSurvey(AssessmentTestCase):
 		factory = find_factory_for(external)
 		assert_that(factory, is_not(none()))
 		submission = factory()
-		update_from_external_object(submission, external,  require_updater=True)
+		update_from_external_object(submission, external, require_updater=True)
 		assert_that(submission, has_length(4))
-		
+
 		psub = submission.get('tag:nextthought.com,2011-10:NTIAlpha-NAQ-NTI1000_TestCourse.naq.qid.poll_test.04')
 		assert_that(psub, is_not(none()))
 		assert_that(psub, has_length(1))
@@ -215,14 +214,14 @@ class TestAggregation(AssessmentTestCase):
 								 			 'MimeType', 'application/vnd.nextthought.assessment.aggregatedmultiplechoicepart')))
 		assert_that(find_factory_for(toExternalObject(QAggregatedMultipleChoicePart())),
 					is_(none()))
-		
+
 		assert_that(QAggregatedMultipleChoiceMultipleAnswerPart(), verifiably_provides(IQAggregatedMultipleChoiceMultipleAnswerPart))
 		assert_that(QAggregatedMultipleChoiceMultipleAnswerPart(),
 					externalizes(has_entries('Class', 'AggregatedMultipleChoiceMultipleAnswerPart',
 								 			 'MimeType', 'application/vnd.nextthought.assessment.aggregatedmultiplechoicemultipleanswerpart')))
 		assert_that(find_factory_for(toExternalObject(QAggregatedMultipleChoiceMultipleAnswerPart())),
 					is_(none()))
-		
+
 	def test_aggregation_poll(self):
 		part = QNonGradableMultipleChoicePart(choices=[u'a', 'b', 'c'], content=u'here')
 		poll = QPoll(parts=(part,))
