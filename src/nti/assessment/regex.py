@@ -18,6 +18,8 @@ from dolmen.builtins.interfaces import IString
 
 from persistent import Persistent
 
+from nti.assessment.interfaces import IRegEx
+
 from nti.contentfragments.interfaces import HTMLContentFragment
 
 from nti.externalization.representation import WithRepr
@@ -25,8 +27,6 @@ from nti.externalization.representation import WithRepr
 from nti.schema.schema import EqHash
 from nti.schema.field import SchemaConfigured
 from nti.schema.fieldproperty import createDirectFieldProperties
-
-from .interfaces import IRegEx
 
 @WithRepr
 @EqHash("pattern",)

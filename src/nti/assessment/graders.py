@@ -21,20 +21,20 @@ from zope.location import LocationIterator
 
 import repoze.lru
 
+from nti.assessment.interfaces import IRegEx
+from nti.assessment.interfaces import IQPartGrader
+from nti.assessment.interfaces import IQuestionSubmission
+from nti.assessment.interfaces import IQMatchingPartGrader
+from nti.assessment.interfaces import IQOrderingPartGrader
+from nti.assessment.interfaces import IQMultipleChoicePartGrader
+from nti.assessment.interfaces import IQFillInTheBlankShortAnswerGrader
+from nti.assessment.interfaces import IQFillInTheBlankWithWordBankGrader
+from nti.assessment.interfaces import IQMultipleChoiceMultipleAnswerPartGrader
+
 from nti.schema.field import InvalidValue
 
-from .interfaces import IRegEx
-from .interfaces import IQPartGrader
-from .interfaces import IQuestionSubmission
-from .interfaces import IQMatchingPartGrader
-from .interfaces import IQOrderingPartGrader
-from .interfaces import IQMultipleChoicePartGrader
-from .interfaces import IQFillInTheBlankShortAnswerGrader
-from .interfaces import IQFillInTheBlankWithWordBankGrader
-from .interfaces import IQMultipleChoiceMultipleAnswerPartGrader
-
 @staticmethod
-def _id(o):
+def _id(o, *args, **kwargs):
 	return o
 
 def __lower(o):

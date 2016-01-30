@@ -17,19 +17,21 @@ import collections
 from zope import component
 from zope import interface
 
-from nti.externalization.singleton import SingletonDecorator
+from nti.assessment.interfaces import IQPart
+from nti.assessment.interfaces import IRegEx
+from nti.assessment.interfaces import IQMathPart
+from nti.assessment.interfaces import IQPartSolutionsExternalizer
+from nti.assessment.interfaces import IQFillInTheBlankShortAnswerPart
+from nti.assessment.interfaces import IQFillInTheBlankWithWordBankPart
+from nti.assessment.interfaces import IQFillInTheBlankShortAnswerSolution
+from nti.assessment.interfaces import IQFillInTheBlankWithWordBankSolution
+
 from nti.externalization.externalization import to_external_object
+
 from nti.externalization.interfaces import IExternalObjectDecorator
 from nti.externalization.interfaces import IExternalMappingDecorator
 
-from .interfaces import IQPart
-from .interfaces import IRegEx
-from .interfaces import IQMathPart
-from .interfaces import IQPartSolutionsExternalizer
-from .interfaces import IQFillInTheBlankShortAnswerPart
-from .interfaces import IQFillInTheBlankWithWordBankPart
-from .interfaces import IQFillInTheBlankShortAnswerSolution
-from .interfaces import IQFillInTheBlankWithWordBankSolution
+from nti.externalization.singleton import SingletonDecorator
 
 @component.adapter(IQPart)
 @interface.implementer(IQPartSolutionsExternalizer)

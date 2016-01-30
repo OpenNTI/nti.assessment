@@ -13,11 +13,11 @@ from zope import interface
 
 from persistent import Persistent
 
-from ._util import TrivialValuedMixin
+from nti.assessment._util import TrivialValuedMixin
 
-from .interfaces import IQHint
-from .interfaces import IQHTMLHint
-from .interfaces import IQTextHint
+from nti.assessment.interfaces import IQHint
+from nti.assessment.interfaces import IQHTMLHint
+from nti.assessment.interfaces import IQTextHint
 
 @interface.implementer(IQHint)
 class QHint(Persistent):

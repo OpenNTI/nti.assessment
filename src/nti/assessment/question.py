@@ -25,21 +25,22 @@ from zope.mimetype.interfaces import IContentTypeAware
 
 from persistent import Persistent
 
+from nti.assessment.interfaces import QUESTION_MIME_TYPE
+from nti.assessment.interfaces import QUESTION_SET_MIME_TYPE
+from nti.assessment.interfaces import QUESTION_FILL_IN_THE_BLANK_MIME_TYPE
+
+from nti.assessment.interfaces import IQuestion
+from nti.assessment.interfaces import IQuestionSet
+from nti.assessment.interfaces import IQFillInTheBlankWithWordBankQuestion
+
 from nti.common.property import alias
 
 from nti.schema.field import SchemaConfigured
+
 from nti.schema.fieldproperty import AdaptingFieldProperty
 from nti.schema.fieldproperty import createDirectFieldProperties
 
 from nti.schema.schema import EqHash
-
-from .interfaces import IQuestion
-from .interfaces import IQuestionSet
-from .interfaces import IQFillInTheBlankWithWordBankQuestion
-
-from .interfaces import QUESTION_MIME_TYPE
-from .interfaces import QUESTION_SET_MIME_TYPE
-from .interfaces import QUESTION_FILL_IN_THE_BLANK_MIME_TYPE
 
 @interface.implementer(IFiniteSequence,
 					   IContentTypeAware,
@@ -47,14 +48,14 @@ from .interfaces import QUESTION_FILL_IN_THE_BLANK_MIME_TYPE
 class QBaseMixin(Contained,
 				 SchemaConfigured,
 				 Persistent):
-	
+
 	ntiid = None
-	parameters = {} # IContentTypeAware
+	parameters = {}  # IContentTypeAware
 
 	def __init__(self, *args, **kwargs):
 		Persistent.__init__(self)
 		SchemaConfigured.__init__(self, *args, **kwargs)
-		
+
 @interface.implementer(IQuestion)
 @EqHash('content', 'parts', superhash=True)
 class QQuestion(QBaseMixin):
@@ -72,9 +73,8 @@ class QQuestion(QBaseMixin):
 	def __len__(self):
 		return len(self.parts or ())
 
-@interface.implementer(IQuestionSet,
-					   ISublocations)
 @EqHash('title', 'questions', superhash=True)
+@interface.implementer(IQuestionSet, ISublocations)
 class QQuestionSet(QBaseMixin):
 
 	questions = ()
@@ -96,8 +96,8 @@ class QQuestionSet(QBaseMixin):
 	def __len__(self):
 		return len(self.questions or ())
 
-@interface.implementer(IQFillInTheBlankWithWordBankQuestion)
 @EqHash('wordbank', include_super=True)
+@interface.implementer(IQFillInTheBlankWithWordBankQuestion)
 class QFillInTheBlankWithWordBankQuestion(QQuestion):
 
 	__external_class_name__ = "Question"

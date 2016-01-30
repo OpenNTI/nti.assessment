@@ -16,20 +16,20 @@ from curses.ascii import isctrl
 from zope import component
 from zope import interface
 
+from nti.assessment.interfaces import DISCLOSURE_TERMINATION
+
+from nti.assessment.interfaces import IRegEx
+from nti.assessment.interfaces import IQInquiry
+from nti.assessment.interfaces import IWordEntry
+from nti.assessment.interfaces import IQModeledContentResponse
+from nti.assessment.interfaces import IQFillInTheBlankShortAnswerSolution
+
 from nti.externalization.datastructures import InterfaceObjectIO
 
 from nti.externalization.interfaces import IInternalObjectUpdater
 
 from nti.externalization.internalization import find_factory_for
 from nti.externalization.internalization import update_from_external_object
-
-from .interfaces import IRegEx
-from .interfaces import IQInquiry
-from .interfaces import IWordEntry
-from .interfaces import IQModeledContentResponse
-from .interfaces import IQFillInTheBlankShortAnswerSolution
-
-from .interfaces import DISCLOSURE_TERMINATION
 
 @component.adapter(IWordEntry)
 @interface.implementer(IInternalObjectUpdater)
