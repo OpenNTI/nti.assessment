@@ -1303,6 +1303,10 @@ class IQPoll(IQInquiry, IFiniteSequence):
 							min_length=1,
 							value_type=Object(IPollable, title="A pollable question part") )
 
+IQPoll['closed'].setTaggedValue(TAG_HIDDEN_IN_UI, False)
+IQPoll['closed'].setTaggedValue(TAG_REQUIRED_IN_UI, False)
+IQPoll['disclosure'].setTaggedValue(TAG_HIDDEN_IN_UI, False)
+IQPoll['disclosure'].setTaggedValue(TAG_REQUIRED_IN_UI, False)
 IQPoll['available_for_submission_ending'].setTaggedValue(TAG_HIDDEN_IN_UI, False)
 IQPoll['available_for_submission_ending'].setTaggedValue(TAG_REQUIRED_IN_UI, False)
 IQPoll['available_for_submission_beginning'].setTaggedValue(TAG_HIDDEN_IN_UI, False)
@@ -1326,6 +1330,10 @@ class IQSurvey(ITitledContent, IQInquiry, IFiniteSequence):
 
 IQSurvey['title'].setTaggedValue(TAG_HIDDEN_IN_UI, False)
 IQSurvey['title'].setTaggedValue(TAG_REQUIRED_IN_UI, False)
+IQSurvey['closed'].setTaggedValue(TAG_HIDDEN_IN_UI, False)
+IQSurvey['closed'].setTaggedValue(TAG_REQUIRED_IN_UI, False)
+IQSurvey['disclosure'].setTaggedValue(TAG_HIDDEN_IN_UI, False)
+IQSurvey['disclosure'].setTaggedValue(TAG_REQUIRED_IN_UI, False)
 IQSurvey['available_for_submission_ending'].setTaggedValue(TAG_HIDDEN_IN_UI, False)
 IQSurvey['available_for_submission_ending'].setTaggedValue(TAG_REQUIRED_IN_UI, False)
 IQSurvey['available_for_submission_beginning'].setTaggedValue(TAG_HIDDEN_IN_UI, False)
