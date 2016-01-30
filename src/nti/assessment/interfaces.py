@@ -763,6 +763,10 @@ class IQAssignment(IQAssessment, ITitledContent, IAttributeAnnotatable, IQSubmit
 
 IQAssignment['title'].setTaggedValue(TAG_HIDDEN_IN_UI, False)
 IQAssignment['title'].setTaggedValue(TAG_REQUIRED_IN_UI, False)
+IQAssignment['category_name'].setTaggedValue(TAG_HIDDEN_IN_UI, False)
+IQAssignment['category_name'].setTaggedValue(TAG_REQUIRED_IN_UI, False)
+IQAssignment['is_non_public'].setTaggedValue(TAG_HIDDEN_IN_UI, False)
+IQAssignment['is_non_public'].setTaggedValue(TAG_REQUIRED_IN_UI, False)
 IQAssignment['available_for_submission_ending'].setTaggedValue(TAG_HIDDEN_IN_UI, False)
 IQAssignment['available_for_submission_ending'].setTaggedValue(TAG_REQUIRED_IN_UI, False)
 IQAssignment['available_for_submission_beginning'].setTaggedValue(TAG_HIDDEN_IN_UI, False)
@@ -777,6 +781,10 @@ class IQTimedAssignment(IQAssignment):
 
 IQTimedAssignment['title'].setTaggedValue(TAG_HIDDEN_IN_UI, False)
 IQTimedAssignment['title'].setTaggedValue(TAG_REQUIRED_IN_UI, False)
+IQTimedAssignment['category_name'].setTaggedValue(TAG_HIDDEN_IN_UI, False)
+IQTimedAssignment['category_name'].setTaggedValue(TAG_REQUIRED_IN_UI, False)
+IQTimedAssignment['is_non_public'].setTaggedValue(TAG_HIDDEN_IN_UI, False)
+IQTimedAssignment['is_non_public'].setTaggedValue(TAG_REQUIRED_IN_UI, False)
 IQTimedAssignment['available_for_submission_ending'].setTaggedValue(TAG_HIDDEN_IN_UI, False)
 IQTimedAssignment['available_for_submission_ending'].setTaggedValue(TAG_REQUIRED_IN_UI, False)
 IQTimedAssignment['available_for_submission_beginning'].setTaggedValue(TAG_HIDDEN_IN_UI, False)
@@ -1316,10 +1324,12 @@ class IQSurvey(ITitledContent, IQInquiry, IFiniteSequence):
 		return the number of questions in this survey
 		"""
 
-IQPoll['available_for_submission_ending'].setTaggedValue(TAG_HIDDEN_IN_UI, False)
-IQPoll['available_for_submission_ending'].setTaggedValue(TAG_REQUIRED_IN_UI, False)
-IQPoll['available_for_submission_beginning'].setTaggedValue(TAG_HIDDEN_IN_UI, False)
-IQPoll['available_for_submission_beginning'].setTaggedValue(TAG_REQUIRED_IN_UI, False)
+IQSurvey['title'].setTaggedValue(TAG_HIDDEN_IN_UI, False)
+IQSurvey['title'].setTaggedValue(TAG_REQUIRED_IN_UI, False)
+IQSurvey['available_for_submission_ending'].setTaggedValue(TAG_HIDDEN_IN_UI, False)
+IQSurvey['available_for_submission_ending'].setTaggedValue(TAG_REQUIRED_IN_UI, False)
+IQSurvey['available_for_submission_beginning'].setTaggedValue(TAG_HIDDEN_IN_UI, False)
+IQSurvey['available_for_submission_beginning'].setTaggedValue(TAG_REQUIRED_IN_UI, False)
 
 class IQInquirySubmission(IQPartsSubmission):
 	inquiryId = interface.Attribute("Identifier of the inquiry being responded to.")
