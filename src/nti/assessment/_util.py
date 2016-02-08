@@ -79,7 +79,7 @@ def dctimes_property_fallback(attrname, dcname):
 				self.__dict__[attrname] = result  # migrate
 				self._p_changed = True
 				return result
-			except KeyError: # pragma: no cover
+			except KeyError:  # pragma: no cover
 				pass
 		return 0
 

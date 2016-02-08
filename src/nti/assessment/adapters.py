@@ -12,27 +12,27 @@ logger = __import__('logging').getLogger(__name__)
 from zope import component
 from zope import interface
 
-from .interfaces import IQAggregatedPartFactory
-from .interfaces import IQPartResponseNormalizer
-from .interfaces import IQNonGradableMatchingPart
-from .interfaces import IQNonGradableOrderingPart
-from .interfaces import IQNonGradableFreeResponsePart
-from .interfaces import IQNonGradableModeledContentPart
-from .interfaces import IQNonGradableMultipleChoicePart
-from .interfaces import IQMatchingPartResponseNormalizer
-from .interfaces import IQOrderingPartResponseNormalizer
-from .interfaces import IQFreeResponsePartResponseNormalizer
-from .interfaces import IQModeledContentPartResponseNormalizer
-from .interfaces import IQMultipleChoicePartResponseNormalizer
-from .interfaces import IQNonGradableMultipleChoiceMultipleAnswerPart
-from .interfaces import IQMultipleChoiceMultipleAnswerPartResponseNormalizer
+from nti.assessment.interfaces import IQAggregatedPartFactory
+from nti.assessment.interfaces import IQPartResponseNormalizer
+from nti.assessment.interfaces import IQNonGradableMatchingPart
+from nti.assessment.interfaces import IQNonGradableOrderingPart
+from nti.assessment.interfaces import IQNonGradableFreeResponsePart
+from nti.assessment.interfaces import IQNonGradableModeledContentPart
+from nti.assessment.interfaces import IQNonGradableMultipleChoicePart
+from nti.assessment.interfaces import IQMatchingPartResponseNormalizer
+from nti.assessment.interfaces import IQOrderingPartResponseNormalizer
+from nti.assessment.interfaces import IQFreeResponsePartResponseNormalizer
+from nti.assessment.interfaces import IQModeledContentPartResponseNormalizer
+from nti.assessment.interfaces import IQMultipleChoicePartResponseNormalizer
+from nti.assessment.interfaces import IQNonGradableMultipleChoiceMultipleAnswerPart
+from nti.assessment.interfaces import IQMultipleChoiceMultipleAnswerPartResponseNormalizer
 
-from .survey import QAggregatedMatchingPart
-from .survey import QAggregatedOrderingPart
-from .survey import QAggregatedFreeResponsePart
-from .survey import QAggregatedModeledContentPart
-from .survey import QAggregatedMultipleChoicePart
-from .survey import QAggregatedMultipleChoiceMultipleAnswerPart
+from nti.assessment.survey import QAggregatedMatchingPart
+from nti.assessment.survey import QAggregatedOrderingPart
+from nti.assessment.survey import QAggregatedFreeResponsePart
+from nti.assessment.survey import QAggregatedModeledContentPart
+from nti.assessment.survey import QAggregatedMultipleChoicePart
+from nti.assessment.survey import QAggregatedMultipleChoiceMultipleAnswerPart
 
 @interface.implementer(IQPartResponseNormalizer)
 class AbstractResponseNormalizer(object):

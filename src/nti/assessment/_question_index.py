@@ -16,20 +16,20 @@ from zope.interface.registry import Components
 
 from zope.proxy import ProxyBase
 
+from nti.assessment.common import iface_of_assessment as _iface_to_register
+
+from nti.assessment.interfaces import IQPoll
+from nti.assessment.interfaces import IQSurvey
+from nti.assessment.interfaces import IQuestion
+from nti.assessment.interfaces import IQAssignment
+from nti.assessment.interfaces import IQuestionSet
+
 from nti.contentfragments.interfaces import LatexContentFragment
 from nti.contentfragments.interfaces import PlainTextContentFragment
 from nti.contentfragments.interfaces import SanitizedHTMLContentFragment
 
 from nti.externalization.internalization import find_factory_for
 from nti.externalization.internalization import update_from_external_object
-
-from .common import iface_of_assessment as _iface_to_register
-
-from .interfaces import IQPoll
-from .interfaces import IQSurvey
-from .interfaces import IQuestion
-from .interfaces import IQAssignment
-from .interfaces import IQuestionSet
 
 def _ntiid_object_hook(k, v, x):
 	"""
@@ -278,9 +278,8 @@ def _load_question_map_json(asm_index_text):
 
 	if not asm_index_text:
 		return
-
-	asm_index_text = unicode(asm_index_text, 'utf-8') \
-					 if isinstance(asm_index_text, bytes) else asm_index_text
+	elif isinstance(asm_index_text, bytes):
+		asm_index_text = unicode(asm_index_text, 'utf-8')
 
 	# In this one specific case, we know that these are already
 	# content fragments (probably HTML content fragments)

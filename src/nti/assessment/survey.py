@@ -20,7 +20,38 @@ from zope.location.interfaces import ISublocations
 from persistent.list import PersistentList
 from persistent.mapping import PersistentMapping
 
+from nti.assessment._util import make_sublocations as _make_sublocations
+
+from nti.assessment.common import normalize_response
+from nti.assessment.common import QPersistentSubmittable
+
+from nti.assessment.interfaces import POLL_MIME_TYPE
+from nti.assessment.interfaces import SURVEY_MIME_TYPE
+from nti.assessment.interfaces import DISCLOSURE_TERMINATION
+
+from nti.assessment.interfaces import IQPoll
+from nti.assessment.interfaces import IQSurvey
+from nti.assessment.interfaces import IQInquiry
+from nti.assessment.interfaces import IQResponse
+from nti.assessment.interfaces import IQBaseSubmission
+from nti.assessment.interfaces import IQPollSubmission
+from nti.assessment.interfaces import IQSurveySubmission
+
+from nti.assessment.interfaces import IQAggregatedPart
+from nti.assessment.interfaces import IQAggregatedPoll
+from nti.assessment.interfaces import IQAggregatedSurvey
+from nti.assessment.interfaces import IQAggregatedPartFactory
+from nti.assessment.interfaces import IQAggregatedMatchingPart
+from nti.assessment.interfaces import IQAggregatedOrderingPart
+from nti.assessment.interfaces import IQAggregatedConnectingPart
+from nti.assessment.interfaces import IQAggregatedFreeResponsePart
+from nti.assessment.interfaces import IQAggregatedModeledContentPart
+from nti.assessment.interfaces import IQAggregatedMultipleChoicePart
+from nti.assessment.interfaces import IQAggregatedMultipleChoiceMultipleAnswerPart
+
 from nti.common.property import alias, CachedProperty
+
+from nti.dataserver_core.interfaces import IContained as INTIContained
 
 from nti.dataserver_core.mixins import ContainedMixin
 
@@ -33,36 +64,7 @@ from nti.schema.field import SchemaConfigured
 from nti.schema.fieldproperty import AdaptingFieldProperty
 from nti.schema.fieldproperty import createDirectFieldProperties
 
-from ._util import make_sublocations as _make_sublocations
-
-from .common import normalize_response
-from .common import QPersistentSubmittable
-
-from .interfaces import IQPoll
-from .interfaces import IQSurvey
-from .interfaces import IQInquiry
-from .interfaces import IQResponse
-from .interfaces import IQBaseSubmission
-from .interfaces import IQPollSubmission
-from .interfaces import IQSurveySubmission
-
-from .interfaces import IQAggregatedPart
-from .interfaces import IQAggregatedPoll
-from .interfaces import IQAggregatedSurvey
-from .interfaces import IQAggregatedPartFactory
-from .interfaces import IQAggregatedMatchingPart
-from .interfaces import IQAggregatedOrderingPart
-from .interfaces import IQAggregatedConnectingPart
-from .interfaces import IQAggregatedFreeResponsePart
-from .interfaces import IQAggregatedModeledContentPart
-from .interfaces import IQAggregatedMultipleChoicePart
-from .interfaces import IQAggregatedMultipleChoiceMultipleAnswerPart
-
-from .interfaces import POLL_MIME_TYPE
-from .interfaces import SURVEY_MIME_TYPE
-from .interfaces import DISCLOSURE_TERMINATION
-
-@interface.implementer(IQInquiry)
+@interface.implementer(IQInquiry, INTIContained)
 class QInquiry(QPersistentSubmittable):
 
 	closed = False
@@ -76,6 +78,11 @@ class QInquiry(QPersistentSubmittable):
 	@property
 	def onTermination(self):
 		return not self.disclosure or self.disclosure.lower() == DISCLOSURE_TERMINATION
+
+	@property
+	def containerId(self):
+		return 		getattr(self.__parent__, 'ntiid', None) \
+				or	getattr(self.__parent__, 'aliasId', None)
 
 @interface.implementer(IQPoll)
 @EqHash('content', 'parts', superhash=True)
