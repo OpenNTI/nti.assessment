@@ -1462,7 +1462,7 @@ class IQAggregatedSurvey(IQAggregatedInquiry, IIterable, IWriteMapping):
 
 # misc
 
-class IQAssessmentContainerIdGetter(interface.interface):
+class IQAssessmentContainerIdGetter(interface.Interface):
 	"""
 	A interface for a utility to get the containerId of an assessment
 	"""
