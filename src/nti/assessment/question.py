@@ -34,6 +34,7 @@ from nti.assessment.interfaces import IQuestionSet
 from nti.assessment.interfaces import IQFillInTheBlankWithWordBankQuestion
 
 from nti.common.property import alias
+from nti.common.property import readproperty
 
 from nti.dataserver_core.interfaces import IContained as INTIContained
 
@@ -60,7 +61,7 @@ class QBaseMixin(Contained,
 		Persistent.__init__(self)
 		SchemaConfigured.__init__(self, *args, **kwargs)
 
-	@property
+	@readproperty
 	def containerId(self):
 		return 		getattr(self.__parent__, 'ntiid', None) \
 				or	getattr(self.__parent__, 'aliasId', None)

@@ -49,7 +49,9 @@ from nti.assessment.interfaces import IQAggregatedModeledContentPart
 from nti.assessment.interfaces import IQAggregatedMultipleChoicePart
 from nti.assessment.interfaces import IQAggregatedMultipleChoiceMultipleAnswerPart
 
-from nti.common.property import alias, CachedProperty
+from nti.common.property import alias
+from nti.common.property import readproperty
+from nti.common.property import CachedProperty
 
 from nti.dataserver_core.interfaces import IContained as INTIContained
 
@@ -79,7 +81,7 @@ class QInquiry(QPersistentSubmittable):
 	def onTermination(self):
 		return not self.disclosure or self.disclosure.lower() == DISCLOSURE_TERMINATION
 
-	@property
+	@readproperty
 	def containerId(self):
 		return 		getattr(self.__parent__, 'ntiid', None) \
 				or	getattr(self.__parent__, 'aliasId', None)

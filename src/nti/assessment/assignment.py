@@ -85,7 +85,7 @@ class QAssignment(QPersistentSubmittable):
 		for part in self.parts:
 			yield part.question_set
 
-	@property
+	@readproperty
 	def containerId(self):
 		return 		getattr(self.__parent__, 'ntiid', None) \
 				or	getattr(self.__parent__, 'aliasId', None)
