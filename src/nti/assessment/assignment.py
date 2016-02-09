@@ -25,6 +25,7 @@ from zope.schema.fieldproperty import FieldPropertyStoredThroughField as FP
 
 from persistent import Persistent
 
+from nti.assessment._util import get_containerId
 from nti.assessment._util import make_sublocations as _make_sublocations
 
 from nti.assessment.common import QPersistentSubmittable
@@ -87,8 +88,7 @@ class QAssignment(QPersistentSubmittable):
 
 	@readproperty
 	def containerId(self):
-		return 		getattr(self.__parent__, 'ntiid', None) \
-				or	getattr(self.__parent__, 'aliasId', None)
+		return get_containerId(self)
 
 @WithRepr
 @interface.implementer(IQTimedAssignment)

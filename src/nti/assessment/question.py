@@ -25,6 +25,8 @@ from zope.mimetype.interfaces import IContentTypeAware
 
 from persistent import Persistent
 
+from nti.assessment._util import get_containerId
+
 from nti.assessment.interfaces import QUESTION_MIME_TYPE
 from nti.assessment.interfaces import QUESTION_SET_MIME_TYPE
 from nti.assessment.interfaces import QUESTION_FILL_IN_THE_BLANK_MIME_TYPE
@@ -63,8 +65,7 @@ class QBaseMixin(Contained,
 
 	@readproperty
 	def containerId(self):
-		return 		getattr(self.__parent__, 'ntiid', None) \
-				or	getattr(self.__parent__, 'aliasId', None)
+		return get_containerId(self)
 
 @interface.implementer(IQuestion)
 @EqHash('content', 'parts', superhash=True)

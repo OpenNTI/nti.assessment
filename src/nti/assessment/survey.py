@@ -20,6 +20,7 @@ from zope.location.interfaces import ISublocations
 from persistent.list import PersistentList
 from persistent.mapping import PersistentMapping
 
+from nti.assessment._util import get_containerId
 from nti.assessment._util import make_sublocations as _make_sublocations
 
 from nti.assessment.common import normalize_response
@@ -83,8 +84,7 @@ class QInquiry(QPersistentSubmittable):
 
 	@readproperty
 	def containerId(self):
-		return 		getattr(self.__parent__, 'ntiid', None) \
-				or	getattr(self.__parent__, 'aliasId', None)
+		return get_containerId(self)
 
 @interface.implementer(IQPoll)
 @EqHash('content', 'parts', superhash=True)
