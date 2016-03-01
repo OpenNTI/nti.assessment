@@ -65,7 +65,7 @@ class TestAssignment(AssessmentTestCase):
 		a = assignment.QAssignment()
 		a.lastModified = a.createdTime = 0
 		assert_that(signature(a), 
-					is_('f8c16c4225dd79de1d1249856bcead169eadb85cbec3259bb2e86274e7f31182') )
+					is_('abe9edfa08090dfd3d543b4ea94614c2764701140a613542309f536f47c2d85b') )
 
 		path = os.path.join(os.path.dirname(__file__), "questionbank.json")
 		with open(path, "rb") as fp:
