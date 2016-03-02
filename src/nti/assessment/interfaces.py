@@ -681,7 +681,7 @@ class IQSubmittable(IRecordable, ICalendarPublishable):
 	no_submit = Bool(title="Whether this object accept submissions",
 					 default=False)
 
-class IQAssignment(IQAssessment, ITitledContent, IAttributeAnnotatable, IQSubmittable):
+class IQAssignment(IQAssessment, IQSubmittable, ITitledContent, IAttributeAnnotatable):
 	"""
 	An assignment differs from either plain questions or question sets
 	in that there is an expectation that it must be completed,
@@ -1269,7 +1269,7 @@ DISCLOSURE_TERMINATION = u'termination'
 DISCLOSURE_STATES = (DISCLOSURE_NEVER, DISCLOSURE_ALWAYS, DISCLOSURE_TERMINATION)
 DISCLOSURE_VOCABULARY = vocabulary.SimpleVocabulary([vocabulary.SimpleTerm(_x) for _x in DISCLOSURE_STATES])
 
-class IQInquiry(IAttributeAnnotatable, IQSubmittable):
+class IQInquiry(IQSubmittable, IAttributeAnnotatable):
 
 	ntiid = ValidNTIID(title="Object NTIID", required=False)
 
