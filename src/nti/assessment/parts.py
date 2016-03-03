@@ -30,52 +30,52 @@ from nti.namedfile.file import FileConstraints
 from nti.schema.schema import EqHash
 from nti.schema.field import SchemaConfigured
 
-from .interfaces import IQPart
-from .interfaces import IQFilePart
-from .interfaces import IQMathPart
-from .interfaces import IQMatchingPart
-from .interfaces import IQOrderingPart
-from .interfaces import IQConnectingPart
-from .interfaces import IQNumericMathPart
-from .interfaces import IQFreeResponsePart
-from .interfaces import IQSymbolicMathPart
-from .interfaces import IQModeledContentPart
-from .interfaces import IQMultipleChoicePart
-from .interfaces import IQFillInTheBlankShortAnswerPart
-from .interfaces import IQFillInTheBlankWithWordBankPart
-from .interfaces import IQMultipleChoiceMultipleAnswerPart
+from nti.assessment.common import grader_for_solution_and_response
 
-from .interfaces import IQNonGradablePart
-from .interfaces import IQNonGradableFilePart
-from .interfaces import IQNonGradableMathPart
-from .interfaces import IQNonGradableMatchingPart
-from .interfaces import IQNonGradableOrderingPart
-from .interfaces import IQNonGradableConnectingPart
-from .interfaces import IQNonGradableFreeResponsePart
-from .interfaces import IQNonGradableModeledContentPart
-from .interfaces import IQNonGradableMultipleChoicePart
-from .interfaces import IQNonGradableFillInTheBlankShortAnswerPart
-from .interfaces import IQNonGradableFillInTheBlankWithWordBankPart
-from .interfaces import IQNonGradableMultipleChoiceMultipleAnswerPart
+from nti.assessment.interfaces import IQPart
+from nti.assessment.interfaces import IQFilePart
+from nti.assessment.interfaces import IQMathPart
+from nti.assessment.interfaces import IQMatchingPart
+from nti.assessment.interfaces import IQOrderingPart
+from nti.assessment.interfaces import IQConnectingPart
+from nti.assessment.interfaces import IQNumericMathPart
+from nti.assessment.interfaces import IQFreeResponsePart
+from nti.assessment.interfaces import IQSymbolicMathPart
+from nti.assessment.interfaces import IQModeledContentPart
+from nti.assessment.interfaces import IQMultipleChoicePart
+from nti.assessment.interfaces import IQFillInTheBlankShortAnswerPart
+from nti.assessment.interfaces import IQFillInTheBlankWithWordBankPart
+from nti.assessment.interfaces import IQMultipleChoiceMultipleAnswerPart
 
-from .interfaces import IQPartGrader
-from .interfaces import IQMatchingPartGrader
-from .interfaces import IQOrderingPartGrader
-from .interfaces import IQSymbolicMathGrader
-from .interfaces import IQMultipleChoicePartGrader
-from .interfaces import IQFillInTheBlankShortAnswerGrader
-from .interfaces import IQFillInTheBlankWithWordBankGrader
-from .interfaces import IQMultipleChoiceMultipleAnswerPartGrader
+from nti.assessment.interfaces import IQNonGradablePart
+from nti.assessment.interfaces import IQNonGradableFilePart
+from nti.assessment.interfaces import IQNonGradableMathPart
+from nti.assessment.interfaces import IQNonGradableMatchingPart
+from nti.assessment.interfaces import IQNonGradableOrderingPart
+from nti.assessment.interfaces import IQNonGradableConnectingPart
+from nti.assessment.interfaces import IQNonGradableFreeResponsePart
+from nti.assessment.interfaces import IQNonGradableModeledContentPart
+from nti.assessment.interfaces import IQNonGradableMultipleChoicePart
+from nti.assessment.interfaces import IQNonGradableFillInTheBlankShortAnswerPart
+from nti.assessment.interfaces import IQNonGradableFillInTheBlankWithWordBankPart
+from nti.assessment.interfaces import IQNonGradableMultipleChoiceMultipleAnswerPart
 
-from .interfaces import IQDictResponse
-from .interfaces import IQFileResponse
-from .interfaces import IQListResponse
-from .interfaces import IQTextResponse
-from .interfaces import IQModeledContentResponse
+from nti.assessment.interfaces import IQPartGrader
+from nti.assessment.interfaces import IQMatchingPartGrader
+from nti.assessment.interfaces import IQOrderingPartGrader
+from nti.assessment.interfaces import IQSymbolicMathGrader
+from nti.assessment.interfaces import IQMultipleChoicePartGrader
+from nti.assessment.interfaces import IQFillInTheBlankShortAnswerGrader
+from nti.assessment.interfaces import IQFillInTheBlankWithWordBankGrader
+from nti.assessment.interfaces import IQMultipleChoiceMultipleAnswerPartGrader
 
-from .interfaces import convert_response_for_solution
+from nti.assessment.interfaces import IQDictResponse
+from nti.assessment.interfaces import IQFileResponse
+from nti.assessment.interfaces import IQListResponse
+from nti.assessment.interfaces import IQTextResponse
+from nti.assessment.interfaces import IQModeledContentResponse
 
-from .common import grader_for_solution_and_response
+from nti.assessment.interfaces import convert_response_for_solution
 
 @WithRepr
 @interface.implementer(IQNonGradablePart)

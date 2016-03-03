@@ -13,13 +13,13 @@ from zope.annotation.interfaces import IAttributeAnnotatable
 
 from zope.container.interfaces import IContained
 
-from zope.interface.interfaces import IMethod
-
 from zope.interface.common.mapping import IReadMapping
 from zope.interface.common.mapping import IWriteMapping
 from zope.interface.common.mapping import IEnumerableMapping
 
 from zope.interface.common.sequence import IFiniteSequence
+
+from zope.interface.interfaces import IMethod
 
 from zope.lifecycleevent import ObjectModifiedEvent
 from zope.lifecycleevent.interfaces import IObjectModifiedEvent
