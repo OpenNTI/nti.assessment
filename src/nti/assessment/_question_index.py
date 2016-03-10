@@ -32,6 +32,8 @@ from nti.contentfragments.interfaces import SanitizedHTMLContentFragment
 from nti.externalization.internalization import find_factory_for
 from nti.externalization.internalization import update_from_external_object
 
+from nti.wref.interfaces import IWeakRef
+
 def _ntiid_object_hook(k, v, x):
 	"""
 	In this one, rare, case, we are reading things from external
@@ -82,7 +84,7 @@ class QuestionIndex(object):
 			question_set = AssestmentProxy(question_set)
 		things_to_register = set([question_set])
 		for question in question_set.questions:
-			question = question() if callable(question) else question
+			question = question() if IWeakRef.providedBy(question) else question
 			if question is not None:
 				question = AssestmentProxy(question, question_set)
 				things_to_register.add(question)
@@ -95,7 +97,7 @@ class QuestionIndex(object):
 			survey = AssestmentProxy(survey)
 		things_to_register = set([survey])
 		for poll in survey.questions:
-			poll = poll() if callable(poll) else poll
+			poll = poll() if IWeakRef.providedBy(poll) else poll
 			if poll != None:
 				poll = AssestmentProxy(poll, survey)
 				things_to_register.add(poll)
@@ -120,7 +122,7 @@ class QuestionIndex(object):
 	def _canonicalize_question_set(cls, obj, registry):
 		items = []
 		for x in obj.questions:
-			x = x if callable(x) else registry.getUtility(IQuestion, name=x.ntiid)
+			x = x if IWeakRef.providedBy(x) else registry.getUtility(IQuestion, name=x.ntiid)
 			items.append(x)
 		obj.questions = items
 
@@ -128,7 +130,7 @@ class QuestionIndex(object):
 	def _canonicalize_survey(cls, obj, registry):
 		items = []
 		for x in obj.questions:
-			x = x if callable(x) else registry.getUtility(IQPoll, name=x.ntiid)
+			x = x if IWeakRef.providedBy(x) else registry.getUtility(IQPoll, name=x.ntiid)
 			items.append(x)
 		obj.questions = items
 
@@ -146,10 +148,11 @@ class QuestionIndex(object):
 	canonicalize_object = _canonicalize_object
 	
 	def _registry_utility(self, registry, component, provided, name, event=False):
-		registry.registerUtility(component,
-								 provided=provided,
-								 name=name,
-								 event=event)
+		if not IWeakRef.providedBy(component):
+			registry.registerUtility(component,
+								 	 provided=provided,
+								 	 name=name,
+								 	 event=event)
 
 	def _register_and_canonicalize(self, things_to_register, registry):
 		registered = set()
@@ -172,7 +175,8 @@ class QuestionIndex(object):
 			# 	continue
 
 			name = thing_to_register.ntiid
-			if registry.queryUtility(provided, name=name) == None:
+			if 		not IWeakRef.providedBy(thing_to_register) \
+				and registry.queryUtility(provided, name=name) == None:
 				self._registry_utility(registry,
 									   thing_to_register,
 									   provided=provided,
