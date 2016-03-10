@@ -78,7 +78,8 @@ setup(
  		'nti.namedfile',
  		'nti.openmath',
  		'nti.plasTeX',
- 		'nti.schema'
+ 		'nti.schema',
+ 		'nti.wref'
 	],
 	extras_require={
 		'test': TESTS_REQUIRE,
