@@ -76,6 +76,7 @@ setup(
  		'nti.externalization',
  		'nti.mimetype',
  		'nti.namedfile',
+ 		'nti.ntiids',
  		'nti.openmath',
  		'nti.plasTeX',
  		'nti.schema',
