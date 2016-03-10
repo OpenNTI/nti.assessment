@@ -21,6 +21,18 @@ from zope.location.interfaces import ISublocations
 from persistent import Persistent
 from persistent.list import PersistentList
 
+from nti.assessment._util import make_sublocations as _make_sublocations
+from nti.assessment._util import dctimes_property_fallback as _dctimes_property_fallback
+
+from nti.assessment.common import QSubmittedPart
+
+from nti.assessment.interfaces import IQuestion
+from nti.assessment.interfaces import IQuestionSet
+from nti.assessment.interfaces import IQAssessedPart
+from nti.assessment.interfaces import IQAssessedQuestion
+from nti.assessment.interfaces import IQuestionSubmission
+from nti.assessment.interfaces import IQAssessedQuestionSet
+
 from nti.coremetadata.interfaces import ICreated
 from nti.coremetadata.interfaces import ILastModified
 
@@ -28,22 +40,11 @@ from nti.dataserver_core.mixins import ContainedMixin
 
 from nti.externalization.representation import WithRepr
 
-from nti.schema.schema import EqHash
 from nti.schema.field import InvalidValue
 from nti.schema.field import SchemaConfigured
 from nti.schema.fieldproperty import createDirectFieldProperties
 
-from .interfaces import IQuestion
-from .interfaces import IQuestionSet
-from .interfaces import IQAssessedPart
-from .interfaces import IQAssessedQuestion
-from .interfaces import IQuestionSubmission
-from .interfaces import IQAssessedQuestionSet
-
-from ._util import make_sublocations as _make_sublocations
-from ._util import dctimes_property_fallback as _dctimes_property_fallback
-
-from .common import QSubmittedPart
+from nti.schema.schema import EqHash
 
 @WithRepr
 @interface.implementer(IQAssessedPart, ISublocations)
@@ -169,13 +170,13 @@ def assess_question_set_submission(set_submission, registry=component):
 
 	assessed = PersistentList()
 	for sub_question in set_submission.questions:
-		question = registry.getUtility( IQuestion, name=sub_question.questionId )
-		if 	question in question_set.questions or question.ntiid in questions_ntiids:
+		question = registry.getUtility(IQuestion, name=sub_question.questionId)
+		if question in question_set.questions or question.ntiid in questions_ntiids:
 			sub_assessed = IQAssessedQuestion(sub_question)  # Raises ComponentLookupError
 			assessed.append(sub_assessed)
 		else: # pragma: no cover
 			logger.warn("Bad input, question (%s) not in question set (%s) (known: %s)",
-						question, question_set, question_set.questions)
+						question, question_set, questions_ntiids)
 
 	# NOTE: We're not really creating some sort of aggregate grade here
 	result = QAssessedQuestionSet(questionSetId=set_submission.questionSetId,

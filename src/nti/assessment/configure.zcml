@@ -403,4 +403,9 @@
 	<!-- randomized -->
 	<include package=".randomized" file="configure.zcml" />
 
+	<!-- weak refs -->
+	<include package="nti.wref" />
+	<adapter factory=".wref.PollWeakRef" />
+	<adapter factory=".wref.QuestionWeakRef" />
+
 </configure>

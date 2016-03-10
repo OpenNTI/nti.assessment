@@ -14,7 +14,8 @@ import simplejson
 
 from zope.interface.registry import Components
 
-from zope.proxy import ProxyBase
+from zope.proxy import isProxy
+from zope.proxy import ProxyBase 
 
 from nti.assessment.common import iface_of_assessment as _iface_to_register
 
@@ -80,9 +81,10 @@ class QuestionIndex(object):
 		if type(question_set) != AssestmentProxy:
 			question_set = AssestmentProxy(question_set)
 		things_to_register = set([question_set])
-		for child_question in question_set.questions:
-			child_question = AssestmentProxy(child_question, question_set)
-			things_to_register.add(child_question)
+		for question in question_set.questions:
+			question = question() if callable(question) else question
+			question = AssestmentProxy(question, question_set)
+			things_to_register.add(question)
 		return things_to_register
 	_explode_question_set_to_register = explode_question_set_to_register
 
@@ -91,15 +93,16 @@ class QuestionIndex(object):
 		if type(survey) != AssestmentProxy:
 			survey = AssestmentProxy(survey)
 		things_to_register = set([survey])
-		for child_poll in survey.questions:
-			child_poll = AssestmentProxy(child_poll, survey)
-			things_to_register.add(child_poll)
+		for poll in survey.questions:
+			poll = poll() if callable(poll) else poll
+			poll = AssestmentProxy(poll, survey)
+			things_to_register.add(poll)
 		return things_to_register
 	_explode_survey_to_register = explode_survey_to_register
 
 	@classmethod
 	def explode_object_to_register(cls, obj):
-		if type(obj) != AssestmentProxy:
+		if not isProxy(obj, AssestmentProxy):
 			obj = AssestmentProxy(obj)
 		things_to_register = set([obj])
 		if IQAssignment.providedBy(obj):
@@ -113,15 +116,19 @@ class QuestionIndex(object):
 	
 	@classmethod
 	def _canonicalize_question_set(cls, obj, registry):
-		obj.questions = [registry.getUtility(IQuestion, name=x.ntiid)
-						 for x
-						 in obj.questions]
+		items = []
+		for x in obj.questions:
+			x = x if callable(x) else registry.getUtility(IQuestion, name=x.ntiid)
+			items.append(x)
+		obj.questions = items
 
 	@classmethod
 	def _canonicalize_survey(cls, obj, registry):
-		obj.questions = [registry.getUtility(IQPoll, name=x.ntiid)
-						 for x
-						 in obj.questions]
+		items = []
+		for x in obj.questions:
+			x = x if callable(x) else registry.getUtility(IQPoll, name=x.ntiid)
+			items.append(x)
+		obj.questions = items
 
 	@classmethod
 	def _canonicalize_object(cls, obj, registry):
