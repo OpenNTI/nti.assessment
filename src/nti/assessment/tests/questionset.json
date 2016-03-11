@@ -1,0 +1,779 @@
+{
+    "Class": "QuestionSet",
+    "MimeType": "application/vnd.nextthought.naquestionset",
+    "NTIID": "tag:nextthought.com,2011-10:OU-NAQ-BIOL2124_F_2014_Human_Physiology.naq.set.qset:intro_quiz1",
+    "draw": 5,
+    "questions": [
+        {
+            "Class": "Question",
+            "MimeType": "application/vnd.nextthought.naquestion",
+            "NTIID": "tag:nextthought.com,2011-10:OU-NAQ-BIOL2124_F_2014_Human_Physiology.naq.qid.intro.01",
+            "content": "<a name=\"qid.intro.01\"><\/a> 1. Rank the following in terms of complexity from low (1) to high (7)",
+            "parts": [{
+                "Class": "MatchingPart",
+                "MimeType": "application/vnd.nextthought.assessment.matchingpart",
+                "content": "",
+                "explanation": "",
+                "hints": [],
+                "labels": [
+                    "<a name=\"5c203840dfcdf51dd7e33a72ea2f484f\" ><\/a>\n\n<p class=\"par\" id=\"5c203840dfcdf51dd7e33a72ea2f484f\">cells <\/p>",
+                    "<a name=\"75c9acad5c1814888e86ce8ac1e3e71c\" ><\/a>\n\n<p class=\"par\" id=\"75c9acad5c1814888e86ce8ac1e3e71c\">organ systems <\/p>",
+                    "<a name=\"1f6a00187d4285ca33aef4e411177542\" ><\/a>\n\n<p class=\"par\" id=\"1f6a00187d4285ca33aef4e411177542\">organelles <\/p>",
+                    "<a name=\"2bb8d809d871a7c1a392fec36563a8f7\" ><\/a>\n\n<p class=\"par\" id=\"2bb8d809d871a7c1a392fec36563a8f7\">atoms <\/p>",
+                    "<a name=\"a71934f2b8a4a23c91077c17afff23a9\" ><\/a>\n\n<p class=\"par\" id=\"a71934f2b8a4a23c91077c17afff23a9\">organs <\/p>",
+                    "<a name=\"187c25e49d45ad10b2f266c1fa7a8d49\" ><\/a>\n\n<p class=\"par\" id=\"187c25e49d45ad10b2f266c1fa7a8d49\">molecules <\/p>",
+                    "<a name=\"79654ca5ba0bc2dbc0ee54a48bab4e31\" ><\/a>\n\n<p class=\"par\" id=\"79654ca5ba0bc2dbc0ee54a48bab4e31\">tissues <\/p>"
+                ],
+                "solutions": [{
+                    "Class": "MatchingSolution",
+                    "MimeType": "application/vnd.nextthought.assessment.matchingsolution",
+                    "value": {
+                        "0": 3,
+                        "1": 6,
+                        "2": 2,
+                        "3": 0,
+                        "4": 5,
+                        "5": 1,
+                        "6": 4
+                    },
+                    "weight": 1.0
+                }],
+                "values": [
+                    "<a name=\"c4ca4238a0b923820dcc509a6f75849b\" ><\/a>\n\n<p class=\"par\" id=\"c4ca4238a0b923820dcc509a6f75849b\">1 <\/p>",
+                    "<a name=\"c81e728d9d4c2f636f067f89cc14862c\" ><\/a>\n\n<p class=\"par\" id=\"c81e728d9d4c2f636f067f89cc14862c\">2 <\/p>",
+                    "<a name=\"eccbc87e4b5ce2fe28308fd9f2a7baf3\" ><\/a>\n\n<p class=\"par\" id=\"eccbc87e4b5ce2fe28308fd9f2a7baf3\">3 <\/p>",
+                    "<a name=\"a87ff679a2f3e71d9181a67b7542122c\" ><\/a>\n\n<p class=\"par\" id=\"a87ff679a2f3e71d9181a67b7542122c\">4 <\/p>",
+                    "<a name=\"e4da3b7fbbce2345d7772b0674a318d5\" ><\/a>\n\n<p class=\"par\" id=\"e4da3b7fbbce2345d7772b0674a318d5\">5 <\/p>",
+                    "<a name=\"1679091c5a880faf6fb5e6087eb1b2dc\" ><\/a>\n\n<p class=\"par\" id=\"1679091c5a880faf6fb5e6087eb1b2dc\">6 <\/p>",
+                    "<a name=\"8f14e45fceea167a5a36dedd4bea2543\" ><\/a>\n\n<p class=\"par\" id=\"8f14e45fceea167a5a36dedd4bea2543\">7 <\/p>"
+                ]
+            }]
+        },
+        {
+            "Class": "Question",
+            "MimeType": "application/vnd.nextthought.naquestion",
+            "NTIID": "tag:nextthought.com,2011-10:OU-NAQ-BIOL2124_F_2014_Human_Physiology.naq.qid.intro.02",
+            "content": "<a name=\"qid.intro.02\"><\/a> 2. When blood oxygen levels drop below normal, this is detected by receptors in the kidneys which then triggers the synthesis and secretion of erythropoietin. An increase in erythropoietin stimulates the production of red blood cells which increases blood oxygen levels. When blood oxygen levels are returned to normal concentrations, receptors will stop signaling the kidneys which will stop the synthesis and secretion of erythropoietin.<br />What type of feedback system is described above?",
+            "parts": [{
+                "Class": "MultipleChoicePart",
+                "MimeType": "application/vnd.nextthought.assessment.randomizedmultiplechoicepart",
+                "choices": [
+                    "<a name=\"dda727076862df642b4f456463d16e6c\" ><\/a>\n\n<p class=\"par\" id=\"dda727076862df642b4f456463d16e6c\">Negative feedback <\/p>",
+                    "<a name=\"c513272b77d76aa1172de56ce347d504\" ><\/a>\n\n<p class=\"par\" id=\"c513272b77d76aa1172de56ce347d504\">Positive feedback <\/p>",
+                    "<a name=\"72410617422ac55097e9fce192505b21\" ><\/a>\n\n<p class=\"par\" id=\"72410617422ac55097e9fce192505b21\">Neutral feedback <\/p>"
+                ],
+                "content": "",
+                "explanation": "",
+                "hints": [],
+                "solutions": [{
+                    "Class": "MultipleChoiceSolution",
+                    "MimeType": "application/vnd.nextthought.assessment.multiplechoicesolution",
+                    "value": 0,
+                    "weight": 1.0
+                }]
+            }]
+        },
+        {
+            "Class": "Question",
+            "MimeType": "application/vnd.nextthought.naquestion",
+            "NTIID": "tag:nextthought.com,2011-10:OU-NAQ-BIOL2124_F_2014_Human_Physiology.naq.qid.intro.03",
+            "content": "<a name=\"qid.intro.03\"><\/a> 3. Low blood oxygen is detected receptors in the kidneys which triggers the synthesis and secretion of erythropoietin. An increase in erythropoietin stimulates the production of red blood cells which then increase blood oxygen.<br />What is the stimulus in the above scenario?",
+            "parts": [{
+                "Class": "MultipleChoicePart",
+                "MimeType": "application/vnd.nextthought.assessment.randomizedmultiplechoicepart",
+                "choices": [
+                    "<a name=\"5dd25ad68f01dcce4a139217a14c8a54\" ><\/a>\n\n<p class=\"par\" id=\"5dd25ad68f01dcce4a139217a14c8a54\">Low blood oxygen <\/p>",
+                    "<a name=\"4ff2bbcf4f04d76ab0638f90352757f6\" ><\/a>\n\n<p class=\"par\" id=\"4ff2bbcf4f04d76ab0638f90352757f6\">Kidney <\/p>",
+                    "<a name=\"860353ffc5d6dcd78e61c07e8caa40a0\" ><\/a>\n\n<p class=\"par\" id=\"860353ffc5d6dcd78e61c07e8caa40a0\">Erythropoietin <\/p>",
+                    "<a name=\"df635e9ffebe3795c32223f20834c716\" ><\/a>\n\n<p class=\"par\" id=\"df635e9ffebe3795c32223f20834c716\">Hypothalamus <\/p>"
+                ],
+                "content": "",
+                "explanation": "",
+                "hints": [],
+                "solutions": [{
+                    "Class": "MultipleChoiceSolution",
+                    "MimeType": "application/vnd.nextthought.assessment.multiplechoicesolution",
+                    "value": 0,
+                    "weight": 1.0
+                }]
+            }]
+        },
+        {
+            "Class": "Question",
+            "MimeType": "application/vnd.nextthought.naquestion",
+            "NTIID": "tag:nextthought.com,2011-10:OU-NAQ-BIOL2124_F_2014_Human_Physiology.naq.qid.intro.04",
+            "content": "<a name=\"qid.intro.04\"><\/a> 4. When a baby suckles on a nipple, a nerve impulse is activated and moves into the hypothalamus of the brain. The hypothalamus stimulates the pituitary gland to produce a hormone called prolactin which results in the synthesis and secretion of milk. . As long as the baby continues to nurse, prolactin will be synthesized and secreted.<br />What type of feedback system is described above?",
+            "parts": [{
+                "Class": "MultipleChoicePart",
+                "MimeType": "application/vnd.nextthought.assessment.randomizedmultiplechoicepart",
+                "choices": [
+                    "<a name=\"dda727076862df642b4f456463d16e6c.1\" ><\/a>\n\n<p class=\"par\" id=\"dda727076862df642b4f456463d16e6c.1\">Negative feedback <\/p>",
+                    "<a name=\"c513272b77d76aa1172de56ce347d504.2\" ><\/a>\n\n<p class=\"par\" id=\"c513272b77d76aa1172de56ce347d504.2\">Positive feedback <\/p>",
+                    "<a name=\"72410617422ac55097e9fce192505b21.3\" ><\/a>\n\n<p class=\"par\" id=\"72410617422ac55097e9fce192505b21.3\">Neutral feedback <\/p>"
+                ],
+                "content": "",
+                "explanation": "",
+                "hints": [],
+                "solutions": [{
+                    "Class": "MultipleChoiceSolution",
+                    "MimeType": "application/vnd.nextthought.assessment.multiplechoicesolution",
+                    "value": 1,
+                    "weight": 1.0
+                }]
+            }]
+        },
+        {
+            "Class": "Question",
+            "MimeType": "application/vnd.nextthought.naquestion",
+            "NTIID": "tag:nextthought.com,2011-10:OU-NAQ-BIOL2124_F_2014_Human_Physiology.naq.qid.intro.05",
+            "content": "<a name=\"qid.intro.05\"><\/a>",
+            "parts": [{
+                "Class": "MultipleChoiceMultipleAnswerPart",
+                "MimeType": "application/vnd.nextthought.assessment.randomizedmultiplechoicemultipleanswerpart",
+                "choices": [
+                    "<a name=\"27634ff8002b12e75d98e07ccd005d18\" ><\/a>\n\n<p class=\"par\" id=\"27634ff8002b12e75d98e07ccd005d18\">Water <\/p>",
+                    "<a name=\"4b624e4af0bb4a5000aa214a8beff42a\" ><\/a>\n\n<p class=\"par\" id=\"4b624e4af0bb4a5000aa214a8beff42a\">Nutrients <\/p>",
+                    "<a name=\"990bf420df89c0c6edf606be2022cbea\" ><\/a>\n\n<p class=\"par\" id=\"990bf420df89c0c6edf606be2022cbea\">Oxygen <\/p>",
+                    "<a name=\"3ec239324542a7cab644b4b5d2f8d929\" ><\/a>\n\n<p class=\"par\" id=\"3ec239324542a7cab644b4b5d2f8d929\">High atmospheric pressure <\/p>",
+                    "<a name=\"89c7554967ca3122ad9a4a8a395c9fb4\" ><\/a>\n\n<p class=\"par\" id=\"89c7554967ca3122ad9a4a8a395c9fb4\">Cold temperatures <\/p>"
+                ],
+                "content": "5. Check <b class=\"bfseries\">all<\/b> the following items that a body needs to survive.",
+                "explanation": "",
+                "hints": [],
+                "solutions": [{
+                    "Class": "MultipleChoiceMultipleAnswerSolution",
+                    "MimeType": "application/vnd.nextthought.assessment.multiplechoicemultipleanswersolution",
+                    "value": [
+                        0,
+                        1,
+                        2
+                    ],
+                    "weight": 1.0
+                }]
+            }]
+        },
+        {
+            "Class": "Question",
+            "MimeType": "application/vnd.nextthought.naquestion",
+            "NTIID": "tag:nextthought.com,2011-10:OU-NAQ-BIOL2124_F_2014_Human_Physiology.naq.qid.intro.06",
+            "content": "<a name=\"qid.intro.06\"><\/a> 6. Match the structure from the word bank to the appropriate number on the diagram of the epithelial cell.<br />",
+            "parts": [{
+                "Class": "MatchingPart",
+                "MimeType": "application/vnd.nextthought.assessment.matchingpart",
+                "content": "",
+                "explanation": "",
+                "hints": [],
+                "labels": [
+                    "<a name=\"c4ca4238a0b923820dcc509a6f75849b.4\" ><\/a>\n\n<p class=\"par\" id=\"c4ca4238a0b923820dcc509a6f75849b.4\">1 <\/p>",
+                    "<a name=\"c81e728d9d4c2f636f067f89cc14862c.5\" ><\/a>\n\n<p class=\"par\" id=\"c81e728d9d4c2f636f067f89cc14862c.5\">2 <\/p>",
+                    "<a name=\"eccbc87e4b5ce2fe28308fd9f2a7baf3.6\" ><\/a>\n\n<p class=\"par\" id=\"eccbc87e4b5ce2fe28308fd9f2a7baf3.6\">3 <\/p>",
+                    "<a name=\"a87ff679a2f3e71d9181a67b7542122c.7\" ><\/a>\n\n<p class=\"par\" id=\"a87ff679a2f3e71d9181a67b7542122c.7\">4 <\/p>"
+                ],
+                "solutions": [{
+                    "Class": "MatchingSolution",
+                    "MimeType": "application/vnd.nextthought.assessment.matchingsolution",
+                    "value": {
+                        "0": 1,
+                        "1": 0,
+                        "2": 3,
+                        "3": 2
+                    },
+                    "weight": 1.0
+                }],
+                "values": [
+                    "<a name=\"66b792ce161e8f56840d634a0d9d8704\" ><\/a>\n\n<p class=\"par\" id=\"66b792ce161e8f56840d634a0d9d8704\">Reticular lamina <\/p>",
+                    "<a name=\"3e8a869898c8bb88413992e1cb8b6156\" ><\/a>\n\n<p class=\"par\" id=\"3e8a869898c8bb88413992e1cb8b6156\">Apical side <\/p>",
+                    "<a name=\"aa741ae226a085f78d5856a5c6d82e84\" ><\/a>\n\n<p class=\"par\" id=\"aa741ae226a085f78d5856a5c6d82e84\">Basement membrane <\/p>",
+                    "<a name=\"44ea7d6ce578bdda10b7c51f327dce85\" ><\/a>\n\n<p class=\"par\" id=\"44ea7d6ce578bdda10b7c51f327dce85\">Basal lamina <\/p>"
+                ]
+            }]
+        },
+        {
+            "Class": "Question",
+            "MimeType": "application/vnd.nextthought.naquestion",
+            "NTIID": "tag:nextthought.com,2011-10:OU-NAQ-BIOL2124_F_2014_Human_Physiology.naq.qid.intro.07",
+            "content": "<a name=\"qid.intro.07\"><\/a> 7. What tissue type consists of cells dispersed within a matrix?",
+            "parts": [{
+                "Class": "MultipleChoicePart",
+                "MimeType": "application/vnd.nextthought.assessment.randomizedmultiplechoicepart",
+                "choices": [
+                    "<a name=\"a4311a4e8cdadda8f7d1a4fb9496414b\" ><\/a>\n\n<p class=\"par\" id=\"a4311a4e8cdadda8f7d1a4fb9496414b\">Connective tissue <\/p>",
+                    "<a name=\"229cdaa3109ad343fd4c441d4af96bd7\" ><\/a>\n\n<p class=\"par\" id=\"229cdaa3109ad343fd4c441d4af96bd7\">Muscle tissue <\/p>",
+                    "<a name=\"57c87ee6da3c1699a10da0d31f7e4c34\" ><\/a>\n\n<p class=\"par\" id=\"57c87ee6da3c1699a10da0d31f7e4c34\">Epithelial tissue <\/p>",
+                    "<a name=\"e315d14bcf7d11eabdaad60081bfec4e\" ><\/a>\n\n<p class=\"par\" id=\"e315d14bcf7d11eabdaad60081bfec4e\">Nervous tissue <\/p>"
+                ],
+                "content": "",
+                "explanation": "",
+                "hints": [],
+                "solutions": [{
+                    "Class": "MultipleChoiceSolution",
+                    "MimeType": "application/vnd.nextthought.assessment.multiplechoicesolution",
+                    "value": 0,
+                    "weight": 1.0
+                }]
+            }]
+        },
+        {
+            "Class": "Question",
+            "MimeType": "application/vnd.nextthought.naquestion",
+            "NTIID": "tag:nextthought.com,2011-10:OU-NAQ-BIOL2124_F_2014_Human_Physiology.naq.qid.intro.08",
+            "content": "<a name=\"qid.intro.08\"><\/a> 8. What type of cell is important for energy storage?",
+            "parts": [{
+                "Class": "MultipleChoicePart",
+                "MimeType": "application/vnd.nextthought.assessment.randomizedmultiplechoicepart",
+                "choices": [
+                    "<a name=\"2d96266f68ff96fb71fe13c396e78cbe\" ><\/a>\n\n<p class=\"par\" id=\"2d96266f68ff96fb71fe13c396e78cbe\">Adipocyte <\/p>",
+                    "<a name=\"33d11e4651c8631b3386c83889e4ecd0\" ><\/a>\n\n<p class=\"par\" id=\"33d11e4651c8631b3386c83889e4ecd0\">Myocyte <\/p>",
+                    "<a name=\"6615941564252f8aba44781d1b61c3d0\" ><\/a>\n\n<p class=\"par\" id=\"6615941564252f8aba44781d1b61c3d0\">Astrocyte <\/p>",
+                    "<a name=\"a19f9e9c7fb4e7ffce7abf17582f8bdc\" ><\/a>\n\n<p class=\"par\" id=\"a19f9e9c7fb4e7ffce7abf17582f8bdc\">Erythrocyte <\/p>"
+                ],
+                "content": "",
+                "explanation": "",
+                "hints": [],
+                "solutions": [{
+                    "Class": "MultipleChoiceSolution",
+                    "MimeType": "application/vnd.nextthought.assessment.multiplechoicesolution",
+                    "value": 0,
+                    "weight": 1.0
+                }]
+            }]
+        },
+        {
+            "Class": "Question",
+            "MimeType": "application/vnd.nextthought.naquestion",
+            "NTIID": "tag:nextthought.com,2011-10:OU-NAQ-BIOL2124_F_2014_Human_Physiology.naq.qid.intro.09",
+            "content": "<a name=\"qid.intro.09\"><\/a> 9. What type of cell to cell junction allows for the passage of material from one cell to the adjacent cell?",
+            "parts": [{
+                "Class": "MultipleChoicePart",
+                "MimeType": "application/vnd.nextthought.assessment.randomizedmultiplechoicepart",
+                "choices": [
+                    "<a name=\"e93e168707efb5c399081942c52d560b\" ><\/a>\n\n<p class=\"par\" id=\"e93e168707efb5c399081942c52d560b\">Gap junctions <\/p>",
+                    "<a name=\"d88832e42ad072a5d7282f86a14955b6\" ><\/a>\n\n<p class=\"par\" id=\"d88832e42ad072a5d7282f86a14955b6\">Desmosomes <\/p>",
+                    "<a name=\"612c37add9f4c8fc45f8a498dd13f923\" ><\/a>\n\n<p class=\"par\" id=\"612c37add9f4c8fc45f8a498dd13f923\">Tight junctions <\/p>",
+                    "<a name=\"47eff983c2360cbd26339cf9714404b9\" ><\/a>\n\n<p class=\"par\" id=\"47eff983c2360cbd26339cf9714404b9\">Anchoring junctions <\/p>"
+                ],
+                "content": "",
+                "explanation": "",
+                "hints": [],
+                "solutions": [{
+                    "Class": "MultipleChoiceSolution",
+                    "MimeType": "application/vnd.nextthought.assessment.multiplechoicesolution",
+                    "value": 0,
+                    "weight": 1.0
+                }]
+            }]
+        },
+        {
+            "Class": "Question",
+            "MimeType": "application/vnd.nextthought.naquestion",
+            "NTIID": "tag:nextthought.com,2011-10:OU-NAQ-BIOL2124_F_2014_Human_Physiology.naq.qid.intro.10",
+            "content": "<a name=\"qid.intro.10\"><\/a> 10. What is the value of the controlled variable for body temperature?",
+            "parts": [{
+                "Class": "MultipleChoicePart",
+                "MimeType": "application/vnd.nextthought.assessment.randomizedmultiplechoicepart",
+                "choices": [
+                    "<a name=\"e971f0e24a689ec4daa3295754a2fc27\" ><\/a>\n\n<p class=\"par\" id=\"e971f0e24a689ec4daa3295754a2fc27\">37°C <\/p>",
+                    "<a name=\"d1d4692b184dd77bebb6902b05d3d47d\" ><\/a>\n\n<p class=\"par\" id=\"d1d4692b184dd77bebb6902b05d3d47d\">0°C <\/p>",
+                    "<a name=\"ff25dc78a7fb75ca7b57cd54f45e2cbf\" ><\/a>\n\n<p class=\"par\" id=\"ff25dc78a7fb75ca7b57cd54f45e2cbf\">100°C <\/p>",
+                    "<a name=\"1c2f820bd5e3b5c823bc0f6a187096c7\" ><\/a>\n\n<p class=\"par\" id=\"1c2f820bd5e3b5c823bc0f6a187096c7\">32°C <\/p>"
+                ],
+                "content": "",
+                "explanation": "",
+                "hints": [],
+                "solutions": [{
+                    "Class": "MultipleChoiceSolution",
+                    "MimeType": "application/vnd.nextthought.assessment.multiplechoicesolution",
+                    "value": 0,
+                    "weight": 1.0
+                }]
+            }]
+        },
+        {
+            "Class": "Question",
+            "MimeType": "application/vnd.nextthought.naquestion",
+            "NTIID": "tag:nextthought.com,2011-10:OU-NAQ-BIOL2124_F_2014_Human_Physiology.naq.qid.intro.11",
+            "content": "<a name=\"qid.intro.11\"><\/a> 11. If Heather comes to class one day and says she has a problem with her chondrocytes, which of the following diseases might she be talking about?",
+            "parts": [{
+                "Class": "MultipleChoicePart",
+                "MimeType": "application/vnd.nextthought.assessment.randomizedmultiplechoicepart",
+                "choices": [
+                    "<a name=\"1e78a23a68f15c3b0678f941f6a1b594\" ><\/a>\n\n<p class=\"par\" id=\"1e78a23a68f15c3b0678f941f6a1b594\">Osteoarthritis (breaking down of cartilage) <\/p>",
+                    "<a name=\"913623c39a2f2fafb868353180302b4e\" ><\/a>\n\n<p class=\"par\" id=\"913623c39a2f2fafb868353180302b4e\">Osteoporosis (breaking down of bone) <\/p>",
+                    "<a name=\"2ad90303bd9af24ed89ae33af1dc28d9\" ><\/a>\n\n<p class=\"par\" id=\"2ad90303bd9af24ed89ae33af1dc28d9\">Lymphoma (blood cell tumors) <\/p>",
+                    "<a name=\"7d9e19b94df6c927c4f6bd5c889b34cc\" ><\/a>\n\n<p class=\"par\" id=\"7d9e19b94df6c927c4f6bd5c889b34cc\">Lipedoma (accumulation of fatty tissue) <\/p>"
+                ],
+                "content": "",
+                "explanation": "",
+                "hints": [],
+                "solutions": [{
+                    "Class": "MultipleChoiceSolution",
+                    "MimeType": "application/vnd.nextthought.assessment.multiplechoicesolution",
+                    "value": 0,
+                    "weight": 1.0
+                }]
+            }]
+        },
+        {
+            "Class": "Question",
+            "MimeType": "application/vnd.nextthought.naquestion",
+            "NTIID": "tag:nextthought.com,2011-10:OU-NAQ-BIOL2124_F_2014_Human_Physiology.naq.qid.intro.12",
+            "content": "<a name=\"qid.intro.12\"><\/a> 12. Multiple sclerosis is a disease that destroys myelin. What type of cell could contain myelin?",
+            "parts": [{
+                "Class": "MultipleChoicePart",
+                "MimeType": "application/vnd.nextthought.assessment.randomizedmultiplechoicepart",
+                "choices": [
+                    "<a name=\"2d092d92942366158bc7e1fa013a74dc\" ><\/a>\n\n<p class=\"par\" id=\"2d092d92942366158bc7e1fa013a74dc\">Neurons <\/p>",
+                    "<a name=\"8b8142d276b9980fe7ca1037a59c2a6a\" ><\/a>\n\n<p class=\"par\" id=\"8b8142d276b9980fe7ca1037a59c2a6a\">Myocytes <\/p>",
+                    "<a name=\"9f03baa0f78f5b3db7302dbc78b4cbf3\" ><\/a>\n\n<p class=\"par\" id=\"9f03baa0f78f5b3db7302dbc78b4cbf3\">Adipocytes <\/p>",
+                    "<a name=\"758e13280c1d4d741949396b13dbef8b\" ><\/a>\n\n<p class=\"par\" id=\"758e13280c1d4d741949396b13dbef8b\">Fibrocytes <\/p>"
+                ],
+                "content": "",
+                "explanation": "",
+                "hints": [],
+                "solutions": [{
+                    "Class": "MultipleChoiceSolution",
+                    "MimeType": "application/vnd.nextthought.assessment.multiplechoicesolution",
+                    "value": 0,
+                    "weight": 1.0
+                }]
+            }]
+        },
+        {
+            "Class": "Question",
+            "MimeType": "application/vnd.nextthought.naquestionfillintheblankwordbank",
+            "NTIID": "tag:nextthought.com,2011-10:OU-NAQ-BIOL2124_F_2014_Human_Physiology.naq.qid.intro.13",
+            "content": "<a name=\"qid.intro.13\"><\/a> 13. Match the muscle tissue with a function they undertake.",
+            "parts": [{
+                "Class": "FillInTheBlankWithWordBankPart",
+                "MimeType": "application/vnd.nextthought.assessment.fillintheblankwithwordbankpart",
+                "content": "",
+                "explanation": "",
+                "hints": [],
+                "input": "1. Regulates respiration <input type=\"blankfield\" name=\"001\" /><br />2. Produces heat <input type=\"blankfield\" name=\"002\" /><br />3. Contracts to pump blood <input type=\"blankfield\" name=\"003\" />",
+                "solutions": [{
+                    "Class": "FillInTheBlankWithWordBankSolution",
+                    "MimeType": "application/vnd.nextthought.assessment.fillintheblankwithwordbanksolution",
+                    "value": {
+                        "001": ["2"],
+                        "002": ["1"],
+                        "003": ["0"]
+                    },
+                    "weight": 1.0
+                }],
+                "wordbank": {
+                    "Class": "WordBank",
+                    "MimeType": "application/vnd.nextthought.naqwordbank",
+                    "entries": [
+                        {
+                            "Class": "WordEntry",
+                            "MimeType": "application/vnd.nextthought.naqwordentry",
+                            "content": "Skeletal muscles",
+                            "lang": "en",
+                            "wid": "1",
+                            "word": "Skeletal muscles"
+                        },
+                        {
+                            "Class": "WordEntry",
+                            "MimeType": "application/vnd.nextthought.naqwordentry",
+                            "content": "Cardiac muscle",
+                            "lang": "en",
+                            "wid": "0",
+                            "word": "Cardiac muscle"
+                        },
+                        {
+                            "Class": "WordEntry",
+                            "MimeType": "application/vnd.nextthought.naqwordentry",
+                            "content": "Smooth muscle",
+                            "lang": "en",
+                            "wid": "2",
+                            "word": "Smooth muscle"
+                        }
+                    ],
+                    "unique": true
+                }
+            }],
+            "wordbank": {
+                "Class": "WordBank",
+                "MimeType": "application/vnd.nextthought.naqwordbank",
+                "entries": [
+                    {
+                        "Class": "WordEntry",
+                        "MimeType": "application/vnd.nextthought.naqwordentry",
+                        "content": "Skeletal muscles",
+                        "lang": "en",
+                        "wid": "1",
+                        "word": "Skeletal muscles"
+                    },
+                    {
+                        "Class": "WordEntry",
+                        "MimeType": "application/vnd.nextthought.naqwordentry",
+                        "content": "Cardiac muscle",
+                        "lang": "en",
+                        "wid": "0",
+                        "word": "Cardiac muscle"
+                    },
+                    {
+                        "Class": "WordEntry",
+                        "MimeType": "application/vnd.nextthought.naqwordentry",
+                        "content": "Smooth muscle",
+                        "lang": "en",
+                        "wid": "2",
+                        "word": "Smooth muscle"
+                    }
+                ],
+                "unique": true
+            }
+        },
+        {
+            "Class": "Question",
+            "MimeType": "application/vnd.nextthought.naquestionfillintheblankwordbank",
+            "NTIID": "tag:nextthought.com,2011-10:OU-NAQ-BIOL2124_F_2014_Human_Physiology.naq.qid.intro.14",
+            "content": "<a name=\"qid.intro.14\"><\/a> 14. Match the cell type with the type of tissue these cells are affiliated with.",
+            "parts": [{
+                "Class": "FillInTheBlankWithWordBankPart",
+                "MimeType": "application/vnd.nextthought.assessment.fillintheblankwithwordbankpart",
+                "content": "",
+                "explanation": "",
+                "hints": [],
+                "input": "1. Nervous tissue <input type=\"blankfield\" name=\"004\" /><br />2. Epithelial tissue <input type=\"blankfield\" name=\"005\" /><br />3. Muscle tissue <input type=\"blankfield\" name=\"006\" /><br />4. Connective tissue <input type=\"blankfield\" name=\"007\" />",
+                "solutions": [{
+                    "Class": "FillInTheBlankWithWordBankSolution",
+                    "MimeType": "application/vnd.nextthought.assessment.fillintheblankwithwordbanksolution",
+                    "value": {
+                        "004": ["6"],
+                        "005": ["5"],
+                        "006": ["3"],
+                        "007": ["4"]
+                    },
+                    "weight": 1.0
+                }],
+                "wordbank": {
+                    "Class": "WordBank",
+                    "MimeType": "application/vnd.nextthought.naqwordbank",
+                    "entries": [
+                        {
+                            "Class": "WordEntry",
+                            "MimeType": "application/vnd.nextthought.naqwordentry",
+                            "content": "Mycoyte",
+                            "lang": "en",
+                            "wid": "3",
+                            "word": "Mycoyte"
+                        },
+                        {
+                            "Class": "WordEntry",
+                            "MimeType": "application/vnd.nextthought.naqwordentry",
+                            "content": "Endocrine cell",
+                            "lang": "en",
+                            "wid": "5",
+                            "word": "Endocrine cell"
+                        },
+                        {
+                            "Class": "WordEntry",
+                            "MimeType": "application/vnd.nextthought.naqwordentry",
+                            "content": "Fibrocyte",
+                            "lang": "en",
+                            "wid": "4",
+                            "word": "Fibrocyte"
+                        },
+                        {
+                            "Class": "WordEntry",
+                            "MimeType": "application/vnd.nextthought.naqwordentry",
+                            "content": "Astrocyte",
+                            "lang": "en",
+                            "wid": "6",
+                            "word": "Astrocyte"
+                        }
+                    ],
+                    "unique": true
+                }
+            }],
+            "wordbank": {
+                "Class": "WordBank",
+                "MimeType": "application/vnd.nextthought.naqwordbank",
+                "entries": [
+                    {
+                        "Class": "WordEntry",
+                        "MimeType": "application/vnd.nextthought.naqwordentry",
+                        "content": "Mycoyte",
+                        "lang": "en",
+                        "wid": "3",
+                        "word": "Mycoyte"
+                    },
+                    {
+                        "Class": "WordEntry",
+                        "MimeType": "application/vnd.nextthought.naqwordentry",
+                        "content": "Endocrine cell",
+                        "lang": "en",
+                        "wid": "5",
+                        "word": "Endocrine cell"
+                    },
+                    {
+                        "Class": "WordEntry",
+                        "MimeType": "application/vnd.nextthought.naqwordentry",
+                        "content": "Fibrocyte",
+                        "lang": "en",
+                        "wid": "4",
+                        "word": "Fibrocyte"
+                    },
+                    {
+                        "Class": "WordEntry",
+                        "MimeType": "application/vnd.nextthought.naqwordentry",
+                        "content": "Astrocyte",
+                        "lang": "en",
+                        "wid": "6",
+                        "word": "Astrocyte"
+                    }
+                ],
+                "unique": true
+            }
+        },
+        {
+            "Class": "Question",
+            "MimeType": "application/vnd.nextthought.naquestionfillintheblankwordbank",
+            "NTIID": "tag:nextthought.com,2011-10:OU-NAQ-BIOL2124_F_2014_Human_Physiology.naq.qid.intro.15",
+            "content": "<a name=\"qid.intro.15\"><\/a>",
+            "parts": [{
+                "Class": "FillInTheBlankWithWordBankPart",
+                "MimeType": "application/vnd.nextthought.assessment.fillintheblankwithwordbankpart",
+                "content": "",
+                "explanation": "",
+                "hints": [],
+                "input": "15. <input type=\"blankfield\" name=\"008\" />glands have ducts while <input type=\"blankfield\" name=\"009\" />glands are ductless.",
+                "solutions": [{
+                    "Class": "FillInTheBlankWithWordBankSolution",
+                    "MimeType": "application/vnd.nextthought.assessment.fillintheblankwithwordbanksolution",
+                    "value": {
+                        "008": ["7"],
+                        "009": ["8"]
+                    },
+                    "weight": 1.0
+                }],
+                "wordbank": {
+                    "Class": "WordBank",
+                    "MimeType": "application/vnd.nextthought.naqwordbank",
+                    "entries": [
+                        {
+                            "Class": "WordEntry",
+                            "MimeType": "application/vnd.nextthought.naqwordentry",
+                            "content": "Exocrine",
+                            "lang": "en",
+                            "wid": "8",
+                            "word": "Exocrine"
+                        },
+                        {
+                            "Class": "WordEntry",
+                            "MimeType": "application/vnd.nextthought.naqwordentry",
+                            "content": "Endocrine",
+                            "lang": "en",
+                            "wid": "7",
+                            "word": "Endocrine"
+                        }
+                    ],
+                    "unique": true
+                }
+            }],
+            "wordbank": {
+                "Class": "WordBank",
+                "MimeType": "application/vnd.nextthought.naqwordbank",
+                "entries": [
+                    {
+                        "Class": "WordEntry",
+                        "MimeType": "application/vnd.nextthought.naqwordentry",
+                        "content": "Exocrine",
+                        "lang": "en",
+                        "wid": "8",
+                        "word": "Exocrine"
+                    },
+                    {
+                        "Class": "WordEntry",
+                        "MimeType": "application/vnd.nextthought.naqwordentry",
+                        "content": "Endocrine",
+                        "lang": "en",
+                        "wid": "7",
+                        "word": "Endocrine"
+                    }
+                ],
+                "unique": true
+            }
+        },
+        {
+            "Class": "Question",
+            "MimeType": "application/vnd.nextthought.naquestionfillintheblankwordbank",
+            "NTIID": "tag:nextthought.com,2011-10:OU-NAQ-BIOL2124_F_2014_Human_Physiology.naq.qid.intro.16",
+            "content": "<a name=\"qid.intro.16\"><\/a>",
+            "parts": [{
+                "Class": "FillInTheBlankWithWordBankPart",
+                "MimeType": "application/vnd.nextthought.assessment.fillintheblankwithwordbankpart",
+                "content": "",
+                "explanation": "",
+                "hints": [],
+                "input": "16. <input type=\"blankfield\" name=\"010\" />is comprised of both <input type=\"blankfield\" name=\"011\" />, which is the building of complex substances and <input type=\"blankfield\" name=\"012\" />, which breaks down complex substances into simpler molecules. Glands have ducts while, glands are ductless.",
+                "solutions": [{
+                    "Class": "FillInTheBlankWithWordBankSolution",
+                    "MimeType": "application/vnd.nextthought.assessment.fillintheblankwithwordbanksolution",
+                    "value": {
+                        "010": ["10"],
+                        "011": ["11"],
+                        "012": ["9"]
+                    },
+                    "weight": 1.0
+                }],
+                "wordbank": {
+                    "Class": "WordBank",
+                    "MimeType": "application/vnd.nextthought.naqwordbank",
+                    "entries": [
+                        {
+                            "Class": "WordEntry",
+                            "MimeType": "application/vnd.nextthought.naqwordentry",
+                            "content": "Catabolism",
+                            "lang": "en",
+                            "wid": "9",
+                            "word": "Catabolism"
+                        },
+                        {
+                            "Class": "WordEntry",
+                            "MimeType": "application/vnd.nextthought.naqwordentry",
+                            "content": "Metabolism",
+                            "lang": "en",
+                            "wid": "10",
+                            "word": "Metabolism"
+                        },
+                        {
+                            "Class": "WordEntry",
+                            "MimeType": "application/vnd.nextthought.naqwordentry",
+                            "content": "Anabolism",
+                            "lang": "en",
+                            "wid": "11",
+                            "word": "Anabolism"
+                        }
+                    ],
+                    "unique": true
+                }
+            }],
+            "wordbank": {
+                "Class": "WordBank",
+                "MimeType": "application/vnd.nextthought.naqwordbank",
+                "entries": [
+                    {
+                        "Class": "WordEntry",
+                        "MimeType": "application/vnd.nextthought.naqwordentry",
+                        "content": "Catabolism",
+                        "lang": "en",
+                        "wid": "9",
+                        "word": "Catabolism"
+                    },
+                    {
+                        "Class": "WordEntry",
+                        "MimeType": "application/vnd.nextthought.naqwordentry",
+                        "content": "Metabolism",
+                        "lang": "en",
+                        "wid": "10",
+                        "word": "Metabolism"
+                    },
+                    {
+                        "Class": "WordEntry",
+                        "MimeType": "application/vnd.nextthought.naqwordentry",
+                        "content": "Anabolism",
+                        "lang": "en",
+                        "wid": "11",
+                        "word": "Anabolism"
+                    }
+                ],
+                "unique": true
+            }
+        },
+        {
+            "Class": "Question",
+            "MimeType": "application/vnd.nextthought.naquestion",
+            "NTIID": "tag:nextthought.com,2011-10:OU-NAQ-BIOL2124_F_2014_Human_Physiology.naq.qid.intro.17",
+            "content": "<a name=\"qid.intro.17\"><\/a> 17. Loose connective tissue is reinforced by bundles of fibers that provide tensile strength, elasticity, and protection.",
+            "parts": [{
+                "Class": "MultipleChoicePart",
+                "MimeType": "application/vnd.nextthought.assessment.multiplechoicepart",
+                "choices": [
+                    "<a name=\"f827cf462f62848df37c5e1e94a4da74\" ><\/a>\n\n<p class=\"par\" id=\"f827cf462f62848df37c5e1e94a4da74\">True <\/p>",
+                    "<a name=\"f8320b26d30ab433c5a54546d21f414c\" ><\/a>\n\n<p class=\"par\" id=\"f8320b26d30ab433c5a54546d21f414c\">False <\/p>"
+                ],
+                "content": "",
+                "explanation": "",
+                "hints": [],
+                "solutions": [{
+                    "Class": "MultipleChoiceSolution",
+                    "MimeType": "application/vnd.nextthought.assessment.multiplechoicesolution",
+                    "value": 1,
+                    "weight": 1.0
+                }]
+            }]
+        },
+        {
+            "Class": "Question",
+            "MimeType": "application/vnd.nextthought.naquestion",
+            "NTIID": "tag:nextthought.com,2011-10:OU-NAQ-BIOL2124_F_2014_Human_Physiology.naq.qid.intro.18",
+            "content": "<a name=\"qid.intro.18\"><\/a> 18. Lymph is a type of connective tissue.",
+            "parts": [{
+                "Class": "MultipleChoicePart",
+                "MimeType": "application/vnd.nextthought.assessment.multiplechoicepart",
+                "choices": [
+                    "<a name=\"f827cf462f62848df37c5e1e94a4da74.8\" ><\/a>\n\n<p class=\"par\" id=\"f827cf462f62848df37c5e1e94a4da74.8\">True <\/p>",
+                    "<a name=\"f8320b26d30ab433c5a54546d21f414c.9\" ><\/a>\n\n<p class=\"par\" id=\"f8320b26d30ab433c5a54546d21f414c.9\">False <\/p>"
+                ],
+                "content": "",
+                "explanation": "",
+                "hints": [],
+                "solutions": [{
+                    "Class": "MultipleChoiceSolution",
+                    "MimeType": "application/vnd.nextthought.assessment.multiplechoicesolution",
+                    "value": 0,
+                    "weight": 1.0
+                }]
+            }]
+        },
+        {
+            "Class": "Question",
+            "MimeType": "application/vnd.nextthought.naquestion",
+            "NTIID": "tag:nextthought.com,2011-10:OU-NAQ-BIOL2124_F_2014_Human_Physiology.naq.qid.intro.19",
+            "content": "<a name=\"qid.intro.19\"><\/a> 19. Desmosomes are a type of cell to cell junction that are used to prohibit movement of solutes between cells.",
+            "parts": [{
+                "Class": "MultipleChoicePart",
+                "MimeType": "application/vnd.nextthought.assessment.multiplechoicepart",
+                "choices": [
+                    "<a name=\"f827cf462f62848df37c5e1e94a4da74.10\" ><\/a>\n\n<p class=\"par\" id=\"f827cf462f62848df37c5e1e94a4da74.10\">True <\/p>",
+                    "<a name=\"f8320b26d30ab433c5a54546d21f414c.11\" ><\/a>\n\n<p class=\"par\" id=\"f8320b26d30ab433c5a54546d21f414c.11\">False <\/p>"
+                ],
+                "content": "",
+                "explanation": "",
+                "hints": [],
+                "solutions": [{
+                    "Class": "MultipleChoiceSolution",
+                    "MimeType": "application/vnd.nextthought.assessment.multiplechoicesolution",
+                    "value": 1,
+                    "weight": 1.0
+                }]
+            }]
+        },
+        {
+            "Class": "Question",
+            "MimeType": "application/vnd.nextthought.naquestion",
+            "NTIID": "tag:nextthought.com,2011-10:OU-NAQ-BIOL2124_F_2014_Human_Physiology.naq.qid.intro.20",
+            "content": "<a name=\"qid.intro.20\"><\/a> 20. Human life needs a narrow temperature range because chemical reactions can only occur within a certain range of temperatures.",
+            "parts": [{
+                "Class": "MultipleChoicePart",
+                "MimeType": "application/vnd.nextthought.assessment.multiplechoicepart",
+                "choices": [
+                    "<a name=\"f827cf462f62848df37c5e1e94a4da74.12\" ><\/a>\n\n<p class=\"par\" id=\"f827cf462f62848df37c5e1e94a4da74.12\">True <\/p>",
+                    "<a name=\"f8320b26d30ab433c5a54546d21f414c.13\" ><\/a>\n\n<p class=\"par\" id=\"f8320b26d30ab433c5a54546d21f414c.13\">False <\/p>"
+                ],
+                "content": "",
+                "explanation": "",
+                "hints": [],
+                "solutions": [{
+                    "Class": "MultipleChoiceSolution",
+                    "MimeType": "application/vnd.nextthought.assessment.multiplechoicesolution",
+                    "value": 0,
+                    "weight": 1.0
+                }]
+            }]
+        }
+    ],
+    "title": "Introduction to Human Physiology Quiz"
+}

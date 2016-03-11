@@ -14,25 +14,31 @@ logger = __import__('logging').getLogger(__name__)
 from zope import component
 from zope import interface
 
-from nti.externalization.interfaces import IInternalObjectIO
-from nti.externalization.interfaces import StandardExternalFields
-from nti.externalization.interfaces import IInternalObjectExternalizer
+from nti.assessment.interfaces import IQuestionSet
+from nti.assessment.interfaces import IQAssessedPart
+from nti.assessment.interfaces import IQUploadedFile
+from nti.assessment.interfaces import IQSubmittedPart
+from nti.assessment.interfaces import IQAssessedQuestion
+from nti.assessment.interfaces import IQuestionSubmission
+from nti.assessment.interfaces import IQAssessedQuestionSet
+from nti.assessment.interfaces import IQuestionSetSubmission
+
+from nti.assessment.interfaces import IQPollSubmission
+from nti.assessment.interfaces import IQSurveySubmission
+
+from nti.assessment.response import QUploadedFile
+from nti.assessment.response import QUploadedImageFile
 
 from nti.externalization.datastructures import InterfaceObjectIO
 
-from .response import QUploadedFile
-from .response import QUploadedImageFile
+from nti.externalization.externalization import to_external_object
 
-from .interfaces import IQAssessedPart
-from .interfaces import IQUploadedFile
-from .interfaces import IQSubmittedPart
-from .interfaces import IQAssessedQuestion
-from .interfaces import IQuestionSubmission
-from .interfaces import IQAssessedQuestionSet
-from .interfaces import IQuestionSetSubmission
+from nti.externalization.interfaces import IInternalObjectIO
+from nti.externalization.interfaces import IInternalObjectExternalizer
 
-from .interfaces import IQPollSubmission
-from .interfaces import IQSurveySubmission
+from nti.externalization.interfaces import StandardExternalFields
+
+from nti.wref.interfaces import IWeakRef
 
 OID = StandardExternalFields.OID
 NTIID = StandardExternalFields.NTIID
@@ -61,6 +67,28 @@ class _AssessmentInternalObjectIOBase(object):
 		k = a_type.__name__
 		ext_class_name = k[1:] if not k.startswith('Question') else k
 		return ext_class_name
+
+# Question Sets
+
+@component.adapter(IQuestionSet)
+@interface.implementer(IInternalObjectExternalizer)
+class _QuestionSetExternalizer(InterfaceObjectIO):
+
+	_excluded_in_ivars_ = InterfaceObjectIO._excluded_out_ivars_.union({'questions'})
+
+	_ext_iface_upper_bound = IQuestionSet
+
+	def toExternalObject(self, **kwargs):
+		context = self._ext_replacement()
+		result = super(_QuestionSetExternalizer, self).toExternalObject(**kwargs)
+		result['questions'] = questions = []
+		for question in context.questions or ():
+			question = question() if IWeakRef.providedBy(question) else question
+			if question is not None:
+				questions.append(to_external_object(question, **kwargs))
+		return result
+
+# Submission and Assessed objects
 
 @interface.implementer(IInternalObjectExternalizer)
 class _QContainedObjectExternalizer(object):

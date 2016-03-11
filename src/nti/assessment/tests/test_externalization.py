@@ -18,22 +18,25 @@ from hamcrest import assert_that
 from hamcrest import has_property
 does_not = is_not
 
+from nti.testing.matchers import verifiably_provides
+
 import os
 import json
 
 import fudge
 
+from nti.assessment.interfaces import IQuestionSet
+
+from nti.assessment.question import QFillInTheBlankWithWordBankQuestion
+
 from nti.assessment.randomized.interfaces import IQuestionBank
 from nti.assessment.randomized.interfaces import IQuestionIndexRange
-from nti.assessment.question import QFillInTheBlankWithWordBankQuestion
 
 from nti.externalization import internalization
 
 from nti.externalization.tests import externalizes
 
 from nti.assessment.tests import AssessmentTestCase
-
-from nti.testing.matchers import verifiably_provides
 
 GIF_DATAURL = b'data:image/gif;base64,R0lGODlhCwALAIAAAAAA3pn/ZiH5BAEAAAEALAAAAAALAAsAAAIUhA+hkcuO4lmNVindo7qyrIXiGBYAOw=='
 
@@ -217,6 +220,28 @@ class TestExternalization(AssessmentTestCase):
 		sol = internal.solutions[0]
 		assert_that(sol, has_property('value', has_entry('001', has_property('solution', 'yes, I will'))))
 
+	def test_question_set(self):
+		path = os.path.join(os.path.dirname(__file__), "questionset.json")
+		with open(path, "r") as fp:
+			ext_obj = json.load(fp)
+
+		factory = internalization.find_factory_for(ext_obj)
+		assert_that(factory, is_(not_none()))
+
+		internal = factory()
+		internalization.update_from_external_object(internal, ext_obj, require_updater=True)
+
+		ntiid = u"tag:nextthought.com,2011-10:OU-NAQ-BIOL2124_F_2014_Human_Physiology.naq.set.qset:intro_quiz1"
+		internal.ntiid = ntiid
+
+		assert_that(internal, verifiably_provides(IQuestionSet) )
+		assert_that(internal, has_property('questions', has_length(20)))
+
+		assert_that(internal, externalizes(all_of(has_entry('NTIID', is_(ntiid)),
+												  has_entry('Class', is_('QuestionSet')),
+												  has_entry('MimeType', is_('application/vnd.nextthought.naquestionset')),
+												  has_entry('questions', has_length(20)))))
+		
 	@fudge.patch('nti.assessment.randomized.get_seed')
 	def test_question_bank(self, mock_gs):
 		
