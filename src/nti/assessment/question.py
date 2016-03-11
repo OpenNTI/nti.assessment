@@ -47,6 +47,8 @@ from nti.schema.fieldproperty import createDirectFieldProperties
 
 from nti.schema.schema import EqHash
 
+from nti.wref.interfaces import IWeakRef
+
 @interface.implementer(INTIContained,
 					   IFiniteSequence,
 					   IContentTypeAware,
@@ -97,6 +99,13 @@ class QQuestionSet(QBaseMixin):
 
 	mimeType = mime_type = QUESTION_SET_MIME_TYPE
 
+	@property
+	def Items(self):
+		for question in self.questions or ():
+			question = question() if IWeakRef.providedBy(question) else question
+			if question is not None:
+				yield question
+		
 	def sublocations(self):
 		for question in self.questions or ():
 			yield question

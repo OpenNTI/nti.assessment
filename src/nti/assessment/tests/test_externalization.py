@@ -236,7 +236,9 @@ class TestExternalization(AssessmentTestCase):
 
 		assert_that(internal, verifiably_provides(IQuestionSet) )
 		assert_that(internal, has_property('questions', has_length(20)))
-
+		
+		assert_that(list(internal.Items), has_length(20))
+		
 		assert_that(internal, externalizes(all_of(has_entry('NTIID', is_(ntiid)),
 												  has_entry('Class', is_('QuestionSet')),
 												  has_entry('MimeType', is_('application/vnd.nextthought.naquestionset')),

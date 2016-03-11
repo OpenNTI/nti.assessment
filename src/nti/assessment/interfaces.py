@@ -61,6 +61,7 @@ from nti.schema.field import Choice
 from nti.schema.field import Object
 from nti.schema.field import Number
 from nti.schema.field import Variant
+from nti.schema.field import Iterable
 from nti.schema.field import ListOrTuple
 from nti.schema.field import IndexedIterable
 from nti.schema.field import ValidText as Text
@@ -639,6 +640,10 @@ class IQuestionSet(IQAssessment, ITitledContent, IAttributeAnnotatable):
 								min_length=1,
 								value_type=Object(IQuestion, title="The questions") )
 	
+	Items = Iterable(title='All the resolved items in this set', 
+					 readonly=True, required=False)
+	Items.setTaggedValue('_ext_excluded_out', True)
+
 	def __len__():
 		"""
 		return the number of questions in this set
@@ -1324,6 +1329,10 @@ class IQSurvey(ITitledContent, IQInquiry, IFiniteSequence):
 								min_length=1,
 								value_type=Object(IQPoll, title="The poll questions") )
 	
+	Items = Iterable(title='All the resolved items in this survey', 
+					 readonly=True, required=False)
+	Items.setTaggedValue('_ext_excluded_out', True)
+
 	def __len__():
 		"""
 		return the number of questions in this survey

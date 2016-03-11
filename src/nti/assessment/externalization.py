@@ -82,10 +82,8 @@ class _QuestionSetExternalizer(InterfaceObjectIO):
 		context = self._ext_replacement()
 		result = super(_QuestionSetExternalizer, self).toExternalObject(**kwargs)
 		result['questions'] = questions = []
-		for question in context.questions or ():
-			question = question() if IWeakRef.providedBy(question) else question
-			if question is not None:
-				questions.append(to_external_object(question, **kwargs))
+		for question in context.Items:
+			questions.append(to_external_object(question, **kwargs))
 		return result
 
 # Submission and Assessed objects

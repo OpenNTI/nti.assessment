@@ -62,10 +62,13 @@ from nti.dublincore.datastructures import PersistentCreatedModDateTrackingObject
 
 from nti.externalization.representation import WithRepr
 
-from nti.schema.schema import EqHash
 from nti.schema.field import SchemaConfigured
 from nti.schema.fieldproperty import AdaptingFieldProperty
 from nti.schema.fieldproperty import createDirectFieldProperties
+
+from nti.schema.schema import EqHash
+
+from nti.wref.interfaces import IWeakRef
 
 @interface.implementer(IQInquiry, INTIContained)
 class QInquiry(QPersistentSubmittable):
@@ -116,6 +119,13 @@ class QSurvey(QInquiry):
 	polls = parts = alias('questions')
 
 	title = AdaptingFieldProperty(IQSurvey['title'])
+
+	@property
+	def Items(self):
+		for poll in self.questions or ():
+			poll = poll() if IWeakRef.providedBy(poll) else poll
+			if poll is not None:
+				yield poll
 
 	def sublocations(self):
 		for question in self.questions or ():
