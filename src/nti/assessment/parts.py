@@ -21,15 +21,6 @@ from zope.schema.interfaces import ConstraintNotSatisfied
 
 from persistent import Persistent
 
-from nti.contentfragments.interfaces import UnicodeContentFragment as _u
-
-from nti.externalization.representation import WithRepr
-
-from nti.namedfile.file import FileConstraints
-
-from nti.schema.schema import EqHash
-from nti.schema.field import SchemaConfigured
-
 from nti.assessment.common import grader_for_solution_and_response
 
 from nti.assessment.interfaces import IQPart
@@ -77,6 +68,15 @@ from nti.assessment.interfaces import IQModeledContentResponse
 
 from nti.assessment.interfaces import convert_response_for_solution
 
+from nti.contentfragments.interfaces import UnicodeContentFragment as _u
+
+from nti.externalization.representation import WithRepr
+
+from nti.namedfile.file import FileConstraints
+
+from nti.schema.schema import EqHash
+from nti.schema.field import SchemaConfigured
+
 @WithRepr
 @interface.implementer(IQNonGradablePart)
 @EqHash('content', 'hints', 'explanation',
@@ -112,14 +112,14 @@ class QPart(QNonGradablePart):
 	of an appropriate type.
 	"""
 
-	#: The interface to which we will attempt to adapt ourself, the
-	#: solution and the response when grading. Should be a
-	#: class:`.IQPartGrader`. The response will have first been converted
-	#: for the solution.
+	# : The interface to which we will attempt to adapt ourself, the
+	# : solution and the response when grading. Should be a
+	# : class:`.IQPartGrader`. The response will have first been converted
+	# : for the solution.
 	grader_interface = IQPartGrader
 
-	#: The name of the grader we will attempt to adapt to. Defaults to the default,
-	#: unnamed, adapter
+	# : The name of the grader we will attempt to adapt to. Defaults to the default,
+	# : unnamed, adapter
 	grader_name = _u('')
 
 	solutions = ()

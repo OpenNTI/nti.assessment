@@ -18,6 +18,13 @@ from zope.interface.common.sequence import IFiniteSequence
 
 from zope.location.interfaces import ISublocations
 
+from nti.assessment._util import make_sublocations as _make_sublocations
+
+from nti.assessment.interfaces import IQBaseSubmission
+from nti.assessment.interfaces import IQuestionSubmission
+from nti.assessment.interfaces import IQuestionSetSubmission
+from nti.assessment.interfaces import IQAssignmentSubmission
+
 from nti.dataserver_core.mixins import ContainedMixin
 
 from nti.dublincore.datastructures import PersistentCreatedModDateTrackingObject
@@ -26,13 +33,6 @@ from nti.externalization.representation import WithRepr
 
 from nti.schema.field import SchemaConfigured
 from nti.schema.fieldproperty import createDirectFieldProperties
-
-from .interfaces import IQBaseSubmission
-from .interfaces import IQuestionSubmission
-from .interfaces import IQuestionSetSubmission
-from .interfaces import IQAssignmentSubmission
-
-from ._util import make_sublocations as _make_sublocations
 
 # NOTE that these objects are not Persistent. Originally this is
 # because they were never intended for storage in the database; only

@@ -106,7 +106,7 @@ class QPoll(QInquiry):
 	def __len__(self):
 		return len(self.parts or ())
 
-@interface.implementer(IQSurvey, ISublocations)
+@interface.implementer(IQSurvey)
 @EqHash('title', 'questions', superhash=True)
 class QSurvey(QInquiry):
 	createDirectFieldProperties(IQSurvey)
@@ -126,10 +126,6 @@ class QSurvey(QInquiry):
 			poll = poll() if IWeakRef.providedBy(poll) else poll
 			if poll is not None:
 				yield poll
-
-	def sublocations(self):
-		for question in self.questions or ():
-			yield question
 
 	def __getitem__(self, index):
 		return self.questions[index]

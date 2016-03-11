@@ -24,9 +24,10 @@ from nti.contentfragments.interfaces import HTMLContentFragment
 
 from nti.externalization.representation import WithRepr
 
-from nti.schema.schema import EqHash
 from nti.schema.field import SchemaConfigured
 from nti.schema.fieldproperty import createDirectFieldProperties
+
+from nti.schema.schema import EqHash
 
 @WithRepr
 @EqHash("pattern",)

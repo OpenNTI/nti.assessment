@@ -13,24 +13,25 @@ from functools import total_ordering
 
 from zope import interface
 
+from nti.assessment.interfaces import QUESTION_BANK_MIME_TYPE
+from nti.assessment.interfaces import RANDOMIZED_QUESTION_SET_MIME_TYPE
+
+from nti.assessment.randomized.interfaces import IQuestionBank
+from nti.assessment.randomized.interfaces import IQuestionIndexRange
+from nti.assessment.randomized.interfaces import IRandomizedQuestionSet
+from nti.assessment.randomized.interfaces import INonRandomizedQuestionSet
+from nti.assessment.randomized.interfaces import INonRandomizedQuestionBank
+from nti.assessment.randomized.interfaces import ISha224RandomizedQuestionSet
+from nti.assessment.randomized.interfaces import ISha224RandomizedQuestionBank
+
+from nti.assessment.question import QQuestionSet
+
 from nti.externalization.representation import WithRepr
 
-from nti.schema.schema import EqHash
 from nti.schema.field import SchemaConfigured
 from nti.schema.fieldproperty import createDirectFieldProperties
 
-from ..interfaces import QUESTION_BANK_MIME_TYPE
-from ..interfaces import RANDOMIZED_QUESTION_SET_MIME_TYPE
-
-from ..question import QQuestionSet
-
-from .interfaces import IQuestionBank
-from .interfaces import IQuestionIndexRange
-from .interfaces import IRandomizedQuestionSet
-from .interfaces import INonRandomizedQuestionSet
-from .interfaces import INonRandomizedQuestionBank
-from .interfaces import ISha224RandomizedQuestionSet
-from .interfaces import ISha224RandomizedQuestionBank
+from nti.schema.schema import EqHash
 
 @interface.implementer(IRandomizedQuestionSet)
 class QRandomizedQuestionSet(QQuestionSet):

@@ -13,36 +13,36 @@ from zope import interface
 
 from persistent import Persistent
 
+from nti.assessment._util import TrivialValuedMixin as _TrivialValuedMixin
+
+from nti.assessment.parts import QPart
+from nti.assessment.parts import QMatchingPart
+from nti.assessment.parts import QOrderingPart
+from nti.assessment.parts import QNumericMathPart
+from nti.assessment.parts import QFreeResponsePart
+from nti.assessment.parts import QSymbolicMathPart
+from nti.assessment.parts import QMultipleChoicePart
+from nti.assessment.parts import QFillInTheBlankShortAnswerPart
+from nti.assessment.parts import QFillInTheBlankWithWordBankPart
+from nti.assessment.parts import QMultipleChoiceMultipleAnswerPart
+
+from nti.assessment.interfaces import IQSolution
+from nti.assessment.interfaces import IQMathSolution
+from nti.assessment.interfaces import IQMatchingSolution
+from nti.assessment.interfaces import IQOrderingSolution
+from nti.assessment.interfaces import IQConnectingSolution
+from nti.assessment.interfaces import IQNumericMathSolution
+from nti.assessment.interfaces import IQFreeResponseSolution
+from nti.assessment.interfaces import IQSymbolicMathSolution
+from nti.assessment.interfaces import IQMultipleChoiceSolution
+from nti.assessment.interfaces import IQLatexSymbolicMathSolution
+from nti.assessment.interfaces import IQFillInTheBlankShortAnswerSolution
+from nti.assessment.interfaces import IQFillInTheBlankWithWordBankSolution
+from nti.assessment.interfaces import IQMultipleChoiceMultipleAnswerSolution
+
 from nti.externalization.representation import WithRepr
 
 from nti.schema.schema import EqHash
-
-from .parts import QPart
-from .parts import QMatchingPart
-from .parts import QOrderingPart
-from .parts import QNumericMathPart
-from .parts import QFreeResponsePart
-from .parts import QSymbolicMathPart
-from .parts import QMultipleChoicePart
-from .parts import QFillInTheBlankShortAnswerPart
-from .parts import QFillInTheBlankWithWordBankPart
-from .parts import QMultipleChoiceMultipleAnswerPart
-
-from .interfaces import IQSolution
-from .interfaces import IQMathSolution
-from .interfaces import IQMatchingSolution
-from .interfaces import IQOrderingSolution
-from .interfaces import IQConnectingSolution
-from .interfaces import IQNumericMathSolution
-from .interfaces import IQFreeResponseSolution
-from .interfaces import IQSymbolicMathSolution
-from .interfaces import IQMultipleChoiceSolution
-from .interfaces import IQLatexSymbolicMathSolution
-from .interfaces import IQFillInTheBlankShortAnswerSolution
-from .interfaces import IQFillInTheBlankWithWordBankSolution
-from .interfaces import IQMultipleChoiceMultipleAnswerSolution
-
-from ._util import TrivialValuedMixin as _TrivialValuedMixin
 
 @WithRepr
 @interface.implementer(IQSolution)

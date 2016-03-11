@@ -76,7 +76,7 @@ class WordEntry(SchemaConfigured, Persistent, Contained):
 
 @WithRepr
 @EqHash("ids", "unique")
-@interface.implementer(IWordBank, ISublocations)
+@interface.implementer(IWordBank)
 class WordBank(Contained, SchemaConfigured, Persistent):
 	createDirectFieldProperties(IWordBank)
 

@@ -18,6 +18,16 @@ from zope.container.contained import Contained
 
 from persistent import Persistent
 
+from nti.assessment._util import TrivialValuedMixin
+
+from nti.assessment.interfaces import IQResponse
+from nti.assessment.interfaces import IQDictResponse
+from nti.assessment.interfaces import IQFileResponse
+from nti.assessment.interfaces import IQListResponse
+from nti.assessment.interfaces import IQTextResponse
+from nti.assessment.interfaces import IQUploadedFile
+from nti.assessment.interfaces import IQModeledContentResponse
+
 from nti.dataserver_core.schema import BodyFieldProperty
 
 from nti.dublincore.datastructures import PersistentCreatedModDateTrackingObject
@@ -26,16 +36,6 @@ from nti.namedfile.file import NamedBlobFile
 from nti.namedfile.file import NamedBlobImage
 
 from nti.schema.fieldproperty import AdaptingFieldProperty
-
-from .interfaces import IQResponse
-from .interfaces import IQDictResponse
-from .interfaces import IQFileResponse
-from .interfaces import IQListResponse
-from .interfaces import IQTextResponse
-from .interfaces import IQUploadedFile
-from .interfaces import IQModeledContentResponse
-
-from ._util import TrivialValuedMixin
 
 @interface.implementer(IQResponse)
 class QResponse(Persistent, Contained):

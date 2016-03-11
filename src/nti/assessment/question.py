@@ -19,8 +19,6 @@ from zope.container.contained import Contained
 
 from zope.interface.common.sequence import IFiniteSequence
 
-from zope.location.interfaces import ISublocations
-
 from zope.mimetype.interfaces import IContentTypeAware
 
 from persistent import Persistent
@@ -87,7 +85,7 @@ class QQuestion(QBaseMixin):
 		return len(self.parts or ())
 
 @EqHash('title', 'questions', superhash=True)
-@interface.implementer(IQuestionSet, ISublocations)
+@interface.implementer(IQuestionSet)
 class QQuestionSet(QBaseMixin):
 
 	questions = ()
@@ -105,10 +103,6 @@ class QQuestionSet(QBaseMixin):
 			question = question() if IWeakRef.providedBy(question) else question
 			if question is not None:
 				yield question
-		
-	def sublocations(self):
-		for question in self.questions or ():
-			yield question
 
 	def __getitem__(self, index):
 		return self.questions[index]
