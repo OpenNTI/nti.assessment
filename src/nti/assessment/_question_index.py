@@ -69,7 +69,7 @@ class QuestionIndex(object):
 
 	@classmethod
 	def explode_assignment_to_register(cls, assignment):
-		if type(assignment) != AssestmentProxy:
+		if not isProxy(assignment, AssestmentProxy):
 			assignment = AssestmentProxy(assignment)
 		things_to_register = set([assignment])
 		for part in assignment.parts:
@@ -80,27 +80,23 @@ class QuestionIndex(object):
 
 	@classmethod
 	def explode_question_set_to_register(cls, question_set):
-		if type(question_set) != AssestmentProxy:
+		if not isProxy(question_set, AssestmentProxy):
 			question_set = AssestmentProxy(question_set)
 		things_to_register = set([question_set])
-		for question in question_set.questions:
-			question = question() if IWeakRef.providedBy(question) else question
-			if question is not None:
-				question = AssestmentProxy(question, question_set)
-				things_to_register.add(question)
+		for question in question_set.Items:
+			question = AssestmentProxy(question, question_set)
+			things_to_register.add(question)
 		return things_to_register
 	_explode_question_set_to_register = explode_question_set_to_register
 
 	@classmethod
 	def explode_survey_to_register(cls, survey):
-		if type(survey) != AssestmentProxy:
+		if not isProxy(survey, AssestmentProxy):
 			survey = AssestmentProxy(survey)
 		things_to_register = set([survey])
-		for poll in survey.questions:
-			poll = poll() if IWeakRef.providedBy(poll) else poll
-			if poll != None:
-				poll = AssestmentProxy(poll, survey)
-				things_to_register.add(poll)
+		for poll in survey.Items:
+			poll = AssestmentProxy(poll, survey)
+			things_to_register.add(poll)
 		return things_to_register
 	_explode_survey_to_register = explode_survey_to_register
 
