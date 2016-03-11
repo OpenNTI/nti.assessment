@@ -7,25 +7,27 @@
 from __future__ import unicode_literals, print_function, absolute_import, division
 __docformat__ = "restructuredtext en"
 
+logger = __import__('logging').getLogger(__name__)
+
 from zope import interface
+
+from nti.assessment.interfaces import IQPart
+from nti.assessment.interfaces import IQPartGrader
+from nti.assessment.interfaces import IQuestionSet
+from nti.assessment.interfaces import IQMatchingPart
+from nti.assessment.interfaces import IQOrderingPart
+from nti.assessment.interfaces import IQConnectingPart
+from nti.assessment.interfaces import IQMatchingPartGrader
+from nti.assessment.interfaces import IQOrderingPartGrader
+from nti.assessment.interfaces import IQMultipleChoicePart
+from nti.assessment.interfaces import IQMultipleChoicePartGrader
+from nti.assessment.interfaces import IQMultipleChoiceMultipleAnswerPart
+from nti.assessment.interfaces import IQMultipleChoiceMultipleAnswerPartGrader
 
 from nti.schema.field import Int
 from nti.schema.field import Bool
 from nti.schema.field import Object
 from nti.schema.field import ListOrTuple
-
-from ..interfaces import IQPart
-from ..interfaces import IQPartGrader
-from ..interfaces import IQuestionSet
-from ..interfaces import IQMatchingPart
-from ..interfaces import IQOrderingPart
-from ..interfaces import IQConnectingPart
-from ..interfaces import IQMatchingPartGrader
-from ..interfaces import IQOrderingPartGrader
-from ..interfaces import IQMultipleChoicePart
-from ..interfaces import IQMultipleChoicePartGrader
-from ..interfaces import IQMultipleChoiceMultipleAnswerPart
-from ..interfaces import IQMultipleChoiceMultipleAnswerPartGrader
 
 # marker
 
@@ -151,7 +153,7 @@ class IQuestionBank(IQuestionSet):
 	"""
 
 	draw = Int(title="number of questions to be randomly drawn", min=1,
-				required=True, default=1)
+			   required=True, default=1)
 
 	ranges = ListOrTuple(Object(IQuestionIndexRange), title="Question index ranges",
 						 required=False, default=())

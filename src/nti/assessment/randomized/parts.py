@@ -11,30 +11,30 @@ logger = __import__('logging').getLogger(__name__)
 
 from zope import interface
 
-from ..parts import QMatchingPart
-from ..parts import QOrderingPart
-from ..parts import QConnectingPart
-from ..parts import QMultipleChoicePart
-from ..parts import QMultipleChoiceMultipleAnswerPart
+from nti.assessment.parts import QMatchingPart
+from nti.assessment.parts import QOrderingPart
+from nti.assessment.parts import QConnectingPart
+from nti.assessment.parts import QMultipleChoicePart
+from nti.assessment.parts import QMultipleChoiceMultipleAnswerPart
 
-from .interfaces import ISha224RandomizedMatchingPart
-from .interfaces import ISha224RandomizedOrderingPart
-from .interfaces import ISha224RandomizedMultipleChoicePart
-from .interfaces import ISha224RandomizedMultipleChoiceMultipleAnswerPart
+from nti.assessment.randomized.interfaces import ISha224RandomizedMatchingPart
+from nti.assessment.randomized.interfaces import ISha224RandomizedOrderingPart
+from nti.assessment.randomized.interfaces import ISha224RandomizedMultipleChoicePart
+from nti.assessment.randomized.interfaces import ISha224RandomizedMultipleChoiceMultipleAnswerPart
 
-from .interfaces import IQRandomizedMatchingPart
-from .interfaces import IQRandomizedOrderingPart
-from .interfaces import INonRandomizedMatchingPart
-from .interfaces import INonRandomizedOrderingPart
-from .interfaces import IQRandomizedConnectingPart
-from .interfaces import IQRandomizedMatchingPartGrader
-from .interfaces import IQRandomizedOrderingPartGrader
-from .interfaces import IQRandomizedMultipleChoicePart
-from .interfaces import INonRandomizedMultipleChoicePart
-from .interfaces import IQRandomizedMultipleChoicePartGrader
-from .interfaces import IQRandomizedMultipleChoiceMultipleAnswerPart
-from .interfaces import INonRandomizedMultipleChoiceMultipleAnswerPart
-from .interfaces import IQRandomizedMultipleChoiceMultipleAnswerPartGrader
+from nti.assessment.randomized.interfaces import IQRandomizedMatchingPart
+from nti.assessment.randomized.interfaces import IQRandomizedOrderingPart
+from nti.assessment.randomized.interfaces import INonRandomizedMatchingPart
+from nti.assessment.randomized.interfaces import INonRandomizedOrderingPart
+from nti.assessment.randomized.interfaces import IQRandomizedConnectingPart
+from nti.assessment.randomized.interfaces import IQRandomizedMatchingPartGrader
+from nti.assessment.randomized.interfaces import IQRandomizedOrderingPartGrader
+from nti.assessment.randomized.interfaces import IQRandomizedMultipleChoicePart
+from nti.assessment.randomized.interfaces import INonRandomizedMultipleChoicePart
+from nti.assessment.randomized.interfaces import IQRandomizedMultipleChoicePartGrader
+from nti.assessment.randomized.interfaces import IQRandomizedMultipleChoiceMultipleAnswerPart
+from nti.assessment.randomized.interfaces import INonRandomizedMultipleChoiceMultipleAnswerPart
+from nti.assessment.randomized.interfaces import IQRandomizedMultipleChoiceMultipleAnswerPartGrader
 
 @interface.implementer(IQRandomizedConnectingPart)
 class QRandomizedConnectingPart(QConnectingPart):
