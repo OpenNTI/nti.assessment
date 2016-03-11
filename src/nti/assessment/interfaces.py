@@ -1092,6 +1092,16 @@ class IQAssessmentItemContainer(IEnumerableMapping):
 	typically with annotations).
 	"""
 		
+	def append(item):
+		"""
+		Add an item to this container
+		"""
+
+	def extend(items):
+		"""
+		Add the specified items to this container
+		"""
+
 	def assessments():
 		"""
 		return an iterable with all assessmentsi this container
