@@ -7,6 +7,8 @@
 from __future__ import unicode_literals, print_function, absolute_import, division
 __docformat__ = "restructuredtext en"
 
+logger = __import__('logging').getLogger(__name__)
+
 from zope import interface
 
 from zope.annotation.interfaces import IAttributeAnnotatable
@@ -1205,9 +1207,9 @@ class IWordEntry(interface.Interface):
 
 class IWordBank(IIterable, IReadMapping):
 
-	entries = List(title="The word entries",
-				   value_type=Object(IWordEntry, title="The word"),
-				   min_length=1)
+	entries = ListOrTuple(title="The word entries",
+				   		  value_type=Object(IWordEntry, title="The word"),
+				   		  min_length=1)
 
 	unique = Bool(title="A word can be used once in a question/part",
 				  default=True, required=False)

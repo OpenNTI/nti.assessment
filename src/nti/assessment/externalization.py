@@ -38,8 +38,6 @@ from nti.externalization.interfaces import IInternalObjectExternalizer
 
 from nti.externalization.interfaces import StandardExternalFields
 
-from nti.wref.interfaces import IWeakRef
-
 OID = StandardExternalFields.OID
 NTIID = StandardExternalFields.NTIID
 
@@ -82,7 +80,7 @@ class _QuestionSetExternalizer(InterfaceObjectIO):
 		context = self._ext_replacement()
 		result = super(_QuestionSetExternalizer, self).toExternalObject(**kwargs)
 		result['questions'] = questions = []
-		for question in context.Items:
+		for question in context.Items: # resolve weaf refs
 			questions.append(to_external_object(question, **kwargs))
 		return result
 

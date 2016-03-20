@@ -43,6 +43,8 @@ class _WordEntryUpdater(object):
 	def updateFromExternalObject(self, parsed, *args, **kwargs):
 		if 'content' not in parsed or not parsed['content']:
 			parsed['content'] = parsed['word']
+		if parsed.get('lang'):
+			parsed['lang'] = parsed['lang'].lower()
 		result = InterfaceObjectIO(self.obj, IWordEntry).updateFromExternalObject(parsed)
 		return result
 

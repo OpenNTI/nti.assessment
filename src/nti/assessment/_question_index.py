@@ -52,7 +52,7 @@ def _ntiid_object_hook(k, v, x):
 		v.value = LatexContentFragment(x['value'].replace(u'\u2212', '-'))
 	return v
 
-class AssestmentProxy(ProxyBase):
+class AssessmentProxy(ProxyBase):
 
 	__container__ = property(
 					lambda s: s.__dict__.get('_v__container__'),
@@ -69,41 +69,41 @@ class QuestionIndex(object):
 
 	@classmethod
 	def explode_assignment_to_register(cls, assignment):
-		if not isProxy(assignment, AssestmentProxy):
-			assignment = AssestmentProxy(assignment)
+		if not isProxy(assignment, AssessmentProxy):
+			assignment = AssessmentProxy(assignment)
 		things_to_register = set([assignment])
 		for part in assignment.parts:
-			qset = AssestmentProxy(part.question_set, assignment)
+			qset = AssessmentProxy(part.question_set, assignment)
 			things_to_register.update(cls._explode_object_to_register(qset))
 		return things_to_register
 	_explode_assignment_to_register = explode_assignment_to_register
 
 	@classmethod
 	def explode_question_set_to_register(cls, question_set):
-		if not isProxy(question_set, AssestmentProxy):
-			question_set = AssestmentProxy(question_set)
+		if not isProxy(question_set, AssessmentProxy):
+			question_set = AssessmentProxy(question_set)
 		things_to_register = set([question_set])
 		for question in question_set.Items:
-			question = AssestmentProxy(question, question_set)
+			question = AssessmentProxy(question, question_set)
 			things_to_register.add(question)
 		return things_to_register
 	_explode_question_set_to_register = explode_question_set_to_register
 
 	@classmethod
 	def explode_survey_to_register(cls, survey):
-		if not isProxy(survey, AssestmentProxy):
-			survey = AssestmentProxy(survey)
+		if not isProxy(survey, AssessmentProxy):
+			survey = AssessmentProxy(survey)
 		things_to_register = set([survey])
 		for poll in survey.Items:
-			poll = AssestmentProxy(poll, survey)
+			poll = AssessmentProxy(poll, survey)
 			things_to_register.add(poll)
 		return things_to_register
 	_explode_survey_to_register = explode_survey_to_register
 
 	@classmethod
 	def explode_object_to_register(cls, obj):
-		if not isProxy(obj, AssestmentProxy):
-			obj = AssestmentProxy(obj)
+		if not isProxy(obj, AssessmentProxy):
+			obj = AssessmentProxy(obj)
 		things_to_register = set([obj])
 		if IQAssignment.providedBy(obj):
 			things_to_register.update(cls._explode_assignment_to_register(obj))

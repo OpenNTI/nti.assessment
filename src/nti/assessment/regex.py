@@ -32,7 +32,7 @@ from nti.schema.schema import EqHash
 @WithRepr
 @EqHash("pattern",)
 @interface.implementer(IRegEx)
-class RegEx(Contained, SchemaConfigured, Persistent):
+class RegEx(SchemaConfigured, Persistent, Contained):
 	createDirectFieldProperties(IRegEx)
 
 	__external_can_create__ = True

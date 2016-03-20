@@ -16,24 +16,26 @@ from zope import interface
 
 from zope.container.contained import Contained
 
-from zope.location.interfaces import ISublocations
-
 from persistent import Persistent
 
-from nti.common.string import safestr
-from nti.common.property import CachedProperty
+from nti.assessment.interfaces import IWordBank
+from nti.assessment.interfaces import IWordEntry
+
 from nti.common.maps import CaseInsensitiveDict
+
+from nti.common.property import CachedProperty
+
+from nti.common.string import safestr
 
 from nti.contentfragments.interfaces import HTMLContentFragment
 
 from nti.externalization.representation import WithRepr
 
-from nti.schema.schema import EqHash
 from nti.schema.field import SchemaConfigured
+
 from nti.schema.fieldproperty import createDirectFieldProperties
 
-from .interfaces import IWordBank
-from .interfaces import IWordEntry
+from nti.schema.schema import EqHash
 
 def safe_encode(word, encoding="UTF-8"):
 	if not isinstance(word, six.string_types):
@@ -64,20 +66,20 @@ class WordEntry(SchemaConfigured, Persistent, Contained):
 
 	def __lt__(self, other):
 		try:
-			return (self.word.lower(), self.lang.lower()) < (other.word.lower(), other.self.lang.lower())
+			return (self.word.lower(), self.lang) < (other.word.lower(), other.self.lang)
 		except AttributeError:
 			return NotImplemented
 
 	def __gt__(self, other):
 		try:
-			return  (self.word.lower(), self.lang.lower()) > (other.word.lower(), other.self.lang.lower())
+			return  (self.word.lower(), self.lang) > (other.word.lower(), other.self.lang)
 		except AttributeError:
 			return NotImplemented
 
 @WithRepr
 @EqHash("ids", "unique")
 @interface.implementer(IWordBank)
-class WordBank(Contained, SchemaConfigured, Persistent):
+class WordBank(SchemaConfigured, Persistent, Contained):
 	createDirectFieldProperties(IWordBank)
 
 	__external_can_create__ = True
@@ -151,13 +153,20 @@ class WordBank(Contained, SchemaConfigured, Persistent):
 @interface.implementer(IWordEntry)
 def _wordentry_adapter(sequence):
 	result = WordEntry(wid=safestr(sequence[0]), word=safestr(sequence[1]))
-	result.lang = safestr(sequence[2]) if len(sequence) > 2 and sequence[2] else u'en'
-	content = safestr(sequence[3]) if len(sequence) > 3 and sequence[3] else result.word
+	if len(sequence) > 2 and sequence[2]:
+		result.lang = safestr(sequence[2]).lower()
+	else:
+		result.lang = u'en'
+
+	if len(sequence) > 3 and sequence[3]:
+		content = safestr(sequence[3])
+	else:
+		content = result.word
 	result.content = HTMLContentFragment(content)
 	return result
 
 @interface.implementer(IWordBank)
 def _wordbank_adapter(entries, unique=True):
 	entries = {e.wid:e for e in entries}
-	result = WordBank(entries=list(entries.values()), unique=unique)
+	result = WordBank(entries=tuple(entries.values()), unique=unique)
 	return result
