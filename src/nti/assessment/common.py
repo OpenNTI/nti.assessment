@@ -27,21 +27,15 @@ from zope.mimetype.interfaces import IContentTypeAware
 
 from persistent import Persistent
 
-from nti.assessment.interfaces import IQPoll
+from nti.assessment import ASSESSMENT_INTERFACES
+
 from nti.assessment.interfaces import IQPart
-from nti.assessment.interfaces import IQSurvey
-from nti.assessment.interfaces import IQuestion
-from nti.assessment.interfaces import IQuestionSet
 from nti.assessment.interfaces import IQAssignment
 from nti.assessment.interfaces import IQSubmittable
 from nti.assessment.interfaces import IQSubmittedPart
 from nti.assessment.interfaces import IQNonGradablePart
-from nti.assessment.interfaces import IQTimedAssignment
 from nti.assessment.interfaces import IQPartResponseNormalizer
 from nti.assessment.interfaces import IQLatexSymbolicMathSolution
-
-from nti.assessment.randomized.interfaces import IQuestionBank
-from nti.assessment.randomized.interfaces import IRandomizedQuestionSet
 
 from nti.common.property import alias
 
@@ -131,16 +125,10 @@ def hashfile(afile, hasher=None, blocksize=65536):
 	return hasher.hexdigest()
 
 def iface_of_assessment(thing):
-	for iface in (IQPoll, 
-				  IQuestion,
-				  IQSurvey, 
-				  IQuestionBank,
-				  IRandomizedQuestionSet,
-				  IQuestionSet,
-				  IQTimedAssignment, 
-				  IQAssignment,
-				  IQPart, 
-				  IQNonGradablePart):  # order matters
+	for iface in ASSESSMENT_INTERFACES:
+		if iface.providedBy(thing):
+			return iface
+	for iface in (IQPart, IQNonGradablePart):
 		if iface.providedBy(thing):
 			return iface
 	return None

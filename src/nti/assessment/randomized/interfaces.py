@@ -29,6 +29,9 @@ from nti.schema.field import Bool
 from nti.schema.field import Object
 from nti.schema.field import ListOrTuple
 
+from nti.schema.jsonschema import TAG_HIDDEN_IN_UI
+from nti.schema.jsonschema import TAG_REQUIRED_IN_UI
+
 # marker
 
 class ISha224Randomized(interface.Interface):
@@ -171,6 +174,11 @@ class IQuestionBank(IQuestionSet):
 		make a copy of this object w/ possibly new questions and/or ranges to
 		target
 		"""
+
+IQuestionBank['draw'].setTaggedValue(TAG_HIDDEN_IN_UI, False)
+IQuestionBank['draw'].setTaggedValue(TAG_REQUIRED_IN_UI, False)
+IQuestionBank['ranges'].setTaggedValue(TAG_HIDDEN_IN_UI, False)
+IQuestionBank['ranges'].setTaggedValue(TAG_REQUIRED_IN_UI, False)
 
 class INonRandomizedQuestionBank(IQuestionBank):
 	"""

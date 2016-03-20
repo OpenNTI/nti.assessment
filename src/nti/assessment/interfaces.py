@@ -21,8 +21,6 @@ from zope.interface.common.mapping import IEnumerableMapping
 
 from zope.interface.common.sequence import IFiniteSequence
 
-from zope.interface.interfaces import IMethod
-
 from zope.lifecycleevent import ObjectModifiedEvent
 from zope.lifecycleevent.interfaces import IObjectModifiedEvent
 
@@ -1520,13 +1518,3 @@ class IQAssessmentContainerIdGetter(interface.Interface):
 
 	def __call__(item):
 		pass
-
-ASSESSMENT_INTERFACES = (IQAssignment, IQuestion, IQuestionSet, IQPoll, IQSurvey)
-def _set_ifaces():
-	for iSchema in ASSESSMENT_INTERFACES:
-		for k, v in iSchema.namesAndDescriptions(all=True):
-			if IMethod.providedBy(v) or v.queryTaggedValue(TAG_HIDDEN_IN_UI) is not None:
-				continue
-			iSchema[k].setTaggedValue(TAG_HIDDEN_IN_UI, True)
-_set_ifaces()
-del _set_ifaces
