@@ -16,14 +16,17 @@ import argparse
 
 import simplejson
 
-from zope.component import hooks
-from zope.configuration import xmlconfig
 from zope.interface.registry import Components
+
+from zope.component import hooks
+
+from zope.configuration import xmlconfig
+
+from nti.assessment._question_index import QuestionIndex
+from nti.assessment._question_index import _load_question_map_json
 
 from nti.assessment.interfaces import IQAssignment
 from nti.assessment.interfaces import IQTimedAssignment
-from nti.assessment._question_index import QuestionIndex
-from nti.assessment._question_index import _load_question_map_json
 
 from nti.externalization.externalization import to_external_object
 
@@ -33,9 +36,9 @@ def _load_assignments(json_string):
 
 	question_map = QuestionIndex()
 	assignment_registry = Components()
-	
-	question_map._from_root_index( index,
-								   registry=assignment_registry)
+
+	question_map._from_root_index(index,
+								  registry=assignment_registry)
 	return assignment_registry
 
 def _asg_registry_to_course_data(registry):
@@ -50,13 +53,14 @@ def _asg_registry_to_course_data(registry):
 		# the actual dates
 		asg_data['available_for_submission_ending'] = \
 				to_external_object(assignment.available_for_submission_ending)
+
 		asg_data['available_for_submission_beginning'] = \
 				to_external_object(assignment.available_for_submission_beginning)
 
 		# max time allowed
 		if IQTimedAssignment.providedBy(assignment):
 			asg_data['maximum_time_allowed'] = assignment.maximum_time_allowed
-		
+
 		# Point specification
 		point_data = asg_data['auto_grade'] = {}
 
@@ -110,12 +114,12 @@ def main_extract_assignments():
 	A tool designed to ease the process for extracting just
 	assignment data for overrides in courses.
 	"""
-	
+
 	arg_parser = argparse.ArgumentParser(description="Extract assignment data")
-	
+
 	arg_parser.add_argument('assessment_index_json', type=file,
 							help="Path to an assessment_index.json file")
-	
+
 	arg_parser.add_argument('--force-total-points', type=int,
 							dest='force_total_points',
 							help="Force all assignments to have this total point value")
@@ -145,10 +149,10 @@ def main_extract_assignments():
 
 	simplejson.dump(ext_value,
 					sys.stdout,
-					indent='    ',
+					indent='	',
 					separators=(', ', ': '),
 					sort_keys=True)
 	# trailing newline
 	print('', file=sys.stdout)
 
-main = main_extract_assignments # alias
+main = main_extract_assignments  # alias
