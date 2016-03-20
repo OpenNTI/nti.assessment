@@ -27,6 +27,22 @@ from zope.mimetype.interfaces import IContentTypeAware
 
 from persistent import Persistent
 
+from nti.assessment.interfaces import IQPoll
+from nti.assessment.interfaces import IQPart
+from nti.assessment.interfaces import IQSurvey
+from nti.assessment.interfaces import IQuestion
+from nti.assessment.interfaces import IQuestionSet
+from nti.assessment.interfaces import IQAssignment
+from nti.assessment.interfaces import IQSubmittable
+from nti.assessment.interfaces import IQSubmittedPart
+from nti.assessment.interfaces import IQNonGradablePart
+from nti.assessment.interfaces import IQTimedAssignment
+from nti.assessment.interfaces import IQPartResponseNormalizer
+from nti.assessment.interfaces import IQLatexSymbolicMathSolution
+
+from nti.assessment.randomized.interfaces import IQuestionBank
+from nti.assessment.randomized.interfaces import IRandomizedQuestionSet
+
 from nti.common.property import alias
 
 from nti.coremetadata.mixins import RecordableMixin
@@ -36,26 +52,16 @@ from nti.dataserver_core.interfaces import SYSTEM_USER_ID
 
 from nti.dublincore.datastructures import PersistentCreatedModDateTrackingObject
 
-from nti.externalization.representation import WithRepr
 from nti.externalization.externalization import toExternalObject
 
-from nti.schema.schema import EqHash
+from nti.externalization.representation import WithRepr
+
 from nti.schema.field import SchemaConfigured
+
 from nti.schema.fieldproperty import AdaptingFieldProperty
 from nti.schema.fieldproperty import createDirectFieldProperties
 
-from .interfaces import IQPoll
-from .interfaces import IQPart
-from .interfaces import IQSurvey
-from .interfaces import IQuestion
-from .interfaces import IQuestionSet
-from .interfaces import IQAssignment
-from .interfaces import IQSubmittable
-from .interfaces import IQSubmittedPart
-from .interfaces import IQNonGradablePart
-from .interfaces import IQTimedAssignment
-from .interfaces import IQPartResponseNormalizer
-from .interfaces import IQLatexSymbolicMathSolution
+from nti.schema.schema import EqHash
 
 # functions
 
@@ -125,19 +131,28 @@ def hashfile(afile, hasher=None, blocksize=65536):
 	return hasher.hexdigest()
 
 def iface_of_assessment(thing):
-	for iface in (IQPoll, IQuestion,
-				  IQSurvey, IQuestionSet,
-				  IQTimedAssignment, IQAssignment,
-				  IQPart, IQNonGradablePart):  # order matters
+	for iface in (IQPoll, 
+				  IQuestion,
+				  IQSurvey, 
+				  IQuestionBank,
+				  IRandomizedQuestionSet,
+				  IQuestionSet,
+				  IQTimedAssignment, 
+				  IQAssignment,
+				  IQPart, 
+				  IQNonGradablePart):  # order matters
 		if iface.providedBy(thing):
 			return iface
-	return IQuestion  # default
+	return None
 
 # classes
 
 @WithRepr
 @interface.implementer(IQSubmittable, IContentTypeAware, IAttributeAnnotatable)
-class QSubmittable(SchemaConfigured, Contained, RecordableMixin, CalendarPublishableMixin):
+class QSubmittable(SchemaConfigured, 
+				   RecordableMixin, 
+				   CalendarPublishableMixin,
+				   Contained):
 
 	ntiid = None
 	parameters = {} # IContentTypeAware
@@ -164,7 +179,7 @@ class QPersistentSubmittable(QSubmittable, PersistentCreatedModDateTrackingObjec
 @WithRepr
 @EqHash('submittedResponse', superhash=True)
 @interface.implementer(IQSubmittedPart, ISublocations)
-class QSubmittedPart(SchemaConfigured, Contained, Persistent):
+class QSubmittedPart(SchemaConfigured, Persistent, Contained):
 
 	submittedResponse = None
 

@@ -97,15 +97,23 @@ INQUIRY_MIME_TYPES = (POLL_MIME_TYPE, SURVEY_MIME_TYPE)
 
 ALL_EVALUATION_MIME_TYPES = ASSESSMENT_MIME_TYPES + INQUIRY_MIME_TYPES
 
+class IQEvaluation(interface.Interface):
+	"""
+	marker interface for evaluation objects
+	"""
+IQEvaluation.setTaggedValue('_ext_is_marker_interface', True)
+
 class IPollable(interface.Interface):
 	"""
 	marker interface for pollable parts
 	"""
+IPollable.setTaggedValue('_ext_is_marker_interface', True)
 
 class IGradable(interface.Interface):
 	"""
 	marker interface for gradable parts
 	"""
+IGradable.setTaggedValue('_ext_is_marker_interface', True)
 
 class IQHint(interface.Interface):
 	"""
@@ -602,14 +610,14 @@ IQGradableModeledContentPart = IQModeledContentPart
 
 # editable
 
-class IQEditable(interface.Interface):
+class IQEditable(IQEvaluation):
 	"""
 	Marker interface for all editable objects
 	"""
 
 # assessment
 
-class IQAssessment(interface.Interface):
+class IQAssessment(IQEvaluation):
 	"""
 	Marker interface for all assessment objects
 	"""
@@ -1302,7 +1310,7 @@ DISCLOSURE_TERMINATION = u'termination'
 DISCLOSURE_STATES = (DISCLOSURE_NEVER, DISCLOSURE_ALWAYS, DISCLOSURE_TERMINATION)
 DISCLOSURE_VOCABULARY = vocabulary.SimpleVocabulary([vocabulary.SimpleTerm(_x) for _x in DISCLOSURE_STATES])
 
-class IQInquiry(IQSubmittable, IAttributeAnnotatable):
+class IQInquiry(IQSubmittable, IQEvaluation, IAttributeAnnotatable):
 
 	ntiid = ValidNTIID(title="Object NTIID", required=False)
 
@@ -1351,7 +1359,7 @@ IQPoll['available_for_submission_ending'].setTaggedValue(TAG_REQUIRED_IN_UI, Fal
 IQPoll['available_for_submission_beginning'].setTaggedValue(TAG_HIDDEN_IN_UI, False)
 IQPoll['available_for_submission_beginning'].setTaggedValue(TAG_REQUIRED_IN_UI, False)
 
-class IQSurvey(ITitledContent, IQInquiry, IFiniteSequence):
+class IQSurvey(IQInquiry, ITitledContent, IFiniteSequence):
 	"""
 	An ordered group of poll questions.
 
