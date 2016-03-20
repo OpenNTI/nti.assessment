@@ -12,22 +12,24 @@ logger = __import__('logging').getLogger(__name__)
 from zope import component
 from zope import interface
 
-from nti.externalization.singleton import SingletonDecorator
+from nti.assessment.interfaces import IQPartSolutionsExternalizer
+
+from nti.assessment.randomized import randomize
+from nti.assessment.randomized import shuffle_list
+from nti.assessment.randomized import questionbank_question_chooser
+
+from nti.assessment.randomized.interfaces import IQuestionBank
+from nti.assessment.randomized.interfaces import IRandomizedQuestionSet
+from nti.assessment.randomized.interfaces import IQRandomizedMatchingPart
+from nti.assessment.randomized.interfaces import IQRandomizedOrderingPart
+from nti.assessment.randomized.interfaces import IQRandomizedMultipleChoicePart
+from nti.assessment.randomized.interfaces import IQRandomizedMultipleChoiceMultipleAnswerPart
+
 from nti.externalization.externalization import to_external_object
+
 from nti.externalization.interfaces import IExternalObjectDecorator
 
-from ..interfaces import IQPartSolutionsExternalizer
-
-from .interfaces import IQuestionBank
-from .interfaces import IRandomizedQuestionSet
-from .interfaces import IQRandomizedMatchingPart
-from .interfaces import IQRandomizedOrderingPart
-from .interfaces import IQRandomizedMultipleChoicePart
-from .interfaces import IQRandomizedMultipleChoiceMultipleAnswerPart
-
-from . import randomize
-from . import shuffle_list
-from . import questionbank_question_chooser
+from nti.externalization.singleton import SingletonDecorator
 
 def _must_randomized(context):
 	iface = getattr(context, 'nonrandomized_interface', None)

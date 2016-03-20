@@ -14,8 +14,8 @@ import hashlib
 
 from zope import component
 
-from .interfaces import ISha224Randomized
-from .interfaces import IPrincipalSeedSelector
+from nti.assessment.randomized.interfaces import ISha224Randomized
+from nti.assessment.randomized.interfaces import IPrincipalSeedSelector
 
 def get_seed(context=None):
 	selector = component.queryUtility(IPrincipalSeedSelector)

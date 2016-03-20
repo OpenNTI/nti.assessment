@@ -11,17 +11,17 @@ logger = __import__('logging').getLogger(__name__)
 
 from zope import interface
 
-from ..graders import EqualityGrader
-from ..graders import ConnectingPartGrader
-from ..graders import MultipleChoiceMultipleAnswerGrader
+from nti.assessment.graders import EqualityGrader
+from nti.assessment.graders import ConnectingPartGrader
+from nti.assessment.graders import MultipleChoiceMultipleAnswerGrader
 
-from .interfaces import IQRandomizedMatchingPartGrader
-from .interfaces import IQRandomizedOrderingPartGrader
-from .interfaces import IQRandomizedMultipleChoicePartGrader
-from .interfaces import IQRandomizedMultipleChoiceMultipleAnswerPartGrader
+from nti.assessment.randomized import randomize
+from nti.assessment.randomized import shuffle_list
 
-from . import randomize
-from . import shuffle_list
+from nti.assessment.randomized.interfaces import IQRandomizedMatchingPartGrader
+from nti.assessment.randomized.interfaces import IQRandomizedOrderingPartGrader
+from nti.assessment.randomized.interfaces import IQRandomizedMultipleChoicePartGrader
+from nti.assessment.randomized.interfaces import IQRandomizedMultipleChoiceMultipleAnswerPartGrader
 
 class RandomizedConnectingPartGrader(ConnectingPartGrader):
 
