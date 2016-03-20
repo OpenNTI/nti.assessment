@@ -47,7 +47,8 @@ from nti.dataserver_core.interfaces import IContextAnnotatable
 from nti.dataserver_core.interfaces import INeverStoredInSharedStream
 
 from nti.dataserver_fragments.interfaces import ITitledContent
-from nti.dataserver_fragments.schema import CompoundModeledContentBody
+
+from nti.dataserver_fragments.schema import ExtendedCompoundModeledContentBody
 
 from nti.ntiids.schema import ValidNTIID
 
@@ -82,10 +83,13 @@ TIMED_ASSIGNMENT_MIME_TYPE = u'application/vnd.nextthought.assessment.timedassig
 RANDOMIZED_QUESTION_SET_MIME_TYPE = u'application/vnd.nextthought.narandomizedquestionset'
 QUESTION_FILL_IN_THE_BLANK_MIME_TYPE = u'application/vnd.nextthought.naquestionfillintheblankwordbank'
 
-ASSESSMENT_MIME_TYPES = (QUESTION_MIME_TYPE, QUESTION_SET_MIME_TYPE, 
-						 QUESTION_FILL_IN_THE_BLANK_MIME_TYPE, QUESTION_BANK_MIME_TYPE, 
-						 RANDOMIZED_QUESTION_SET_MIME_TYPE, ASSIGNMENT_MIME_TYPE,
-						 TIMED_ASSIGNMENT_MIME_TYPE)
+ASSESSMENT_MIME_TYPES = (QUESTION_MIME_TYPE, 
+						 ASSIGNMENT_MIME_TYPE,
+						 QUESTION_SET_MIME_TYPE, 
+						 QUESTION_BANK_MIME_TYPE,
+						 TIMED_ASSIGNMENT_MIME_TYPE,
+						 RANDOMIZED_QUESTION_SET_MIME_TYPE, 
+						 QUESTION_FILL_IN_THE_BLANK_MIME_TYPE)
 
 INQUIRY_MIME_TYPES = (POLL_MIME_TYPE, SURVEY_MIME_TYPE)
 
@@ -181,7 +185,7 @@ class IQModeledContentResponse(IQResponse,
 	in its proper external form as this type object, not a primitive.
 	"""
 
-	value = CompoundModeledContentBody()
+	value = ExtendedCompoundModeledContentBody()
 	value.required = True
 	value.__name__ = 'value'
 
@@ -594,6 +598,13 @@ class IQModeledContentPart(IQNonGradableModeledContentPart, IQPart):
 
 IQGradableModeledContentPart = IQModeledContentPart
 
+# editable
+
+class IQEditable(interface.Interface):
+	"""
+	Marker interface for all editable objects
+	"""
+
 # assessment
 
 class IQAssessment(interface.Interface):
@@ -601,6 +612,11 @@ class IQAssessment(interface.Interface):
 	Marker interface for all assessment objects
 	"""
 
+class IQEditableAssessment(IQAssessment, IQEditable):
+	"""
+	Marker interface for all editable assessment objects
+	"""
+	
 # question
 
 class IQuestion(IQAssessment, IAttributeAnnotatable):
@@ -1301,6 +1317,11 @@ class IQInquiry(IQSubmittable, IAttributeAnnotatable):
 	is_non_public = Bool(title="Whether this inquiry should be public or restricted",
 						 default=False)
 	
+class IQEditableInquiry(IQEditable):
+	"""
+	Marker interface for all editable inquiry objects
+	"""
+
 class IQPoll(IQInquiry, IFiniteSequence):
 	"""
 	A poll question consists of one or more parts (typically one).
