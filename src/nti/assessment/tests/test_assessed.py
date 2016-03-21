@@ -20,8 +20,21 @@ from hamcrest import has_entries
 from hamcrest import greater_than
 from hamcrest import has_property
 
-from zope import interface
+from nti.testing.matchers import is_false
+from nti.testing.matchers import verifiably_provides
+
 from zope import component
+from zope import interface
+
+from nti.assessment import parts
+from nti.assessment import assessed
+from nti.assessment import response
+from nti.assessment import submission
+from nti.assessment import interfaces
+from nti.assessment import solution as solutions
+
+from nti.assessment.question import QQuestion
+from nti.assessment.question import QQuestionSet
 
 from nti.coremetadata.interfaces import ILastModified
 
@@ -31,22 +44,11 @@ from nti.externalization.internalization import update_from_external_object
 
 from nti.schema.field import InvalidValue
 
-from nti.assessment import parts
-from nti.assessment import assessed
-from nti.assessment import response
-from nti.assessment import submission
-from nti.assessment import interfaces
-from nti.assessment import solution as solutions
-from nti.assessment.question import QQuestion, QQuestionSet
-
-from nti.externalization.tests import externalizes
-
-from nti.testing.matchers import is_false
-from nti.testing.matchers import verifiably_provides
-
 from nti.assessment.tests import lineage
 from nti.assessment.tests import AssessmentTestCase
 from nti.assessment.tests import check_old_dublin_core as _check_old_dublin_core
+
+from nti.externalization.tests import externalizes
 
 class TestAssessedPart(AssessmentTestCase):
 
