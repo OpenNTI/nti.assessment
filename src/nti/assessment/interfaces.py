@@ -213,8 +213,7 @@ class IQFileResponse(IQResponse):
 	two fields as
 	"""
 
-	value = Object(IQUploadedFile,
-					title="The uploaded file")
+	value = Object(IQUploadedFile, title="The uploaded file")
 
 # It seems like the concepts of domain and range may come into play here somewhere
 
@@ -231,7 +230,7 @@ class IQPart(IQNonGradablePart, IGradable):
 	which requires a response.
 	"""
 
-	explanation = _ContentFragment(title="An explanation of how the solution is arrived at.",
+	explanation = _ContentFragment(	title="An explanation of how the solution is arrived at.",
 									default='')
 
 	solutions = IndexedIterable(title="Acceptable solutions for this question part in no particular order.",
@@ -349,7 +348,7 @@ class IQLatexSymbolicMathSolution(IQSymbolicMathSolution, IQSingleValuedSolution
 	as symbols, parsed from latex.
 	"""
 
-	value = _LatexTextLine(title="The LaTeX form of the correct answer.",
+	value = _LatexTextLine(	title="The LaTeX form of the correct answer.",
 							min_length=1)
 
 class IResponseToSymbolicMathConverter(interface.Interface):
@@ -398,7 +397,7 @@ class IQMultipleChoicePart(IQNonGradableMultipleChoicePart, IQPart):
 	solutions = IndexedIterable(title="The multiple-choice solutions",
 								min_length=1,
 								value_type=Object(IQMultipleChoiceSolution,
-													title="Multiple choice solution"))
+												  title="Multiple choice solution"))
 IQGradableMultipleChoicePart = IQMultipleChoicePart  # alias
 
 class IQMultipleChoicePartGrader(IQPartGrader):
@@ -640,7 +639,7 @@ class IQuestion(IQAssessment, IAttributeAnnotatable):
 
 	ntiid = ValidNTIID(title="Question NTIID", required=False)
 
-	content = Text(title="The content to present to the user, if any.",
+	content = Text(	title="The content to present to the user, if any.",
 					default='')
 
 	parts = IndexedIterable(title="The ordered parts of the question.",
@@ -678,7 +677,7 @@ class IQAssignmentPart(ITitledContent):
 	One portion of an assignment.
 	"""
 
-	content = Text(title="Additional content for the question set in the context of an assignment.",
+	content = Text(	title="Additional content for the question set in the context of an assignment.",
 					default='')
 
 	question_set = Object(IQuestionSet,
@@ -744,7 +743,7 @@ class IQAssignment(IQAssessment, IQSubmittable, ITitledContent, IAttributeAnnota
 
 	ntiid = ValidNTIID(title="Assignment NTIID", required=False)
 
-	content = Text(title="The content to present to the user, if any.",
+	content = Text(	title="The content to present to the user, if any.",
 					default='')
 
 	category_name = Tag(title="Assignments can be grouped into categories.",
@@ -1064,7 +1063,7 @@ class IQuestionSetSubmission(IQBaseSubmission):
 								 description="""Order is not important. Depending on the question set,
 								 missing answers may or may not be allowed; the set may refuse to grade, or simply consider them wrong.""",
 								 default=(),
-								 value_type=Object(IQuestionSubmission,
+								 value_type=Object(	IQuestionSubmission,
 													title="The submission for a particular question."))
 
 class IQAssessedQuestionSet(IContained, IContextAnnotatable):
@@ -1195,7 +1194,7 @@ class IQFillInTheBlankWithWordBankSolution(IQSolution):
 
 	value = Dict(key_type=TextLine(title="input name/id"),
 				 value_type=Variant((TextLine(title="word id answer"),
-									  ListOrTuple(TextLine(title="word id answer"))),
+									 ListOrTuple(TextLine(title="word id answer"))),
 									title="The word ids"),
 				 title="The correct answer selections",
 				 description="The correct word id map.",
