@@ -57,13 +57,16 @@ class QBaseMixin(Contained,
 
 	ntiid = None
 	id = alias('ntiid')
-	home = alias('__parent__')
 
 	parameters = {}  # IContentTypeAware
 
 	def __init__(self, *args, **kwargs):
 		Persistent.__init__(self)
 		SchemaConfigured.__init__(self, *args, **kwargs)
+
+	@readproperty
+	def __home__(self):
+		return self.__parent__
 
 	@readproperty
 	def containerId(self):

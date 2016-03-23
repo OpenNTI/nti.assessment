@@ -77,8 +77,6 @@ class QInquiry(QPersistentSubmittable):
 	is_non_public = False
 	disclosure = DISCLOSURE_TERMINATION
 
-	home = alias('__parent__')
-
 	@property
 	def isClosed(self):
 		return bool(self.closed)
@@ -90,6 +88,10 @@ class QInquiry(QPersistentSubmittable):
 	@readproperty
 	def containerId(self):
 		return get_containerId(self)
+
+	@readproperty
+	def __home__(self):
+		return self.__parent__
 
 @interface.implementer(IQPoll)
 @EqHash('content', 'parts', superhash=True)

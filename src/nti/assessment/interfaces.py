@@ -99,8 +99,8 @@ class IQEvaluation(IContained):
 	"""
 	marker interface for evaluation objects
 	"""
-	home = interface.Attribute("home location")
-	home.setTaggedValue('_ext_excluded_out', True)
+	__home__ = interface.Attribute("home location")
+	__home__.setTaggedValue('_ext_excluded_out', True)
 		
 IQEvaluation.setTaggedValue('_ext_is_marker_interface', True)
 
