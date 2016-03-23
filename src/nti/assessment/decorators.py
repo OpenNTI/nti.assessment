@@ -7,7 +7,6 @@ Decorators for assessment objects.
 """
 
 from __future__ import unicode_literals, print_function, absolute_import, division
-from nti.assessment._util import get_containerId
 __docformat__ = "restructuredtext en"
 
 logger = __import__('logging').getLogger(__name__)
@@ -17,6 +16,8 @@ import collections
 
 from zope import component
 from zope import interface
+
+from nti.assessment._util import get_containerId
 
 from nti.assessment.interfaces import IQPart
 from nti.assessment.interfaces import IRegEx
