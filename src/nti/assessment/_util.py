@@ -97,5 +97,9 @@ def get_containerId(item):
 	if getter is not None:
 		result = getter(item)
 	else:
-		result = getattr(item.__parent__, 'ntiid', None)
+		for name in ('home', '__parent__'):
+			attribute = getattr(item, name, None)
+			result = getattr(attribute, 'ntiid', None)
+			if result:
+				break
 	return result

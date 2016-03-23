@@ -77,6 +77,8 @@ class QInquiry(QPersistentSubmittable):
 	is_non_public = False
 	disclosure = DISCLOSURE_TERMINATION
 
+	home = alias('__parent__')
+
 	@property
 	def isClosed(self):
 		return bool(self.closed)

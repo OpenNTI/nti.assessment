@@ -7,6 +7,7 @@ Decorators for assessment objects.
 """
 
 from __future__ import unicode_literals, print_function, absolute_import, division
+from nti.assessment._util import get_containerId
 __docformat__ = "restructuredtext en"
 
 logger = __import__('logging').getLogger(__name__)
@@ -130,8 +131,7 @@ class _QAssessmentObjectIContainedAdder(object):
 		if not mapping.get('containerId'):
 			# Be careful not to write this out at rendering time
 			# with a None value, but if it does happen overwrite it
-			containerId = None
-			containerId = getattr(context.__parent__, 'ntiid', None)
+			containerId = get_containerId(context)
 			if containerId:
 				mapping['containerId'] = containerId
 

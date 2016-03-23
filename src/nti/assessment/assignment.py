@@ -77,6 +77,7 @@ class QAssignment(QPersistentSubmittable):
 	mimeType = mime_type = ASSIGNMENT_MIME_TYPE
 
 	id = alias('ntiid')
+	home = alias('__parent__')
 
 	@readproperty
 	def no_submit(self):

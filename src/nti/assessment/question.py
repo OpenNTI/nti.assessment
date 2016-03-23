@@ -57,6 +57,8 @@ class QBaseMixin(Contained,
 
 	ntiid = None
 	id = alias('ntiid')
+	home = alias('__parent__')
+
 	parameters = {}  # IContentTypeAware
 
 	def __init__(self, *args, **kwargs):

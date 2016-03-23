@@ -95,10 +95,13 @@ INQUIRY_MIME_TYPES = (POLL_MIME_TYPE, SURVEY_MIME_TYPE)
 
 ALL_EVALUATION_MIME_TYPES = ASSESSMENT_MIME_TYPES + INQUIRY_MIME_TYPES
 
-class IQEvaluation(interface.Interface):
+class IQEvaluation(IContained):
 	"""
 	marker interface for evaluation objects
 	"""
+	home = interface.Attribute("home location")
+	home.setTaggedValue('_ext_excluded_out', True)
+		
 IQEvaluation.setTaggedValue('_ext_is_marker_interface', True)
 
 class IPollable(interface.Interface):
@@ -611,6 +614,7 @@ class IQEditable(IQEvaluation):
 	"""
 	Marker interface for all editable objects
 	"""
+IEditable = IQEditable # alias
 
 # assessment
 
@@ -619,11 +623,6 @@ class IQAssessment(IQEvaluation):
 	Marker interface for all assessment objects
 	"""
 
-class IQEditableAssessment(IQAssessment, IQEditable):
-	"""
-	Marker interface for all editable assessment objects
-	"""
-	
 # question
 
 class IQuestion(IQAssessment, IAttributeAnnotatable):
@@ -1323,11 +1322,6 @@ class IQInquiry(IQSubmittable, IQEvaluation, IAttributeAnnotatable):
 	
 	is_non_public = Bool(title="Whether this inquiry should be public or restricted",
 						 default=False)
-	
-class IQEditableInquiry(IQEditable):
-	"""
-	Marker interface for all editable inquiry objects
-	"""
 
 class IQPoll(IQInquiry, IFiniteSequence):
 	"""
