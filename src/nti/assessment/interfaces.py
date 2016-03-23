@@ -618,7 +618,7 @@ IEditable = IQEditable # alias
 
 # assessment
 
-class IQAssessment(IQEvaluation):
+class IQAssessment(IQEvaluation, IRecordable):
 	"""
 	Marker interface for all assessment objects
 	"""

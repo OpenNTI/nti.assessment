@@ -36,6 +36,8 @@ from nti.assessment.interfaces import IQFillInTheBlankWithWordBankQuestion
 from nti.common.property import alias
 from nti.common.property import readproperty
 
+from nti.coremetadata.mixins import RecordableMixin
+
 from nti.dataserver_core.interfaces import IContained as INTIContained
 
 from nti.schema.field import SchemaConfigured
@@ -51,9 +53,10 @@ from nti.wref.interfaces import IWeakRef
 					   IFiniteSequence,
 					   IContentTypeAware,
 					   IAttributeAnnotatable)
-class QBaseMixin(Contained,
-				 SchemaConfigured,
-				 Persistent):
+class QBaseMixin(SchemaConfigured,
+				 Persistent,
+				 RecordableMixin,
+				 Contained):
 
 	ntiid = None
 	id = alias('ntiid')
