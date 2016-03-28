@@ -104,6 +104,27 @@ class IQEvaluation(IContained):
 		
 IQEvaluation.setTaggedValue('_ext_is_marker_interface', True)
 
+class IQEvaluationItemContainer(IContained):
+	"""
+	marker interface for evaluation object containers
+	"""
+	
+	Items = Iterable(title='All the resolved items in this container', 
+					 readonly=True, required=False)
+	Items.setTaggedValue('_ext_excluded_out', True)
+
+	def __len__():
+		"""
+		return the number of items in this container
+		"""
+		
+	def remove(obj):
+		"""
+		remove the specifed object from this container
+		"""
+		
+IQEvaluationItemContainer.setTaggedValue('_ext_is_marker_interface', True)
+
 class IPollable(interface.Interface):
 	"""
 	marker interface for pollable parts
@@ -645,7 +666,7 @@ class IQuestion(IQAssessment, IAttributeAnnotatable):
 							min_length=1,
 							value_type=Object(IQPart, title="A question part") )
 
-class IQuestionSet(IQAssessment, ITitledContent, IAttributeAnnotatable):
+class IQuestionSet(IQAssessment, ITitledContent, IQEvaluationItemContainer, IAttributeAnnotatable):
 	"""
 	An ordered group of related questions generally intended to be
 	completed as a unit (aka, a Quiz or worksheet).
@@ -661,15 +682,6 @@ class IQuestionSet(IQAssessment, ITitledContent, IAttributeAnnotatable):
 								description="For convenience, this should also be aliased to `parts`",
 								min_length=1,
 								value_type=Object(IQuestion, title="The questions") )
-	
-	Items = Iterable(title='All the resolved items in this set', 
-					 readonly=True, required=False)
-	Items.setTaggedValue('_ext_excluded_out', True)
-
-	def __len__():
-		"""
-		return the number of questions in this set
-		"""
 
 class IQAssignmentPart(ITitledContent):
 	"""
@@ -1350,7 +1362,7 @@ IQPoll['available_for_submission_ending'].setTaggedValue(TAG_REQUIRED_IN_UI, Fal
 IQPoll['available_for_submission_beginning'].setTaggedValue(TAG_HIDDEN_IN_UI, False)
 IQPoll['available_for_submission_beginning'].setTaggedValue(TAG_REQUIRED_IN_UI, False)
 
-class IQSurvey(IQInquiry, ITitledContent, IFiniteSequence):
+class IQSurvey(IQInquiry, ITitledContent, IQEvaluationItemContainer, IFiniteSequence):
 	"""
 	An ordered group of poll questions.
 
@@ -1360,15 +1372,6 @@ class IQSurvey(IQInquiry, ITitledContent, IFiniteSequence):
 	questions = IndexedIterable(title="The ordered polls in the set.",
 								min_length=1,
 								value_type=Object(IQPoll, title="The poll questions") )
-	
-	Items = Iterable(title='All the resolved items in this survey', 
-					 readonly=True, required=False)
-	Items.setTaggedValue('_ext_excluded_out', True)
-
-	def __len__():
-		"""
-		return the number of questions in this survey
-		"""
 
 IQSurvey['title'].setTaggedValue(TAG_HIDDEN_IN_UI, False)
 IQSurvey['title'].setTaggedValue(TAG_REQUIRED_IN_UI, False)

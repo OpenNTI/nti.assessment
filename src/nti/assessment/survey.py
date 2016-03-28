@@ -136,6 +136,13 @@ class QSurvey(QInquiry):
 
 	def __len__(self):
 		return len(self.questions or ())
+	
+	def remove(self, question):
+		ntiid = getattr(question, 'ntiid', question)
+		for idx, question in enumerate(list(self.questions)): # mutating
+			if question.ntiid == ntiid:
+				return self.questions.pop(idx)
+		return None
 
 @WithRepr
 @interface.implementer(IQPollSubmission, ISublocations, IFiniteSequence)

@@ -117,6 +117,13 @@ class QQuestionSet(QBaseMixin):
 
 	def __len__(self):
 		return len(self.questions or ())
+	
+	def remove(self, question):
+		ntiid = getattr(question, 'ntiid', question)
+		for idx, question in enumerate(list(self.questions)): # mutating
+			if question.ntiid == ntiid:
+				return self.questions.pop(idx)
+		return None
 
 @EqHash('wordbank', include_super=True)
 @interface.implementer(IQFillInTheBlankWithWordBankQuestion)
@@ -134,7 +141,3 @@ class QFillInTheBlankWithWordBankQuestion(QQuestion):
 		if name == "parts":
 			for x in self.parts or ():
 				x.__parent__ = self  # take ownership
-
-	def sublocations(self):
-		for part in self.parts or ():
-			yield part
