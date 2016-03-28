@@ -17,6 +17,8 @@ from zope.component.interfaces import ComponentLookupError
 
 from zope.container.contained import Contained
 
+from zope.location.interfaces import IContained
+
 from zope.schema.interfaces import ConstraintNotSatisfied
 
 from persistent import Persistent
@@ -78,7 +80,7 @@ from nti.schema.schema import EqHash
 from nti.schema.field import SchemaConfigured
 
 @WithRepr
-@interface.implementer(IQNonGradablePart)
+@interface.implementer(IQNonGradablePart, IContained)
 @EqHash('content', 'hints', 'explanation',
 		superhash=True,
 		include_type=True)
@@ -86,6 +88,9 @@ class QNonGradablePart(SchemaConfigured, Persistent):
 	"""
 	Base class for parts.
 	"""
+
+	__name__ = None
+	__parent__ = None
 
 	response_interface = None
 
@@ -295,12 +300,13 @@ class QFilePart(QPart, QNonGradableFilePart):  # order matters
 		response = self.response_interface(response)
 		# We first check our own constraints for submission
 		# and refuse to even grade if they are not met
-		if not self.is_mime_type_allowed(response.value.contentType):
-			raise ConstraintNotSatisfied(response.value.contentType, 'mimeType')
-		if not self.is_filename_allowed(response.value.filename):
-			raise ConstraintNotSatisfied(response.value.filename, 'filename')
-		if (self.max_file_size is not None and response.value.getSize() > self.max_file_size):
-			raise ConstraintNotSatisfied(response.value.getSize(), 'max_file_size')
+		value = response.value
+		if not self.is_mime_type_allowed(value.contentType):
+			raise ConstraintNotSatisfied(value.contentType, 'mimeType')
+		if not self.is_filename_allowed(value.filename):
+			raise ConstraintNotSatisfied(value.filename, 'filename')
+		if (self.max_file_size is not None and value.getSize() > self.max_file_size):
+			raise ConstraintNotSatisfied(value.getSize(), 'max_file_size')
 
 		super(QFilePart, self).grade(response)
 

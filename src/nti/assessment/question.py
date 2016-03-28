@@ -91,6 +91,12 @@ class QQuestion(QBaseMixin):
 
 	def __len__(self):
 		return len(self.parts or ())
+	
+	def __setattr__(self, name, value):
+		super(QQuestion, self).__setattr__(name, value)
+		if name == "parts":
+			for x in self.parts or ():
+				x.__parent__ = self  # take ownership
 
 @EqHash('title', 'questions', superhash=True)
 @interface.implementer(IQuestionSet)
