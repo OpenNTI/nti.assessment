@@ -400,11 +400,11 @@ class IQNonGradableMultipleChoicePart(IQNonGradablePart, IPollable):
 	of alternatives.
 	"""
 
-	choices = List(title="The choice strings to present to the user.",
-					min_length=1,
-					description="""Presentation order may matter, hence the list. But for grading purposes,
-					the order does not matter and simple existence within the set is sufficient.""",
-					value_type=_ContentFragment(title="A rendered value"))
+	choices = List(	title="The choice strings to present to the user.",
+				   	min_length=1,
+				   	description="""Presentation order may matter, hence the list. But for grading purposes,
+				  	the order does not matter and simple existence within the set is sufficient.""",
+				  	value_type=_ContentFragment(title="A rendered value"))
 IQNonGradableMultipleChoicePart.setTaggedValue('response_type', IQTextResponse)
 
 class IQMultipleChoiceSolution(IQSolution, IQSingleValuedSolution):
@@ -1071,11 +1071,11 @@ class IQuestionSetSubmission(IQBaseSubmission):
 
 	questionSetId = TextLine(title="Identifier of the question set being responded to.")
 	questions = IndexedIterable(title="Submissions, one for each question in the set.",
-								 description="""Order is not important. Depending on the question set,
-								 missing answers may or may not be allowed; the set may refuse to grade, or simply consider them wrong.""",
-								 default=(),
-								 value_type=Object(	IQuestionSubmission,
-													title="The submission for a particular question."))
+								description="""Order is not important. Depending on the question set,
+								missing answers may or may not be allowed; the set may refuse to grade, or simply consider them wrong.""",
+								default=(),
+								value_type=Object(IQuestionSubmission,
+												  title="The submission for a particular question."))
 
 class IQAssessedQuestionSet(IContained, IContextAnnotatable):
 	"""
