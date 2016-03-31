@@ -41,6 +41,8 @@ from nti.contentfragments.schema import HTMLContentFragment as _HTMLContentFragm
 from nti.contentfragments.schema import TextUnicodeContentFragment as _ContentFragment
 
 from nti.coremetadata.interfaces import IRecordable
+from nti.coremetadata.interfaces import IPublishable
+from nti.coremetadata.interfaces import INoPublishLink
 from nti.coremetadata.interfaces import ICalendarPublishable
 
 from nti.dataserver_core.interfaces import IContextAnnotatable
@@ -646,7 +648,7 @@ class IQAssessment(IQEvaluation, IRecordable):
 
 # question
 
-class IQuestion(IQAssessment, IAttributeAnnotatable):
+class IQuestion(IQAssessment, IPublishable, INoPublishLink, IAttributeAnnotatable):
 	"""
 	A question consists of one or more parts (typically one) that require answers.
 	It may have prefacing text. It may have other metadata, such as what
