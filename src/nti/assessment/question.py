@@ -36,7 +36,8 @@ from nti.assessment.interfaces import IQFillInTheBlankWithWordBankQuestion
 from nti.common.property import alias
 from nti.common.property import readproperty
 
-from nti.coremetadata.mixins import RecordableMixin
+from nti.coremetadata.mixins import RecordableMixin 
+from nti.coremetadata.mixins import PublishableMixin
 
 from nti.dataserver_core.interfaces import IContained as INTIContained
 
@@ -77,7 +78,7 @@ class QBaseMixin(SchemaConfigured,
 
 @interface.implementer(IQuestion)
 @EqHash('content', 'parts', superhash=True)
-class QQuestion(QBaseMixin):
+class QQuestion(QBaseMixin, PublishableMixin):
 
 	parts = ()
 	content = None
