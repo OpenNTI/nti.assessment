@@ -11,10 +11,13 @@ __docformat__ = "restructuredtext en"
 
 logger = __import__('logging').getLogger(__name__)
 
+from collections import Mapping
+
 from zope import component
 from zope import interface
 
-from nti.assessment.interfaces import IQuestionSet
+from nti.assessment.interfaces import IQEvaluation
+from nti.assessment.interfaces import IQuestionSet 
 from nti.assessment.interfaces import IQAssessedPart
 from nti.assessment.interfaces import IQUploadedFile
 from nti.assessment.interfaces import IQSubmittedPart
@@ -37,9 +40,18 @@ from nti.externalization.interfaces import IInternalObjectIO
 from nti.externalization.interfaces import IInternalObjectExternalizer
 
 from nti.externalization.interfaces import StandardExternalFields
+from nti.externalization.interfaces import StandardInternalFields
+
+from nti.mimetype import decorateMimeType
+
+from nti.ntiids.ntiids import TYPE_OID
+from nti.ntiids.ntiids import is_ntiid_of_type
 
 OID = StandardExternalFields.OID
 NTIID = StandardExternalFields.NTIID
+MIMETYPE = StandardExternalFields.MIMETYPE
+CONTAINER_ID_EXT = StandardExternalFields.CONTAINER_ID
+CONTAINER_ID_INT = StandardInternalFields.CONTAINER_ID
 
 @interface.implementer(IInternalObjectIO)
 class _AssessmentInternalObjectIOBase(object):
@@ -154,3 +166,39 @@ class _QUploadedFileObjectIO(NamedFileObjectIO):
 def _QUploadedFileFactory(ext_obj):
 	factory = BaseFactory(ext_obj, QUploadedFile, QUploadedImageFile)
 	return factory
+
+# custom externalization
+
+@component.adapter(IQEvaluation)
+@interface.implementer(IInternalObjectExternalizer)
+class _EvaluationExporter(object):
+
+	def __init__(self, obj):
+		self.evaluation = obj
+
+	def _decorate_callback(self, obj, result):
+		if isinstance(result, Mapping) and MIMETYPE not in result:
+			decorateMimeType(obj, result)
+
+	def _remover(self, result):
+		if isinstance(result, Mapping):
+			for name, value in list(result.items()):
+				if name in (OID, CONTAINER_ID_EXT, CONTAINER_ID_INT):
+					result.pop(name, None)
+				elif name == NTIID and is_ntiid_of_type(value, TYPE_OID):
+					result.pop(name, None)
+				else:
+					self._remover(value)
+		elif isinstance(result, (list, tuple)):
+			for value in result:
+				self._remover(value)
+		return result
+
+	def toExternalObject(self, **kwargs):
+		mod_args = dict(**kwargs)
+		mod_args['name'] = ''  # default
+		mod_args['decorate'] = False  # no decoration
+		mod_args['decorate_callback'] = self._decorate_callback
+		result = to_external_object(self.evaluation, **mod_args)
+		result = self._remover(result)
+		return result

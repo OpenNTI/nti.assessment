@@ -14,6 +14,7 @@ from hamcrest import has_key
 from hamcrest import not_none
 from hamcrest import has_entry
 from hamcrest import has_length
+from hamcrest import has_entries
 from hamcrest import assert_that
 from hamcrest import has_property
 does_not = is_not
@@ -33,6 +34,8 @@ from nti.assessment.randomized.interfaces import IQuestionBank
 from nti.assessment.randomized.interfaces import IQuestionIndexRange
 
 from nti.externalization import internalization
+
+from nti.externalization.externalization import to_external_object
 
 from nti.externalization.tests import externalizes
 
@@ -74,7 +77,7 @@ class TestExternalization(AssessmentTestCase):
 													has_key('name') )))
 		# But we have no URL because we're not in a connection anywhere
 
-	def test_file_upload2(self):
+	def test_file_upload_2(self):
 		# Temporary workaround for iPad bug.
 		ext_obj = {
 			'MimeType': 'application/vnd.nextthought.assessment.quploadedfile',
@@ -243,6 +246,12 @@ class TestExternalization(AssessmentTestCase):
 												  has_entry('Class', is_('QuestionSet')),
 												  has_entry('MimeType', is_('application/vnd.nextthought.naquestionset')),
 												  has_entry('questions', has_length(20)))))
+		
+		exported = to_external_object(internal, name="exporter")
+		assert_that(exported, has_entries('NTIID', ntiid,
+										  'Class', 'QuestionSet',
+										  'MimeType', 'application/vnd.nextthought.naquestionset',
+										  'questions', has_length(20)))
 		
 	@fudge.patch('nti.assessment.randomized.get_seed')
 	def test_question_bank(self, mock_gs):

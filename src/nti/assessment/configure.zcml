@@ -412,4 +412,9 @@
 	<adapter factory=".wref.PollWeakRef" />
 	<adapter factory=".wref.QuestionWeakRef" />
 
+	<!-- Exporter -->
+	<adapter factory=".externalization._EvaluationExporter"
+			 for=".interfaces.IQEvaluation"
+			 name="exporter" />
+
 </configure>
