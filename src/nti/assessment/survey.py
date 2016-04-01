@@ -109,6 +109,12 @@ class QPoll(QInquiry):
 
 	def __len__(self):
 		return len(self.parts or ())
+	
+	def __setattr__(self, name, value):
+		super(QPoll, self).__setattr__(name, value)
+		if name == "parts":
+			for x in self.parts or ():
+				x.__parent__ = self  # take ownership
 
 @interface.implementer(IQSurvey)
 @EqHash('title', 'questions', superhash=True)

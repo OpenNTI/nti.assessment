@@ -94,6 +94,12 @@ class QAssignment(QPersistentSubmittable):
 	def containerId(self):
 		return get_containerId(self)
 
+	def __setattr__(self, name, value):
+		super(QAssignment, self).__setattr__(name, value)
+		if name == "parts":
+			for x in self.parts or ():
+				x.__parent__ = self  # take ownership
+
 @WithRepr
 @interface.implementer(IQTimedAssignment)
 class QTimedAssignment(QAssignment):
