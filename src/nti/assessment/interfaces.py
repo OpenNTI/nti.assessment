@@ -803,6 +803,11 @@ class IQAssignment(IQAssessment, IQSubmittable, ITitledContent, IAttributeAnnota
 	# Depending on the policy and context, submission will either be blocked,
 	# or the elapsed time will simply be recorded.
 
+	def iter_question_sets():
+		"""
+		return an iterator with the question sets in this assignment
+		"""
+
 IQAssignment['title'].setTaggedValue(TAG_HIDDEN_IN_UI, False)
 IQAssignment['title'].setTaggedValue(TAG_REQUIRED_IN_UI, False)
 IQAssignment['category_name'].setTaggedValue(TAG_HIDDEN_IN_UI, False)
