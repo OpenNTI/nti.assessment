@@ -36,7 +36,7 @@ from nti.assessment.interfaces import IQSubmittedPart
 from nti.assessment.interfaces import IQNonGradablePart
 from nti.assessment.interfaces import IQPartResponseNormalizer
 from nti.assessment.interfaces import IQLatexSymbolicMathSolution
-from nti.assessment.interfaces import IQAssessmentContainerIdGetter
+from nti.assessment.interfaces import IQEvaluationContainerIdGetter
 
 from nti.common.property import alias
 
@@ -135,7 +135,7 @@ def iface_of_assessment(thing):
 	return None
 
 def get_containerId(item):
-	getter = component.queryUtility(IQAssessmentContainerIdGetter)
+	getter = component.queryUtility(IQEvaluationContainerIdGetter)
 	if getter is not None:
 		result = getter(item)
 	else:

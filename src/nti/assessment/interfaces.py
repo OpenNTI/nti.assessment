@@ -1514,10 +1514,11 @@ class IQAggregatedSurvey(IQAggregatedInquiry, IIterable, IWriteMapping):
 
 # misc
 
-class IQAssessmentContainerIdGetter(interface.Interface):
+class IQEvaluationContainerIdGetter(interface.Interface):
 	"""
 	A interface for a utility to get the containerId of an assessment
 	"""
 
 	def __call__(item):
 		pass
+IQAssessmentContainerIdGetter = IQEvaluationContainerIdGetter # BWC
