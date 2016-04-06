@@ -633,11 +633,12 @@ IQGradableModeledContentPart = IQModeledContentPart
 
 # editable
 
-class IQEditable(IQEvaluation):
+class IQEditableEvalutation(IQEvaluation):
 	"""
 	Marker interface for all editable objects
 	"""
-IEditable = IQEditable # alias
+IQEditableEvalutation.setTaggedValue('_ext_is_marker_interface', True)
+IQEditable = IQEditableEvalutation # alias
 
 # assessment
 
