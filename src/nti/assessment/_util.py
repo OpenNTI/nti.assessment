@@ -11,11 +11,7 @@ logger = __import__('logging').getLogger(__name__)
 
 import time
 
-from zope import component
-
 from zope.datetime import parseDatetimetz
-
-from nti.assessment.interfaces import IQAssessmentContainerIdGetter
 
 from nti.common.representation import WithRepr
 
@@ -91,15 +87,3 @@ def dctimes_property_fallback(attrname, dcname):
 		self.__dict__[attrname] = value
 
 	return property(get, _set)
-
-def get_containerId(item):
-	getter = component.queryUtility(IQAssessmentContainerIdGetter)
-	if getter is not None:
-		result = getter(item)
-	else:
-		for name in ('__home__', '__parent__'):
-			attribute = getattr(item, name, None)
-			result = getattr(attribute, 'ntiid', None)
-			if result:
-				break
-	return result

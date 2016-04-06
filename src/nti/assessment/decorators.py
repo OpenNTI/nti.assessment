@@ -17,7 +17,7 @@ import collections
 from zope import component
 from zope import interface
 
-from nti.assessment._util import get_containerId
+from nti.assessment.common import get_containerId
 
 from nti.assessment.interfaces import IQPart
 from nti.assessment.interfaces import IRegEx

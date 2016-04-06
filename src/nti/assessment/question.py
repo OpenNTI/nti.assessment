@@ -23,7 +23,7 @@ from zope.mimetype.interfaces import IContentTypeAware
 
 from persistent import Persistent
 
-from nti.assessment._util import get_containerId
+from nti.assessment.common import get_containerId
 
 from nti.assessment.interfaces import QUESTION_MIME_TYPE
 from nti.assessment.interfaces import QUESTION_SET_MIME_TYPE

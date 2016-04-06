@@ -25,9 +25,9 @@ from zope.schema.fieldproperty import FieldPropertyStoredThroughField as FP
 
 from persistent import Persistent
 
-from nti.assessment._util import get_containerId
 from nti.assessment._util import make_sublocations as _make_sublocations
 
+from nti.assessment.common import get_containerId
 from nti.assessment.common import QPersistentSubmittable
 
 from nti.assessment.interfaces import ASSIGNMENT_MIME_TYPE

@@ -20,9 +20,9 @@ from zope.location.interfaces import ISublocations
 from persistent.list import PersistentList
 from persistent.mapping import PersistentMapping
 
-from nti.assessment._util import get_containerId
 from nti.assessment._util import make_sublocations as _make_sublocations
 
+from nti.assessment.common import get_containerId
 from nti.assessment.common import normalize_response
 from nti.assessment.common import QPersistentSubmittable
 
