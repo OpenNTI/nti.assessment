@@ -57,6 +57,7 @@ from nti.wref.interfaces import IWeakRef
 class QBaseMixin(SchemaConfigured,
 				 Persistent,
 				 RecordableMixin,
+				 PublishableMixin,
 				 Contained):
 
 	ntiid = None
@@ -78,7 +79,7 @@ class QBaseMixin(SchemaConfigured,
 
 @interface.implementer(IQuestion)
 @EqHash('content', 'parts', superhash=True)
-class QQuestion(QBaseMixin, PublishableMixin):
+class QQuestion(QBaseMixin):
 
 	parts = ()
 	content = None
