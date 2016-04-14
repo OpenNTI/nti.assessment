@@ -50,7 +50,7 @@ class _WordEntryUpdater(object):
 
 @interface.implementer(IInternalObjectUpdater)
 @component.adapter(IQFillInTheBlankShortAnswerSolution)
-class _QFillInTheBlankWithWordBankSolutionUpdater(object):
+class _QFillInTheBlankShortAnswerSolutionUpdater(object):
 
 	__slots__ = ('obj',)
 

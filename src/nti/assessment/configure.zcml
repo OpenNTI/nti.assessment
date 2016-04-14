@@ -247,7 +247,7 @@
 	-->
 	<ext:registerMimeFactories module=".parts" />
 	
-	<adapter factory=".internalization._QFillInTheBlankWithWordBankSolutionUpdater"
+	<adapter factory=".internalization._QFillInTheBlankShortAnswerSolutionUpdater"
 			 for=".interfaces.IQFillInTheBlankShortAnswerSolution"
 			 provides="nti.externalization.interfaces.IInternalObjectUpdater" />
 
