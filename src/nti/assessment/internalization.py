@@ -23,6 +23,7 @@ from nti.assessment.interfaces import IQInquiry
 from nti.assessment.interfaces import IWordEntry
 from nti.assessment.interfaces import IQModeledContentResponse
 from nti.assessment.interfaces import IQFillInTheBlankShortAnswerSolution
+from nti.assessment.interfaces import IQFillInTheBlankWithWordBankSolution
 
 from nti.externalization.datastructures import InterfaceObjectIO
 
@@ -59,7 +60,7 @@ class _QFillInTheBlankShortAnswerSolutionUpdater(object):
 
 	def updateFromExternalObject(self, parsed, *args, **kwargs):
 		value = parsed.get('value', {})
-		for key in value.keys():
+		for key in list(value.keys()): # mutating
 			regex = value.get(key)
 			if isinstance(regex, six.string_types):
 				regex = IRegEx(regex)
@@ -72,6 +73,28 @@ class _QFillInTheBlankShortAnswerSolutionUpdater(object):
 		result = InterfaceObjectIO(
 					self.obj,
 					IQFillInTheBlankShortAnswerSolution).updateFromExternalObject(parsed)
+		return result
+
+@interface.implementer(IInternalObjectUpdater)
+@component.adapter(IQFillInTheBlankWithWordBankSolution)
+class _QFillInTheBlankWithWordBankSolutionUpdater(object):
+
+	__slots__ = ('obj',)
+
+	def __init__(self, obj):
+		self.obj = obj
+
+	def updateFromExternalObject(self, parsed, *args, **kwargs):
+		value = parsed.get('value', {})
+		for key in list(value.keys()): # mutating
+			data = value.get(key)
+			if isinstance(data, six.string_types):
+				data = data.split() # make it a list
+				value[key] = data
+
+		result = InterfaceObjectIO(
+					self.obj,
+					IQFillInTheBlankWithWordBankSolution).updateFromExternalObject(parsed)
 		return result
 
 @component.adapter(IQModeledContentResponse)

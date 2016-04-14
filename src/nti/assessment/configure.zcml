@@ -251,6 +251,10 @@
 			 for=".interfaces.IQFillInTheBlankShortAnswerSolution"
 			 provides="nti.externalization.interfaces.IInternalObjectUpdater" />
 
+	<adapter factory=".internalization._QFillInTheBlankWithWordBankSolutionUpdater"
+			 for=".interfaces.IQFillInTheBlankWithWordBankSolution"
+			 provides="nti.externalization.interfaces.IInternalObjectUpdater" />
+
 	<adapter factory=".externalization._QuestionSetExternalizer"
 			 for=".interfaces.IQuestionSet"
 			 provides="nti.externalization.interfaces.IInternalObjectExternalizer" />
