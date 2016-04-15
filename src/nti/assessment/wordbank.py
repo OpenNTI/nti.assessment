@@ -32,7 +32,6 @@ from nti.contentfragments.interfaces import HTMLContentFragment
 from nti.externalization.representation import WithRepr
 
 from nti.schema.field import SchemaConfigured
-
 from nti.schema.fieldproperty import createDirectFieldProperties
 
 from nti.schema.schema import EqHash
@@ -42,7 +41,7 @@ def safe_encode(word, encoding="UTF-8"):
 		word = str(word)
 	try:
 		word = word.encode(encoding)
-	except:
+	except Exception:
 		word = repr(word)
 	return word
 
@@ -134,10 +133,6 @@ class WordBank(SchemaConfigured, Persistent, Contained):
 			unique = unique and other.unique
 		result = WordBank(entries=list(entries), unique=unique)
 		return result
-
-	def sublocations(self):
-		for entry in self:
-			yield entry
 
 	@CachedProperty('entries')
 	def _id_map(self):
