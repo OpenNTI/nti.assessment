@@ -104,7 +104,8 @@ class WordBank(SchemaConfigured, Persistent, Contained):
 
 	def idOf(self, word):
 		return self._word_map.get(safe_encode(word), None) if word is not None else None
-
+	id_of = idOf
+	
 	def contains_word(self, word):
 		return self.idOf(word) != None
 
