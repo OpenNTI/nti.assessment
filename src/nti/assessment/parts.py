@@ -74,7 +74,7 @@ from nti.contentfragments.interfaces import UnicodeContentFragment as _u
 
 from nti.externalization.representation import WithRepr
 
-from nti.namedfile.file import FileConstraints
+from nti.namedfile.constraints import FileConstraints
 
 from nti.schema.schema import EqHash
 from nti.schema.field import SchemaConfigured
