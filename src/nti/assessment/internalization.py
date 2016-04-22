@@ -60,7 +60,7 @@ class _QFillInTheBlankShortAnswerSolutionUpdater(object):
 
 	def updateFromExternalObject(self, parsed, *args, **kwargs):
 		value = parsed.get('value', {})
-		for key in list(value.keys()): # mutating
+		for key in tuple(value.keys()): # mutating
 			regex = value.get(key)
 			if isinstance(regex, six.string_types):
 				regex = IRegEx(regex)
@@ -86,7 +86,7 @@ class _QFillInTheBlankWithWordBankSolutionUpdater(object):
 
 	def updateFromExternalObject(self, parsed, *args, **kwargs):
 		value = parsed.get('value', {})
-		for key in list(value.keys()): # mutating
+		for key in tuple(value.keys()): # mutating
 			data = value.get(key)
 			if isinstance(data, six.string_types):
 				data = data.split() # make it a list

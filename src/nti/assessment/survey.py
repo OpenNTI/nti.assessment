@@ -145,7 +145,7 @@ class QSurvey(QInquiry):
 	
 	def remove(self, question):
 		ntiid = getattr(question, 'ntiid', question)
-		for idx, question in enumerate(list(self.questions)): # mutating
+		for idx, question in enumerate(tuple(self.questions)): # mutating
 			if question.ntiid == ntiid:
 				return self.questions.pop(idx)
 		return None
