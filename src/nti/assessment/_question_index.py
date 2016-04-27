@@ -113,7 +113,7 @@ class QuestionIndex(object):
 			things_to_register.update(cls._explode_survey_to_register(obj))
 		return things_to_register
 	_explode_object_to_register = explode_object_to_register
-	
+
 	@classmethod
 	def _canonicalize_question_set(cls, obj, registry):
 		items = []
@@ -142,7 +142,7 @@ class QuestionIndex(object):
 		elif IQSurvey.providedBy(obj):
 			cls._canonicalize_survey(obj, registry)
 	canonicalize_object = _canonicalize_object
-	
+
 	def _registry_utility(self, registry, component, provided, name, event=False):
 		if not IWeakRef.providedBy(component):
 			registry.registerUtility(component,

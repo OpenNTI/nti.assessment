@@ -85,15 +85,17 @@ TIMED_ASSIGNMENT_MIME_TYPE = u'application/vnd.nextthought.assessment.timedassig
 RANDOMIZED_QUESTION_SET_MIME_TYPE = u'application/vnd.nextthought.narandomizedquestionset'
 QUESTION_FILL_IN_THE_BLANK_MIME_TYPE = u'application/vnd.nextthought.naquestionfillintheblankwordbank'
 
-ASSESSMENT_MIME_TYPES = (QUESTION_MIME_TYPE, 
+ASSESSMENT_MIME_TYPES = (QUESTION_MIME_TYPE,
 						 ASSIGNMENT_MIME_TYPE,
-						 QUESTION_SET_MIME_TYPE, 
+						 QUESTION_SET_MIME_TYPE,
 						 QUESTION_BANK_MIME_TYPE,
 						 TIMED_ASSIGNMENT_MIME_TYPE,
-						 RANDOMIZED_QUESTION_SET_MIME_TYPE, 
+						 RANDOMIZED_QUESTION_SET_MIME_TYPE,
 						 QUESTION_FILL_IN_THE_BLANK_MIME_TYPE)
 
 INQUIRY_MIME_TYPES = (POLL_MIME_TYPE, SURVEY_MIME_TYPE)
+
+ALL_ASSIGNMENT_MIME_TYPES = (ASSIGNMENT_MIME_TYPE, TIMED_ASSIGNMENT_MIME_TYPE)
 
 ALL_EVALUATION_MIME_TYPES = ASSESSMENT_MIME_TYPES + INQUIRY_MIME_TYPES
 
@@ -103,15 +105,15 @@ class IQEvaluation(IContained):
 	"""
 	__home__ = interface.Attribute("home location")
 	__home__.setTaggedValue('_ext_excluded_out', True)
-		
+
 IQEvaluation.setTaggedValue('_ext_is_marker_interface', True)
 
 class IQEvaluationItemContainer(IContained):
 	"""
 	marker interface for evaluation object containers
 	"""
-	
-	Items = Iterable(title='All the resolved items in this container', 
+
+	Items = Iterable(title='All the resolved items in this container',
 					 readonly=True, required=False)
 	Items.setTaggedValue('_ext_excluded_out', True)
 
@@ -119,12 +121,12 @@ class IQEvaluationItemContainer(IContained):
 		"""
 		return the number of items in this container
 		"""
-		
+
 	def remove(obj):
 		"""
 		remove the specifed object from this container
 		"""
-		
+
 IQEvaluationItemContainer.setTaggedValue('_ext_is_marker_interface', True)
 
 class IPollable(interface.Interface):
@@ -849,10 +851,10 @@ class IQAssessmentContextMixin(interface.Interface):
 	def clear():
 		"""
 		clear all policies
-		
+
 		:return true if policies were cleared
 		"""
-		
+
 	def get(assessment, name, default=None):
 		"""
 		Return the attribute value for the specified assessment
@@ -867,12 +869,12 @@ class IQAssessmentContextMixin(interface.Interface):
 		"""
 		return the number of assessments
 		"""
-		
+
 	def __len__():
 		"""
 		return the number of assessments
 		"""
-		
+
 class IQAssessmentDateContext(IQAssessmentContextMixin):
 	"""
 	An object that can be used as context to adapt an assessment
@@ -1133,7 +1135,7 @@ class IQAssessmentItemContainer(IEnumerableMapping):
 	something like the content library package may be adaptable to this,
 	typically with annotations).
 	"""
-		
+
 	def append(item):
 		"""
 		Add an item to this container
@@ -1153,7 +1155,7 @@ class IQAssessmentItemContainer(IEnumerableMapping):
 		"""
 		remove specified key and return the corresponding value
 		*args may contain a single default value, or may not be supplied.
-		If key is not found, default is returned if given, otherwise 
+		If key is not found, default is returned if given, otherwise
 		KeyError is raised
 		"""
 
@@ -1310,7 +1312,7 @@ class IQMatchingPartResponseNormalizer(IQPartResponseNormalizer):
 	A marker interface for an adapter that that knows how to normalize a given
 	a :class:`IQResponse` for a :class:`IQNonGradableMatchingPart`
 	"""
-	
+
 class IQOrderingPartResponseNormalizer(IQPartResponseNormalizer):
 	"""
 	A marker interface for an adapter that that knows how to normalize a given
@@ -1335,11 +1337,11 @@ class IQInquiry(IQSubmittable, IQEvaluation, IAttributeAnnotatable):
 
 	closed = Bool(title="Close flag", required=False, default=False)
 	closed.setTaggedValue('_ext_excluded_out', True)
-	
+
 	no_submit = Bool(title="Whether this object accept submissions",
 					 default=False, required=False)
 	no_submit.setTaggedValue('_ext_excluded_out', True)
-	
+
 	is_non_public = Bool(title="Whether this inquiry should be public or restricted",
 						 default=False)
 
@@ -1417,7 +1419,7 @@ class IQSurveySubmission(IQInquirySubmission, IContextAnnotatable, IWriteMapping
 												  title="The submission for a particular poll."))
 
 class IQAggregatedPartFactory(interface.Interface):
-	
+
 	def __call__():
 		pass
 
@@ -1450,7 +1452,7 @@ class IQAggregatedConnectingPart(IQAggregatedPart):
 
 class IQAggregatedMatchingPart(IQAggregatedConnectingPart):
 	pass
-	
+
 class IQAggregatedOrderingPart(IQAggregatedConnectingPart):
 	pass
 
