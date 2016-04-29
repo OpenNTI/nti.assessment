@@ -428,7 +428,8 @@ class IQMultipleChoicePart(IQNonGradableMultipleChoicePart, IQPart):
 	solutions = IndexedIterable(title="The multiple-choice solutions",
 								min_length=1,
 								value_type=Object(IQMultipleChoiceSolution,
-												  title="Multiple choice solution"))
+												  title="Multiple choice solution"),
+								required=False)
 IQGradableMultipleChoicePart = IQMultipleChoicePart  # alias
 
 class IQMultipleChoicePartGrader(IQPartGrader):
@@ -464,7 +465,8 @@ class IQMultipleChoiceMultipleAnswerPart(IQNonGradableMultipleChoiceMultipleAnsw
 	solutions = IndexedIterable(title="The multiple-choice solutions",
 								min_length=1,
 								value_type=Object(IQMultipleChoiceMultipleAnswerSolution,
-												  title="Multiple choice / multiple answer solution"))
+												  title="Multiple choice / multiple answer solution"),
+								required=False)
 
 class IQMultipleChoiceMultipleAnswerPartGrader(IQPartGrader):
 	"""
@@ -543,7 +545,8 @@ class IQMatchingPart(IQNonGradableMatchingPart, IQConnectingPart):
 
 	solutions = IndexedIterable(title="The matching solution",
 								min_length=1,
-								value_type=Object(IQMatchingSolution, title="Matching solution"))
+								value_type=Object(IQMatchingSolution, title="Matching solution"),
+								required=False)
 
 IQGradableMatchingPart = IQMatchingPart  # alias
 
