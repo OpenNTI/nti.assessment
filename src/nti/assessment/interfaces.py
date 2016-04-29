@@ -554,7 +554,8 @@ class IQOrderingPart(IQNonGradableOrderingPart, IQConnectingPart):
 
 	solutions = IndexedIterable(title="The matching solution",
 								min_length=1,
-								value_type=Object(IQOrderingSolution, title="Ordering solution"))
+								value_type=Object(IQOrderingSolution, title="Ordering solution"),
+								required=False)
 
 IQGradableOrderingPart = IQMatchingPart  # alias
 
