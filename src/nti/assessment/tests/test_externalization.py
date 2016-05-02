@@ -284,3 +284,12 @@ class TestExternalization(AssessmentTestCase):
 													has_entry('Class', is_('QuestionSet')),
 													has_entry('MimeType', is_('application/vnd.nextthought.naquestionbank')),
 													has_entry('ranges', has_length(2)))))
+
+	def test_assignment(self):
+		path = os.path.join(os.path.dirname(__file__), "assignment_no_solutions.json")
+		with open(path, "r") as fp:
+			ext_obj = json.load(fp)
+		factory = internalization.find_factory_for(ext_obj)
+		assert_that(factory, is_(not_none()))
+		internal = factory()
+		internalization.update_from_external_object(internal, ext_obj, require_updater=True)

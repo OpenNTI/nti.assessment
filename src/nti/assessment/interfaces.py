@@ -266,6 +266,7 @@ class IQPart(IQNonGradablePart, IGradable):
 	solutions = IndexedIterable(title="Acceptable solutions for this question part in no particular order.",
 								description="All solutions must be of the same type, and there must be at least one.",
 								value_type=Object(IQSolution, title="A solution for this part"),
+								min_length=0,
 								required=False)
 
 	def grade(response):
@@ -426,7 +427,7 @@ class IQMultipleChoiceSolution(IQSolution, IQSingleValuedSolution):
 class IQMultipleChoicePart(IQNonGradableMultipleChoicePart, IQPart):
 
 	solutions = IndexedIterable(title="The multiple-choice solutions",
-								min_length=1,
+								min_length=0,
 								value_type=Object(IQMultipleChoiceSolution,
 												  title="Multiple choice solution"),
 								required=False)
@@ -463,7 +464,7 @@ class IQMultipleChoiceMultipleAnswerPart(IQNonGradableMultipleChoiceMultipleAnsw
 										 IQMultipleChoicePart):
 
 	solutions = IndexedIterable(title="The multiple-choice solutions",
-								min_length=1,
+								min_length=0,
 								value_type=Object(IQMultipleChoiceMultipleAnswerSolution,
 												  title="Multiple choice / multiple answer solution"),
 								required=False)
@@ -544,7 +545,7 @@ IQGradableConnectingPart = IQConnectingPart  # alias
 class IQMatchingPart(IQNonGradableMatchingPart, IQConnectingPart):
 
 	solutions = IndexedIterable(title="The matching solution",
-								min_length=1,
+								min_length=0,
 								value_type=Object(IQMatchingSolution, title="Matching solution"),
 								required=False)
 
@@ -553,7 +554,7 @@ IQGradableMatchingPart = IQMatchingPart  # alias
 class IQOrderingPart(IQNonGradableOrderingPart, IQConnectingPart):
 
 	solutions = IndexedIterable(title="The matching solution",
-								min_length=1,
+								min_length=0,
 								value_type=Object(IQOrderingSolution, title="Ordering solution"),
 								required=False)
 
@@ -1211,7 +1212,8 @@ class IQFillInTheBlankShortAnswerPart(IQNonGradableFillInTheBlankShortAnswerPart
 	"""
 
 	solutions = IndexedIterable(title="The solutions",
-								min_length=1,
+								min_length=0,
+								required=False,
 								value_type=Object(IQFillInTheBlankShortAnswerSolution,
 												  title="the solution"))
 
@@ -1262,7 +1264,8 @@ class IQFillInTheBlankWithWordBankPart(IQNonGradableFillInTheBlankWithWordBankPa
 									   IQFillInTheBlankPart):
 
 	solutions = IndexedIterable(title="The solutions",
-								min_length=1,
+								min_length=0,
+								required=False,
 								value_type=Object(IQFillInTheBlankWithWordBankSolution,
 												  title="the solution"))
 
