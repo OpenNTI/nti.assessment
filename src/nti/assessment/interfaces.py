@@ -796,7 +796,8 @@ class IQAssignment(IQAssessment, IQSubmittable, ITitledContent, IAttributeAnnota
 						special and serves as a marker to higher levels of code.
 						""",
 						min_length=0,
-						value_type=Object(IQAssignmentPart, title="An assignment part"))
+						value_type=Object(IQAssignmentPart, title="An assignment part"),
+						required=False)
 
 	is_non_public = Bool(title="Whether this assignment should be public or restricted",
 						 description="""An ill-defined semi-layer violation. Set it to true if
