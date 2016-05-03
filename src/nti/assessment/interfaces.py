@@ -693,8 +693,9 @@ class IQuestionSet(IQAssessment, ITitledContent, IQEvaluationItemContainer, IAtt
 
 	questions = IndexedIterable(title="The ordered questions in the set.",
 								description="For convenience, this should also be aliased to `parts`",
-								min_length=1,
-								value_type=Object(IQuestion, title="The questions") )
+								min_length=0,
+								value_type=Object(IQuestion, title="The questions"),
+								required=False)
 
 class IQAssignmentPart(ITitledContent):
 	"""
@@ -1391,8 +1392,9 @@ class IQSurvey(IQInquiry, ITitledContent, IQEvaluationItemContainer, IFiniteSequ
 	"""
 
 	questions = IndexedIterable(title="The ordered polls in the set.",
-								min_length=1,
-								value_type=Object(IQPoll, title="The poll questions") )
+								min_length=0,
+								value_type=Object(IQPoll, title="The poll questions"),
+								required=False)
 
 IQSurvey['title'].setTaggedValue(TAG_HIDDEN_IN_UI, False)
 IQSurvey['title'].setTaggedValue(TAG_REQUIRED_IN_UI, False)
