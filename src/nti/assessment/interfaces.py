@@ -648,7 +648,14 @@ class IQEditableEvaluation(IQEvaluation):
 	Marker interface for all editable objects
 	"""
 IQEditableEvaluation.setTaggedValue('_ext_is_marker_interface', True)
-IQEditable IQEditableEvalutation = IQEditableEvaluation # alias
+IQEditable = IQEditableEvaluation # alias
+
+import zope.deferredimport
+zope.deferredimport.initialize()
+
+zope.deferredimport.deprecated(
+	"Import from IQEditableEvaluation instead",
+	IQEditableEvalutation='nti.assessments.interfaces:IQEditableEvaluation')
 
 # assessment
 
