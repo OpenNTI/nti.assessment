@@ -45,9 +45,8 @@ class TestAssignment(AssessmentTestCase):
 		assert_that( part, validly_provides( interfaces.IQAssignmentPart ) )
 
 		assert_that( assignment.QAssignment(), verifiably_provides( interfaces.IQAssignment ) )
-		# But it's not valid, it's missing parts
-		# - We now allow assignments without parts.
-		#assert_that( assignment.QAssignment(), does_not( validly_provides( interfaces.IQAssignment ) ) )
+		# This is now valid since we default to empty parts.
+		assert_that( assignment.QAssignment(), validly_provides( interfaces.IQAssignment ) )
 		assert_that( assignment.QAssignment(), externalizes( has_entries( 'Class', 'Assignment',
 																		  'category_name', 'default',
 																		  'CategoryName', 'default',
@@ -66,7 +65,7 @@ class TestAssignment(AssessmentTestCase):
 		a = assignment.QAssignment()
 		a.lastModified = a.createdTime = 0
 		assert_that(signature(a),
-					is_('abe9edfa08090dfd3d543b4ea94614c2764701140a613542309f536f47c2d85b') )
+					is_('43e4476f3e9dbd9a3f1a4ea108080069c5b7bdc8998b1c1945b3d4fa719397fd') )
 
 		path = os.path.join(os.path.dirname(__file__), "questionbank.json")
 		with open(path, "rb") as fp:

@@ -78,6 +78,8 @@ class QAssignment(QPersistentSubmittable):
 
 	id = alias('ntiid')
 
+	parts = ()
+
 	@readproperty
 	def __home__(self):
 		return self.__parent__
