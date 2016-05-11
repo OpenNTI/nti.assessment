@@ -305,10 +305,10 @@ class IQMultiValuedSolution(IQSolution):
 	"""
 	A solution consisting of a set of values.
 	"""
-	value = List(title="The correct answer selections",
-				 description="The correct answer as a tuple of items which are a zero-based index into the choices list.",
-				 min_length=0,
-				 value_type=TextLine(title="The value"))
+	value = ListOrTuple(title="The correct answer selections",
+				 		description="The correct answer as a tuple of items which are a zero-based index into the choices list.",
+				 		min_length=0,
+				 		value_type=TextLine(title="The value"))
 
 # math parts
 
@@ -408,11 +408,11 @@ class IQNonGradableMultipleChoicePart(IQNonGradablePart, IPollable):
 	of alternatives.
 	"""
 
-	choices = List(	title="The choice strings to present to the user.",
-				   	min_length=1,
-				   	description="""Presentation order may matter, hence the list. But for grading purposes,
-				  	the order does not matter and simple existence within the set is sufficient.""",
-				  	value_type=_ContentFragment(title="A rendered value"))
+	choices = ListOrTuple(title="The choice strings to present to the user.",
+				   		  min_length=1,
+				   		  description="""Presentation order may matter, hence the list. But for grading purposes,
+				  		  the order does not matter and simple existence within the set is sufficient.""",
+				  		  value_type=_ContentFragment(title="A rendered value"))
 IQNonGradableMultipleChoicePart.setTaggedValue('response_type', IQTextResponse)
 
 class IQMultipleChoiceSolution(IQSolution, IQSingleValuedSolution):
@@ -455,10 +455,10 @@ class IQMultipleChoiceMultipleAnswerSolution(IQSolution,
 	the options presented. These will typically be used in isolation as a single part.
 	"""
 
-	value = List(title="The correct answer selections",
-				 description="The correct answer as a tuple of items which are a zero-based index into the choices list.",
-				 min_length=1,
-				 value_type=Int(title="The value", min=0))
+	value = ListOrTuple(title="The correct answer selections",
+				 		description="The correct answer as a tuple of items which are a zero-based index into the choices list.",
+				 		min_length=1,
+				 		value_type=Int(title="The value", min=0))
 
 class IQMultipleChoiceMultipleAnswerPart(IQNonGradableMultipleChoiceMultipleAnswerPart,
 										 IQMultipleChoicePart):
