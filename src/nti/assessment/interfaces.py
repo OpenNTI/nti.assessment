@@ -694,6 +694,7 @@ class IQuestionSet(IQAssessment, ITitledContent, IQEvaluationItemContainer, IAtt
 	questions = IndexedIterable(title="The ordered questions in the set.",
 								description="For convenience, this should also be aliased to `parts`",
 								min_length=0,
+								default=(),
 								value_type=Object(IQuestion, title="The questions"))
 
 class IQAssignmentPart(ITitledContent):
@@ -796,6 +797,7 @@ class IQAssignment(IQAssessment, IQSubmittable, ITitledContent, IAttributeAnnota
 						special and serves as a marker to higher levels of code.
 						""",
 						min_length=0,
+						default=(),
 						value_type=Object(IQAssignmentPart, title="An assignment part"))
 
 	is_non_public = Bool(title="Whether this assignment should be public or restricted",
@@ -1391,6 +1393,7 @@ class IQSurvey(IQInquiry, ITitledContent, IQEvaluationItemContainer, IFiniteSequ
 
 	questions = IndexedIterable(title="The ordered polls in the set.",
 								min_length=0,
+								default=(),
 								value_type=Object(IQPoll, title="The poll questions"))
 
 IQSurvey['title'].setTaggedValue(TAG_HIDDEN_IN_UI, False)
