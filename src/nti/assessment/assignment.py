@@ -27,7 +27,9 @@ from persistent import Persistent
 
 from nti.assessment._util import make_sublocations as _make_sublocations
 
+from nti.assessment.common import make_schema
 from nti.assessment.common import get_containerId
+from nti.assessment.common import AssessmentSchemaMixin
 from nti.assessment.common import QPersistentSubmittable
 
 from nti.assessment.interfaces import ASSIGNMENT_MIME_TYPE
@@ -51,6 +53,7 @@ from nti.dublincore.datastructures import PersistentCreatedModDateTrackingObject
 from nti.externalization.representation import WithRepr
 
 from nti.schema.field import SchemaConfigured
+
 from nti.schema.fieldproperty import AdaptingFieldProperty
 from nti.schema.fieldproperty import createDirectFieldProperties
 
@@ -66,9 +69,13 @@ class QAssignmentPart(SchemaConfigured,
 
 	mimeType = mime_type = 'application/vnd.nextthought.assessment.assignmentpart'
 
+	def schema(self):
+		result = make_schema(schema=IQAssignmentPart)
+		return result
+
 @WithRepr
 @interface.implementer(IQAssignment, INTIContained)
-class QAssignment(QPersistentSubmittable):
+class QAssignment(QPersistentSubmittable, AssessmentSchemaMixin):
 
 	createDirectFieldProperties(IQAssignment)
 

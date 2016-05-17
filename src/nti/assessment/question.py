@@ -24,6 +24,7 @@ from zope.mimetype.interfaces import IContentTypeAware
 from persistent import Persistent
 
 from nti.assessment.common import get_containerId
+from nti.assessment.common import AssessmentSchemaMixin
 
 from nti.assessment.interfaces import QUESTION_MIME_TYPE
 from nti.assessment.interfaces import QUESTION_SET_MIME_TYPE
@@ -36,7 +37,7 @@ from nti.assessment.interfaces import IQFillInTheBlankWithWordBankQuestion
 from nti.common.property import alias
 from nti.common.property import readproperty
 
-from nti.coremetadata.mixins import RecordableMixin 
+from nti.coremetadata.mixins import RecordableMixin
 from nti.coremetadata.mixins import PublishableMixin
 
 from nti.dataserver_core.interfaces import IContained as INTIContained
@@ -58,7 +59,8 @@ class QBaseMixin(SchemaConfigured,
 				 Persistent,
 				 RecordableMixin,
 				 PublishableMixin,
-				 Contained):
+				 Contained,
+				 AssessmentSchemaMixin):
 
 	ntiid = None
 	id = alias('ntiid')
@@ -93,7 +95,7 @@ class QQuestion(QBaseMixin):
 
 	def __len__(self):
 		return len(self.parts or ())
-	
+
 	def __setattr__(self, name, value):
 		super(QQuestion, self).__setattr__(name, value)
 		if name == "parts":
@@ -125,7 +127,7 @@ class QQuestionSet(QBaseMixin):
 
 	def __len__(self):
 		return len(self.questions or ())
-	
+
 	def remove(self, question):
 		ntiid = getattr(question, 'ntiid', question)
 		for idx, question in enumerate(tuple(self.questions)): # mutating

@@ -30,11 +30,13 @@ from persistent import Persistent
 from nti.assessment import ASSESSMENT_INTERFACES
 
 from nti.assessment.interfaces import IQPart
+from nti.assessment.interfaces import IQAssessment
 from nti.assessment.interfaces import IQAssignment
 from nti.assessment.interfaces import IQSubmittable
 from nti.assessment.interfaces import IQSubmittedPart
 from nti.assessment.interfaces import IQNonGradablePart
 from nti.assessment.interfaces import IQPartResponseNormalizer
+from nti.assessment.interfaces import IQAssessmentJsonSchemaMaker
 from nti.assessment.interfaces import IQLatexSymbolicMathSolution
 from nti.assessment.interfaces import IQEvaluationContainerIdGetter
 
@@ -55,6 +57,8 @@ from nti.schema.field import SchemaConfigured
 
 from nti.schema.fieldproperty import AdaptingFieldProperty
 from nti.schema.fieldproperty import createDirectFieldProperties
+
+from nti.schema.interfaces import find_most_derived_interface
 
 from nti.schema.schema import EqHash
 
@@ -150,8 +154,8 @@ def get_containerId(item):
 
 @WithRepr
 @interface.implementer(IQSubmittable, IContentTypeAware, IAttributeAnnotatable)
-class QSubmittable(SchemaConfigured, 
-				   RecordableMixin, 
+class QSubmittable(SchemaConfigured,
+				   RecordableMixin,
 				   CalendarPublishableMixin,
 				   Contained):
 
@@ -195,3 +199,19 @@ class QSubmittedPart(SchemaConfigured, Persistent, Contained):
 				part.__parent__ = self
 			if part.__parent__ is self:
 				yield part
+
+def make_schema(schema):
+	name = schema.queryTaggedValue('_ext_jsonschema') or u''
+	schemafier = component.getUtility(IQAssessmentJsonSchemaMaker, name=name)
+	result = schemafier.make_schema(schema=schema)
+	return result
+
+class AssessmentSchemaMixin(object):
+	"""
+	Mixin to pull a schema for a given implementation.
+	"""
+
+	def schema(self):
+		schema = find_most_derived_interface(self, IQAssessment)
+		result = make_schema(schema=schema)
+		return result

@@ -44,6 +44,7 @@ from nti.coremetadata.interfaces import IRecordable
 from nti.coremetadata.interfaces import IPublishable
 from nti.coremetadata.interfaces import INoPublishLink
 from nti.coremetadata.interfaces import ICalendarPublishable
+from nti.coremetadata.interfaces import IObjectJsonSchemaMaker
 
 from nti.dataserver_core.interfaces import IContextAnnotatable
 from nti.dataserver_core.interfaces import INeverStoredInSharedStream
@@ -657,6 +658,7 @@ class IQAssessment(IQEvaluation, IRecordable):
 	Marker interface for all assessment objects
 	"""
 
+IQAssessment.setTaggedValue('_ext_jsonschema', u'')
 # question
 
 class IQuestion(IQAssessment, IPublishable, INoPublishLink, IAttributeAnnotatable):
@@ -679,6 +681,9 @@ class IQuestion(IQAssessment, IPublishable, INoPublishLink, IAttributeAnnotatabl
 							min_length=1,
 							value_type=Object(IQPart, title="A question part") )
 
+IQuestion.setTaggedValue('_ext_jsonschema', u'question')
+IQuestion.setTaggedValue('_ext_mime_type', QUESTION_MIME_TYPE)
+
 class IQuestionSet(IQAssessment, ITitledContent, IQEvaluationItemContainer, IAttributeAnnotatable):
 	"""
 	An ordered group of related questions generally intended to be
@@ -697,6 +702,9 @@ class IQuestionSet(IQAssessment, ITitledContent, IQEvaluationItemContainer, IAtt
 								default=(),
 								value_type=Object(IQuestion, title="The questions"))
 
+IQuestionSet.setTaggedValue('_ext_jsonschema', u'questionset')
+IQuestionSet.setTaggedValue('_ext_mime_type', QUESTION_SET_MIME_TYPE)
+
 class IQAssignmentPart(ITitledContent):
 	"""
 	One portion of an assignment.
@@ -710,6 +718,9 @@ class IQAssignmentPart(ITitledContent):
 
 	auto_grade = Bool(title="Should this part be run through the grading machinery?",
 					  default=False)
+
+IQAssignmentPart.setTaggedValue('_ext_jsonschema', u'assignmentpart')
+IQAssignmentPart.setTaggedValue('_ext_mime_type', u'application/vnd.nextthought.assessment.assignmentpart')
 
 class IQSubmittable(IRecordable, ICalendarPublishable):
 
@@ -831,6 +842,9 @@ IQAssignment['available_for_submission_ending'].setTaggedValue(TAG_HIDDEN_IN_UI,
 IQAssignment['available_for_submission_ending'].setTaggedValue(TAG_REQUIRED_IN_UI, False)
 IQAssignment['available_for_submission_beginning'].setTaggedValue(TAG_HIDDEN_IN_UI, False)
 IQAssignment['available_for_submission_beginning'].setTaggedValue(TAG_REQUIRED_IN_UI, False)
+
+IQAssignment.setTaggedValue('_ext_jsonschema', u'assignment')
+IQAssignment.setTaggedValue('_ext_mime_type', ASSIGNMENT_MIME_TYPE)
 
 class IQTimedAssignment(IQAssignment):
 
@@ -1538,3 +1552,11 @@ class IQEvaluationContainerIdGetter(interface.Interface):
 	def __call__(item):
 		pass
 IQAssessmentContainerIdGetter = IQEvaluationContainerIdGetter # BWC
+
+class IQAssessmentJsonSchemaMaker(IObjectJsonSchemaMaker):
+	"""
+	Marker interface for a assessment JSON Schema maker utility
+	"""
+
+	def make_schema(schema=IQAssessment):
+		pass

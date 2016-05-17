@@ -25,14 +25,20 @@ from nti.assessment.randomized.interfaces import IRandomizedQuestionSet
 
 from nti.schema.jsonschema import TAG_HIDDEN_IN_UI
 
+#: Fields attribute
+FIELDS = 'Fields'
+
+#: Accepts attribute
+ACCEPTS = 'Accepts'
+
 EVALUATION_INTERFACES = ASSESSMENT_INTERFACES = ( # order matters
-        IQPoll, 
+        IQPoll,
         IQuestion,
-        IQSurvey, 
+        IQSurvey,
         IQuestionBank,
         IRandomizedQuestionSet,
         IQuestionSet,
-        IQTimedAssignment, 
+        IQTimedAssignment,
         IQAssignment
 )
 
