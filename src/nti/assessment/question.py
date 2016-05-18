@@ -138,7 +138,8 @@ class QQuestionSet(QBaseMixin, RecordableContainerMixin):
 		return None
 
 	def _validate_insert(self, item):
-		return IWeakRef(item)
+		return item
+		#return IWeakRef(item)
 
 	def append(self, item):
 		item = self._validate_insert(item)
