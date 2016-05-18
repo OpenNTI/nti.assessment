@@ -11,6 +11,9 @@ __docformat__ = "restructuredtext en"
 
 logger = __import__('logging').getLogger(__name__)
 
+from persistent import Persistent
+from persistent.list import PersistentList
+
 from zope import interface
 
 from zope.annotation.interfaces import IAttributeAnnotatable
@@ -20,8 +23,6 @@ from zope.container.contained import Contained
 from zope.interface.common.sequence import IFiniteSequence
 
 from zope.mimetype.interfaces import IContentTypeAware
-
-from persistent import Persistent
 
 from nti.assessment.common import get_containerId
 from nti.assessment.common import AssessmentSchemaMixin
@@ -39,6 +40,7 @@ from nti.common.property import readproperty
 
 from nti.coremetadata.mixins import RecordableMixin
 from nti.coremetadata.mixins import PublishableMixin
+from nti.coremetadata.mixins import RecordableContainerMixin
 
 from nti.dataserver_core.interfaces import IContained as INTIContained
 
@@ -104,7 +106,7 @@ class QQuestion(QBaseMixin):
 
 @EqHash('title', 'questions', superhash=True)
 @interface.implementer(IQuestionSet)
-class QQuestionSet(QBaseMixin):
+class QQuestionSet(QBaseMixin, RecordableContainerMixin):
 
 	questions = ()
 	parts = alias('questions')
@@ -134,6 +136,28 @@ class QQuestionSet(QBaseMixin):
 			if question.ntiid == ntiid:
 				return self.questions.pop(idx)
 		return None
+
+	def _validate_insert(self, item):
+		return IWeakRef(item)
+
+	def append(self, item):
+		item = self._validate_insert(item)
+		item.__parent__ = self  # take ownership
+		self.questions = PersistentList() if not self.questions else self.questions
+		self.questions.append(item)
+	add = append
+
+	def insert(self, index, item):
+		# Remove from our list if it exists, and then insert at.
+		self.remove(item)
+		# Only validate after remove.
+		item = self._validate_insert(item)
+		if index is None or index >= len(self):
+			# Default to append.
+			self.append(item)
+		else:
+			item.__parent__ = self  # take ownership
+			self.questions.insert(index, item)
 
 @EqHash('wordbank', include_super=True)
 @interface.implementer(IQFillInTheBlankWithWordBankQuestion)

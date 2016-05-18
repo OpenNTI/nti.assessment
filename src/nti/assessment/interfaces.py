@@ -44,6 +44,7 @@ from nti.coremetadata.interfaces import IRecordable
 from nti.coremetadata.interfaces import IPublishable
 from nti.coremetadata.interfaces import INoPublishLink
 from nti.coremetadata.interfaces import ICalendarPublishable
+from nti.coremetadata.interfaces import IRecordableContainer
 from nti.coremetadata.interfaces import IObjectJsonSchemaMaker
 
 from nti.dataserver_core.interfaces import IContextAnnotatable
@@ -684,7 +685,8 @@ class IQuestion(IQAssessment, IPublishable, INoPublishLink, IAttributeAnnotatabl
 IQuestion.setTaggedValue('_ext_jsonschema', u'question')
 IQuestion.setTaggedValue('_ext_mime_type', QUESTION_MIME_TYPE)
 
-class IQuestionSet(IQAssessment, ITitledContent, IQEvaluationItemContainer, IAttributeAnnotatable):
+class IQuestionSet(IQAssessment, ITitledContent, IQEvaluationItemContainer,
+				   IAttributeAnnotatable, IRecordableContainer):
 	"""
 	An ordered group of related questions generally intended to be
 	completed as a unit (aka, a Quiz or worksheet).
