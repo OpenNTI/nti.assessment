@@ -200,13 +200,15 @@ class QSubmittedPart(SchemaConfigured, Persistent, Contained):
 			if part.__parent__ is self:
 				yield part
 
+# schema
+
 def make_schema(schema):
 	name = schema.queryTaggedValue('_ext_jsonschema') or u''
 	schemafier = component.getUtility(IQAssessmentJsonSchemaMaker, name=name)
 	result = schemafier.make_schema(schema=schema)
 	return result
 
-class AssessmentSchemaMixin(object):
+class EvaluationSchemaMixin(object):
 	"""
 	Mixin to pull a schema for a given implementation.
 	"""
@@ -215,3 +217,4 @@ class AssessmentSchemaMixin(object):
 		schema = find_most_derived_interface(self, IQAssessment)
 		result = make_schema(schema=schema)
 		return result
+AssessmentSchemaMixin = EvaluationSchemaMixin

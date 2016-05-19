@@ -110,6 +110,7 @@ class IQEvaluation(IContained):
 	__home__ = interface.Attribute("home location")
 	__home__.setTaggedValue('_ext_excluded_out', True)
 
+IQEvaluation.setTaggedValue('_ext_jsonschema', u'')
 IQEvaluation.setTaggedValue('_ext_is_marker_interface', True)
 
 class IQEvaluationItemContainer(IContained):
@@ -1402,6 +1403,9 @@ IQPoll['available_for_submission_ending'].setTaggedValue(TAG_REQUIRED_IN_UI, Fal
 IQPoll['available_for_submission_beginning'].setTaggedValue(TAG_HIDDEN_IN_UI, False)
 IQPoll['available_for_submission_beginning'].setTaggedValue(TAG_REQUIRED_IN_UI, False)
 
+IQPoll.setTaggedValue('_ext_jsonschema', u'poll')
+IQPoll.setTaggedValue('_ext_mime_type', POLL_MIME_TYPE)
+
 class IQSurvey(IQInquiry, ITitledContent, IQEvaluationItemContainer, IFiniteSequence):
 	"""
 	An ordered group of poll questions.
@@ -1424,6 +1428,9 @@ IQSurvey['available_for_submission_ending'].setTaggedValue(TAG_HIDDEN_IN_UI, Fal
 IQSurvey['available_for_submission_ending'].setTaggedValue(TAG_REQUIRED_IN_UI, False)
 IQSurvey['available_for_submission_beginning'].setTaggedValue(TAG_HIDDEN_IN_UI, False)
 IQSurvey['available_for_submission_beginning'].setTaggedValue(TAG_REQUIRED_IN_UI, False)
+
+IQSurvey.setTaggedValue('_ext_jsonschema', u'survey')
+IQSurvey.setTaggedValue('_ext_mime_type', SURVEY_MIME_TYPE)
 
 class IQInquirySubmission(IQPartsSubmission):
 	inquiryId = interface.Attribute("Identifier of the inquiry being responded to.")
@@ -1557,13 +1564,15 @@ class IQEvaluationContainerIdGetter(interface.Interface):
 		pass
 IQAssessmentContainerIdGetter = IQEvaluationContainerIdGetter # BWC
 
-class IQAssessmentJsonSchemaMaker(IObjectJsonSchemaMaker):
+class IQEvaluationJsonSchemaMaker(IObjectJsonSchemaMaker):
 	"""
-	Marker interface for a assessment JSON Schema maker utility
+	Marker interface for an evaluation JSON Schema maker utility
 	"""
 
-	def make_schema(schema=IQAssessment):
+	def make_schema(schema=IQEvaluation):
 		pass
+
+IQAssessmentJsonSchemaMaker=IQEvaluationJsonSchemaMaker
 
 #: Question moved recorder transaction type.
 TRX_QUESTION_MOVE_TYPE = u'questionmoved'

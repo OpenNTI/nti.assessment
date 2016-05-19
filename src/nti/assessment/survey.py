@@ -24,6 +24,7 @@ from nti.assessment._util import make_sublocations as _make_sublocations
 
 from nti.assessment.common import get_containerId
 from nti.assessment.common import normalize_response
+from nti.assessment.common import EvaluationSchemaMixin
 from nti.assessment.common import QPersistentSubmittable
 
 from nti.assessment.interfaces import POLL_MIME_TYPE
@@ -71,7 +72,7 @@ from nti.schema.schema import EqHash
 from nti.wref.interfaces import IWeakRef
 
 @interface.implementer(IQInquiry, INTIContained)
-class QInquiry(QPersistentSubmittable):
+class QInquiry(QPersistentSubmittable, EvaluationSchemaMixin):
 
 	closed = False
 	is_non_public = False

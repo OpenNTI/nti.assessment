@@ -16,12 +16,13 @@ from nti.assessment import ACCEPTS
 
 from nti.assessment.common import make_schema
 
+from nti.assessment.interfaces import IQPoll, IQSurvey
 from nti.assessment.interfaces import IQuestion
 from nti.assessment.interfaces import IQuestionSet
 from nti.assessment.interfaces import IQAssignment
 from nti.assessment.interfaces import IQAssessment
 from nti.assessment.interfaces import IQAssignmentPart
-from nti.assessment.interfaces import IQAssessmentJsonSchemaMaker
+from nti.assessment.interfaces import IQEvaluationJsonSchemaMaker
 
 from nti.coremetadata.jsonschema import CoreJsonSchemafier
 
@@ -35,8 +36,8 @@ class BaseJsonSchemafier(CoreJsonSchemafier):
 	def post_process_field(self, name, field, item_schema):
 		super(BaseJsonSchemafier, self).post_process_field(name, field, item_schema)
 
-@interface.implementer(IQAssessmentJsonSchemaMaker)
-class AssessmentJsonSchemaMaker(object):
+@interface.implementer(IQEvaluationJsonSchemaMaker)
+class EvaluationJsonSchemaMaker(object):
 
 	maker = BaseJsonSchemafier
 
@@ -45,9 +46,10 @@ class AssessmentJsonSchemaMaker(object):
 		maker = self.maker(schema)
 		result[FIELDS] = maker.make_schema()
 		return result
+AssessmentJsonSchemaMaker = EvaluationJsonSchemaMaker
 
-@interface.implementer(IQAssessmentJsonSchemaMaker)
-class ItemContainerJsonSchemaMaker(AssessmentJsonSchemaMaker):
+@interface.implementer(IQEvaluationJsonSchemaMaker)
+class ItemContainerJsonSchemaMaker(EvaluationJsonSchemaMaker):
 
 	has_items = True
 	ref_interfaces = ()
@@ -64,7 +66,7 @@ class ItemContainerJsonSchemaMaker(AssessmentJsonSchemaMaker):
 			fields[ITEMS]['base_type'] = base_types if len(base_types) > 1 else base_types[0]
 		return result
 
-@interface.implementer(IQAssessmentJsonSchemaMaker)
+@interface.implementer(IQEvaluationJsonSchemaMaker)
 class AssignmentJsonSchemaMaker(ItemContainerJsonSchemaMaker):
 
 	has_items = False
@@ -74,7 +76,7 @@ class AssignmentJsonSchemaMaker(ItemContainerJsonSchemaMaker):
 		result = super(AssignmentJsonSchemaMaker, self).make_schema(schema)
 		return result
 
-@interface.implementer(IQAssessmentJsonSchemaMaker)
+@interface.implementer(IQEvaluationJsonSchemaMaker)
 class AssignmentPartJsonSchemaMaker(ItemContainerJsonSchemaMaker):
 
 	has_items = False
@@ -84,7 +86,7 @@ class AssignmentPartJsonSchemaMaker(ItemContainerJsonSchemaMaker):
 		result = super(AssignmentPartJsonSchemaMaker, self).make_schema(schema)
 		return result
 
-@interface.implementer(IQAssessmentJsonSchemaMaker)
+@interface.implementer(IQEvaluationJsonSchemaMaker)
 class QuestionSetJsonSchemaMaker(ItemContainerJsonSchemaMaker):
 
 	has_items = False
@@ -94,11 +96,30 @@ class QuestionSetJsonSchemaMaker(ItemContainerJsonSchemaMaker):
 		result = super(QuestionSetJsonSchemaMaker, self).make_schema(schema)
 		return result
 
-@interface.implementer(IQAssessmentJsonSchemaMaker)
+@interface.implementer(IQEvaluationJsonSchemaMaker)
 class QuestionJsonSchemaMaker(ItemContainerJsonSchemaMaker):
 
 	has_items = False
 
 	def make_schema(self, schema=IQuestion):
 		result = super(QuestionJsonSchemaMaker, self).make_schema(schema)
+		return result
+
+@interface.implementer(IQEvaluationJsonSchemaMaker)
+class PollJsonSchemaMaker(ItemContainerJsonSchemaMaker):
+
+	has_items = False
+
+	def make_schema(self, schema=IQPoll):
+		result = super(PollJsonSchemaMaker, self).make_schema(schema)
+		return result
+
+@interface.implementer(IQEvaluationJsonSchemaMaker)
+class SurveyJsonSchemaMaker(ItemContainerJsonSchemaMaker):
+
+	has_items = False
+	ref_interfaces = (IQPoll,)
+
+	def make_schema(self, schema=IQSurvey):
+		result = super(PollJsonSchemaMaker, self).make_schema(schema)
 		return result

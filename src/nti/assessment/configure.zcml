@@ -207,9 +207,11 @@
 
 	<!-- Utilities -->
 	<utility factory=".jsonschema.AssessmentJsonSchemaMaker" />
+	<utility factory=".jsonschema.PollJsonSchemaMaker" name="poll" />
+	<utility factory=".jsonschema.SurveyJsonSchemaMaker" name="survey" />
 	<utility factory=".jsonschema.QuestionJsonSchemaMaker" name="question" />
-	<utility factory=".jsonschema.QuestionSetJsonSchemaMaker" name="questionset" />
 	<utility factory=".jsonschema.AssignmentJsonSchemaMaker" name="assignment" />
+	<utility factory=".jsonschema.QuestionSetJsonSchemaMaker" name="questionset" />
 	<utility factory=".jsonschema.AssignmentPartJsonSchemaMaker" name="assignmentpart" />
 
 	<!-- Externalization -->
