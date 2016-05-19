@@ -21,6 +21,8 @@ from zope.interface.common.mapping import IEnumerableMapping
 
 from zope.interface.common.sequence import IFiniteSequence
 
+from zope.interface.interfaces import IObjectEvent
+
 from zope.lifecycleevent import ObjectModifiedEvent
 from zope.lifecycleevent.interfaces import IObjectModifiedEvent
 
@@ -1562,3 +1564,9 @@ class IQAssessmentJsonSchemaMaker(IObjectJsonSchemaMaker):
 
 	def make_schema(schema=IQAssessment):
 		pass
+
+#: Question moved recorder transaction type.
+TRX_QUESTION_MOVE_TYPE = u'questionmoved'
+
+class IQuestionMovedEvent(IObjectEvent):
+	pass
