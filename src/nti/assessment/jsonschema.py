@@ -16,7 +16,9 @@ from nti.assessment import ACCEPTS
 
 from nti.assessment.common import make_schema
 
-from nti.assessment.interfaces import IQPoll, IQSurvey
+from nti.assessment.interfaces import IQPart
+from nti.assessment.interfaces import IQPoll
+from nti.assessment.interfaces import IQSurvey
 from nti.assessment.interfaces import IQuestion
 from nti.assessment.interfaces import IQuestionSet
 from nti.assessment.interfaces import IQAssignment
@@ -100,9 +102,20 @@ class QuestionSetJsonSchemaMaker(ItemContainerJsonSchemaMaker):
 class QuestionJsonSchemaMaker(ItemContainerJsonSchemaMaker):
 
 	has_items = False
+	# FIXME: parts
+	ref_interfaces = ()
 
 	def make_schema(self, schema=IQuestion):
 		result = super(QuestionJsonSchemaMaker, self).make_schema(schema)
+		return result
+
+class PartJsonSchemaMaker(ItemContainerJsonSchemaMaker):
+	has_items = False
+	# FIXME: solutions
+	ref_interfaces = ()
+
+	def make_schema(self, schema=IQPart):
+		result = super(PartJsonSchemaMaker, self).make_schema(schema)
 		return result
 
 @interface.implementer(IQEvaluationJsonSchemaMaker)

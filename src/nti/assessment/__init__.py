@@ -50,3 +50,8 @@ def _set_ifaces():
             iSchema[k].setTaggedValue(TAG_HIDDEN_IN_UI, True)
 _set_ifaces()
 del _set_ifaces
+
+
+from nti.assessment._patch import patch
+patch()
+del patch

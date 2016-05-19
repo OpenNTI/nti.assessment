@@ -287,6 +287,7 @@ class IQPart(IQNonGradablePart, IGradable):
 			there are no provided solutions. If solution weights are
 			taken into account, this will be a floating point number between 0.0 (incorrect) and 1.0 (perfect).
 		"""
+
 IQGradablePart = IQPart  # alias
 
 class IQPartGrader(interface.Interface):
@@ -686,7 +687,6 @@ class IQuestion(IQAssessment, IPublishable, INoPublishLink, IAttributeAnnotatabl
 							value_type=Object(IQPart, title="A question part") )
 
 IQuestion.setTaggedValue('_ext_jsonschema', u'question')
-IQuestion.setTaggedValue('_ext_mime_type', QUESTION_MIME_TYPE)
 
 class IQuestionSet(IQAssessment, ITitledContent, IQEvaluationItemContainer,
 				   IAttributeAnnotatable, IRecordableContainer):
@@ -708,7 +708,6 @@ class IQuestionSet(IQAssessment, ITitledContent, IQEvaluationItemContainer,
 								value_type=Object(IQuestion, title="The questions"))
 
 IQuestionSet.setTaggedValue('_ext_jsonschema', u'questionset')
-IQuestionSet.setTaggedValue('_ext_mime_type', QUESTION_SET_MIME_TYPE)
 
 class IQAssignmentPart(ITitledContent):
 	"""
@@ -725,7 +724,6 @@ class IQAssignmentPart(ITitledContent):
 					  default=False)
 
 IQAssignmentPart.setTaggedValue('_ext_jsonschema', u'assignmentpart')
-IQAssignmentPart.setTaggedValue('_ext_mime_type', u'application/vnd.nextthought.assessment.assignmentpart')
 
 class IQSubmittable(IRecordable, ICalendarPublishable):
 
@@ -849,7 +847,6 @@ IQAssignment['available_for_submission_beginning'].setTaggedValue(TAG_HIDDEN_IN_
 IQAssignment['available_for_submission_beginning'].setTaggedValue(TAG_REQUIRED_IN_UI, False)
 
 IQAssignment.setTaggedValue('_ext_jsonschema', u'assignment')
-IQAssignment.setTaggedValue('_ext_mime_type', ASSIGNMENT_MIME_TYPE)
 
 class IQTimedAssignment(IQAssignment):
 
@@ -1404,7 +1401,6 @@ IQPoll['available_for_submission_beginning'].setTaggedValue(TAG_HIDDEN_IN_UI, Fa
 IQPoll['available_for_submission_beginning'].setTaggedValue(TAG_REQUIRED_IN_UI, False)
 
 IQPoll.setTaggedValue('_ext_jsonschema', u'poll')
-IQPoll.setTaggedValue('_ext_mime_type', POLL_MIME_TYPE)
 
 class IQSurvey(IQInquiry, ITitledContent, IQEvaluationItemContainer, IFiniteSequence):
 	"""
@@ -1430,7 +1426,6 @@ IQSurvey['available_for_submission_beginning'].setTaggedValue(TAG_HIDDEN_IN_UI, 
 IQSurvey['available_for_submission_beginning'].setTaggedValue(TAG_REQUIRED_IN_UI, False)
 
 IQSurvey.setTaggedValue('_ext_jsonschema', u'survey')
-IQSurvey.setTaggedValue('_ext_mime_type', SURVEY_MIME_TYPE)
 
 class IQInquirySubmission(IQPartsSubmission):
 	inquiryId = interface.Attribute("Identifier of the inquiry being responded to.")

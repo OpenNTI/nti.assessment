@@ -25,6 +25,8 @@ from nti.assessment.assignment import QAssignmentPart
 from nti.assessment.interfaces import QUESTION_MIME_TYPE
 from nti.assessment.interfaces import QUESTION_SET_MIME_TYPE
 
+from nti.assessment.parts import QMatchingPart
+
 from nti.assessment.question import QQuestion
 from nti.assessment.question import QQuestionSet
 
@@ -60,6 +62,18 @@ class TestJsonSchema(unittest.TestCase):
 		assert_that(fields, has_entry('content', has_entry('type', 'string')))
 		assert_that(fields, has_entry('parts', has_entry('type', 'List')))
 
+	def test_qpart(self):
+		a = QMatchingPart()
+		schema = a.schema()
+		assert_that(schema, has_key(FIELDS))
+		fields = schema[FIELDS]
+		assert_that(fields, has_length(6))
+		assert_that(fields, has_entry('explanation', has_entry('base_type', 'string')))
+		assert_that(fields, has_entry('labels', has_entry('type', 'list')))
+		assert_that(fields, has_entry('content', has_entry('base_type', 'string')))
+		assert_that(fields, has_entry('solutions', has_entry('type', 'List')))
+		assert_that(fields, has_entry('hints', has_entry('type', 'List')))
+
 	def test_qset(self):
 		a = QQuestionSet()
 		schema = a.schema()
@@ -75,7 +89,7 @@ class TestJsonSchema(unittest.TestCase):
 		assert_that(accepts, has_key(QUESTION_MIME_TYPE))
 
 	def test_assignment(self):
-		# TODO: ntiid, no_submit, publishable (skip)
+		# TODO: ntiid, no_submit, publishable (exclude?)
 		a = QAssignment()
 		schema = a.schema()
 		assert_that(schema, has_key(FIELDS))
