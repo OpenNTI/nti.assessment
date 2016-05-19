@@ -173,7 +173,7 @@ class QPart(QNonGradablePart):
 @EqHash(include_super=True, include_type=True)
 class QNonGradableMathPart(QNonGradablePart):
 
-	mimeType = mime_type = 'application/vnd.nextthought.assessment.nongradeablemathpart'
+	mimeType = mime_type = 'application/vnd.nextthought.assessment.nongradablemathpart'
 
 	def _eq_instance(self, other):
 		return isinstance(other, QNonGradableMathPart)
@@ -210,7 +210,7 @@ class QNumericMathPart(QMathPart):
 		superhash=True)
 class QNonGradableMultipleChoicePart(QNonGradablePart):
 
-	mimeType = mime_type = 'application/vnd.nextthought.assessment.nongradeablemultiplechoicepart'
+	mimeType = mime_type = 'application/vnd.nextthought.assessment.nongradablemultiplechoicepart'
 	choices = ()
 	response_interface = IQTextResponse
 
@@ -230,7 +230,7 @@ class QMultipleChoicePart(QPart, QNonGradableMultipleChoicePart):  # order matte
 @interface.implementer(IQNonGradableMultipleChoiceMultipleAnswerPart)
 class QNonGradableMultipleChoiceMultipleAnswerPart(QNonGradableMultipleChoicePart):
 
-	mimeType = mime_type = 'application/vnd.nextthought.assessment.nongradeablemultiplechoicemultipleanswerpart'
+	mimeType = mime_type = 'application/vnd.nextthought.assessment.nongradablemultiplechoicemultipleanswerpart'
 	response_interface = IQListResponse
 
 @interface.implementer(IQMultipleChoiceMultipleAnswerPart)
@@ -249,7 +249,7 @@ class QMultipleChoiceMultipleAnswerPart(QMultipleChoicePart,
 		superhash=True)
 class QNonGradableConnectingPart(QNonGradablePart):
 
-	mimeType = mime_type = 'application/vnd.nextthought.assessment.nongradeableconnectingpart'
+	mimeType = mime_type = 'application/vnd.nextthought.assessment.nongradableconnectingpart'
 	labels = ()
 	values = ()
 
@@ -272,7 +272,7 @@ zope.deferredimport.deprecated(
 @interface.implementer(IQNonGradableMatchingPart)
 class QNonGradableMatchingPart(QNonGradableConnectingPart):
 
-	mimeType = mime_type = 'application/vnd.nextthought.assessment.nongradeablematchingpart'
+	mimeType = mime_type = 'application/vnd.nextthought.assessment.nongradablematchingpart'
 
 @interface.implementer(IQMatchingPart)
 class QMatchingPart(QConnectingPart, QNonGradableMatchingPart):
@@ -283,7 +283,7 @@ class QMatchingPart(QConnectingPart, QNonGradableMatchingPart):
 @interface.implementer(IQNonGradableOrderingPart)
 class QNonGradableOrderingPart(QNonGradableConnectingPart):
 
-	mimeType = mime_type = 'application/vnd.nextthought.assessment.nongradeableorderingpart'
+	mimeType = mime_type = 'application/vnd.nextthought.assessment.nongradableorderingpart'
 
 @interface.implementer(IQOrderingPart)
 class QOrderingPart(QConnectingPart, QNonGradableOrderingPart):  # order matters
@@ -298,7 +298,7 @@ class QOrderingPart(QConnectingPart, QNonGradableOrderingPart):  # order matters
 		include_type=True)
 class QNonGradableFreeResponsePart(QNonGradablePart):
 
-	mimeType = mime_type = 'application/vnd.nextthought.assessment.nongradeablefreeresponsepart'
+	mimeType = mime_type = 'application/vnd.nextthought.assessment.nongradablefreeresponsepart'
 	response_interface = IQTextResponse
 
 @interface.implementer(IQFreeResponsePart)
@@ -318,7 +318,7 @@ class QFreeResponsePart(QPart, QNonGradableFreeResponsePart):  # order matters
 		superhash=True)
 class QNonGradableFilePart(QNonGradablePart, FileConstraints):  # order matters
 
-	mimeType = mime_type = 'application/vnd.nextthought.assessment.nongradeablefilepart'
+	mimeType = mime_type = 'application/vnd.nextthought.assessment.nongradablefilepart'
 	max_file_size = None
 	allowed_mime_types = ()
 	allowed_extensions = ()
@@ -353,7 +353,7 @@ class QFilePart(QPart, QNonGradableFilePart):  # order matters
 		include_type=True)
 class QNonGradableModeledContentPart(QNonGradablePart):
 
-	mimeType = mime_type = 'application/vnd.nextthought.assessment.nongradeablemodeledcontentpart'
+	mimeType = mime_type = 'application/vnd.nextthought.assessment.nongradablemodeledcontentpart'
 	response_interface = IQModeledContentResponse
 
 @interface.implementer(IQModeledContentPart)
@@ -368,7 +368,7 @@ class QModeledContentPart(QPart, QNonGradableModeledContentPart):  # order matte
 @interface.implementer(IQNonGradableFillInTheBlankShortAnswerPart)
 class QNonGradableFillInTheBlankShortAnswerPart(QNonGradablePart):
 
-	mimeType = mime_type = 'application/vnd.nextthought.assessment.nongradeablefillintheblankshortanswerpart'
+	mimeType = mime_type = 'application/vnd.nextthought.assessment.nongradablefillintheblankshortanswerpart'
 	response_interface = IQDictResponse
 
 @interface.implementer(IQFillInTheBlankShortAnswerPart)
@@ -380,7 +380,7 @@ class QFillInTheBlankShortAnswerPart(QPart, QNonGradableFillInTheBlankShortAnswe
 @interface.implementer(IQNonGradableFillInTheBlankWithWordBankPart)
 class QNonGradableFillInTheBlankWithWordBankPart(QNonGradablePart, Contained):
 
-	mimeType = mime_type = 'application/vnd.nextthought.assessment.nongradeablefillintheblankwithwordbankpart'
+	mimeType = mime_type = 'application/vnd.nextthought.assessment.nongradablefillintheblankwithwordbankpart'
 	response_interface = IQDictResponse
 
 @interface.implementer(IQFillInTheBlankWithWordBankPart)
