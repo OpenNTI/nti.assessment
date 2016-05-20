@@ -725,16 +725,19 @@ class IQuestionSet(IQAssessment, ITitledContent, IQEvaluationItemContainer,
 IQuestionSet.setTaggedValue('_ext_jsonschema', u'questionset')
 
 class IQuestionInsertedEvent(IObjectModifiedEvent):
-	pass
+	container = interface.Attribute("The Insertion container")
+	question = interface.Attribute("The inserted question")
+	index = interface.Attribute("The Insertion index")
 
 @interface.implementer(IQuestionInsertedEvent)
 class QuestionInsertedEvent(ObjectModifiedEvent):
 
-	def __init__(self, context, question=None, index=None):
-		super(QuestionInsertedEvent, self).__init__(context)
+	container = alias('object')
+
+	def __init__(self, container, question=None, index=None):
+		super(QuestionInsertedEvent, self).__init__(container)
 		self.index = index
-		self.principal = principal
-		self.old_parent_ntiid = old_parent_ntiid
+		self.question = question
 
 class IQAssignmentPart(ITitledContent):
 	"""
