@@ -130,6 +130,9 @@ class QQuestionSet(QBaseMixin, RecordableContainerMixin):
 	def __len__(self):
 		return len(self.questions or ())
 
+	def pop(self, index):
+		return self.questions.pop( index )
+
 	def remove(self, question):
 		ntiid = getattr(question, 'ntiid', question)
 		for idx, question in enumerate(tuple(self.questions)):  # mutating
