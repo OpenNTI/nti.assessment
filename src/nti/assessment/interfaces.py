@@ -23,6 +23,8 @@ from zope.interface.common.sequence import IFiniteSequence
 
 from zope.interface.interfaces import IObjectEvent
 
+from zope.interface.interfaces import ObjectEvent
+
 from zope.lifecycleevent import ObjectModifiedEvent
 from zope.lifecycleevent.interfaces import IObjectModifiedEvent
 
@@ -36,6 +38,8 @@ from dolmen.builtins.interfaces import IString
 from dolmen.builtins.interfaces import INumeric
 from dolmen.builtins.interfaces import IUnicode
 from dolmen.builtins.interfaces import IIterable
+
+from nti.common.property import alias
 
 from nti.contentfragments.schema import Tag
 from nti.contentfragments.schema import LatexFragmentTextLine as _LatexTextLine
@@ -707,7 +711,30 @@ class IQuestionSet(IQAssessment, ITitledContent, IQEvaluationItemContainer,
 								default=(),
 								value_type=Object(IQuestion, title="The questions"))
 
+	def append(item):
+		"""
+		Add the specified :class:`IQuestion` to this set
+		"""
+	add = append
+
+	def insert(index, item):
+		"""
+		Insert the specified :class:`IQuestion` item at the specified index
+		"""
+
 IQuestionSet.setTaggedValue('_ext_jsonschema', u'questionset')
+
+class IQuestionInsertedEvent(IObjectModifiedEvent):
+	pass
+
+@interface.implementer(IQuestionInsertedEvent)
+class QuestionInsertedEvent(ObjectModifiedEvent):
+
+	def __init__(self, context, question=None, index=None):
+		super(QuestionInsertedEvent, self).__init__(context)
+		self.index = index
+		self.principal = principal
+		self.old_parent_ntiid = old_parent_ntiid
 
 class IQAssignmentPart(ITitledContent):
 	"""
@@ -1574,3 +1601,14 @@ TRX_QUESTION_MOVE_TYPE = u'questionmoved'
 
 class IQuestionMovedEvent(IObjectEvent):
 	pass
+
+@interface.implementer(IQuestionMovedEvent)
+class QuestionMovedEvent(ObjectEvent):
+
+	question = alias('object')
+
+	def __init__(self, obj, principal=None, index=None, old_parent_ntiid=None):
+		super(QuestionMovedEvent, self).__init__(obj)
+		self.index = index
+		self.principal = principal
+		self.old_parent_ntiid = old_parent_ntiid

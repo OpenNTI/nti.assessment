@@ -11,9 +11,6 @@ __docformat__ = "restructuredtext en"
 
 logger = __import__('logging').getLogger(__name__)
 
-from persistent import Persistent
-from persistent.list import PersistentList
-
 from zope import interface
 
 from zope.annotation.interfaces import IAttributeAnnotatable
@@ -22,9 +19,10 @@ from zope.container.contained import Contained
 
 from zope.interface.common.sequence import IFiniteSequence
 
-from zope.interface.interfaces import ObjectEvent
-
 from zope.mimetype.interfaces import IContentTypeAware
+
+from persistent import Persistent
+from persistent.list import PersistentList
 
 from nti.assessment.common import get_containerId
 from nti.assessment.common import AssessmentSchemaMixin
@@ -35,7 +33,6 @@ from nti.assessment.interfaces import QUESTION_FILL_IN_THE_BLANK_MIME_TYPE
 
 from nti.assessment.interfaces import IQuestion
 from nti.assessment.interfaces import IQuestionSet
-from nti.assessment.interfaces import IQuestionMovedEvent
 from nti.assessment.interfaces import IQFillInTheBlankWithWordBankQuestion
 
 from nti.common.property import alias
@@ -135,14 +132,13 @@ class QQuestionSet(QBaseMixin, RecordableContainerMixin):
 
 	def remove(self, question):
 		ntiid = getattr(question, 'ntiid', question)
-		for idx, question in enumerate(tuple(self.questions)): # mutating
+		for idx, question in enumerate(tuple(self.questions)):  # mutating
 			if question.ntiid == ntiid:
 				return self.questions.pop(idx)
 		return None
 
 	def _validate_insert(self, item):
 		return item
-		#return IWeakRef(item)
 
 	def append(self, item):
 		item = self._validate_insert(item)
@@ -179,14 +175,3 @@ class QFillInTheBlankWithWordBankQuestion(QQuestion):
 		if name == "parts":
 			for x in self.parts or ():
 				x.__parent__ = self  # take ownership
-
-@interface.implementer(IQuestionMovedEvent)
-class QuestionMovedEvent(ObjectEvent):
-
-	question = alias('object')
-
-	def __init__(self, obj, principal=None, index=None, old_parent_ntiid=None):
-		super(QuestionMovedEvent, self).__init__(obj)
-		self.index = index
-		self.principal = principal
-		self.old_parent_ntiid = old_parent_ntiid
