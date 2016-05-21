@@ -729,18 +729,39 @@ class IQuestionSet(IQAssessment, ITitledContent, IQEvaluationItemContainer,
 
 IQuestionSet.setTaggedValue('_ext_jsonschema', u'questionset')
 
-class IQuestionInsertedEvent(IObjectModifiedEvent):
+class IQuestionInsertedInContainerEvent(IObjectModifiedEvent):
+	"""
+	Question inserted in container event
+	"""
 	container = interface.Attribute("The Insertion container")
 	question = interface.Attribute("The inserted question")
 	index = interface.Attribute("The Insertion index")
 
-@interface.implementer(IQuestionInsertedEvent)
-class QuestionInsertedEvent(ObjectModifiedEvent):
+@interface.implementer(IQuestionInsertedInContainerEvent)
+class QuestionInsertedInContainerEvent(ObjectModifiedEvent):
 
 	container = alias('object')
 
 	def __init__(self, container, question=None, index=None):
-		super(QuestionInsertedEvent, self).__init__(container)
+		super(QuestionInsertedInContainerEvent, self).__init__(container)
+		self.index = index
+		self.question = question
+
+class IQuestionRemovedFromContainerEvent(IObjectModifiedEvent):
+	"""
+	Question removed from container event
+	"""
+	container = interface.Attribute("The Insertion container")
+	question = interface.Attribute("The inserted question")
+	index = interface.Attribute("The Insertion index")
+
+@interface.implementer(IQuestionRemovedFromContainerEvent)
+class QuestionRemovedFromContainerEvent(ObjectModifiedEvent):
+
+	container = alias('object')
+
+	def __init__(self, container, question=None, index=None):
+		super(QuestionRemovedFromContainerEvent, self).__init__(container)
 		self.index = index
 		self.question = question
 
