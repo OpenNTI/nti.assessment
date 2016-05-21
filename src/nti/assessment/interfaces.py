@@ -717,6 +717,11 @@ class IQuestionSet(IQAssessment, ITitledContent, IQEvaluationItemContainer,
 		"""
 	add = append
 
+	def pop(index):
+		"""
+		Pop the :class:`IQuestion` at the specified index
+		"""
+
 	def insert(index, item):
 		"""
 		Insert the specified :class:`IQuestion` item at the specified index
