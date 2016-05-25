@@ -45,6 +45,8 @@ from nti.common.property import alias
 from nti.coremetadata.mixins import RecordableMixin
 from nti.coremetadata.mixins import CalendarPublishableMixin
 
+from nti.coremetadata.utils import make_schema
+
 from nti.dataserver_core.interfaces import SYSTEM_USER_ID
 
 from nti.dublincore.datastructures import PersistentCreatedModDateTrackingObject
@@ -202,19 +204,13 @@ class QSubmittedPart(SchemaConfigured, Persistent, Contained):
 
 # schema
 
-def make_schema(schema):
-	name = schema.queryTaggedValue('_ext_jsonschema') or u''
-	schemafier = component.getUtility(IQAssessmentJsonSchemaMaker, name=name)
-	result = schemafier.make_schema(schema=schema)
-	return result
-
 class EvaluationSchemaMixin(object):
 	"""
 	Mixin to pull a schema for a given implementation.
 	"""
 
-	def schema(self):
+	def schema(self, user=None):
 		schema = find_most_derived_interface(self, IQAssessment)
-		result = make_schema(schema=schema)
+		result = make_schema(schema=schema, user=None, maker=IQAssessmentJsonSchemaMaker)
 		return result
 AssessmentSchemaMixin = EvaluationSchemaMixin
