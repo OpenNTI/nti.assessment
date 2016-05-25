@@ -1620,7 +1620,7 @@ class IQEvaluationJsonSchemaMaker(IObjectJsonSchemaMaker):
 	Marker interface for an evaluation JSON Schema maker utility
 	"""
 
-	def make_schema(schema=IQEvaluation):
+	def make_schema(schema=IQEvaluation, user=None):
 		pass
 
 IQAssessmentJsonSchemaMaker=IQEvaluationJsonSchemaMaker

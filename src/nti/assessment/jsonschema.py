@@ -43,7 +43,7 @@ class EvaluationJsonSchemaMaker(object):
 
 	maker = BaseJsonSchemafier
 
-	def make_schema(self, schema=IQAssessment):
+	def make_schema(self, schema=IQAssessment, user=None):
 		result = LocatedExternalDict()
 		maker = self.maker(schema)
 		result[FIELDS] = maker.make_schema()
@@ -56,8 +56,8 @@ class ItemContainerJsonSchemaMaker(EvaluationJsonSchemaMaker):
 	has_items = True
 	ref_interfaces = ()
 
-	def make_schema(self, schema=IQAssessment):
-		result = super(ItemContainerJsonSchemaMaker, self).make_schema(schema)
+	def make_schema(self, schema=IQAssessment, user=None):
+		result = super(ItemContainerJsonSchemaMaker, self).make_schema(schema, user)
 		accepts = result[ACCEPTS] = {}
 		for iface in self.ref_interfaces:
 			mimeType = iface.getTaggedValue('_ext_mime_type')
@@ -74,8 +74,8 @@ class AssignmentJsonSchemaMaker(ItemContainerJsonSchemaMaker):
 	has_items = False
 	ref_interfaces = (IQAssignmentPart,)
 
-	def make_schema(self, schema=IQAssignment):
-		result = super(AssignmentJsonSchemaMaker, self).make_schema(schema)
+	def make_schema(self, schema=IQAssignment, user=None):
+		result = super(AssignmentJsonSchemaMaker, self).make_schema(schema, user)
 		return result
 
 @interface.implementer(IQEvaluationJsonSchemaMaker)
@@ -84,8 +84,8 @@ class AssignmentPartJsonSchemaMaker(ItemContainerJsonSchemaMaker):
 	has_items = False
 	ref_interfaces = (IQuestionSet,)
 
-	def make_schema(self, schema=IQAssignmentPart):
-		result = super(AssignmentPartJsonSchemaMaker, self).make_schema(schema)
+	def make_schema(self, schema=IQAssignmentPart, user=None):
+		result = super(AssignmentPartJsonSchemaMaker, self).make_schema(schema, user)
 		return result
 
 @interface.implementer(IQEvaluationJsonSchemaMaker)
@@ -94,8 +94,8 @@ class QuestionSetJsonSchemaMaker(ItemContainerJsonSchemaMaker):
 	has_items = False
 	ref_interfaces = (IQuestion,)
 
-	def make_schema(self, schema=IQuestionSet):
-		result = super(QuestionSetJsonSchemaMaker, self).make_schema(schema)
+	def make_schema(self, schema=IQuestionSet, user=None):
+		result = super(QuestionSetJsonSchemaMaker, self).make_schema(schema, user)
 		return result
 
 @interface.implementer(IQEvaluationJsonSchemaMaker)
@@ -105,8 +105,8 @@ class QuestionJsonSchemaMaker(ItemContainerJsonSchemaMaker):
 	# FIXME: parts
 	ref_interfaces = ()
 
-	def make_schema(self, schema=IQuestion):
-		result = super(QuestionJsonSchemaMaker, self).make_schema(schema)
+	def make_schema(self, schema=IQuestion, user=None):
+		result = super(QuestionJsonSchemaMaker, self).make_schema(schema, user)
 		return result
 
 class PartJsonSchemaMaker(ItemContainerJsonSchemaMaker):
@@ -114,8 +114,8 @@ class PartJsonSchemaMaker(ItemContainerJsonSchemaMaker):
 	# FIXME: solutions
 	ref_interfaces = ()
 
-	def make_schema(self, schema=IQPart):
-		result = super(PartJsonSchemaMaker, self).make_schema(schema)
+	def make_schema(self, schema=IQPart, user=None):
+		result = super(PartJsonSchemaMaker, self).make_schema(schema, user)
 		return result
 
 @interface.implementer(IQEvaluationJsonSchemaMaker)
@@ -123,8 +123,8 @@ class PollJsonSchemaMaker(ItemContainerJsonSchemaMaker):
 
 	has_items = False
 
-	def make_schema(self, schema=IQPoll):
-		result = super(PollJsonSchemaMaker, self).make_schema(schema)
+	def make_schema(self, schema=IQPoll, user=None):
+		result = super(PollJsonSchemaMaker, self).make_schema(schema, user)
 		return result
 
 @interface.implementer(IQEvaluationJsonSchemaMaker)
@@ -133,6 +133,6 @@ class SurveyJsonSchemaMaker(ItemContainerJsonSchemaMaker):
 	has_items = False
 	ref_interfaces = (IQPoll,)
 
-	def make_schema(self, schema=IQSurvey):
-		result = super(PollJsonSchemaMaker, self).make_schema(schema)
+	def make_schema(self, schema=IQSurvey, user=None):
+		result = super(PollJsonSchemaMaker, self).make_schema(schema, user)
 		return result
