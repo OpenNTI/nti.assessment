@@ -23,7 +23,7 @@ def get_seed(context=None):
 	return result
 
 def randomize(user=None, context=None):
-	seed = get_seed(user)	
+	seed = get_seed(user)
 	if seed is not None:
 		use_sha224 = context is not None and ISha224Randomized.providedBy(context)
 		if use_sha224:
@@ -62,3 +62,40 @@ def questionbank_question_chooser(context, questions=None, user=None):
 	else:
 		result.extend(questions)
 	return result
+
+def must_randomize(context):
+	"""
+	Checks the given context to see if is a randomized type.
+	"""
+	iface = getattr(context, 'nonrandomized_interface', None)
+	return iface is None or not iface.providedBy(context)
+
+def shuffle_matching_part_solutions(generator, values, ext_solutions):
+	original = {idx:v for idx, v in enumerate(values)}
+	shuffled = {v:idx for idx, v in enumerate(shuffle_list(generator, values))}
+	for solution in ext_solutions:
+		value = solution['value']
+		for k in list(value.keys()):
+			idx = int(value[k])
+			uidx = shuffled[original[idx]]
+			value[k] = uidx
+
+def shuffle_multiple_choice_part_solutions(generator, choices, ext_solutions):
+	original = {idx:v for idx, v in enumerate(choices)}
+	shuffled = {v:idx for idx, v in enumerate(shuffle_list(generator, choices))}
+	for solution in ext_solutions:
+		value = int(solution['value'])
+		uidx = shuffled[original[value]]
+		solution['value'] = uidx
+
+def shuffle_multiple_choice_multiple_answer_part_solutions(generator,
+															choices,
+															ext_solutions):
+	original = {idx:v for idx, v in enumerate(choices)}
+	shuffled = {v:idx for idx, v in enumerate(shuffle_list(generator, choices))}
+	for solution in ext_solutions:
+		value = solution['value']
+		for pos, v in enumerate(value):
+			idx = int(v)
+			uidx = shuffled[original[idx]]
+			value[pos] = uidx

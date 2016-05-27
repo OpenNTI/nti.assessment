@@ -4,69 +4,69 @@
 			xmlns:zcml="http://namespaces.zope.org/zcml"
 			xmlns:ext="http://nextthought.com/ntp/ext"
 			i18n_domain="zope">
-			
+
 	<include package="zope.component" file="meta.zcml" />
 	<include package="zope.security" file="meta.zcml" />
 	<include package="zope.component" />
 	<include package="zope.security" />
 	<include package="zope.location" />
-	
+
 	<!-- Adapters -->
 
 	<!-- matching -->
 	<adapter factory=".graders.RandomizedMatchingPartGrader"
-			 for=".interfaces.IQRandomizedMatchingPart 
+			 for=".interfaces.IQRandomizedMatchingPart
 			 	  nti.assessment.interfaces.IQMatchingSolution
 			 	  nti.assessment.interfaces.IQDictResponse"
 			 provides=".interfaces.IQRandomizedMatchingPartGrader" />
-	
+
 	<adapter factory=".graders.RandomizedMatchingPartGrader"
-			 for=".interfaces.IQRandomizedMatchingPart 
+			 for=".interfaces.IQRandomizedMatchingPart
 			 	  nti.assessment.interfaces.IQMatchingSolution
 			 	  dict"
 			 provides=".interfaces.IQRandomizedMatchingPartGrader" />
-			 		
+
 	<!-- ordering -->
 	<adapter factory=".graders.RandomizedOrderingPartGrader"
-			 for=".interfaces.IQRandomizedOrderingPart 
+			 for=".interfaces.IQRandomizedOrderingPart
 			 	  nti.assessment.interfaces.IQOrderingSolution
 			 	  nti.assessment.interfaces.IQDictResponse"
 			 provides=".interfaces.IQRandomizedOrderingPartGrader" />
 
 	<adapter factory=".graders.RandomizedOrderingPartGrader"
-			 for=".interfaces.IQRandomizedOrderingPart 
+			 for=".interfaces.IQRandomizedOrderingPart
 			 	  nti.assessment.interfaces.IQOrderingSolution
 			 	  dict"
 			 provides=".interfaces.IQRandomizedOrderingPartGrader" />
 
 	<!-- multiple choice -->
 	<adapter factory=".graders.RandomizedMultipleChoiceGrader"
-			 for=".interfaces.IQRandomizedMultipleChoicePart 
+			 for=".interfaces.IQRandomizedMultipleChoicePart
 			 	  nti.assessment.interfaces.IQSingleValuedSolution
 			 	  nti.assessment.interfaces.IQTextResponse"
 			 provides=".interfaces.IQRandomizedMultipleChoicePartGrader" />
-	
+
 	<adapter factory=".graders.RandomizedMultipleChoiceGrader"
-			 for=".interfaces.IQRandomizedMultipleChoicePart 
+			 for=".interfaces.IQRandomizedMultipleChoicePart
 			 	  nti.assessment.interfaces.IQSingleValuedSolution
 			 	  int"
 			 provides=".interfaces.IQRandomizedMultipleChoicePartGrader" />
-			 
+
 	<adapter factory=".graders.RandomizedMultipleChoiceGrader"
-			 for=".interfaces.IQRandomizedMultipleChoicePart 
+			 for=".interfaces.IQRandomizedMultipleChoicePart
 			 	  nti.assessment.interfaces.IQSingleValuedSolution
 			 	  basestring"
 			 provides=".interfaces.IQRandomizedMultipleChoicePartGrader" />
-	
+
 	<!-- multiple choice, multiple answer -->
 	<adapter factory=".graders.RandomizedMultipleChoiceMultipleAnswerGrader"
-			 for=".interfaces.IQRandomizedMultipleChoiceMultipleAnswerPart 
+			 for=".interfaces.IQRandomizedMultipleChoiceMultipleAnswerPart
 			 	  nti.assessment.interfaces.IQMultiValuedSolution
 			 	  nti.assessment.interfaces.IQListResponse"
 			 provides=".interfaces.IQRandomizedMultipleChoiceMultipleAnswerPartGrader" />
-			 
+
 	<adapter factory=".graders.RandomizedMultipleChoiceMultipleAnswerGrader"
-			 for=".interfaces.IQRandomizedMultipleChoiceMultipleAnswerPart 
+			 for=".interfaces.IQRandomizedMultipleChoiceMultipleAnswerPart
 			 	  nti.assessment.interfaces.IQMultiValuedSolution
 			 	  list"
 			 provides=".interfaces.IQRandomizedMultipleChoiceMultipleAnswerPartGrader" />
@@ -78,44 +78,24 @@
 	<adapter factory="list .question._range_adapter"
 			 provides=".interfaces.IQuestionIndexRange"
 			 for="tuple"/>
-			 
+
 	<!-- Decorators -->
-	<subscriber factory=".decorators._QRandomizedMatchingPartDecorator"
-				provides="nti.externalization.interfaces.IExternalObjectDecorator"
-				for=".interfaces.IQRandomizedMatchingPart"/>
-			
-	<subscriber factory=".decorators._QRandomizedOrderingPartDecorator"
-				provides="nti.externalization.interfaces.IExternalObjectDecorator"
-				for=".interfaces.IQRandomizedOrderingPart"/>
-						 
 	<adapter factory=".decorators._RandomizedMatchingPartSolutionsExternalizer"
 			 for=".interfaces.IQRandomizedMatchingPart"
 			 provides="..interfaces.IQPartSolutionsExternalizer" />
-		
+
 	<adapter factory=".decorators._RandomizedOrderingPartSolutionsExternalizer"
 			 for=".interfaces.IQRandomizedOrderingPart"
 			 provides="..interfaces.IQPartSolutionsExternalizer" />
-			 	 			 
-	<subscriber factory=".decorators._QRandomizedMultipleChoicePartDecorator"
-				provides="nti.externalization.interfaces.IExternalObjectDecorator"
-				for=".interfaces.IQRandomizedMultipleChoicePart"/>
-	
+
 	<adapter factory=".decorators._RandomizedMultipleChoicePartSolutionsExternalizer"
 			 for=".interfaces.IQRandomizedMultipleChoicePart"
 			 provides="nti.assessment.interfaces.IQPartSolutionsExternalizer" />
-		
-	<subscriber factory=".decorators._QRandomizedMultipleChoiceMultipleAnswerPartDecorator"
-				provides="nti.externalization.interfaces.IExternalObjectDecorator"
-				for=".interfaces.IQRandomizedMultipleChoiceMultipleAnswerPart"/>
-	
-	<subscriber factory=".decorators._QRandomizedQuestionSetDecorator"
-				provides="nti.externalization.interfaces.IExternalObjectDecorator"
-				for=".interfaces.IRandomizedQuestionSet"/>
-					
+
 	<subscriber factory=".decorators._QQuestionBankDecorator"
 				provides="nti.externalization.interfaces.IExternalObjectDecorator"
 				for=".interfaces.IQuestionBank"/>
-	
+
 	<adapter factory=".decorators._RandomizedMultipleChoiceMultipleAnswerPartSolutionsExternalizer"
 			 for=".interfaces.IQRandomizedMultipleChoiceMultipleAnswerPart"
 			 provides="nti.assessment.interfaces.IQPartSolutionsExternalizer" />
