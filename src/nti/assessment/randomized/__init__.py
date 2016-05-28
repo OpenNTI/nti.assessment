@@ -42,25 +42,33 @@ def questionbank_random(context, user=None):
 	generator = random.Random() if context.srand else randomize(user=user, context=context)
 	return generator
 
-def questionbank_question_chooser(context, questions=None, user=None):
-	result = []
+def questionbank_question_index_chooser(context, questions=None, user=None):
+	result = ()
 	questions = questions or context.questions
 	generator = questionbank_random(context, user=user)
 	if generator and questions and context.draw and context.draw < len(questions):
 		ranges = context.ranges or ()
 		if not ranges:
-			sample_idxs = generator.sample(xrange(0, len(questions)), context.draw)
-			sample_idxs.sort() # keep order
-			result.extend(questions[idx] for idx in sample_idxs)
+			result = generator.sample(xrange(0, len(questions)), context.draw)
 		else:
+			result = []
 			for r in ranges:
 				indices = xrange(r.start, r.end+1)
 				generated = generator.sample(indices, r.draw)
-				for idx in generated:
-					result.append(questions[idx])
+				result.extend(generated)
 				generator = questionbank_random(context, user=user)
+		result.sort()
 	else:
-		result.extend(questions)
+		result = range(len(questions))
+	return result
+
+def questionbank_question_chooser(context, questions=None, user=None):
+	questions = questions or context.questions
+	idxs = questionbank_question_index_chooser(context, questions, user)
+	if len(idxs) == len(questions):
+		result = list(questions)
+	else:
+		result = [questions[x] for x in idxs]
 	return result
 
 def must_randomize(context):
