@@ -89,3 +89,38 @@ class QRandomizedMultipleChoiceMultipleAnswerPart(QMultipleChoiceMultipleAnswerP
 
 	nonrandomized_interface = INonRandomizedMultipleChoiceMultipleAnswerPart
 	sha224randomized_interface = ISha224RandomizedMultipleChoiceMultipleAnswerPart
+
+def randomized_connecting_part_factory(ext_obj):
+	def _factory():
+		result = QConnectingPart()
+		interface.alsoProvides(result, IQRandomizedConnectingPart)
+		return result
+	return _factory
+
+def randomized_matching_part_factory(ext_obj):
+	def _factory():
+		result = QMatchingPart()
+		interface.alsoProvides(result, IQRandomizedMatchingPart)
+		return result
+	return _factory
+
+def randomized_ordering_part_factory(ext_obj):
+	def _factory():
+		result = QOrderingPart()
+		interface.alsoProvides(result, IQRandomizedOrderingPart)
+		return result
+	return _factory
+
+def randomized_multiple_choice_part_factory(ext_obj):
+	def _factory():
+		result = QMultipleChoicePart()
+		interface.alsoProvides(result, IQRandomizedMultipleChoicePart)
+		return result
+	return _factory
+
+def randomized_multiple_choice_multiple_answer_part_factory(ext_obj):
+	def _factory():
+		result = QMultipleChoiceMultipleAnswerPart()
+		interface.alsoProvides(result, IQRandomizedMultipleChoiceMultipleAnswerPart)
+		return result
+	return _factory

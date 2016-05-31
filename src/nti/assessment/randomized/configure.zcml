@@ -79,6 +79,11 @@
 			 provides=".interfaces.IQuestionIndexRange"
 			 for="tuple"/>
 
+	<!-- Decorators -->
+	<subscriber	factory=".decorators._RandomizedPartDecorator"
+				for=".interfaces.IQRandomizedPart"
+				provides="nti.externalization.interfaces.IExternalMappingDecorator" />
+		
 	<!-- Externalization -->
 	<adapter factory=".externalization._RandomizedMatchingPartSolutionsExternalizer"
 			 for=".interfaces.IQRandomizedMatchingPart"
@@ -108,4 +113,14 @@
 		modules=".parts .question"
 		iobase="..externalization._AssessmentInternalObjectIOBase"/>
 
+	<!-- Internalization -->
+	<!--
+	Randomized parts are regular parts with marker interface
+
+	<adapter factory=".parts.randomized_matching_part_factory"
+			 for="dolmen.builtins.IDict"
+			 provides="nti.externalization.interfaces.IMimeObjectFactory"
+			 name="application/vnd.nextthought.assessment.randomizedmatchingpart" />
+	-->
+			 
 </configure>
