@@ -16,22 +16,16 @@ from nti.assessment.interfaces import IQPartSolutionsExternalizer
 
 from nti.assessment.randomized import randomize
 from nti.assessment.randomized import must_randomize
-from nti.assessment.randomized import questionbank_question_chooser
 from nti.assessment.randomized import shuffle_matching_part_solutions
 from nti.assessment.randomized import shuffle_multiple_choice_part_solutions
 from nti.assessment.randomized import shuffle_multiple_choice_multiple_answer_part_solutions
 
-from nti.assessment.randomized.interfaces import IQuestionBank
 from nti.assessment.randomized.interfaces import IQRandomizedMatchingPart
 from nti.assessment.randomized.interfaces import IQRandomizedOrderingPart
 from nti.assessment.randomized.interfaces import IQRandomizedMultipleChoicePart
 from nti.assessment.randomized.interfaces import IQRandomizedMultipleChoiceMultipleAnswerPart
 
 from nti.externalization.externalization import to_external_object
-
-from nti.externalization.interfaces import IExternalObjectDecorator
-
-from nti.externalization.singleton import SingletonDecorator
 
 @interface.implementer(IQPartSolutionsExternalizer)
 @component.adapter(IQRandomizedMatchingPart)
@@ -92,19 +86,5 @@ class _RandomizedMultipleChoiceMultipleAnswerPartSolutionsExternalizer(object):
 			generator = randomize(context=self.part)
 			if generator is not None:
 				choices = to_external_object(self.part.choices, useCache=False)
-				shuffle_multiple_choice_multiple_answer_part_solutions(generator,
-																		choices,
-																		solutions)
+				shuffle_multiple_choice_multiple_answer_part_solutions(generator, choices, solutions)
 		return solutions
-
-@interface.implementer(IExternalObjectDecorator)
-@component.adapter(IQuestionBank)
-class _QQuestionBankDecorator(object):
-
-	__metaclass__ = SingletonDecorator
-
-	def decorateExternalObject(self, context, result):
-		if must_randomize(context):
-			questions = result.get('questions', ())
-			questions = questionbank_question_chooser(context, questions)
-			result['questions'] = questions
