@@ -79,20 +79,20 @@
 			 provides=".interfaces.IQuestionIndexRange"
 			 for="tuple"/>
 
-	<!-- Decorators -->
-	<adapter factory=".decorators._RandomizedMatchingPartSolutionsExternalizer"
+	<!-- Externalization -->
+	<adapter factory=".externalization._RandomizedMatchingPartSolutionsExternalizer"
 			 for=".interfaces.IQRandomizedMatchingPart"
 			 provides="..interfaces.IQPartSolutionsExternalizer" />
 
-	<adapter factory=".decorators._RandomizedOrderingPartSolutionsExternalizer"
+	<adapter factory=".externalization._RandomizedOrderingPartSolutionsExternalizer"
 			 for=".interfaces.IQRandomizedOrderingPart"
 			 provides="..interfaces.IQPartSolutionsExternalizer" />
 
-	<adapter factory=".decorators._RandomizedMultipleChoicePartSolutionsExternalizer"
+	<adapter factory=".externalization._RandomizedMultipleChoicePartSolutionsExternalizer"
 			 for=".interfaces.IQRandomizedMultipleChoicePart"
 			 provides="nti.assessment.interfaces.IQPartSolutionsExternalizer" />
 
-	<adapter factory=".decorators._RandomizedMultipleChoiceMultipleAnswerPartSolutionsExternalizer"
+	<adapter factory=".externalization._RandomizedMultipleChoiceMultipleAnswerPartSolutionsExternalizer"
 			 for=".interfaces.IQRandomizedMultipleChoiceMultipleAnswerPart"
 			 provides="nti.assessment.interfaces.IQPartSolutionsExternalizer" />
 
