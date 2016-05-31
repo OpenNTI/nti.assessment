@@ -61,8 +61,8 @@ class QBaseMixin(SchemaConfigured,
 				 Persistent,
 				 RecordableMixin,
 				 PublishableMixin,
-				 Contained,
-				 AssessmentSchemaMixin):
+				 AssessmentSchemaMixin,
+				 Contained):
 
 	ntiid = None
 	id = alias('ntiid')

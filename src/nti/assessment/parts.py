@@ -123,7 +123,7 @@ class QPart(QNonGradablePart):
 	nonrandomized_interface = IQPart
 	
 	#: The interface to implement when this this part IS randomized
-	randomized_grader_interface = IQPart
+	randomized_interface = IQPart
 
 	#: The interface to which we will attempt to adapt ourself, the
 	#: solution and the response when grading a NON randomized part. Should be a
@@ -142,6 +142,17 @@ class QPart(QNonGradablePart):
 
 	solutions = ()
 
+	def _get_randomzied(self):
+		return self.randomized_interface.providedBy(self)
+	def _set_randomized(self, nv):
+		if nv and not self.randomized_interface.providedBy(self):
+			interface.alsoProvides(self, self.randomized_interface)
+			self._p_changed = True
+		elif self.randomized_interface.providedBy(self):
+			interface.noLongerProvides(self, self.randomized_interface)
+			self._p_changed = True
+	randomized = property(_get_randomzied, _set_randomized)
+	
 	def grade(self, response):
 
 		if self.response_interface is not None:
