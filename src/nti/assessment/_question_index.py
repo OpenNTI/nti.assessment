@@ -287,7 +287,8 @@ def _load_question_map_json(asm_index_text):
 
 	if not asm_index_text:
 		return
-	elif isinstance(asm_index_text, bytes):
+
+	if isinstance(asm_index_text, bytes):
 		asm_index_text = unicode(asm_index_text, 'utf-8')
 
 	# In this one specific case, we know that these are already

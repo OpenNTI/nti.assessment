@@ -15,8 +15,8 @@ def _patch():
 	import inspect
 	import importlib
 
-	from nti.assessment.interfaces import IQAssessment
 	from nti.assessment.interfaces import IQPart
+	from nti.assessment.interfaces import IQAssessment
 	module = sys.modules[IQAssessment.__module__]
 
 	# main package name
