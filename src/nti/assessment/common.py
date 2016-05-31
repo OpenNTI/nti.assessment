@@ -95,7 +95,7 @@ def assess(quiz, responses):
 
 def grader_for_solution_and_response(part, solution, response):
 	if IQRandomizedPart.providedBy(part):
-		grader_interface = part.randomized_grader_interface
+		grader_interface = part.grader_interface # part.randomized_grader_interface
 	else:
 		grader_interface = part.grader_interface
 	result = component.queryMultiAdapter((part, solution, response),
