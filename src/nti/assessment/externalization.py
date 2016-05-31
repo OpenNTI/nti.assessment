@@ -61,6 +61,15 @@ MIMETYPE = StandardExternalFields.MIMETYPE
 CONTAINER_ID_EXT = StandardExternalFields.CONTAINER_ID
 CONTAINER_ID_INT = StandardInternalFields.CONTAINER_ID
 
+# Misc
+
+def union(a, b):
+	a = set(a)
+	a.union(b)
+	return a
+
+# Base internal IO
+
 @interface.implementer(IInternalObjectIO)
 class _AssessmentInternalObjectIOBase(object):
 	"""
@@ -144,7 +153,7 @@ class _FillInTheBlankWithWordBankPartSolutionsExternalizer(object):
 @interface.implementer(IInternalObjectExternalizer)
 class _QuestionSetExternalizer(InterfaceObjectIO):
 
-	_excluded_in_ivars_ = InterfaceObjectIO._excluded_out_ivars_.union({'questions'})
+	_excluded_in_ivars_ = union(InterfaceObjectIO._excluded_out_ivars_, {'questions'})
 
 	_ext_iface_upper_bound = IQuestionSet
 
@@ -214,7 +223,7 @@ from nti.namedfile.datastructures import NamedFileObjectIO
 @component.adapter(IQUploadedFile)
 class _QUploadedFileObjectIO(NamedFileObjectIO):
 
-	_excluded_in_ivars_ = {'download_url', 'url', 'value'}.union(NamedFileObjectIO._excluded_in_ivars_)
+	_excluded_in_ivars_ = union({'download_url', 'url', 'value'}, NamedFileObjectIO._excluded_in_ivars_)
 
 	def _ext_mimeType(self, obj):
 		return u'application/vnd.nextthought.assessment.uploadedfile'
