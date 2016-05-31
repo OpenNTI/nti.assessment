@@ -137,6 +137,12 @@ class IRandomizedQuestionSet(IQuestionSet):
 class INonRandomizedQuestionSet(IRandomizedQuestionSet):
 	pass
 
+class IRandomizedPartsContainer(interface.Interface):
+	"""
+	A marker interface that indicates the underlying `IQParts` should
+	*all* be treated as randomized.
+	"""
+
 class ISha224RandomizedQuestionSet(IRandomizedQuestionSet, ISha224Randomized):
 	pass
 
