@@ -61,8 +61,8 @@ from nti.schema.fieldproperty import createDirectFieldProperties
 @interface.implementer(IQAssignmentPart,
 					   IContentTypeAware)
 class QAssignmentPart(SchemaConfigured,
-					  Contained,
-					  Persistent):
+					  Persistent,
+					  Contained):
 	createDirectFieldProperties(IQAssignmentPart)
 
 	title = AdaptingFieldProperty(IQAssignmentPart['title'])
