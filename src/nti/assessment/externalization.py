@@ -1,8 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 """
-Externalization for assessment objects.
-
 .. $Id$
 """
 
@@ -11,7 +9,9 @@ __docformat__ = "restructuredtext en"
 
 logger = __import__('logging').getLogger(__name__)
 
+import six
 from collections import Mapping
+from collections import Sequence
 
 from zope import component
 from zope import interface
@@ -28,6 +28,14 @@ from nti.assessment.interfaces import IQuestionSetSubmission
 
 from nti.assessment.interfaces import IQPollSubmission
 from nti.assessment.interfaces import IQSurveySubmission
+
+from nti.assessment.interfaces import IQPart
+from nti.assessment.interfaces import IRegEx
+from nti.assessment.interfaces import IQPartSolutionsExternalizer
+from nti.assessment.interfaces import IQFillInTheBlankShortAnswerPart
+from nti.assessment.interfaces import IQFillInTheBlankWithWordBankPart
+from nti.assessment.interfaces import IQFillInTheBlankShortAnswerSolution
+from nti.assessment.interfaces import IQFillInTheBlankWithWordBankSolution
 
 from nti.assessment.response import QUploadedFile
 from nti.assessment.response import QUploadedImageFile
@@ -77,6 +85,58 @@ class _AssessmentInternalObjectIOBase(object):
 		k = a_type.__name__
 		ext_class_name = k[1:] if not k.startswith('Question') else k
 		return ext_class_name
+
+# Solution parts
+
+@component.adapter(IQPart)
+@interface.implementer(IQPartSolutionsExternalizer)
+class _DefaultPartSolutionsExternalizer(object):
+
+	def __init__(self, part):
+		self.part = part
+
+	def to_external_object(self):
+		return to_external_object(self.part.solutions)
+
+@interface.implementer(IQPartSolutionsExternalizer)
+@component.adapter(IQFillInTheBlankShortAnswerPart)
+class _FillInTheBlankShortAnswerPartSolutionsExternalizer(object):
+
+	def __init__(self, part):
+		self.part = part
+
+	def to_external_object(self):
+		result = []
+		for solution in self.part.solutions:
+			ext = to_external_object(solution)
+			if IQFillInTheBlankShortAnswerSolution.providedBy(solution):
+				value = {}
+				for k, v in solution.value.items():
+					txt = v.solution if IRegEx.providedBy(v) else v
+					value[k] = txt
+				ext['value'] = value
+		return result
+
+@interface.implementer(IQPartSolutionsExternalizer)
+@component.adapter(IQFillInTheBlankWithWordBankPart)
+class _FillInTheBlankWithWordBankPartSolutionsExternalizer(object):
+
+	def __init__(self, part):
+		self.part = part
+
+	def to_external_object(self):
+		result = []
+		for solution in self.part.solutions:
+			ext = to_external_object(solution)
+			if IQFillInTheBlankWithWordBankSolution.providedBy(solution):
+				value = ext.get('value', {})
+				for k in list(value.keys()):
+					v = value.get(k)
+					if 	v and not isinstance(v, six.string_types) and \
+						isinstance(v, Sequence):
+						value[k] = v[0]  # pick first one always
+			result.append(ext)
+		return result
 
 # Question Sets
 

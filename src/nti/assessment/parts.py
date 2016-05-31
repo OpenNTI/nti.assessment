@@ -77,8 +77,9 @@ from nti.externalization.representation import WithRepr
 
 from nti.namedfile.constraints import FileConstraints
 
-from nti.schema.schema import EqHash
 from nti.schema.field import SchemaConfigured
+
+from nti.schema.schema import EqHash
 
 @WithRepr
 @interface.implementer(IQNonGradablePart, IContained)
@@ -118,11 +119,22 @@ class QPart(QNonGradablePart):
 	of an appropriate type.
 	"""
 
+	#: The interface to implement when this this part IS NOT randomized
+	nonrandomized_interface = IQPart
+	
+	#: The interface to implement when this this part IS randomized
+	randomized_grader_interface = IQPart
+
 	#: The interface to which we will attempt to adapt ourself, the
-	#: solution and the response when grading. Should be a
+	#: solution and the response when grading a NON randomized part. Should be a
 	#: class:`.IQPartGrader`. The response will have first been converted
 	#: for the solution.
 	grader_interface = IQPartGrader
+	
+	#: The interface to which we will attempt to adapt ourself, the
+	#: solution and the response when grading a randomized part.
+	#: The response will have first been converted for the solution.
+	randomized_grader_interface = IQPartGrader
 
 	#: The name of the grader we will attempt to adapt to. Defaults to the default,
 	#: unnamed, adapter
@@ -337,11 +349,14 @@ class QFilePart(QPart, QNonGradableFilePart):  # order matters
 		# We first check our own constraints for submission
 		# and refuse to even grade if they are not met
 		value = response.value
+
 		if not self.is_mime_type_allowed(value.contentType):
 			raise ConstraintNotSatisfied(value.contentType, 'mimeType')
+
 		if not self.is_filename_allowed(value.filename):
 			raise ConstraintNotSatisfied(value.filename, 'filename')
-		if (self.max_file_size is not None and value.getSize() > self.max_file_size):
+
+		if self.max_file_size is not None and value.getSize() > self.max_file_size:
 			raise ConstraintNotSatisfied(value.getSize(), 'max_file_size')
 
 		super(QFilePart, self).grade(response)

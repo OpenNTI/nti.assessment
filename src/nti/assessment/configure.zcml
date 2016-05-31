@@ -355,15 +355,15 @@
 			 for="tuple"/>
 
 	<!-- Decorators -->
-	<adapter factory=".decorators._DefaultPartSolutionsExternalizer"
+	<adapter factory=".externalization._DefaultPartSolutionsExternalizer"
 			 for=".interfaces.IQPart"
 			 provides=".interfaces.IQPartSolutionsExternalizer" />
 
-	<adapter factory=".decorators._FillInTheBlankShortAnswerPartSolutionsExternalizer"
+	<adapter factory=".externalization._FillInTheBlankShortAnswerPartSolutionsExternalizer"
 			 for=".interfaces.IQFillInTheBlankShortAnswerPart"
 			 provides=".interfaces.IQPartSolutionsExternalizer" />
 
-	<adapter factory=".decorators._FillInTheBlankWithWordBankPartSolutionsExternalizer"
+	<adapter factory=".externalization._FillInTheBlankWithWordBankPartSolutionsExternalizer"
 			 for=".interfaces.IQFillInTheBlankWithWordBankPart"
 			 provides=".interfaces.IQPartSolutionsExternalizer" />
 

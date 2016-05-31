@@ -11,79 +11,17 @@ __docformat__ = "restructuredtext en"
 
 logger = __import__('logging').getLogger(__name__)
 
-import six
-import collections
-
 from zope import component
 from zope import interface
 
 from nti.assessment.common import get_containerId
 
-from nti.assessment.interfaces import IQPart
-from nti.assessment.interfaces import IRegEx
 from nti.assessment.interfaces import IQMathPart
-from nti.assessment.interfaces import IQPartSolutionsExternalizer
-from nti.assessment.interfaces import IQFillInTheBlankShortAnswerPart
-from nti.assessment.interfaces import IQFillInTheBlankWithWordBankPart
-from nti.assessment.interfaces import IQFillInTheBlankShortAnswerSolution
-from nti.assessment.interfaces import IQFillInTheBlankWithWordBankSolution
-
-from nti.externalization.externalization import to_external_object
 
 from nti.externalization.interfaces import IExternalObjectDecorator
 from nti.externalization.interfaces import IExternalMappingDecorator
 
 from nti.externalization.singleton import SingletonDecorator
-
-@component.adapter(IQPart)
-@interface.implementer(IQPartSolutionsExternalizer)
-class _DefaultPartSolutionsExternalizer(object):
-
-	def __init__(self, part):
-		self.part = part
-
-	def to_external_object(self):
-		return to_external_object(self.part.solutions)
-
-@interface.implementer(IQPartSolutionsExternalizer)
-@component.adapter(IQFillInTheBlankShortAnswerPart)
-class _FillInTheBlankShortAnswerPartSolutionsExternalizer(object):
-
-	def __init__(self, part):
-		self.part = part
-
-	def to_external_object(self):
-		result = []
-		for solution in self.part.solutions:
-			ext = to_external_object(solution)
-			if IQFillInTheBlankShortAnswerSolution.providedBy(solution):
-				value = {}
-				for k, v in solution.value.items():
-					txt = v.solution if IRegEx.providedBy(v) else v
-					value[k] = txt
-				ext['value'] = value
-		return result
-
-@interface.implementer(IQPartSolutionsExternalizer)
-@component.adapter(IQFillInTheBlankWithWordBankPart)
-class _FillInTheBlankWithWordBankPartSolutionsExternalizer(object):
-
-	def __init__(self, part):
-		self.part = part
-
-	def to_external_object(self):
-		result = []
-		for solution in self.part.solutions:
-			ext = to_external_object(solution)
-			if IQFillInTheBlankWithWordBankSolution.providedBy(solution):
-				value = ext.get('value', {})
-				for k in list(value.keys()):
-					v = value.get(k)
-					if 	v and not isinstance(v, six.string_types) and \
-						isinstance(v, collections.Sequence):
-						value[k] = v[0]  # pick first one always
-			result.append(ext)
-		return result
 
 @component.adapter(IQMathPart)
 @interface.implementer(IExternalMappingDecorator)
