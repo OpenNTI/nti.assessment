@@ -43,6 +43,7 @@ class ISha224Randomized(interface.Interface):
 
 	where uid is the user int id
 	"""
+ISha224Randomized.setTaggedValue('_ext_is_marker_interface', True)
 
 # parts
 
@@ -143,7 +144,7 @@ class IRandomizedPartsContainer(interface.Interface):
 	*all* be treated as randomized.
 	"""
 
-IRandomizedPartsContainer.setTaggedValue( '_ext_is_marker_interface', True )
+IRandomizedPartsContainer.setTaggedValue('_ext_is_marker_interface', True)
 
 class ISha224RandomizedQuestionSet(IRandomizedQuestionSet, ISha224Randomized):
 	pass

@@ -44,18 +44,18 @@ def __lower(o):
 	# like numbers.
 	return unicode(o).lower()
 
-_lower = staticmethod( __lower )
+_lower = staticmethod(__lower)
 
 def __normalize_quotes(string):
 	"""
 	We want curly quotes to compare the same as straight quotes.
 	"""
-	replacements = ((u'\u201c', '"'), # Left double
-					(u'\u201d', '"'), # Right double
-					(u'\u2018', "'"), # Left single
-					(u'\u2019', "'")) # Right single
+	replacements = ((u'\u201c', '"'),  # Left double
+					(u'\u201d', '"'),  # Right double
+					(u'\u2018', "'"),  # Left single
+					(u'\u2019', "'"))  # Right single
 	for bad, good in replacements:
-		string = string.replace( bad, good )
+		string = string.replace(bad, good)
 
 	return string
 _normalize_quotes = staticmethod(__normalize_quotes)
@@ -73,12 +73,12 @@ class _AbstractGrader(object):
 	a grader for any combination of inputs.
 	"""
 
-	def __init__( self, part, solution, response ):
+	def __init__(self, part, solution, response):
 		self.part = part
 		self.solution = solution
 		self.response = response
 
-	def __call__( self ):
+	def __call__(self):
 		raise NotImplementedError()
 
 @interface.implementer(IQPartGrader)
@@ -95,10 +95,10 @@ class EqualityGrader(_AbstractGrader):
 	#: before checking for equality
 	solution_converter = _id
 
-	def __call__( self ):
-		return self._compare( self.solution.value, self.response.value )
+	def __call__(self):
+		return self._compare(self.solution.value, self.response.value)
 
-	def _compare( self, solution_value, response_value ):
+	def _compare(self, solution_value, response_value):
 		converted_solution = self.solution_converter(solution_value)
 		converted_response = self.response_converter(response_value)
 		result = converted_solution == converted_response
@@ -142,15 +142,15 @@ class UnitAwareFloatEqualityGrader(FloatEqualityGrader):
 	The solution type this is registered for must be an :class:`.IQMathSolution`
 	"""
 
-	def __call__( self ):
-		if self.solution.allowed_units is None: # No special unit handling
-			return super(UnitAwareFloatEqualityGrader,self).__call__()
+	def __call__(self):
+		if self.solution.allowed_units is None:  # No special unit handling
+			return super(UnitAwareFloatEqualityGrader, self).__call__()
 
-		if not self.solution.allowed_units: # Units are specifically forbidden
+		if not self.solution.allowed_units:  # Units are specifically forbidden
 			# Then the response must parse cleanly as a floating point number,
 			# which happens to be the default behaviour
 			try:
-				return super(UnitAwareFloatEqualityGrader,self).__call__()
+				return super(UnitAwareFloatEqualityGrader, self).__call__()
 			except ValueError:
 				# Failed to parse. Unlike in the default case, we do have an opinion,
 				# this isn't faulty input and is a wrong answer
@@ -158,13 +158,13 @@ class UnitAwareFloatEqualityGrader(FloatEqualityGrader):
 
 		# Units may be required, or optional if the last element is the empty string
 		for unit in self.solution.allowed_units:
-			if self.response.value.endswith( unit ):
+			if self.response.value.endswith(unit):
 				# strip the trailing unit and grade.
 				# This handles unit='cm' and value in ('1.0 cm', '1.0cm')
 				# It also handles unit='', if it comes at the end
 				value = self.response.value[:-len(unit)] if unit else self.response.value
 				__traceback_info__ = self.response.value, unit, value
-				return self._compare( self.solution.value, value )
+				return self._compare(self.solution.value, value)
 
 		# If we get here, there was no unit that matched. Therefore, units were required
 		# and not given
@@ -193,17 +193,17 @@ class MultipleChoiceGrader(EqualityGrader):
 			raise InvalidValue(value=value, field=IQuestionSubmission['parts'])
 
 		# Does it exactly match?
-		result = super(MultipleChoiceGrader,self).__call__()
+		result = super(MultipleChoiceGrader, self).__call__()
 		if not result:
 			# No. Ok, did they send us the actual value?
 			index = None
 			try:
-				index = self.part.choices.index( self.response.value )
+				index = self.part.choices.index(self.response.value)
 			except ValueError:
 				# The value they sent isn't present. Maybe they sent an
 				# int string?
 				try:
-					index = int( self.response.value )
+					index = int(self.response.value)
 					# They sent an int. We can take this, if the actual value they sent
 					# is not an option. If the choices are "0", "2", "3", with index 1, value "2"
 					# being correct, and they send "1", we shouldn't accept that
@@ -238,7 +238,7 @@ class ConnectingPartGrader(EqualityGrader):
 			except ValueError:
 				# Try string to int conversion
 				try:
-					result = { int(k) : int(v) for k,v in the_dict.items() }
+					result = { int(k) : int(v) for k, v in the_dict.items() }
 				except ValueError:
 					# Ooh, too bad. A wrong key/value
 					result = {}
@@ -246,7 +246,7 @@ class ConnectingPartGrader(EqualityGrader):
 
 	solution_converter = _to_int_dict
 	response_converter = _to_int_dict
-	
+
 @interface.implementer(IQMatchingPartGrader)
 class MatchingPartGrader(ConnectingPartGrader):
 	"""
@@ -257,7 +257,7 @@ class MatchingPartGrader(ConnectingPartGrader):
 @interface.implementer(IQOrderingPartGrader)
 class OrderingPartGrader(ConnectingPartGrader):
 	pass
-	
+
 @repoze.lru.lru_cache(200)
 def _compile(pattern, flags=re.I | re.U | re.M):
 	return re.compile(pattern, flags)
@@ -308,7 +308,7 @@ class FillInTheBlankWithWordBankGrader(EqualityGrader):
 	def _compare(self, solution_value, response_value):
 		converted_solution = self.solution_converter(solution_value)
 		converted_response = self.response_converter(response_value)
-		for x,y in converted_solution.items():
+		for x, y in converted_solution.items():
 			ir = converted_response.get(x)
 			if not ir or not y.intersection(ir):
 				return False
