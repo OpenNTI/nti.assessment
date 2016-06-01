@@ -26,8 +26,8 @@ from nti.assessment.randomized.interfaces import IQRandomizedMultipleChoiceMulti
 
 from nti.externalization.externalization import to_external_object
 
-@interface.implementer(IQPartSolutionsExternalizer)
 @component.adapter(IQRandomizedMatchingPart)
+@interface.implementer(IQPartSolutionsExternalizer)
 class _RandomizedMatchingPartSolutionsExternalizer(object):
 
 	__slots__ = ('part',)
@@ -46,8 +46,8 @@ class _RandomizedMatchingPartSolutionsExternalizer(object):
 			shuffle_matching_part_solutions(generator, values, solutions)
 		return solutions
 
-@interface.implementer(IQPartSolutionsExternalizer)
 @component.adapter(IQRandomizedOrderingPart)
+@interface.implementer(IQPartSolutionsExternalizer)
 class _RandomizedOrderingPartSolutionsExternalizer(_RandomizedMatchingPartSolutionsExternalizer):
 	pass
 

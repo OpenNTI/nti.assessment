@@ -48,12 +48,16 @@ ISha224Randomized.setTaggedValue('_ext_is_marker_interface', True)
 # parts
 
 class IQRandomizedPart(IQPart):
-	pass
-
+	"""
+	marker interface for randomized parts
+	"""
 IQRandomizedPart.setTaggedValue('_ext_is_marker_interface', True)
 
 class ISha224RandomizedPart(IQRandomizedPart, ISha224Randomized):
-	pass
+	"""
+	marker interface for randomized parts that use Sha224 algorithm
+	"""
+ISha224RandomizedPart.setTaggedValue('_ext_is_marker_interface', True)
 
 class IQRandomizedPartGrader(IQPartGrader):
 
