@@ -21,8 +21,6 @@ from nti.assessment.randomized.interfaces import IQuestionIndexRange
 from nti.assessment.randomized.interfaces import IRandomizedQuestionSet
 from nti.assessment.randomized.interfaces import INonRandomizedQuestionSet
 from nti.assessment.randomized.interfaces import INonRandomizedQuestionBank
-from nti.assessment.randomized.interfaces import ISha224RandomizedQuestionSet
-from nti.assessment.randomized.interfaces import ISha224RandomizedQuestionBank
 
 from nti.assessment.question import QQuestionSet
 
@@ -41,7 +39,6 @@ class QRandomizedQuestionSet(QQuestionSet):
 	mimeType = mime_type = RANDOMIZED_QUESTION_SET_MIME_TYPE
 
 	nonrandomized_interface = INonRandomizedQuestionSet
-	sha224randomized_interface = ISha224RandomizedQuestionSet
 
 @interface.implementer(IQuestionBank)
 @EqHash('draw', include_super=True)
@@ -52,7 +49,6 @@ class QQuestionBank(QQuestionSet):
 	mimeType = mime_type = QUESTION_BANK_MIME_TYPE
 
 	nonrandomized_interface = INonRandomizedQuestionBank
-	sha224randomized_interface = ISha224RandomizedQuestionBank
 
 	srand = False
 

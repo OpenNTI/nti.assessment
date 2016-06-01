@@ -143,11 +143,7 @@ class IRandomizedPartsContainer(interface.Interface):
 	A marker interface that indicates the underlying `IQParts` should
 	*all* be treated as randomized.
 	"""
-
 IRandomizedPartsContainer.setTaggedValue('_ext_is_marker_interface', True)
-
-class ISha224RandomizedQuestionSet(IRandomizedQuestionSet, ISha224Randomized):
-	pass
 
 # question bank
 
@@ -193,9 +189,6 @@ class INonRandomizedQuestionBank(IQuestionBank):
 	"""
 	Marker interface to avoid randomizing an question bank
 	"""
-
-class ISha224RandomizedQuestionBank(IQuestionBank, ISha224Randomized):
-	pass
 
 # Principal utility
 
