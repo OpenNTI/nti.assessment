@@ -100,27 +100,27 @@ def randomized_connecting_part_factory(ext_obj):
 def randomized_matching_part_factory(ext_obj):
 	def _factory():
 		result = QMatchingPart()
-		interface.alsoProvides(result, IQRandomizedMatchingPart)
+		result.randomized = True
 		return result
 	return _factory
 
 def randomized_ordering_part_factory(ext_obj):
 	def _factory():
 		result = QOrderingPart()
-		interface.alsoProvides(result, IQRandomizedOrderingPart)
+		result.randomized = True
 		return result
 	return _factory
 
 def randomized_multiple_choice_part_factory(ext_obj):
 	def _factory():
 		result = QMultipleChoicePart()
-		interface.alsoProvides(result, IQRandomizedMultipleChoicePart)
+		result.randomized = True
 		return result
 	return _factory
 
 def randomized_multiple_choice_multiple_answer_part_factory(ext_obj):
 	def _factory():
 		result = QMultipleChoiceMultipleAnswerPart()
-		interface.alsoProvides(result, IQRandomizedMultipleChoiceMultipleAnswerPart)
+		result.randomized = True
 		return result
 	return _factory
