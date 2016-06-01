@@ -20,9 +20,9 @@ from zope import interface
 import plasTeX
 from plasTeX.TeX import TeX
 
-import nti.openmath as openmath
+from nti.assessment.interfaces import IResponseToSymbolicMathConverter
 
-from .interfaces import IResponseToSymbolicMathConverter
+import nti.openmath as openmath
 
 _counter = 0
 
@@ -59,7 +59,6 @@ def _mathTexToDOMNodes(maths):
 		# I know no way to predict in advance that will happen, but we can
 		# catch it here
 		return ()
-
 	return dom.getElementsByTagName(b'math')
 
 def _response_text_to_latex(response):

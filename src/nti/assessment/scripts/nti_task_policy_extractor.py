@@ -37,8 +37,7 @@ def _load_assignments(json_string):
 	question_map = QuestionIndex()
 	assignment_registry = Components()
 
-	question_map._from_root_index(index,
-								  registry=assignment_registry)
+	question_map._from_root_index(index, registry=assignment_registry)
 	return assignment_registry
 
 def _asg_registry_to_course_data(registry):

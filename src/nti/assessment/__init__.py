@@ -51,7 +51,6 @@ def _set_ifaces():
 _set_ifaces()
 del _set_ifaces
 
-
 from nti.assessment._patch import patch
 patch()
 del patch
