@@ -71,13 +71,6 @@ def questionbank_question_chooser(context, questions=None, user=None):
 		result = [questions[x] for x in idxs]
 	return result
 
-def must_randomize(context):
-	"""
-	Checks the given context to see if is a randomized type.
-	"""
-	iface = getattr(context, 'nonrandomized_interface', None)
-	return iface is None or not iface.providedBy(context)
-
 def shuffle_matching_part_solutions(generator, values, ext_solutions):
 	original = {idx:v for idx, v in enumerate(values)}
 	shuffled = {v:idx for idx, v in enumerate(shuffle_list(generator, values))}

@@ -15,7 +15,6 @@ from zope import interface
 from nti.assessment.interfaces import IQPartSolutionsExternalizer
 
 from nti.assessment.randomized import randomize
-from nti.assessment.randomized import must_randomize
 from nti.assessment.randomized import shuffle_matching_part_solutions
 from nti.assessment.randomized import shuffle_multiple_choice_part_solutions
 from nti.assessment.randomized import shuffle_multiple_choice_multiple_answer_part_solutions
@@ -41,11 +40,10 @@ class _RandomizedMatchingPartSolutionsExternalizer(object):
 		# since this method may be called from a decorator and the state
 		# cache may have been set
 		solutions = to_external_object(self.part.solutions, useCache=False)
-		if must_randomize(self.part):
-			generator = randomize(context=self.part)
-			if generator is not None:
-				values = to_external_object(self.part.values, useCache=False)
-				shuffle_matching_part_solutions(generator, values, solutions)
+		generator = randomize(context=self.part)
+		if generator is not None:
+			values = to_external_object(self.part.values, useCache=False)
+			shuffle_matching_part_solutions(generator, values, solutions)
 		return solutions
 
 @interface.implementer(IQPartSolutionsExternalizer)
@@ -64,11 +62,10 @@ class _RandomizedMultipleChoicePartSolutionsExternalizer(object):
 
 	def to_external_object(self):
 		solutions = to_external_object(self.part.solutions, useCache=False)
-		if must_randomize(self.part):
-			generator = randomize(context=self.part)
-			if generator is not None:
-				choices = to_external_object(self.part.choices, useCache=False)
-				shuffle_multiple_choice_part_solutions(generator, choices, solutions)
+		generator = randomize(context=self.part)
+		if generator is not None:
+			choices = to_external_object(self.part.choices, useCache=False)
+			shuffle_multiple_choice_part_solutions(generator, choices, solutions)
 		return solutions
 
 @interface.implementer(IQPartSolutionsExternalizer)
@@ -82,9 +79,8 @@ class _RandomizedMultipleChoiceMultipleAnswerPartSolutionsExternalizer(object):
 
 	def to_external_object(self):
 		solutions = to_external_object(self.part.solutions, useCache=False)
-		if must_randomize(self.part):
-			generator = randomize(context=self.part)
-			if generator is not None:
-				choices = to_external_object(self.part.choices, useCache=False)
-				shuffle_multiple_choice_multiple_answer_part_solutions(generator, choices, solutions)
+		generator = randomize(context=self.part)
+		if generator is not None:
+			choices = to_external_object(self.part.choices, useCache=False)
+			shuffle_multiple_choice_multiple_answer_part_solutions(generator, choices, solutions)
 		return solutions
