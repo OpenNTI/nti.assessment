@@ -16,11 +16,11 @@ from zope import interface
 from nti.assessment.interfaces import QUESTION_BANK_MIME_TYPE
 from nti.assessment.interfaces import RANDOMIZED_QUESTION_SET_MIME_TYPE
 
+from nti.assessment.question import QQuestionSet
+
 from nti.assessment.randomized.interfaces import IQuestionBank
 from nti.assessment.randomized.interfaces import IQuestionIndexRange
 from nti.assessment.randomized.interfaces import IRandomizedQuestionSet
-
-from nti.assessment.question import QQuestionSet
 
 from nti.externalization.representation import WithRepr
 
