@@ -19,8 +19,6 @@ from nti.assessment.interfaces import RANDOMIZED_QUESTION_SET_MIME_TYPE
 from nti.assessment.randomized.interfaces import IQuestionBank
 from nti.assessment.randomized.interfaces import IQuestionIndexRange
 from nti.assessment.randomized.interfaces import IRandomizedQuestionSet
-from nti.assessment.randomized.interfaces import INonRandomizedQuestionSet
-from nti.assessment.randomized.interfaces import INonRandomizedQuestionBank
 
 from nti.assessment.question import QQuestionSet
 
@@ -38,45 +36,23 @@ class QRandomizedQuestionSet(QQuestionSet):
 	__external_class_name__ = "QuestionSet"
 	mimeType = mime_type = RANDOMIZED_QUESTION_SET_MIME_TYPE
 
-	nonrandomized_interface = INonRandomizedQuestionSet
-
 @interface.implementer(IQuestionBank)
 @EqHash('draw', include_super=True)
 class QQuestionBank(QQuestionSet):
 	createDirectFieldProperties(IQuestionBank)
 
+	srand = False
+
 	__external_class_name__ = "QuestionSet"
 	mimeType = mime_type = QUESTION_BANK_MIME_TYPE
 
-	nonrandomized_interface = INonRandomizedQuestionBank
-
-	srand = False
-
-	def _copy(self, result, questions=None, ranges=None, srand=None):
-		result.draw = self.draw
-		result.title = self.title
-		result.ranges = ranges or list(self.ranges or ())
-		result.questions = questions or list(self.questions or ())
-		result.srand = self.srand if srand is None else bool(srand)
-		return result
-
-	def copy(self, questions=None, ranges=None, srand=None):
-		result = self._copy(self.__class__(), questions, ranges, srand)
-		return result
-
-	def copyTo(self, target, questions=None, ranges=None, srand=None):
-		result = self._copy(target, questions, ranges, srand)
-		return result
-
-	def summRangeDraw(self):
-		if not self.ranges:
-			result = self.draw
-		else:
-			result = sum([x.draw for x in self.ranges])
-		return result
-
 	def validate(self):
-		if self.draw != self.summRangeDraw():
+		if not self.ranges:
+			sum_draw = self.draw
+		else:
+			sum_draw = sum([x.draw for x in self.ranges])
+
+		if self.draw != sum_draw:
 			raise ValueError("Sum of range draws is not equal to bank draw")
 		elif self.ranges:
 			# validate ranges

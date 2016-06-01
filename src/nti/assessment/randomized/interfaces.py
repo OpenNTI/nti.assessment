@@ -65,9 +65,6 @@ class IQRandomizedPartGrader(IQPartGrader):
 class IQRandomizedConnectingPart(IQRandomizedPart, IQConnectingPart):
 	pass
 
-class INonRandomizedConnectingPart(IQRandomizedConnectingPart):
-	pass
-
 class ISha224RandomizedConnectingPart(IQRandomizedConnectingPart, ISha224Randomized):
 	pass
 
@@ -77,9 +74,6 @@ class IQRandomizedMatchingPart(IQRandomizedConnectingPart, IQMatchingPart):
 	pass
 
 class IQRandomizedMatchingPartGrader(IQMatchingPartGrader, IQRandomizedPartGrader):
-	pass
-
-class INonRandomizedMatchingPart(IQRandomizedMatchingPart):
 	pass
 
 class ISha224RandomizedMatchingPart(IQRandomizedMatchingPart, ISha224RandomizedPart):
@@ -93,9 +87,6 @@ class IQRandomizedOrderingPart(IQRandomizedConnectingPart, IQOrderingPart):
 class IQRandomizedOrderingPartGrader(IQOrderingPartGrader, IQRandomizedPartGrader):
 	pass
 
-class INonRandomizedOrderingPart(IQRandomizedOrderingPart):
-	pass
-
 class ISha224RandomizedOrderingPart(IQRandomizedOrderingPart, ISha224RandomizedPart):
 	pass
 
@@ -105,9 +96,6 @@ class IQRandomizedMultipleChoicePart(IQRandomizedPart, IQMultipleChoicePart):
 	pass
 
 class IQRandomizedMultipleChoicePartGrader(IQMultipleChoicePartGrader, IQRandomizedPartGrader):
-	pass
-
-class INonRandomizedMultipleChoicePart(IQRandomizedMultipleChoicePart):
 	pass
 
 class ISha224RandomizedMultipleChoicePart(IQRandomizedMultipleChoicePart, ISha224RandomizedPart):
@@ -123,9 +111,6 @@ class IQRandomizedMultipleChoiceMultipleAnswerPartGrader(IQMultipleChoiceMultipl
 														 IQRandomizedPartGrader):
 	pass
 
-class INonRandomizedMultipleChoiceMultipleAnswerPart(IQRandomizedMultipleChoiceMultipleAnswerPart):
-	pass
-
 class ISha224RandomizedMultipleChoiceMultipleAnswerPart(IQRandomizedMultipleChoiceMultipleAnswerPart,
 														ISha224RandomizedPart):
 	pass
@@ -133,9 +118,6 @@ class ISha224RandomizedMultipleChoiceMultipleAnswerPart(IQRandomizedMultipleChoi
 # question set
 
 class IRandomizedQuestionSet(IQuestionSet):
-	pass
-
-class INonRandomizedQuestionSet(IRandomizedQuestionSet):
 	pass
 
 class IRandomizedPartsContainer(interface.Interface):
@@ -169,26 +151,10 @@ class IQuestionBank(IQuestionSet):
 	srand = Bool(title="always use a different random seed.", required=False,
 				 default=False)
 
-	def copy(questions=None, ranges=None, srand=None):
-		"""
-		make a copy of this object w/ possibly new questions and/or ranges
-		"""
-
-	def copyTo(target, questions=None, ranges=None, srand=None,):
-		"""
-		make a copy of this object w/ possibly new questions and/or ranges to
-		target
-		"""
-
 IQuestionBank['draw'].setTaggedValue(TAG_HIDDEN_IN_UI, False)
 IQuestionBank['draw'].setTaggedValue(TAG_REQUIRED_IN_UI, False)
 IQuestionBank['ranges'].setTaggedValue(TAG_HIDDEN_IN_UI, False)
 IQuestionBank['ranges'].setTaggedValue(TAG_REQUIRED_IN_UI, False)
-
-class INonRandomizedQuestionBank(IQuestionBank):
-	"""
-	Marker interface to avoid randomizing an question bank
-	"""
 
 # Principal utility
 

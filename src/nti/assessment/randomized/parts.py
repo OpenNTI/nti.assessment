@@ -24,16 +24,12 @@ from nti.assessment.randomized.interfaces import ISha224RandomizedMultipleChoice
 
 from nti.assessment.randomized.interfaces import IQRandomizedMatchingPart
 from nti.assessment.randomized.interfaces import IQRandomizedOrderingPart
-from nti.assessment.randomized.interfaces import INonRandomizedMatchingPart
-from nti.assessment.randomized.interfaces import INonRandomizedOrderingPart
 from nti.assessment.randomized.interfaces import IQRandomizedConnectingPart
 from nti.assessment.randomized.interfaces import IQRandomizedMatchingPartGrader
 from nti.assessment.randomized.interfaces import IQRandomizedOrderingPartGrader
 from nti.assessment.randomized.interfaces import IQRandomizedMultipleChoicePart
-from nti.assessment.randomized.interfaces import INonRandomizedMultipleChoicePart
 from nti.assessment.randomized.interfaces import IQRandomizedMultipleChoicePartGrader
 from nti.assessment.randomized.interfaces import IQRandomizedMultipleChoiceMultipleAnswerPart
-from nti.assessment.randomized.interfaces import INonRandomizedMultipleChoiceMultipleAnswerPart
 from nti.assessment.randomized.interfaces import IQRandomizedMultipleChoiceMultipleAnswerPartGrader
 
 @interface.implementer(IQRandomizedConnectingPart)
@@ -50,7 +46,6 @@ class QRandomizedMatchingPart(QRandomizedConnectingPart, QMatchingPart):
 
 	grader_interface = IQRandomizedMatchingPartGrader
 
-	nonrandomized_interface = INonRandomizedMatchingPart
 	sha224randomized_interface = ISha224RandomizedMatchingPart
 
 @interface.implementer(IQRandomizedOrderingPart)
@@ -61,7 +56,6 @@ class QRandomizedOrderingPart(QRandomizedConnectingPart, QOrderingPart):
 
 	grader_interface = IQRandomizedOrderingPartGrader
 
-	nonrandomized_interface = INonRandomizedOrderingPart
 	sha224randomized_interface = ISha224RandomizedOrderingPart
 
 @interface.implementer(IQRandomizedMultipleChoicePart)
@@ -74,7 +68,6 @@ class QRandomizedMultipleChoicePart(QMultipleChoicePart):
 
 	grader_interface = IQRandomizedMultipleChoicePartGrader
 
-	nonrandomized_interface = INonRandomizedMultipleChoicePart
 	sha224randomized_interface = ISha224RandomizedMultipleChoicePart
 
 @interface.implementer(IQRandomizedMultipleChoiceMultipleAnswerPart)
@@ -87,7 +80,6 @@ class QRandomizedMultipleChoiceMultipleAnswerPart(QMultipleChoiceMultipleAnswerP
 
 	grader_interface = IQRandomizedMultipleChoiceMultipleAnswerPartGrader
 
-	nonrandomized_interface = INonRandomizedMultipleChoiceMultipleAnswerPart
 	sha224randomized_interface = ISha224RandomizedMultipleChoiceMultipleAnswerPart
 
 def randomized_connecting_part_factory(ext_obj):

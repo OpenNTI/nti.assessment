@@ -13,7 +13,6 @@ from hamcrest import not_none
 from hamcrest import equal_to
 from hamcrest import has_length
 from hamcrest import assert_that
-from hamcrest import has_property
 from hamcrest import same_instance
 does_not = is_not
 
@@ -70,8 +69,6 @@ class TestRandomized(AssessmentTestCase):
 		internalization.update_from_external_object(internal, ext_obj,
 													require_updater=True)
 
-		all_questions = list(internal.questions)
-
 		user1 = 'user1@nti.com'
 		mock_gs.is_callable().with_args().returns(100)
 		questions = questionbank_question_chooser(internal, user=user1)
@@ -95,14 +92,6 @@ class TestRandomized(AssessmentTestCase):
 		internal.srand = True
 		questions3 = questionbank_question_chooser(internal)
 		assert_that(questions, is_not(equal_to(questions3)))
-
-		new_internal = internal.copy(questions=all_questions)
-		assert_that(id(new_internal), is_not(id(internal)))
-		assert_that(new_internal, has_property('srand', is_(True)))
-		assert_that(new_internal, has_property('draw', is_(internal.draw)))
-		assert_that(new_internal, has_property('srand', is_(internal.srand)))
-		assert_that(new_internal, has_property('title', is_(internal.title)))
-		assert_that(new_internal, has_property('questions', is_(all_questions)))
 
 	@fudge.patch('nti.assessment.randomized.get_seed')
 	def test_question_bank_2(self, mock_gs):

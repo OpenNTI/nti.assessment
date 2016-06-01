@@ -79,16 +79,12 @@ from nti.assessment.randomized.interfaces import ISha224RandomizedMultipleChoice
 from nti.assessment.randomized.interfaces import IQRandomizedPart
 from nti.assessment.randomized.interfaces import IQRandomizedMatchingPart
 from nti.assessment.randomized.interfaces import IQRandomizedOrderingPart
-from nti.assessment.randomized.interfaces import INonRandomizedMatchingPart
-from nti.assessment.randomized.interfaces import INonRandomizedOrderingPart
 from nti.assessment.randomized.interfaces import IQRandomizedConnectingPart
 from nti.assessment.randomized.interfaces import IQRandomizedMatchingPartGrader
 from nti.assessment.randomized.interfaces import IQRandomizedOrderingPartGrader
 from nti.assessment.randomized.interfaces import IQRandomizedMultipleChoicePart
-from nti.assessment.randomized.interfaces import INonRandomizedMultipleChoicePart
 from nti.assessment.randomized.interfaces import IQRandomizedMultipleChoicePartGrader
 from nti.assessment.randomized.interfaces import IQRandomizedMultipleChoiceMultipleAnswerPart
-from nti.assessment.randomized.interfaces import INonRandomizedMultipleChoiceMultipleAnswerPart
 from nti.assessment.randomized.interfaces import IQRandomizedMultipleChoiceMultipleAnswerPartGrader
 
 from nti.contentfragments.interfaces import UnicodeContentFragment as _u
@@ -138,9 +134,6 @@ class QPart(QNonGradablePart):
 	can always be sure that the response is at least
 	of an appropriate type.
 	"""
-
-	#: The interface to implement when this this part IS NOT randomized
-	nonrandomized_interface = IQPart
 	
 	#: The interface to implement when this this part IS randomized
 	randomized_interface = IQPart
@@ -279,7 +272,6 @@ class QMultipleChoicePart(QPart, QNonGradableMultipleChoicePart):  # order matte
 	
 	# randomized
 	randomized_interface = IQRandomizedMultipleChoicePart
-	nonrandomized_interface = INonRandomizedMultipleChoicePart
 	sha224randomized_interface = ISha224RandomizedMultipleChoicePart
 
 # Multiple Choice Multiple Answer
@@ -303,7 +295,6 @@ class QMultipleChoiceMultipleAnswerPart(QMultipleChoicePart,
 	
 	# randomized
 	randomized_interface = IQRandomizedMultipleChoiceMultipleAnswerPart
-	nonrandomized_interface = INonRandomizedMultipleChoiceMultipleAnswerPart
 	sha224randomized_interface = ISha224RandomizedMultipleChoiceMultipleAnswerPart
 
 # Connecting
@@ -352,7 +343,6 @@ class QMatchingPart(QConnectingPart, QNonGradableMatchingPart):
 	
 	# randomized
 	randomized_interface = IQRandomizedMatchingPart
-	nonrandomized_interface = INonRandomizedMatchingPart
 	sha224randomized_interface = ISha224RandomizedMatchingPart
 	
 @interface.implementer(IQNonGradableOrderingPart)
@@ -371,7 +361,6 @@ class QOrderingPart(QConnectingPart, QNonGradableOrderingPart):  # order matters
 	
 	# randomized
 	randomized_interface = IQRandomizedOrderingPart
-	nonrandomized_interface = INonRandomizedOrderingPart
 	sha224randomized_interface = ISha224RandomizedOrderingPart
 
 # Free Response
