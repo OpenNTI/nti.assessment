@@ -125,6 +125,9 @@ class QPart(QNonGradablePart):
 	#: The interface to implement when this this part IS randomized
 	randomized_interface = IQPart
 
+	#: The interface to implement when this this part IS sha224 randomized
+	sha224randomized_interface = IQPart
+	
 	#: The interface to which we will attempt to adapt ourself, the
 	#: solution and the response when grading a NON randomized part. Should be a
 	#: class:`.IQPartGrader`. The response will have first been converted
@@ -135,7 +138,7 @@ class QPart(QNonGradablePart):
 	#: solution and the response when grading a randomized part.
 	#: The response will have first been converted for the solution.
 	randomized_grader_interface = IQPartGrader
-
+	
 	#: The name of the grader we will attempt to adapt to. Defaults to the default,
 	#: unnamed, adapter
 	grader_name = _u('')
