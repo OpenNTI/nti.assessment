@@ -143,6 +143,8 @@ class IRandomizedPartsContainer(interface.Interface):
 	*all* be treated as randomized.
 	"""
 
+IRandomizedPartsContainer.setTaggedValue( '_ext_is_marker_interface', True )
+
 class ISha224RandomizedQuestionSet(IRandomizedQuestionSet, ISha224Randomized):
 	pass
 
