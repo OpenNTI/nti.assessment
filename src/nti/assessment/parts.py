@@ -143,10 +143,11 @@ class QPart(QNonGradablePart):
 	nonrandomized_interface = IQPart
 	
 	#: The interface to implement when this this part IS randomized
-	randomized_interface = IQRandomizedPart
+	randomized_interface = IQPart
 
 	#: The interface to implement when this this part IS sha224 randomized
-	sha224randomized_interface = IQRandomizedPart
+	#: This is option is deprecated
+	sha224randomized_interface = IQPart
 	
 	#: The interface to which we will attempt to adapt ourself, the
 	#: solution and the response when grading a NON randomized part. Should be a

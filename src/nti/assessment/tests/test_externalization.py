@@ -317,3 +317,9 @@ class TestExternalization(AssessmentTestCase):
 		rand_solutions = externalizer.to_external_object()
 		
 		assert_that(org_solutions[0]['value'], is_not(equal_to(rand_solutions[0]['value'])))
+
+		part.randomized = False
+		externalizer = IQPartSolutionsExternalizer(part)
+		no_rand_solutions = externalizer.to_external_object()
+		
+		assert_that(org_solutions[0]['value'], is_(equal_to(no_rand_solutions[0]['value'])))
