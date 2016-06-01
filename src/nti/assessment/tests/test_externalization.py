@@ -27,7 +27,8 @@ import json
 
 import fudge
 
-from nti.assessment.interfaces import IQuestionSet, IQPartSolutionsExternalizer
+from nti.assessment.interfaces import IQuestionSet
+from nti.assessment.interfaces import IQPartSolutionsExternalizer 
 
 from nti.assessment.question import QFillInTheBlankWithWordBankQuestion
 
