@@ -26,7 +26,7 @@
 			 	  dict"
 			 provides=".interfaces.IQRandomizedMatchingPartGrader" />
 
-	<!-- ordering -->
+	<!-- Ordering -->
 	<adapter factory=".graders.RandomizedOrderingPartGrader"
 			 for=".interfaces.IQRandomizedOrderingPart
 			 	  nti.assessment.interfaces.IQOrderingSolution
@@ -39,7 +39,7 @@
 			 	  dict"
 			 provides=".interfaces.IQRandomizedOrderingPartGrader" />
 
-	<!-- multiple choice -->
+	<!-- Multiple choice -->
 	<adapter factory=".graders.RandomizedMultipleChoiceGrader"
 			 for=".interfaces.IQRandomizedMultipleChoicePart
 			 	  nti.assessment.interfaces.IQSingleValuedSolution
@@ -58,7 +58,7 @@
 			 	  basestring"
 			 provides=".interfaces.IQRandomizedMultipleChoicePartGrader" />
 
-	<!-- multiple choice, multiple answer -->
+	<!-- Multiple choice, Multiple answer -->
 	<adapter factory=".graders.RandomizedMultipleChoiceMultipleAnswerGrader"
 			 for=".interfaces.IQRandomizedMultipleChoiceMultipleAnswerPart
 			 	  nti.assessment.interfaces.IQMultiValuedSolution
@@ -78,11 +78,6 @@
 	<adapter factory="list .question._range_adapter"
 			 provides=".interfaces.IQuestionIndexRange"
 			 for="tuple"/>
-
-	<!-- Decorators -->
-	<subscriber	factory=".decorators._RandomizedPartDecorator"
-				for=".interfaces.IQRandomizedPart"
-				provides="nti.externalization.interfaces.IExternalMappingDecorator" />
 		
 	<!-- Externalization -->
 	<adapter factory=".externalization._RandomizedMatchingPartSolutionsExternalizer"

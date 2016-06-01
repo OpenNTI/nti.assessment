@@ -16,12 +16,25 @@ from zope import interface
 
 from nti.assessment.common import get_containerId
 
-from nti.assessment.interfaces import IQMathPart
+from nti.assessment.interfaces import IQPart
+from nti.assessment.interfaces import IQMathPart 
 
 from nti.externalization.interfaces import IExternalObjectDecorator
 from nti.externalization.interfaces import IExternalMappingDecorator
 
 from nti.externalization.singleton import SingletonDecorator
+
+@component.adapter(IQPart)
+@interface.implementer(IExternalMappingDecorator)
+class _RandomizedPartDecorator(object):
+
+	def __init__(self, part):
+		self.part = part
+
+	def decorateExternalMapping(self, original, external):
+		if not original.randomized:
+			external.pop('randomized', None)
+		return external
 
 @component.adapter(IQMathPart)
 @interface.implementer(IExternalMappingDecorator)

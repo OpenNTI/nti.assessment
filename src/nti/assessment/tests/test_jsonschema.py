@@ -44,7 +44,7 @@ class TestJsonSchema(unittest.TestCase):
 		assert_that(fields, has_length(4))
 		assert_that(fields, has_entry('content', has_entry('type', 'string')))
 		assert_that(fields, has_entry('title', has_entry('min_length', is_(0))))
-		# FIXME: base_type
+
 		assert_that(fields, has_entry('question_set', has_entry('type', not_none())))
 		assert_that(fields, has_entry('auto_grade', has_entry('type', 'bool')))
 
@@ -67,7 +67,7 @@ class TestJsonSchema(unittest.TestCase):
 		schema = a.schema()
 		assert_that(schema, has_key(FIELDS))
 		fields = schema[FIELDS]
-		assert_that(fields, has_length(6))
+		assert_that(fields, has_length(7))
 		assert_that(fields, has_entry('explanation', has_entry('base_type', 'string')))
 		assert_that(fields, has_entry('labels', has_entry('type', 'list')))
 		assert_that(fields, has_entry('content', has_entry('base_type', 'string')))

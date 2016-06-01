@@ -278,6 +278,10 @@ class IQPart(IQNonGradablePart, IGradable):
 								min_length=0,
 								required=False)
 
+	randomized = Bool(title="Boolean to indicate whether this part is randomzied.",
+					  default=False,
+					  required=False)
+	
 	def grade(response):
 		"""
 		Determine the correctness of the given response. Usually this will do its work

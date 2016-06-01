@@ -355,6 +355,11 @@
 			 for="tuple"/>
 
 	<!-- Decorators -->
+	<subscriber	factory=".decorators._RandomizedPartDecorator"
+				for=".interfaces.IQPart"
+				provides="nti.externalization.interfaces.IExternalMappingDecorator" />
+
+	<!-- Externalizers -->
 	<adapter factory=".externalization._DefaultPartSolutionsExternalizer"
 			 for=".interfaces.IQPart"
 			 provides=".interfaces.IQPartSolutionsExternalizer" />
