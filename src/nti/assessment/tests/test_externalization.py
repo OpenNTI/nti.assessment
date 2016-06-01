@@ -11,6 +11,7 @@ from hamcrest import is_
 from hamcrest import is_not
 from hamcrest import all_of
 from hamcrest import has_key
+from hamcrest import equal_to
 from hamcrest import not_none
 from hamcrest import has_entry
 from hamcrest import has_length
@@ -26,7 +27,7 @@ import json
 
 import fudge
 
-from nti.assessment.interfaces import IQuestionSet
+from nti.assessment.interfaces import IQuestionSet, IQPartSolutionsExternalizer
 
 from nti.assessment.question import QFillInTheBlankWithWordBankQuestion
 
@@ -293,3 +294,25 @@ class TestExternalization(AssessmentTestCase):
 		assert_that(factory, is_(not_none()))
 		internal = factory()
 		internalization.update_from_external_object(internal, ext_obj, require_updater=True)
+
+	@fudge.patch('nti.assessment.randomized.get_seed')
+	def test_solutions_externalizer(self, mock_gs):		
+		path = os.path.join(os.path.dirname(__file__), "questionset.json")
+		with open(path, "r") as fp:
+			ext_obj = json.load(fp)
+
+		question_ext = ext_obj['questions'][0]
+		factory = internalization.find_factory_for(question_ext)
+		internal = factory()
+		internalization.update_from_external_object(internal, question_ext)
+		
+		part = internal.parts[0]
+		externalizer = IQPartSolutionsExternalizer(part)
+		org_solutions = externalizer.to_external_object()
+		
+		mock_gs.is_callable().with_args().returns(100)
+		part.randomized = True
+		externalizer = IQPartSolutionsExternalizer(part)
+		rand_solutions = externalizer.to_external_object()
+		
+		assert_that(org_solutions[0]['value'], is_not(equal_to(rand_solutions[0]['value'])))
