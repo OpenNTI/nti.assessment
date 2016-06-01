@@ -17,7 +17,7 @@ from zope import component
 from zope import interface
 
 from nti.assessment.interfaces import IQEvaluation
-from nti.assessment.interfaces import IQuestionSet 
+from nti.assessment.interfaces import IQuestionSet
 from nti.assessment.interfaces import IQAssessedPart
 from nti.assessment.interfaces import IQUploadedFile
 from nti.assessment.interfaces import IQSubmittedPart
@@ -160,9 +160,10 @@ class _QuestionSetExternalizer(InterfaceObjectIO):
 	def toExternalObject(self, **kwargs):
 		context = self._ext_replacement()
 		result = super(_QuestionSetExternalizer, self).toExternalObject(**kwargs)
-		result['questions'] = questions = []
-		for question in context.Items: # resolve weaf refs
-			questions.append(to_external_object(question, **kwargs))
+		if 'questions' not in result:
+			result['questions'] = questions = []
+			for question in context.Items: # resolve weaf refs
+				questions.append(to_external_object(question, **kwargs))
 		return result
 
 # Submission and Assessed objects
@@ -214,7 +215,7 @@ class _QPollSubmissionExternalizer(_QContainedObjectExternalizer):
 @component.adapter(IQSurveySubmission)
 class _QSurveySubmissionSubmissionExternalizer(_QContainedObjectExternalizer):
 	interface = IQSurveySubmission
-	
+
 # File uploads
 
 from nti.namedfile.datastructures import BaseFactory

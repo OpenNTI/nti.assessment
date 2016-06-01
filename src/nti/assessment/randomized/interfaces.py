@@ -50,6 +50,8 @@ ISha224Randomized.setTaggedValue('_ext_is_marker_interface', True)
 class IQRandomizedPart(IQPart):
 	pass
 
+IQRandomizedPart.setTaggedValue('_ext_is_marker_interface', True)
+
 class ISha224RandomizedPart(IQRandomizedPart, ISha224Randomized):
 	pass
 

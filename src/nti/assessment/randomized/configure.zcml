@@ -78,7 +78,7 @@
 	<adapter factory="list .question._range_adapter"
 			 provides=".interfaces.IQuestionIndexRange"
 			 for="tuple"/>
-		
+
 	<!-- Externalization -->
 	<adapter factory=".externalization._RandomizedMatchingPartSolutionsExternalizer"
 			 for=".interfaces.IQRandomizedMatchingPart"
@@ -101,8 +101,7 @@
 	<include package="nti.externalization" />
 
 	<ext:registerAutoPackageIO
-		root_interfaces=".interfaces.IQRandomizedPart
-						 .interfaces.IRandomizedQuestionSet
+		root_interfaces=".interfaces.IRandomizedQuestionSet
 						 .interfaces.IQuestionIndexRange
 						 .interfaces.IQuestionBank"
 		modules=".parts .question"
@@ -117,5 +116,5 @@
 			 provides="nti.externalization.interfaces.IMimeObjectFactory"
 			 name="application/vnd.nextthought.assessment.randomizedmatchingpart" />
 	-->
-			 
+
 </configure>
