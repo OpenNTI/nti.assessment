@@ -93,7 +93,7 @@ class QRandomizedMultipleChoiceMultipleAnswerPart(QMultipleChoiceMultipleAnswerP
 def randomized_connecting_part_factory(ext_obj):
 	def _factory():
 		result = QConnectingPart()
-		interface.alsoProvides(result, IQRandomizedConnectingPart)
+		result.randomized = True
 		return result
 	return _factory
 
