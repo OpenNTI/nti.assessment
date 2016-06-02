@@ -23,6 +23,8 @@ import fudge
 from nti.assessment.randomized import randomize
 from nti.assessment.randomized import shuffle_list
 from nti.assessment.randomized import questionbank_question_chooser
+
+from nti.assessment.randomized.interfaces import IQRandomizedPart
 from nti.assessment.randomized.interfaces import IQuestionIndexRange
 
 from nti.externalization import internalization
@@ -68,6 +70,10 @@ class TestRandomized(AssessmentTestCase):
 		internal = factory()
 		internalization.update_from_external_object(internal, ext_obj,
 													require_updater=True)
+
+		questions = internal.questions
+		assert_that(questions, has_length(20))
+		assert_that(IQRandomizedPart.providedBy(questions[1].parts[0]), is_(True))
 
 		user1 = 'user1@nti.com'
 		mock_gs.is_callable().with_args().returns(100)
