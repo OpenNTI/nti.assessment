@@ -25,7 +25,7 @@ from nti.common.maps import CaseInsensitiveDict
 
 from nti.common.property import CachedProperty
 
-from nti.common.string import safestr
+from nti.common.string import to_unicode
 
 from nti.contentfragments.interfaces import HTMLContentFragment
 
@@ -37,8 +37,7 @@ from nti.schema.fieldproperty import createDirectFieldProperties
 from nti.schema.schema import EqHash
 
 def safe_encode(word, encoding="UTF-8"):
-	if not isinstance(word, six.string_types):
-		word = str(word)
+	word = str(word) if not isinstance(word, six.string_types) else word
 	try:
 		word = word.encode(encoding)
 	except Exception:
@@ -148,14 +147,14 @@ class WordBank(SchemaConfigured, Persistent, Contained):
 
 @interface.implementer(IWordEntry)
 def _wordentry_adapter(sequence):
-	result = WordEntry(wid=safestr(sequence[0]), word=safestr(sequence[1]))
+	result = WordEntry(wid=to_unicode(sequence[0]), word=to_unicode(sequence[1]))
 	if len(sequence) > 2 and sequence[2]:
-		result.lang = safestr(sequence[2]).lower()
+		result.lang = to_unicode(sequence[2]).lower()
 	else:
 		result.lang = u'en'
 
 	if len(sequence) > 3 and sequence[3]:
-		content = safestr(sequence[3])
+		content = to_unicode(sequence[3])
 	else:
 		content = result.word
 	result.content = HTMLContentFragment(content)

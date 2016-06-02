@@ -81,6 +81,7 @@ class QInquiry(QPersistentSubmittable, EvaluationSchemaMixin):
 	@property
 	def isClosed(self):
 		return bool(self.closed)
+	is_closed = isClosed
 
 	@property
 	def onTermination(self):
