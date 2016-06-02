@@ -136,11 +136,11 @@ class QPart(QNonGradablePart):
 	"""
 	
 	#: The interface to implement when this this part IS randomized
-	randomized_interface = IQPart
+	randomized_interface = None
 
 	#: The interface to implement when this this part IS sha224 randomized
-	#: This is option is deprecated
-	sha224randomized_interface = IQPart
+	#: This option is deprecated
+	sha224randomized_interface = None
 	
 	#: The interface to which we will attempt to adapt ourself, the
 	#: solution and the response when grading a NON randomized part. Should be a
@@ -151,7 +151,7 @@ class QPart(QNonGradablePart):
 	#: The interface to which we will attempt to adapt ourself, the
 	#: solution and the response when grading a randomized part.
 	#: The response will have first been converted for the solution.
-	randomized_grader_interface = IQPartGrader
+	randomized_grader_interface = None
 	
 	#: The name of the grader we will attempt to adapt to. Defaults to the default,
 	#: unnamed, adapter
@@ -160,16 +160,17 @@ class QPart(QNonGradablePart):
 	solutions = ()
 
 	def _get_randomzied(self):
-		return self.randomized_interface.providedBy(self)
+		return bool(	self.randomized_interface is not None
+					and self.randomized_interface.providedBy(self))
 	def _set_randomized(self, nv):
-		if nv:
-			if not IQRandomizedPart.providedBy(self):
-				interface.alsoProvides(self, self.randomized_interface)
+		if self.randomized_interface is not None:
+			if nv:
+				if not IQRandomizedPart.providedBy(self):
+					interface.alsoProvides(self, self.randomized_interface)
+					self._p_changed = True
+			elif IQRandomizedPart.providedBy(self):
+				interface.noLongerProvides(self, self.randomized_interface)
 				self._p_changed = True
-		elif IQRandomizedPart.providedBy(self):
-			interface.noLongerProvides(self, self.randomized_interface)
-			interface.noLongerProvides(self, self.sha224randomized_interface)
-			self._p_changed = True
 	randomized = property(_get_randomzied, _set_randomized)
 	
 	def grade(self, response):
