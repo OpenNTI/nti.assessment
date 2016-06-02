@@ -40,8 +40,6 @@ from nti.assessment.interfaces import IQAssessmentJsonSchemaMaker
 from nti.assessment.interfaces import IQLatexSymbolicMathSolution
 from nti.assessment.interfaces import IQEvaluationContainerIdGetter
 
-from nti.assessment.randomized.interfaces import IQRandomizedPart
-
 from nti.common.property import alias
 
 from nti.coremetadata.mixins import RecordableMixin
@@ -94,8 +92,8 @@ def assess(quiz, responses):
 	return result
 
 def grader_for_solution_and_response(part, solution, response):
-	if IQRandomizedPart.providedBy(part):
-		grader_interface = part.grader_interface # part.randomized_grader_interface
+	if part.randomized:
+		grader_interface = part.randomized_grader_interface
 	else:
 		grader_interface = part.grader_interface
 	result = component.queryMultiAdapter((part, solution, response),

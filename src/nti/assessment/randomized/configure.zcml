@@ -104,23 +104,18 @@
 		root_interfaces=".interfaces.IRandomizedQuestionSet
 						 .interfaces.IQuestionIndexRange
 						 .interfaces.IQuestionBank"
-		modules=".parts .question"
+		modules=".question"
 		iobase="..externalization._AssessmentInternalObjectIOBase"/>
 
 	<!-- Internalization -->
 	<!--
 	Randomized parts are regular parts with marker interface
-
+	-->
 	<adapter factory=".parts.randomized_matching_part_factory"
 			 for="dolmen.builtins.IDict"
 			 provides="nti.externalization.interfaces.IMimeObjectFactory"
 			 name="application/vnd.nextthought.assessment.randomizedmatchingpart" />
 			 
-	<adapter factory=".parts.randomized_ordering_part_factory"
-			 for="dolmen.builtins.IDict"
-			 provides="nti.externalization.interfaces.IMimeObjectFactory"
-			 name="application/vnd.nextthought.assessment.randomizedorderingpart" />
-		
 	<adapter factory=".parts.randomized_ordering_part_factory"
 			 for="dolmen.builtins.IDict"
 			 provides="nti.externalization.interfaces.IMimeObjectFactory"
@@ -135,7 +130,5 @@
 			 for="dolmen.builtins.IDict"
 			 provides="nti.externalization.interfaces.IMimeObjectFactory"
 			 name="application/vnd.nextthought.assessment.randomizedmultiplechoicemultipleanswerpart" />
-
-	-->
 
 </configure>

@@ -11,83 +11,44 @@ logger = __import__('logging').getLogger(__name__)
 
 from zope import interface
 
+from zope.deprecation import deprecated
+
 from nti.assessment.parts import QMatchingPart
 from nti.assessment.parts import QOrderingPart
 from nti.assessment.parts import QConnectingPart
 from nti.assessment.parts import QMultipleChoicePart
 from nti.assessment.parts import QMultipleChoiceMultipleAnswerPart
 
-from nti.assessment.randomized.interfaces import ISha224RandomizedMatchingPart
-from nti.assessment.randomized.interfaces import ISha224RandomizedOrderingPart
-from nti.assessment.randomized.interfaces import ISha224RandomizedMultipleChoicePart
-from nti.assessment.randomized.interfaces import ISha224RandomizedMultipleChoiceMultipleAnswerPart
-
 from nti.assessment.randomized.interfaces import IQRandomizedMatchingPart
 from nti.assessment.randomized.interfaces import IQRandomizedOrderingPart
 from nti.assessment.randomized.interfaces import IQRandomizedConnectingPart
-from nti.assessment.randomized.interfaces import IQRandomizedMatchingPartGrader
-from nti.assessment.randomized.interfaces import IQRandomizedOrderingPartGrader
 from nti.assessment.randomized.interfaces import IQRandomizedMultipleChoicePart
-from nti.assessment.randomized.interfaces import IQRandomizedMultipleChoicePartGrader
 from nti.assessment.randomized.interfaces import IQRandomizedMultipleChoiceMultipleAnswerPart
-from nti.assessment.randomized.interfaces import IQRandomizedMultipleChoiceMultipleAnswerPartGrader
 
+deprecated('QRandomizedConnectingPart', 'No longer used')
 @interface.implementer(IQRandomizedConnectingPart)
 class QRandomizedConnectingPart(QConnectingPart):
-	response_interface = None
+	pass
 
+deprecated('QRandomizedMatchingPart', 'No longer used')
 @interface.implementer(IQRandomizedMatchingPart)
 class QRandomizedMatchingPart(QRandomizedConnectingPart, QMatchingPart):
-
-	response_interface = None
-
-	__external_class_name__ = "MatchingPart"
 	mimeType = mime_type = "application/vnd.nextthought.assessment.randomizedmatchingpart"
 
-	grader_interface = IQRandomizedMatchingPartGrader
-
-	sha224randomized_interface = ISha224RandomizedMatchingPart
-
+deprecated('QRandomizedOrderingPart', 'No longer used')
 @interface.implementer(IQRandomizedOrderingPart)
 class QRandomizedOrderingPart(QRandomizedConnectingPart, QOrderingPart):
-
-	__external_class_name__ = "OrderingPart"
 	mimeType = mime_type = "application/vnd.nextthought.assessment.randomizedorderingpart"
 
-	grader_interface = IQRandomizedOrderingPartGrader
-
-	sha224randomized_interface = ISha224RandomizedOrderingPart
-
+deprecated('QRandomizedMultipleChoicePart', 'No longer used')
 @interface.implementer(IQRandomizedMultipleChoicePart)
 class QRandomizedMultipleChoicePart(QMultipleChoicePart):
-
-	response_interface = None
-
-	__external_class_name__ = "MultipleChoicePart"
 	mimeType = mime_type = "application/vnd.nextthought.assessment.randomizedmultiplechoicepart"
 
-	grader_interface = IQRandomizedMultipleChoicePartGrader
-
-	sha224randomized_interface = ISha224RandomizedMultipleChoicePart
-
+deprecated('QRandomizedMultipleChoiceMultipleAnswerPart', 'No longer used')
 @interface.implementer(IQRandomizedMultipleChoiceMultipleAnswerPart)
 class QRandomizedMultipleChoiceMultipleAnswerPart(QMultipleChoiceMultipleAnswerPart):
-
-	response_interface = None
-
-	__external_class_name__ = "MultipleChoiceMultipleAnswerPart"
 	mimeType = mime_type = "application/vnd.nextthought.assessment.randomizedmultiplechoicemultipleanswerpart"
-
-	grader_interface = IQRandomizedMultipleChoiceMultipleAnswerPartGrader
-
-	sha224randomized_interface = ISha224RandomizedMultipleChoiceMultipleAnswerPart
-
-def randomized_connecting_part_factory(ext_obj):
-	def _factory():
-		result = QConnectingPart()
-		result.randomized = True
-		return result
-	return _factory
 
 def randomized_matching_part_factory(ext_obj):
 	def _factory():
