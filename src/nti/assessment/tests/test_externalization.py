@@ -28,7 +28,7 @@ import json
 import fudge
 
 from nti.assessment.interfaces import IQuestionSet
-from nti.assessment.interfaces import IQPartSolutionsExternalizer 
+from nti.assessment.interfaces import IQPartSolutionsExternalizer
 
 from nti.assessment.question import QFillInTheBlankWithWordBankQuestion
 
@@ -201,6 +201,7 @@ class TestExternalization(AssessmentTestCase):
 		ext_obj = {u'MimeType': 'application/vnd.nextthought.assessment.fillintheblankshortanswerpart',
 					'explanation': u'',
 					'content': u'Will you visit America next year?',
+					'weight': .5,
 					'solutions': [
 									{u'MimeType': 'application/vnd.nextthought.assessment.fillintheblankshortanswersolution',
 									 'value': {u'001': {u'MimeType': u'application/vnd.nextthought.naqregex',
@@ -222,6 +223,7 @@ class TestExternalization(AssessmentTestCase):
 		hash(internal)
 
 		assert_that(internal, has_property('solutions', has_length(1)))
+		assert_that(internal, has_property('weight', is_( .5 )))
 		sol = internal.solutions[0]
 		assert_that(sol, has_property('value', has_entry('001', has_property('solution', 'yes, I will'))))
 
@@ -241,25 +243,25 @@ class TestExternalization(AssessmentTestCase):
 
 		assert_that(internal, verifiably_provides(IQuestionSet) )
 		assert_that(internal, has_property('questions', has_length(20)))
-		
+
 		assert_that(list(internal.Items), has_length(20))
-		
+
 		assert_that(internal, externalizes(all_of(has_entry('NTIID', is_(ntiid)),
 												  has_entry('Class', is_('QuestionSet')),
 												  has_entry('MimeType', is_('application/vnd.nextthought.naquestionset')),
 												  has_entry('questions', has_length(20)))))
-		
+
 		exported = to_external_object(internal, name="exporter")
 		assert_that(exported, has_entries('NTIID', ntiid,
 										  'Class', 'QuestionSet',
 										  'MimeType', 'application/vnd.nextthought.naquestionset',
 										  'questions', has_length(20)))
-		
+
 	@fudge.patch('nti.assessment.randomized.get_seed')
 	def test_question_bank(self, mock_gs):
-		
+
 		mock_gs.is_callable().with_args().returns(None)
-		
+
 		path = os.path.join(os.path.dirname(__file__), "questionbank.json")
 		with open(path, "r") as fp:
 			ext_obj = json.load(fp)
@@ -296,8 +298,12 @@ class TestExternalization(AssessmentTestCase):
 		internal = factory()
 		internalization.update_from_external_object(internal, ext_obj, require_updater=True)
 
+		# Parts
+		part = internal.parts[0]
+		assert_that(part, has_property('total_points', is_(0)))
+
 	@fudge.patch('nti.assessment.randomized.get_seed')
-	def test_solutions_externalizer(self, mock_gs):		
+	def test_solutions_externalizer(self, mock_gs):
 		path = os.path.join(os.path.dirname(__file__), "questionset.json")
 		with open(path, "r") as fp:
 			ext_obj = json.load(fp)
@@ -306,20 +312,20 @@ class TestExternalization(AssessmentTestCase):
 		factory = internalization.find_factory_for(question_ext)
 		internal = factory()
 		internalization.update_from_external_object(internal, question_ext)
-		
+
 		part = internal.parts[0]
 		externalizer = IQPartSolutionsExternalizer(part)
 		org_solutions = externalizer.to_external_object()
-		
+
 		mock_gs.is_callable().with_args().returns(100)
 		part.randomized = True
 		externalizer = IQPartSolutionsExternalizer(part)
 		rand_solutions = externalizer.to_external_object()
-		
+
 		assert_that(org_solutions[0]['value'], is_not(equal_to(rand_solutions[0]['value'])))
 
 		part.randomized = False
 		externalizer = IQPartSolutionsExternalizer(part)
 		no_rand_solutions = externalizer.to_external_object()
-		
+
 		assert_that(org_solutions[0]['value'], is_(equal_to(no_rand_solutions[0]['value'])))

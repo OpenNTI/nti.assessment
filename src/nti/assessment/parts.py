@@ -134,25 +134,25 @@ class QPart(QNonGradablePart):
 	can always be sure that the response is at least
 	of an appropriate type.
 	"""
-	
+
 	#: The interface to implement when this this part IS randomized
 	randomized_interface = None
 
 	#: The interface to implement when this this part IS sha224 randomized
 	#: This option is deprecated
 	sha224randomized_interface = None
-	
+
 	#: The interface to which we will attempt to adapt ourself, the
 	#: solution and the response when grading a NON randomized part. Should be a
 	#: class:`.IQPartGrader`. The response will have first been converted
 	#: for the solution.
 	grader_interface = IQPartGrader
-	
+
 	#: The interface to which we will attempt to adapt ourself, the
 	#: solution and the response when grading a randomized part.
 	#: The response will have first been converted for the solution.
 	randomized_grader_interface = None
-	
+
 	#: The name of the grader we will attempt to adapt to. Defaults to the default,
 	#: unnamed, adapter
 	grader_name = _u('')
@@ -172,7 +172,7 @@ class QPart(QNonGradablePart):
 				interface.noLongerProvides(self, self.randomized_interface)
 				self._p_changed = True
 	randomized = property(_get_randomzied, _set_randomized)
-	
+
 	def grade(self, response):
 
 		if self.response_interface is not None:
@@ -195,7 +195,7 @@ class QPart(QNonGradablePart):
 		return result
 
 	def _weight(self, result, solution):
-		return 1.0 * solution.weight
+		return self.weight * solution.weight
 
 	def _grade(self, solution, response):
 		__traceback_info__ = solution, response, self.grader_name
@@ -270,7 +270,7 @@ class QMultipleChoicePart(QPart, QNonGradableMultipleChoicePart):  # order matte
 	# graders
 	grader_interface = IQMultipleChoicePartGrader
 	randomized_grader_interface = IQRandomizedMultipleChoicePartGrader
-	
+
 	# randomized
 	randomized_interface = IQRandomizedMultipleChoicePart
 	sha224randomized_interface = ISha224RandomizedMultipleChoicePart
@@ -293,7 +293,7 @@ class QMultipleChoiceMultipleAnswerPart(QMultipleChoicePart,
 	# graders
 	grader_interface = IQMultipleChoiceMultipleAnswerPartGrader
 	randomized_grader_interface = IQRandomizedMultipleChoiceMultipleAnswerPartGrader
-	
+
 	# randomized
 	randomized_interface = IQRandomizedMultipleChoiceMultipleAnswerPart
 	sha224randomized_interface = ISha224RandomizedMultipleChoiceMultipleAnswerPart
@@ -337,15 +337,15 @@ class QNonGradableMatchingPart(QNonGradableConnectingPart):
 class QMatchingPart(QConnectingPart, QNonGradableMatchingPart):
 
 	mimeType = mime_type = 'application/vnd.nextthought.assessment.matchingpart'
-	
+
 	# graders
 	grader_interface = IQMatchingPartGrader
 	randomized_grader_interface = IQRandomizedMatchingPartGrader
-	
+
 	# randomized
 	randomized_interface = IQRandomizedMatchingPart
 	sha224randomized_interface = ISha224RandomizedMatchingPart
-	
+
 @interface.implementer(IQNonGradableOrderingPart)
 class QNonGradableOrderingPart(QNonGradableConnectingPart):
 
@@ -359,7 +359,7 @@ class QOrderingPart(QConnectingPart, QNonGradableOrderingPart):  # order matters
 	# graders
 	grader_interface = IQOrderingPartGrader
 	randomized_grader_interface = IQRandomizedOrderingPartGrader
-	
+
 	# randomized
 	randomized_interface = IQRandomizedOrderingPart
 	sha224randomized_interface = ISha224RandomizedOrderingPart

@@ -278,10 +278,19 @@ class IQPart(IQNonGradablePart, IGradable):
 								min_length=0,
 								required=False)
 
-	randomized = Bool(title="Boolean to indicate whether this part is randomzied.",
+	randomized = Bool(title="Boolean to indicate whether this part is randomized.",
 					  default=False,
 					  required=False)
-	
+
+	weight = Float( title="The relative point value of this part, compared to other parts.",
+					description="""When calculating points per part, the weight is used to
+					calculate what part of a :class:`IQuestion` total_points goes towards
+					this part.
+					""",
+					min=0.0,
+					max=1.0,
+					default=1.0)
+
 	def grade(response):
 		"""
 		Determine the correctness of the given response. Usually this will do its work
@@ -782,6 +791,14 @@ class IQAssignmentPart(ITitledContent):
 
 	auto_grade = Bool(title="Should this part be run through the grading machinery?",
 					  default=False)
+
+	total_points = Float(title="The number of points to allocate for this part.",
+						  description="""Number of points to allocate for IQParts in this assignment part.
+						  If this part is not auto-graded, this value is for display purposes.
+						  """,
+						  min=0.0,
+						  default=0.0,
+						  required=False)
 
 IQAssignmentPart.setTaggedValue('_ext_jsonschema', u'assignmentpart')
 
