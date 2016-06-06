@@ -41,9 +41,8 @@ class TestJsonSchema(unittest.TestCase):
 		schema = a.schema()
 		assert_that(schema, has_key(FIELDS))
 		fields = schema[FIELDS]
-		assert_that(fields, has_length(5))
+		assert_that(fields, has_length(4))
 		assert_that(fields, has_entry('content', has_entry('type', 'string')))
-		assert_that(fields, has_entry('total_points', has_entry('type', 'float')))
 		assert_that(fields, has_entry('title', has_entry('min_length', is_(0))))
 
 		assert_that(fields, has_entry('question_set', has_entry('type', not_none())))

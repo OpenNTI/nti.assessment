@@ -298,10 +298,6 @@ class TestExternalization(AssessmentTestCase):
 		internal = factory()
 		internalization.update_from_external_object(internal, ext_obj, require_updater=True)
 
-		# Parts
-		part = internal.parts[0]
-		assert_that(part, has_property('total_points', is_(0)))
-
 	@fudge.patch('nti.assessment.randomized.get_seed')
 	def test_solutions_externalizer(self, mock_gs):
 		path = os.path.join(os.path.dirname(__file__), "questionset.json")

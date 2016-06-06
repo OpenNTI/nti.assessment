@@ -792,14 +792,6 @@ class IQAssignmentPart(ITitledContent):
 	auto_grade = Bool(title="Should this part be run through the grading machinery?",
 					  default=False)
 
-	total_points = Float(title="The number of points to allocate for this part.",
-						  description="""Number of points to allocate for IQParts in this assignment part.
-						  If this part is not auto-graded, this value is for display purposes.
-						  """,
-						  min=0.0,
-						  default=0.0,
-						  required=False)
-
 IQAssignmentPart.setTaggedValue('_ext_jsonschema', u'assignmentpart')
 
 class IQSubmittable(IRecordable, ICalendarPublishable):
