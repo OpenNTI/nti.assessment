@@ -157,10 +157,13 @@ class QPart(QNonGradablePart):
 	#: unnamed, adapter
 	grader_name = _u('')
 
+	#: Part weight when grading
+	weight = 1.0
+
 	solutions = ()
 
 	def _get_randomzied(self):
-		return bool(	self.randomized_interface is not None
+		return bool(self.randomized_interface is not None
 					and self.randomized_interface.providedBy(self))
 	def _set_randomized(self, nv):
 		if self.randomized_interface is not None:
@@ -207,7 +210,7 @@ class QPart(QNonGradablePart):
 
 	def schema(self):
 		interfaces = tuple(self.__implemented__.interfaces())
-		result = make_schema( interfaces[0] )
+		result = make_schema(interfaces[0])
 		return result
 
 # Math
