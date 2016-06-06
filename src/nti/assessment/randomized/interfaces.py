@@ -154,9 +154,14 @@ class IQuestionBank(IQuestionSet):
 	ranges = ListOrTuple(Object(IQuestionIndexRange), title="Question index ranges",
 						 required=False, default=())
 
-	srand = Bool(title="always use a different random seed.", required=False,
-				 default=False)
-
+	def copy(questions=None, ranges=None):
+		"""
+		Copy this question bank
+		
+		:param questions: Questions to add to this bank
+		:param ranges: Question bank ranges
+		"""
+		
 IQuestionBank['draw'].setTaggedValue(TAG_HIDDEN_IN_UI, False)
 IQuestionBank['draw'].setTaggedValue(TAG_REQUIRED_IN_UI, False)
 IQuestionBank['ranges'].setTaggedValue(TAG_HIDDEN_IN_UI, False)

@@ -41,10 +41,21 @@ class QRandomizedQuestionSet(QQuestionSet):
 class QQuestionBank(QQuestionSet):
 	createDirectFieldProperties(IQuestionBank)
 
-	srand = False
+	srand = False # XXX LEGACY field don't remove
 
 	__external_class_name__ = "QuestionSet"
 	mimeType = mime_type = QUESTION_BANK_MIME_TYPE
+
+	def _copy(self, result, questions=None, ranges=None):
+		result.draw = self.draw
+		result.title = self.title
+		result.ranges = ranges or list(self.ranges or ())
+		result.questions = questions or list(self.questions or ())
+		return result
+
+	def copy(self, questions=None, ranges=None):
+		result = self._copy(self.__class__(), questions, ranges)
+		return result
 
 	def validate(self):
 		if not self.ranges:

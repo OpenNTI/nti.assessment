@@ -39,7 +39,7 @@ def shuffle_list(generator, target):
 	return target
 
 def questionbank_random(context, user=None):
-	generator = random.Random() if context.srand else randomize(user=user, context=context)
+	generator = randomize(user=user, context=context)
 	return generator
 
 def questionbank_question_index_chooser(context, questions=None, user=None):

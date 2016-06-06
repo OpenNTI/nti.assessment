@@ -95,10 +95,6 @@ class TestRandomized(AssessmentTestCase):
 		questions2 = questionbank_question_chooser(internal, user=user2)
 		assert_that(questions, is_not(equal_to(questions2)))
 
-		internal.srand = True
-		questions3 = questionbank_question_chooser(internal)
-		assert_that(questions, is_not(equal_to(questions3)))
-
 	@fudge.patch('nti.assessment.randomized.get_seed')
 	def test_question_bank_2(self, mock_gs):
 
