@@ -12,6 +12,7 @@ from hamcrest import has_key
 from hamcrest import not_none
 from hamcrest import has_entry
 from hamcrest import has_length
+from hamcrest import has_entries
 from hamcrest import assert_that
 
 import unittest
@@ -95,13 +96,17 @@ class TestJsonSchema(unittest.TestCase):
 		schema = a.schema()
 		assert_that(schema, has_key(FIELDS))
 		fields = schema[FIELDS]
-		assert_that(fields, has_length(11))
+		assert_that(fields, has_length(12))
 		assert_that(fields, has_entry('parts', has_entry('base_type',
 														 'application/vnd.nextthought.assessment.assignmentpart')))
 		assert_that(fields, has_entry('title', has_entry('min_length', is_(0))))
 		assert_that(fields, has_entry('is_non_public', has_entry('type', 'bool')))
 		assert_that(fields, has_entry('available_for_submission_beginning',
 									  has_entry( 'type', 'datetime' )))
+		assert_that(fields, has_entry('version',
+									  has_entries( 'type', 'string',
+												   'readonly', True,
+												   'required', False )))
 
 		assert_that(schema, has_key(ACCEPTS))
 		accepts = schema[ACCEPTS]

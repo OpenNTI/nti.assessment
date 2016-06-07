@@ -81,6 +81,7 @@ from nti.schema.field import ValidDatetime as Datetime
 
 from nti.schema.jsonschema import TAG_HIDDEN_IN_UI
 from nti.schema.jsonschema import TAG_REQUIRED_IN_UI
+from nti.schema.jsonschema import TAG_READONLY_IN_UI
 
 NTIID_TYPE = 'NAQ'
 POLL_MIME_TYPE = u'application/vnd.nextthought.napoll'
@@ -816,6 +817,17 @@ class IQSubmittable(IRecordable, ICalendarPublishable):
 
 	no_submit = Bool(title="Whether this object accept submissions",
 					 default=False)
+
+	version = TextLine(
+			title="The structural version of this submittable.",
+			description="""An artificial string signifying the 'structural version'
+				of the submittable. Typically used to determine if submissions
+				align with the currently submittable state.""",
+			required=False)
+
+IQSubmittable['version'].setTaggedValue(TAG_HIDDEN_IN_UI, True)
+IQSubmittable['version'].setTaggedValue(TAG_REQUIRED_IN_UI, False)
+IQSubmittable['version'].setTaggedValue(TAG_READONLY_IN_UI, True)
 
 class IQAssignment(IQAssessment, IQSubmittable, ITitledContent, IAttributeAnnotatable):
 	"""
