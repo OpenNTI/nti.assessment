@@ -55,6 +55,8 @@ from nti.dataserver_core.interfaces import SYSTEM_USER_ID
 
 from nti.dublincore.datastructures import PersistentCreatedModDateTrackingObject
 
+from nti.dublincore.time_mixins import CreatedAndModifiedTimeMixin
+
 from nti.externalization.externalization import toExternalObject
 
 from nti.externalization.representation import WithRepr
@@ -167,6 +169,7 @@ def get_containerId(item):
 class QSubmittable(SchemaConfigured,
 				   RecordableMixin,
 				   CalendarPublishableMixin,
+				   CreatedAndModifiedTimeMixin,
 				   Contained):
 
 	ntiid = None
@@ -180,6 +183,11 @@ class QSubmittable(SchemaConfigured,
 
 	def __init__(self, *args, **kwargs):
 		SchemaConfigured.__init__(self, *args, **kwargs)
+	
+	@readproperty
+	def version(self):
+		value = datetime.fromtimestamp(self.lastModified or 0)
+		return unicode(isodate.datetime_isoformat(value))
 
 class QPersistentSubmittable(QSubmittable, PersistentCreatedModDateTrackingObject):
 
@@ -190,11 +198,6 @@ class QPersistentSubmittable(QSubmittable, PersistentCreatedModDateTrackingObjec
 		# schema configured is not cooperative
 		QSubmittable.__init__(self, *args, **kwargs)
 		PersistentCreatedModDateTrackingObject.__init__(self)
-
-	@readproperty
-	def version(self):
-		value = datetime.fromtimestamp(self.lastModified or 0)
-		return unicode(isodate.datetime_isoformat(value))
 	
 @WithRepr
 @EqHash('submittedResponse', superhash=True)
