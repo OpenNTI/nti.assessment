@@ -407,6 +407,7 @@ class QFilePart(QPart, QNonGradableFilePart):  # order matters
 
 	mimeType = mime_type = 'application/vnd.nextthought.assessment.filepart'
 	response_interface = IQFileResponse
+	grader_interface = None
 
 	def grade(self, response):
 		response = self.response_interface(response)
@@ -441,6 +442,7 @@ class QNonGradableModeledContentPart(QNonGradablePart):
 class QModeledContentPart(QPart, QNonGradableModeledContentPart):  # order matters
 
 	mimeType = mime_type = 'application/vnd.nextthought.assessment.modeledcontentpart'
+	grader_interface = None
 
 # Fill in the Blank
 
