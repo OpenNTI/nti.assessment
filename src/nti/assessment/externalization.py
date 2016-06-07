@@ -25,13 +25,13 @@ from nti.assessment.interfaces import IQAssessedQuestion
 from nti.assessment.interfaces import IQuestionSubmission
 from nti.assessment.interfaces import IQAssessedQuestionSet
 from nti.assessment.interfaces import IQuestionSetSubmission
+from nti.assessment.interfaces import IQPartSolutionsExternalizer
 
 from nti.assessment.interfaces import IQPollSubmission
 from nti.assessment.interfaces import IQSurveySubmission
 
 from nti.assessment.interfaces import IQPart
 from nti.assessment.interfaces import IRegEx
-from nti.assessment.interfaces import IQPartSolutionsExternalizer
 from nti.assessment.interfaces import IQFillInTheBlankShortAnswerPart
 from nti.assessment.interfaces import IQFillInTheBlankWithWordBankPart
 from nti.assessment.interfaces import IQFillInTheBlankShortAnswerSolution
@@ -179,7 +179,7 @@ class _QContainedObjectExternalizer(object):
 	def toExternalObject(self, **kwargs):
 		if hasattr(self.item, 'sublocations'):
 			# sets the full parent lineage for these objects.
-			# we wrapp the execution of it in a tuple in case it
+			# we wrap the execution of it in a tuple in case it
 			# returns a generator
 			tuple(self.item.sublocations())
 		return InterfaceObjectIO(self.item, self.interface).toExternalObject(**kwargs)
