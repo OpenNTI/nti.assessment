@@ -874,7 +874,7 @@ class IQAssignment(IQAssessment, IQSubmittable, ITitledContent, IAttributeAnnota
 						default='default',
 						required=True)
 
-	parts = ListOrTuple(title="The ordered parts of the assignment.",
+	parts = IndexedIterable(title="The ordered parts of the assignment.",
 						description="""Unlike questions, assignments with zero parts are allowed.
 						Because they accept no input, such an assignment is very
 						special and serves as a marker to higher levels of code.
