@@ -288,7 +288,14 @@ class TestExternalization(AssessmentTestCase):
 													has_entry('Class', is_('QuestionSet')),
 													has_entry('MimeType', is_('application/vnd.nextthought.naquestionbank')),
 													has_entry('ranges', has_length(2)))))
-
+		
+		ext_obj = to_external_object(internal)
+		assert_that(ext_obj, has_entry('questions', has_length(20)))
+		rand_question = ext_obj['questions'][1]
+		assert_that(rand_question, has_entry('parts', has_length(1)))
+		assert_that(rand_question['parts'][0], has_entry('randomized', is_(True)))
+		assert_that(rand_question['parts'][0], has_entry('MimeType', is_('application/vnd.nextthought.assessment.multiplechoicepart')))
+		
 	def test_assignment(self):
 		path = os.path.join(os.path.dirname(__file__), "assignment_no_solutions.json")
 		with open(path, "r") as fp:
