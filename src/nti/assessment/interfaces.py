@@ -795,7 +795,24 @@ class IQAssignmentPart(ITitledContent):
 
 IQAssignmentPart.setTaggedValue('_ext_jsonschema', u'assignmentpart')
 
-class IQSubmittable(IRecordable, ICalendarPublishable):
+class IVersioned(interface.Interface):
+	"""
+	An interface containing version information. Useful when comparing
+	submission versions to submittable versions.
+	"""
+
+	version = TextLine(
+			title="The structural version of this object.",
+			description="""An artificial string signifying the 'structural version'
+				of this object. Typically used to determine if submissions
+				align with the currently submittable state.""",
+			required=False)
+
+IVersioned['version'].setTaggedValue(TAG_HIDDEN_IN_UI, True)
+IVersioned['version'].setTaggedValue(TAG_REQUIRED_IN_UI, False)
+IVersioned['version'].setTaggedValue(TAG_READONLY_IN_UI, True)
+
+class IQSubmittable(IRecordable, ICalendarPublishable, IVersioned):
 
 	available_for_submission_beginning = Datetime(
 		title="Submissions are accepted no earlier than this.",
@@ -817,17 +834,6 @@ class IQSubmittable(IRecordable, ICalendarPublishable):
 
 	no_submit = Bool(title="Whether this object accept submissions",
 					 default=False)
-
-	version = TextLine(
-			title="The structural version of this submittable.",
-			description="""An artificial string signifying the 'structural version'
-				of the submittable. Typically used to determine if submissions
-				align with the currently submittable state.""",
-			required=False)
-
-IQSubmittable['version'].setTaggedValue(TAG_HIDDEN_IN_UI, True)
-IQSubmittable['version'].setTaggedValue(TAG_REQUIRED_IN_UI, False)
-IQSubmittable['version'].setTaggedValue(TAG_READONLY_IN_UI, True)
 
 class IQAssignment(IQAssessment, IQSubmittable, ITitledContent, IAttributeAnnotatable):
 	"""
@@ -1086,7 +1092,7 @@ def convert_response_for_solution(solution, response):
 # the submission, and finally the assessed value. The three
 # parts have similar structure.
 
-class IQBaseSubmission(IContained):
+class IQBaseSubmission(IContained, IVersioned):
 	"""
 	The root of the tree for submission objects.
 	"""

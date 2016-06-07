@@ -59,16 +59,20 @@ class TestQuestionSubmission(AssessmentTestCase):
 		# No coersion of parts happens yet at this level
 		submiss = submission.QuestionSubmission()
 		with assert_raises(RequiredMissing):
-			update_from_external_object(submiss, {"parts": ["The text response"]}, 
+			update_from_external_object(submiss, {"parts": ["The text response"]},
 										require_updater=True )
 
-		update_from_external_object(submiss, {'questionId': 'foo', "parts": ["The text response"]}, 
+		update_from_external_object(submiss,
+									{'questionId': 'foo',
+									 "parts": ["The text response"],
+									 "version": 'version1999'},
 									require_updater=True )
 		assert_that( submiss, has_property( "parts", contains( "The text response" ) ) )
-		
+		assert_that( submiss, has_property( "version", is_('version1999') ))
+
 	def test_sequence(self):
 		submiss = submission.QuestionSubmission()
-		update_from_external_object(submiss, {'questionId': 'foo', "parts": ["The text response"]}, 
+		update_from_external_object(submiss, {'questionId': 'foo', "parts": ["The text response"]},
 									require_updater=True )
 		# length
 		assert_that(submiss, has_length(1))
@@ -106,28 +110,28 @@ class TestQuestionSetSubmission(AssessmentTestCase):
 		assert_that( wct.exception.args[0][0], is_(WrongContainedType ) )
 
 		update_from_external_object( qss, {'questionSetId': 'foo',
-										   "questions": [submission.QuestionSubmission(questionId='foo', parts=[])]}, 
+										   "questions": [submission.QuestionSubmission(questionId='foo', parts=[])]},
 									require_updater=True )
 
 		assert_that( qss, has_property( 'questions', contains( is_( submission.QuestionSubmission ) ) ) )
-		
+
 	def test_mapping(self):
 		qss = submission.QuestionSetSubmission()
 		update_from_external_object(qss, {'questionSetId': 'foo-set',
-										  "questions": [submission.QuestionSubmission(questionId='foo-q', parts=[])]}, 
+										  "questions": [submission.QuestionSubmission(questionId='foo-q', parts=[])]},
 									require_updater=True )
 
 		assert_that(qss, has_length(1))
 		assert_that(qss['foo-q'], is_(not_none()))
-		
+
 		qss['foo-q2'] = submission.QuestionSubmission(questionId='foo-q2', parts=[])
 		assert_that(qss, has_length(2))
 		assert_that(qss['foo-q2'], is_(not_none()))
-		
+
 		del qss['foo-q']
 		assert_that(qss, has_length(1))
 		assert_that(qss.index('foo-q'), is_(-1))
-	
+
 class TestAssignmentSubmission(AssessmentTestCase):
 
 	def test_externalizes(self):
@@ -175,21 +179,21 @@ class TestAssignmentSubmission(AssessmentTestCase):
 		assert_that( asub, validly_provides( interfaces.IQAssignmentSubmission ))
 
 		assert_that( asub, has_property('CreatorRecordedEffortDuration', 12))
-		
+
 	def test_mapping(self):
 		asub = submission.AssignmentSubmission()
 		update_from_external_object( asub,
 									 {'parts': [submission.QuestionSetSubmission(questionSetId='foo-qs', questions=())],
 									  'assignmentId': 'baz'},
 									 require_updater=True )
-		
+
 		assert_that(asub, has_length(1))
 		assert_that(asub['foo-qs'], is_(not_none()))
-		
+
 		asub['foo-qs2'] = submission.QuestionSetSubmission(questionSetId='foo-qs2', questions=())
 		assert_that(asub, has_length(2))
 		assert_that(asub['foo-qs2'], is_(not_none()))
-		
+
 		del asub['foo-qs']
 		assert_that(asub, has_length(1))
 		assert_that(asub.index('foo-qs'), is_(-1))
