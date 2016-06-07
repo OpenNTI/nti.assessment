@@ -89,7 +89,7 @@ class QBaseMixin(SchemaConfigured,
 	@readproperty
 	def version(self):
 		value = datetime.fromtimestamp(self.lastModified or 0)
-		return isodate.datetime_isoformat(value)
+		return unicode(isodate.datetime_isoformat(value))
 
 @interface.implementer(IQuestion)
 @EqHash('content', 'parts', superhash=True)
