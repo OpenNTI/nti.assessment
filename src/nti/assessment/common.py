@@ -10,7 +10,10 @@ __docformat__ = "restructuredtext en"
 logger = __import__('logging').getLogger(__name__)
 
 import hashlib
+from datetime import datetime
 from collections import Mapping
+
+import isodate
 
 import simplejson as json
 
@@ -41,6 +44,7 @@ from nti.assessment.interfaces import IQLatexSymbolicMathSolution
 from nti.assessment.interfaces import IQEvaluationContainerIdGetter
 
 from nti.common.property import alias
+from nti.common.property import readproperty
 
 from nti.coremetadata.mixins import RecordableMixin
 from nti.coremetadata.mixins import CalendarPublishableMixin
@@ -187,6 +191,11 @@ class QPersistentSubmittable(QSubmittable, PersistentCreatedModDateTrackingObjec
 		QSubmittable.__init__(self, *args, **kwargs)
 		PersistentCreatedModDateTrackingObject.__init__(self)
 
+	@readproperty
+	def version(self):
+		value = datetime.fromtimestamp(self.lastModified or 0)
+		return unicode(isodate.datetime_isoformat(value))
+	
 @WithRepr
 @EqHash('submittedResponse', superhash=True)
 @interface.implementer(IQSubmittedPart, ISublocations)

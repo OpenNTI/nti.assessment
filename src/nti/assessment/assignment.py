@@ -11,10 +11,6 @@ __docformat__ = "restructuredtext en"
 
 logger = __import__('logging').getLogger(__name__)
 
-from datetime import datetime
-
-import isodate
-
 from zope import interface
 
 from zope.annotation.interfaces import IAttributeAnnotatable
@@ -98,11 +94,6 @@ class QAssignment(QPersistentSubmittable, AssessmentSchemaMixin):
 	@readproperty
 	def no_submit(self):
 		return self.category_name == 'no_submit'
-
-	@readproperty
-	def version(self):
-		value = datetime.fromtimestamp(self.lastModified or 0)
-		return unicode(isodate.datetime_isoformat(value))
 
 	def iter_question_sets(self):
 		for part in self.parts:
