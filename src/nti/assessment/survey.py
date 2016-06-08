@@ -17,6 +17,8 @@ from zope.interface.common.sequence import IFiniteSequence
 
 from zope.location.interfaces import ISublocations
 
+from ZODB.POSException import ConnectionStateError
+
 from persistent.list import PersistentList
 from persistent.mapping import PersistentMapping
 
@@ -96,6 +98,15 @@ class QInquiry(QPersistentSubmittable, EvaluationSchemaMixin):
 	@readproperty
 	def __home__(self):
 		return self.__parent__
+	
+	def __str__(self, *args, **kwargs):
+		try:
+			result = "%s(ntiid=%s)" % (self.__class__.__name__, self.ntiid)
+			return result
+		except (ConnectionStateError, AttributeError):
+			return"<%s object at %s>" % (type(self).__name__, hex(id(self)))
+	__repr__ = __str__
+
 
 @interface.implementer(IQPoll)
 @EqHash('content', 'parts', superhash=True)

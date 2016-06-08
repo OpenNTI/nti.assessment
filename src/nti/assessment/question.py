@@ -21,6 +21,8 @@ from zope.interface.common.sequence import IFiniteSequence
 
 from zope.mimetype.interfaces import IContentTypeAware
 
+from ZODB.POSException import ConnectionStateError
+
 from persistent.list import PersistentList
 
 from nti.assessment.common import get_containerId
@@ -84,6 +86,14 @@ class QBaseMixin(SchemaConfigured,
 	@readproperty
 	def containerId(self):
 		return get_containerId(self)
+
+	def __str__(self, *args, **kwargs):
+		try:
+			result = "%s(ntiid=%s)" % (self.__class__.__name__, self.ntiid)
+			return result
+		except (ConnectionStateError, AttributeError):
+			return"<%s object at %s>" % (type(self).__name__, hex(id(self)))
+	__repr__ = __str__
 
 @interface.implementer(IQuestion)
 @EqHash('content', 'parts', superhash=True)
