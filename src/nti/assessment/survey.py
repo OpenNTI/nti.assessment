@@ -9,6 +9,10 @@ __docformat__ = "restructuredtext en"
 
 logger = __import__('logging').getLogger(__name__)
 
+from datetime import datetime
+
+import isodate
+
 from zope import component
 from zope import interface
 
@@ -24,6 +28,8 @@ from nti.assessment._util import make_sublocations as _make_sublocations
 
 from nti.assessment.common import get_containerId
 from nti.assessment.common import normalize_response
+
+from nti.assessment.common import VersionedMixin
 from nti.assessment.common import EvaluationSchemaMixin
 from nti.assessment.common import QPersistentSubmittable
 
@@ -156,6 +162,7 @@ class QSurvey(QInquiry):
 @interface.implementer(IQPollSubmission, ISublocations, IFiniteSequence)
 class QPollSubmission(ContainedMixin,
 					  SchemaConfigured,
+					  VersionedMixin,
 					  PersistentCreatedModDateTrackingObject):
 	createDirectFieldProperties(IQPollSubmission)
 
@@ -166,6 +173,11 @@ class QPollSubmission(ContainedMixin,
 		# schema configured is not cooperative
 		ContainedMixin.__init__(self, *args, **kwargs)
 		PersistentCreatedModDateTrackingObject.__init__(self)
+
+	@readproperty
+	def version(self):
+		value = datetime.fromtimestamp(self.lastModified or 0)
+		return unicode(isodate.datetime_isoformat(value))
 
 	def __iter__(self):
 		return iter(self.parts)
@@ -238,6 +250,7 @@ class QBasePollSet(object):
 @interface.implementer(IQSurveySubmission, ISublocations)
 class QSurveySubmission(ContainedMixin,
 						SchemaConfigured,
+						VersionedMixin,
 						PersistentCreatedModDateTrackingObject,
 						QBasePollSet):
 	createDirectFieldProperties(IQBaseSubmission)
@@ -253,6 +266,11 @@ class QSurveySubmission(ContainedMixin,
 		ContainedMixin.__init__(self, *args, **kwargs)
 		PersistentCreatedModDateTrackingObject.__init__(self)
 
+	@readproperty
+	def version(self):
+		value = datetime.fromtimestamp(self.lastModified or 0)
+		return unicode(isodate.datetime_isoformat(value))
+	
 # Aggregation
 
 @WithRepr

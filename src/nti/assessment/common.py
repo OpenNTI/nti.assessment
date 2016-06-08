@@ -33,6 +33,7 @@ from persistent import Persistent
 from nti.assessment import ASSESSMENT_INTERFACES
 
 from nti.assessment.interfaces import IQPart
+from nti.assessment.interfaces import IVersioned
 from nti.assessment.interfaces import IQAssessment
 from nti.assessment.interfaces import IQAssignment
 from nti.assessment.interfaces import IQSubmittable
@@ -164,9 +165,20 @@ def get_containerId(item):
 
 # classes
 
+@interface.implementer(IVersioned)
+class VersionedMixin(object):
+	
+	def __init__(self, *args, **kwargs):
+		super(VersionedMixin, self).__init__(*args, **kwargs)
+
+	@readproperty
+	def version(self):
+		return None
+
 @WithRepr
 @interface.implementer(IQSubmittable, IContentTypeAware, IAttributeAnnotatable)
 class QSubmittable(SchemaConfigured,
+				   VersionedMixin,
 				   RecordableMixin,
 				   CalendarPublishableMixin,
 				   CreatedAndModifiedTimeMixin,

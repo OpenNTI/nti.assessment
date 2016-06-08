@@ -24,7 +24,8 @@ from zope.location.interfaces import ISublocations
 
 from nti.assessment._util import make_sublocations as _make_sublocations
 
-from nti.assessment.interfaces import IVersioned
+from nti.assessment.common import VersionedMixin
+
 from nti.assessment.interfaces import IQBaseSubmission
 from nti.assessment.interfaces import IQuestionSubmission
 from nti.assessment.interfaces import IQuestionSetSubmission
@@ -61,19 +62,9 @@ from nti.schema.fieldproperty import createDirectFieldProperties
 # transformed; the transformed object may or may not
 # be directly added.
 
-@interface.implementer(IVersioned)
-class VersionedMixin(Contained):
-	
-	def __init__(self, *args, **kwargs):
-		super(VersionedMixin, self).__init__(*args, **kwargs)
-
-	@readproperty
-	def version(self):
-		return None
-
 @WithRepr
 @interface.implementer(IQuestionSubmission, ISublocations, IFiniteSequence)
-class QuestionSubmission(SchemaConfigured, VersionedMixin):
+class QuestionSubmission(SchemaConfigured, VersionedMixin, Contained):
 	createDirectFieldProperties(IQBaseSubmission)
 	createDirectFieldProperties(IQuestionSubmission)
 
@@ -93,7 +84,7 @@ class QuestionSubmission(SchemaConfigured, VersionedMixin):
 	
 @WithRepr
 @interface.implementer(IQuestionSetSubmission, ISublocations, IWriteMapping)
-class QuestionSetSubmission(SchemaConfigured, VersionedMixin):
+class QuestionSetSubmission(SchemaConfigured, VersionedMixin, Contained):
 	createDirectFieldProperties(IQBaseSubmission)
 	createDirectFieldProperties(IQuestionSetSubmission)
 
