@@ -33,12 +33,13 @@ from persistent import Persistent
 from nti.assessment import ASSESSMENT_INTERFACES
 
 from nti.assessment.interfaces import IQPart
-from nti.assessment.interfaces import IVersioned
 from nti.assessment.interfaces import IQAssessment
 from nti.assessment.interfaces import IQAssignment
+from nti.assessment.interfaces import IQEvaluation
 from nti.assessment.interfaces import IQSubmittable
 from nti.assessment.interfaces import IQSubmittedPart
 from nti.assessment.interfaces import IQNonGradablePart
+from nti.assessment.interfaces import IQEditableEvaluation
 from nti.assessment.interfaces import IQPartResponseNormalizer
 from nti.assessment.interfaces import IQAssessmentJsonSchemaMaker
 from nti.assessment.interfaces import IQLatexSymbolicMathSolution
@@ -46,6 +47,8 @@ from nti.assessment.interfaces import IQEvaluationContainerIdGetter
 
 from nti.common.property import alias
 from nti.common.property import readproperty
+
+from nti.coremetadata.interfaces import ILastModified
 
 from nti.coremetadata.mixins import RecordableMixin
 from nti.coremetadata.mixins import CalendarPublishableMixin
@@ -165,15 +168,26 @@ def get_containerId(item):
 
 # classes
 
-@interface.implementer(IVersioned)
 class VersionedMixin(object):
 	
+	Version = alias('version')
+		
 	def __init__(self, *args, **kwargs):
 		super(VersionedMixin, self).__init__(*args, **kwargs)
 
+	def _lastModVersion(self):
+		value = datetime.fromtimestamp(self.lastModified or 0)
+		return unicode(isodate.datetime_isoformat(value))
+
 	@readproperty
 	def version(self):
-		return None
+		result = None
+		if IQEvaluation.providedBy(self):
+			if IQEditableEvaluation.providedBy(self): 
+				result = self._lastModVersion()
+		elif ILastModified.providedBy(self):
+			result = self._lastModVersion()
+		return result
 
 @WithRepr
 @interface.implementer(IQSubmittable, IContentTypeAware, IAttributeAnnotatable)
@@ -192,17 +206,10 @@ class QSubmittable(SchemaConfigured,
 	not_after = alias('available_for_submission_ending')
 	not_before = alias('available_for_submission_beginning')
 
-	Version = alias('version')
-
 	parameters = {} # IContentTypeAware
 
 	def __init__(self, *args, **kwargs):
 		SchemaConfigured.__init__(self, *args, **kwargs)
-	
-	@readproperty
-	def version(self):
-		value = datetime.fromtimestamp(self.lastModified or 0)
-		return unicode(isodate.datetime_isoformat(value))
 
 class QPersistentSubmittable(QSubmittable, PersistentCreatedModDateTrackingObject):
 

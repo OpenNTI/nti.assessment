@@ -9,10 +9,6 @@ __docformat__ = "restructuredtext en"
 
 logger = __import__('logging').getLogger(__name__)
 
-from datetime import datetime
-
-import isodate
-
 from zope import interface 
 
 from zope.container.contained import Contained
@@ -30,8 +26,6 @@ from nti.assessment.interfaces import IQBaseSubmission
 from nti.assessment.interfaces import IQuestionSubmission
 from nti.assessment.interfaces import IQuestionSetSubmission
 from nti.assessment.interfaces import IQAssignmentSubmission
-
-from nti.common.property import readproperty
 
 from nti.dataserver_core.mixins import ContainedMixin
 
@@ -166,11 +160,6 @@ class AssignmentSubmission(ContainedMixin,
 			return self[key]
 		except KeyError:
 			return default
-
-	@readproperty
-	def version(self):
-		value = datetime.fromtimestamp(self.lastModified or 0)
-		return unicode(isodate.datetime_isoformat(value))
 
 	def __getitem__(self, key):
 		idx = self.index(key)

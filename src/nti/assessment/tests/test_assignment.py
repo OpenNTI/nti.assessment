@@ -9,7 +9,6 @@ __docformat__ = "restructuredtext en"
 
 from hamcrest import is_
 from hamcrest import is_not
-from hamcrest import not_none
 from hamcrest import has_entry
 from hamcrest import has_entries
 from hamcrest import assert_that
@@ -52,8 +51,7 @@ class TestAssignment(AssessmentTestCase):
 																		  'category_name', 'default',
 																		  'CategoryName', 'default',
 																		  'no_submit', False,
-																		  'NoSubmit', False,
-																		  'version', not_none()) ) )
+																		  'NoSubmit', False) ) )
 
 		assert_that( assignment.QAssignment(parts=[part]),
 					 validly_provides(interfaces.IQAssignment) )
@@ -67,7 +65,7 @@ class TestAssignment(AssessmentTestCase):
 		a = assignment.QAssignment()
 		a.lastModified = a.createdTime = 0
 		assert_that(signature(a),
-					is_('a2d3381fabbf4bbaf9761d2ee28cc2bbc23b209bd9b820b4c02bb500eefdeb97') )
+					is_('99792a045c58477ad4ad58cf3380692d0bd647089bf9a9ba831f877d1fca5914') )
 
 		path = os.path.join(os.path.dirname(__file__), "questionbank.json")
 		with open(path, "rb") as fp:

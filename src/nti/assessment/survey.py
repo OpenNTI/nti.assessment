@@ -9,10 +9,6 @@ __docformat__ = "restructuredtext en"
 
 logger = __import__('logging').getLogger(__name__)
 
-from datetime import datetime
-
-import isodate
-
 from zope import component
 from zope import interface
 
@@ -174,11 +170,6 @@ class QPollSubmission(ContainedMixin,
 		ContainedMixin.__init__(self, *args, **kwargs)
 		PersistentCreatedModDateTrackingObject.__init__(self)
 
-	@readproperty
-	def version(self):
-		value = datetime.fromtimestamp(self.lastModified or 0)
-		return unicode(isodate.datetime_isoformat(value))
-
 	def __iter__(self):
 		return iter(self.parts)
 
@@ -265,11 +256,6 @@ class QSurveySubmission(ContainedMixin,
 		# schema configured is not cooperative
 		ContainedMixin.__init__(self, *args, **kwargs)
 		PersistentCreatedModDateTrackingObject.__init__(self)
-
-	@readproperty
-	def version(self):
-		value = datetime.fromtimestamp(self.lastModified or 0)
-		return unicode(isodate.datetime_isoformat(value))
 	
 # Aggregation
 

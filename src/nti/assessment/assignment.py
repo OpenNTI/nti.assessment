@@ -11,10 +11,6 @@ __docformat__ = "restructuredtext en"
 
 logger = __import__('logging').getLogger(__name__)
 
-from datetime import datetime
-
-import isodate
-
 from zope import interface
 
 from zope.annotation.interfaces import IAttributeAnnotatable
@@ -33,6 +29,8 @@ from nti.assessment._util import make_sublocations as _make_sublocations
 
 from nti.assessment.common import make_schema
 from nti.assessment.common import get_containerId
+
+from nti.assessment.common import VersionedMixin
 from nti.assessment.common import AssessmentSchemaMixin
 from nti.assessment.common import QPersistentSubmittable
 
@@ -129,6 +127,7 @@ class QTimedAssignment(QAssignment):
 					   ISublocations)
 class QAssignmentSubmissionPendingAssessment(ContainedMixin,
 											 SchemaConfigured,
+											 VersionedMixin,
 											 PersistentCreatedModDateTrackingObject):
 	createDirectFieldProperties(IQBaseSubmission)
 	createDirectFieldProperties(IQAssignmentSubmissionPendingAssessment)
@@ -148,8 +147,3 @@ class QAssignmentSubmissionPendingAssessment(ContainedMixin,
 		# schema configured is not cooperative
 		ContainedMixin.__init__(self, *args, **kwargs)
 		PersistentCreatedModDateTrackingObject.__init__(self)
-
-	@readproperty
-	def version(self):
-		value = datetime.fromtimestamp(self.lastModified or 0)
-		return unicode(isodate.datetime_isoformat(value))

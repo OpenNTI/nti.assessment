@@ -11,10 +11,6 @@ __docformat__ = "restructuredtext en"
 
 logger = __import__('logging').getLogger(__name__)
 
-from datetime import datetime
-
-import isodate
-
 from zope import interface
 
 from zope.annotation.interfaces import IAttributeAnnotatable
@@ -28,6 +24,8 @@ from zope.mimetype.interfaces import IContentTypeAware
 from persistent.list import PersistentList
 
 from nti.assessment.common import get_containerId
+
+from nti.assessment.common import VersionedMixin
 from nti.assessment.common import EvaluationSchemaMixin
 
 from nti.assessment.interfaces import QUESTION_MIME_TYPE
@@ -66,13 +64,12 @@ class QBaseMixin(SchemaConfigured,
 				 PersistentCreatedModDateTrackingObject,
 				 RecordableMixin,
 				 PublishableMixin,
+				 VersionedMixin,
 				 EvaluationSchemaMixin,
 				 Contained):
 
 	ntiid = None
 	id = alias('ntiid')
-
-	Version = alias('version')
 
 	parameters = {}  # IContentTypeAware
 
@@ -87,11 +84,6 @@ class QBaseMixin(SchemaConfigured,
 	@readproperty
 	def containerId(self):
 		return get_containerId(self)
-
-	@readproperty
-	def version(self):
-		value = datetime.fromtimestamp(self.lastModified or 0)
-		return unicode(isodate.datetime_isoformat(value))
 
 @interface.implementer(IQuestion)
 @EqHash('content', 'parts', superhash=True)
