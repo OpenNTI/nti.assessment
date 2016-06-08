@@ -173,7 +173,6 @@ class QSubmittable(SchemaConfigured,
 				   Contained):
 
 	ntiid = None
-	parameters = {} # IContentTypeAware
 
 	available_for_submission_ending = AdaptingFieldProperty(IQAssignment['available_for_submission_ending'])
 	available_for_submission_beginning = AdaptingFieldProperty(IQAssignment['available_for_submission_beginning'])
@@ -182,6 +181,8 @@ class QSubmittable(SchemaConfigured,
 	not_before = alias('available_for_submission_beginning')
 
 	Version = alias('version')
+
+	parameters = {} # IContentTypeAware
 
 	def __init__(self, *args, **kwargs):
 		SchemaConfigured.__init__(self, *args, **kwargs)
