@@ -18,6 +18,7 @@ from nti.assessment.common import get_containerId
 
 from nti.assessment.interfaces import IQPart
 from nti.assessment.interfaces import IQMathPart 
+from nti.assessment.interfaces import IVersioned 
 
 from nti.externalization.interfaces import IExternalObjectDecorator
 from nti.externalization.interfaces import IExternalMappingDecorator
@@ -56,6 +57,16 @@ class _MathPartDecorator(object):
 				all_allowed_units.extend([x for x in allowed_units])
 		external['allowed_units'] = all_allowed_units
 		return external
+
+@component.adapter(IVersioned)
+@interface.implementer(IExternalObjectDecorator)
+class _VersionedDecorator(object):
+
+	__metaclass__ = SingletonDecorator
+
+	def decorateExternalObject(self, context, mapping):
+		if not mapping.get('version'):
+			mapping.pop('version', None)
 
 @interface.implementer(IExternalObjectDecorator)
 class _QAssessmentObjectIContainedAdder(object):

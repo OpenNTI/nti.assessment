@@ -405,6 +405,11 @@
 		for=".interfaces.IQAssignment"
 		provides="nti.externalization.interfaces.IExternalObjectDecorator" />
 
+	<subscriber
+		factory=".decorators._VersionedDecorator"
+		for=".interfaces.IVersioned"
+		provides="nti.externalization.interfaces.IExternalObjectDecorator" />
+
 	<!--
 	File uploads, which are handled manually because
 	they deviate from the pattern.
