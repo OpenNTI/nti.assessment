@@ -72,6 +72,8 @@ class QBaseMixin(SchemaConfigured,
 	ntiid = None
 	id = alias('ntiid')
 
+	Version = alias('version')
+
 	parameters = {}  # IContentTypeAware
 
 	def __init__(self, *args, **kwargs):

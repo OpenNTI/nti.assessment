@@ -181,6 +181,8 @@ class QSubmittable(SchemaConfigured,
 	not_after = alias('available_for_submission_ending')
 	not_before = alias('available_for_submission_beginning')
 
+	Version = alias('version')
+
 	def __init__(self, *args, **kwargs):
 		SchemaConfigured.__init__(self, *args, **kwargs)
 	
