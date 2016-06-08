@@ -9,6 +9,10 @@ __docformat__ = "restructuredtext en"
 
 logger = __import__('logging').getLogger(__name__)
 
+from datetime import datetime
+
+import isodate
+
 from zope import interface 
 
 from zope.container.contained import Contained
@@ -20,10 +24,13 @@ from zope.location.interfaces import ISublocations
 
 from nti.assessment._util import make_sublocations as _make_sublocations
 
+from nti.assessment.interfaces import IVersioned
 from nti.assessment.interfaces import IQBaseSubmission
 from nti.assessment.interfaces import IQuestionSubmission
 from nti.assessment.interfaces import IQuestionSetSubmission
 from nti.assessment.interfaces import IQAssignmentSubmission
+
+from nti.common.property import readproperty
 
 from nti.dataserver_core.mixins import ContainedMixin
 
@@ -54,9 +61,19 @@ from nti.schema.fieldproperty import createDirectFieldProperties
 # transformed; the transformed object may or may not
 # be directly added.
 
-@interface.implementer(IQuestionSubmission, ISublocations, IFiniteSequence)
+@interface.implementer(IVersioned)
+class VersionedMixin(Contained):
+	
+	def __init__(self, *args, **kwargs):
+		super(VersionedMixin, self).__init__(*args, **kwargs)
+
+	@readproperty
+	def version(self):
+		return None
+
 @WithRepr
-class QuestionSubmission(SchemaConfigured, Contained):
+@interface.implementer(IQuestionSubmission, ISublocations, IFiniteSequence)
+class QuestionSubmission(SchemaConfigured, VersionedMixin):
 	createDirectFieldProperties(IQBaseSubmission)
 	createDirectFieldProperties(IQuestionSubmission)
 
@@ -74,9 +91,9 @@ class QuestionSubmission(SchemaConfigured, Contained):
 	def __len__(self):
 		return len(self.parts)
 	
-@interface.implementer(IQuestionSetSubmission, ISublocations, IWriteMapping)
 @WithRepr
-class QuestionSetSubmission(SchemaConfigured, Contained):
+@interface.implementer(IQuestionSetSubmission, ISublocations, IWriteMapping)
+class QuestionSetSubmission(SchemaConfigured, VersionedMixin):
 	createDirectFieldProperties(IQBaseSubmission)
 	createDirectFieldProperties(IQuestionSetSubmission)
 
@@ -120,10 +137,11 @@ class QuestionSetSubmission(SchemaConfigured, Contained):
 	def __len__(self):
 		return len(self.questions)
 
-@interface.implementer(IQAssignmentSubmission, ISublocations, IWriteMapping)
 @WithRepr
+@interface.implementer(IQAssignmentSubmission, ISublocations, IWriteMapping)
 class AssignmentSubmission(ContainedMixin,
 						   SchemaConfigured,
+						   VersionedMixin,
 						   PersistentCreatedModDateTrackingObject):
 	"""
 	We do expect assignment submissions to be stored in the database
@@ -157,6 +175,11 @@ class AssignmentSubmission(ContainedMixin,
 			return self[key]
 		except KeyError:
 			return default
+
+	@readproperty
+	def version(self):
+		value = datetime.fromtimestamp(self.lastModified or 0)
+		return unicode(isodate.datetime_isoformat(value))
 
 	def __getitem__(self, key):
 		idx = self.index(key)
