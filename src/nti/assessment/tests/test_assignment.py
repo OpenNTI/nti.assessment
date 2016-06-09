@@ -9,6 +9,8 @@ __docformat__ = "restructuredtext en"
 
 from hamcrest import is_
 from hamcrest import is_not
+from hamcrest import not_none
+from hamcrest import has_item
 from hamcrest import has_entry
 from hamcrest import has_entries
 from hamcrest import assert_that
@@ -44,14 +46,19 @@ class TestAssignment(AssessmentTestCase):
 					parts=[parts.QMathPart()])]) )
 		assert_that( part, validly_provides( interfaces.IQAssignmentPart ) )
 
-		assert_that( assignment.QAssignment(), verifiably_provides( interfaces.IQAssignment ) )
+		assign_obj = assignment.QAssignment()
+		assert_that( assign_obj, verifiably_provides( interfaces.IQAssignment ) )
 		# This is now valid since we default to empty parts.
-		assert_that( assignment.QAssignment(), validly_provides( interfaces.IQAssignment ) )
-		assert_that( assignment.QAssignment(), externalizes( has_entries( 'Class', 'Assignment',
-																		  'category_name', 'default',
-																		  'CategoryName', 'default',
-																		  'no_submit', False,
-																		  'NoSubmit', False) ) )
+		assert_that( assign_obj, validly_provides( interfaces.IQAssignment ) )
+		assert_that( assign_obj, externalizes( has_entries( 'Class', 'Assignment',
+															'category_name', 'default',
+															'CategoryName', 'default',
+															'no_submit', False,
+															'NoSubmit', False) ) )
+		assert_that( assign_obj, externalizes( does_not( has_item( 'version' ))))
+
+		assign_obj.update_version()
+		assert_that( assign_obj, externalizes( has_entry( 'version', not_none() )))
 
 		assert_that( assignment.QAssignment(parts=[part]),
 					 validly_provides(interfaces.IQAssignment) )

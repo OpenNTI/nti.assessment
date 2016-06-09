@@ -808,6 +808,12 @@ class IVersioned(interface.Interface):
 				align with the currently submittable state.""",
 			required=False)
 
+	def update_version( version=None ):
+		"""
+		Update the version for this object. If no arg given, the
+		default algorithm will be used.
+		"""
+
 IVersioned['version'].setTaggedValue(TAG_HIDDEN_IN_UI, True)
 IVersioned['version'].setTaggedValue(TAG_REQUIRED_IN_UI, False)
 IVersioned['version'].setTaggedValue(TAG_READONLY_IN_UI, True)

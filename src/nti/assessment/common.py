@@ -169,9 +169,11 @@ def get_containerId(item):
 # classes
 
 class VersionedMixin(object):
-	
+
 	Version = alias('version')
-		
+	# Default to None
+	version = None
+
 	def __init__(self, *args, **kwargs):
 		super(VersionedMixin, self).__init__(*args, **kwargs)
 
@@ -179,15 +181,9 @@ class VersionedMixin(object):
 		value = datetime.fromtimestamp(self.lastModified or 0)
 		return unicode(isodate.datetime_isoformat(value))
 
-	@readproperty
-	def version(self):
-		result = None
-		if IQEvaluation.providedBy(self):
-			if IQEditableEvaluation.providedBy(self): 
-				result = self._lastModVersion()
-		elif ILastModified.providedBy(self):
-			result = self._lastModVersion()
-		return result
+	def update_version(self, version=None):
+		self.version = version if version else self._lastModVersion()
+		return self.version
 
 @WithRepr
 @interface.implementer(IQSubmittable, IContentTypeAware, IAttributeAnnotatable)
@@ -220,7 +216,7 @@ class QPersistentSubmittable(QSubmittable, PersistentCreatedModDateTrackingObjec
 		# schema configured is not cooperative
 		QSubmittable.__init__(self, *args, **kwargs)
 		PersistentCreatedModDateTrackingObject.__init__(self)
-	
+
 @WithRepr
 @EqHash('submittedResponse', superhash=True)
 @interface.implementer(IQSubmittedPart, ISublocations)
