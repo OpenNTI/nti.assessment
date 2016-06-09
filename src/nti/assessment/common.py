@@ -9,11 +9,12 @@ __docformat__ = "restructuredtext en"
 
 logger = __import__('logging').getLogger(__name__)
 
+import time
 import hashlib
+import isodate
+
 from datetime import datetime
 from collections import Mapping
-
-import isodate
 
 import simplejson as json
 
@@ -35,20 +36,15 @@ from nti.assessment import ASSESSMENT_INTERFACES
 from nti.assessment.interfaces import IQPart
 from nti.assessment.interfaces import IQAssessment
 from nti.assessment.interfaces import IQAssignment
-from nti.assessment.interfaces import IQEvaluation
 from nti.assessment.interfaces import IQSubmittable
 from nti.assessment.interfaces import IQSubmittedPart
 from nti.assessment.interfaces import IQNonGradablePart
-from nti.assessment.interfaces import IQEditableEvaluation
 from nti.assessment.interfaces import IQPartResponseNormalizer
 from nti.assessment.interfaces import IQAssessmentJsonSchemaMaker
 from nti.assessment.interfaces import IQLatexSymbolicMathSolution
 from nti.assessment.interfaces import IQEvaluationContainerIdGetter
 
 from nti.common.property import alias
-from nti.common.property import readproperty
-
-from nti.coremetadata.interfaces import ILastModified
 
 from nti.coremetadata.mixins import RecordableMixin
 from nti.coremetadata.mixins import CalendarPublishableMixin
@@ -177,12 +173,12 @@ class VersionedMixin(object):
 	def __init__(self, *args, **kwargs):
 		super(VersionedMixin, self).__init__(*args, **kwargs)
 
-	def _lastModVersion(self):
-		value = datetime.fromtimestamp(self.lastModified or 0)
+	def _get_version_timestamp(self):
+		value = datetime.fromtimestamp( time.time() )
 		return unicode(isodate.datetime_isoformat(value))
 
 	def update_version(self, version=None):
-		self.version = version if version else self._lastModVersion()
+		self.version = version if version else self._get_version_timestamp()
 		return self.version
 
 @WithRepr
