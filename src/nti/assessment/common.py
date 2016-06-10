@@ -11,10 +11,10 @@ logger = __import__('logging').getLogger(__name__)
 
 import time
 import hashlib
-import isodate
-
 from datetime import datetime
 from collections import Mapping
+
+import isodate
 
 import simplejson as json
 
@@ -51,7 +51,7 @@ from nti.coremetadata.mixins import CalendarPublishableMixin
 
 from nti.coremetadata.utils import make_schema
 
-from nti.dataserver_core.interfaces import SYSTEM_USER_ID
+from nti.coremetadata.interfaces import SYSTEM_USER_ID
 
 from nti.dublincore.datastructures import PersistentCreatedModDateTrackingObject
 
