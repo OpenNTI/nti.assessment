@@ -141,8 +141,8 @@ class _FillInTheBlankWithWordBankPartSolutionsExternalizer(object):
 				value = ext.get('value', {})
 				for k in list(value.keys()):
 					v = value.get(k)
-					if 	v and not isinstance(v, six.string_types) and \
-						isinstance(v, Sequence):
+					if 		v and not isinstance(v, six.string_types) \
+						and isinstance(v, Sequence):
 						value[k] = v[0]  # pick first one always
 			result.append(ext)
 		return result
