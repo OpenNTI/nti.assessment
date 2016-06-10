@@ -127,6 +127,17 @@ class LowerQuoteNormalizedStringEqualityGrader(StringEqualityGrader):
 	"""
 	solution_converter = _lower_normalized
 	response_converter = _lower_normalized
+	
+	def _compare(self, solution_value, response_value):
+		if IRegEx.providedBy(solution_value):
+			pattern = solution_value.pattern
+			converted_response = unicode(response_value) if response_value else response_value
+			result = converted_response and _compile(pattern).match(converted_response)
+		else:
+			converted_solution = self.solution_converter(solution_value)
+			converted_response = self.response_converter(response_value	)
+			result = converted_solution == converted_response
+		return result
 
 class FloatEqualityGrader(EqualityGrader):
 	"""

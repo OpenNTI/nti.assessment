@@ -108,6 +108,11 @@ ALL_ASSIGNMENT_MIME_TYPES = (ASSIGNMENT_MIME_TYPE, TIMED_ASSIGNMENT_MIME_TYPE)
 
 ALL_EVALUATION_MIME_TYPES = ASSESSMENT_MIME_TYPES + INQUIRY_MIME_TYPES
 
+class IRegEx(interface.Interface):
+	pattern = TextLine(title="the pattern")
+	solution = _ContentFragment(title="A solution to present to the user.",
+								required=False)
+
 class IQEvaluation(IContained):
 	"""
 	marker interface for evaluation objects
@@ -509,7 +514,9 @@ class IQFreeResponseSolution(IQSolution, IQSingleValuedSolution):
 	A solution whose correct answer is simple text.
 	"""
 
-	value = Text(title="The correct text response", min_length=1)
+	value = Variant((TextLine(title="The correct text response", min_length=1),
+					 Object(IRegEx, title="The regex object")),
+					title="The correct regex")
 
 class IQFreeResponsePart(IQNonGradableFreeResponsePart, IQPart):
 	"""
@@ -1298,11 +1305,6 @@ class IQNonGradableFillInTheBlankShortAnswerPart(IQNonGradableFillInTheBlankPart
 
 class IQFillInTheBlankShortAnswerGrader(IQPartGrader):
 	pass
-
-class IRegEx(interface.Interface):
-	pattern = TextLine(title="the pattern")
-	solution = _ContentFragment(title="A solution to present to the user.",
-								required=False)
 
 class IQFillInTheBlankShortAnswerSolution(IQSolution):
 
