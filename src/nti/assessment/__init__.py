@@ -19,7 +19,6 @@ from nti.assessment.interfaces import IQuestionSet
 from nti.assessment.interfaces import IQAssignment
 from nti.assessment.interfaces import IQNonGradablePart
 from nti.assessment.interfaces import IQTimedAssignment
-from nti.assessment.interfaces import IQFillInTheBlankWithWordBankQuestion
 
 from nti.assessment.randomized.interfaces import IQuestionBank
 from nti.assessment.randomized.interfaces import IRandomizedQuestionSet
@@ -34,7 +33,6 @@ ACCEPTS = 'Accepts'
 
 EVALUATION_INTERFACES = ASSESSMENT_INTERFACES = ( # order matters
         IQPoll,
-        IQFillInTheBlankWithWordBankQuestion,
         IQuestion,
         IQSurvey,
         IQuestionBank,
