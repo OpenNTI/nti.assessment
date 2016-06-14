@@ -81,9 +81,8 @@ def grade_one_response(questionResponse, possible_answers):
 		`questionResponse` with.
 	"""
 
-	answers = [IQLatexSymbolicMathSolution(t) for t in possible_answers]
-
 	match = False
+	answers = [IQLatexSymbolicMathSolution(t) for t in possible_answers]
 	for answer in answers:
 		match = answer.grade(questionResponse)
 		if match:
@@ -166,15 +165,14 @@ def get_containerId(item):
 
 class VersionedMixin(object):
 
+	version = None  # Default to None
 	Version = alias('version')
-	# Default to None
-	version = None
 
 	def __init__(self, *args, **kwargs):
 		super(VersionedMixin, self).__init__(*args, **kwargs)
 
 	def _get_version_timestamp(self):
-		value = datetime.fromtimestamp( time.time() )
+		value = datetime.fromtimestamp(time.time())
 		return unicode(isodate.datetime_isoformat(value))
 
 	def update_version(self, version=None):
@@ -198,7 +196,7 @@ class QSubmittable(SchemaConfigured,
 	not_after = alias('available_for_submission_ending')
 	not_before = alias('available_for_submission_beginning')
 
-	parameters = {} # IContentTypeAware
+	parameters = {}  # IContentTypeAware
 
 	def __init__(self, *args, **kwargs):
 		SchemaConfigured.__init__(self, *args, **kwargs)
@@ -226,7 +224,7 @@ class QSubmittedPart(SchemaConfigured, Persistent, Contained):
 
 	def sublocations(self):
 		part = self.submittedResponse
-		if hasattr(part, '__parent__'): # take ownership
+		if hasattr(part, '__parent__'):  # take ownership
 			if part.__parent__ is None:
 				part.__parent__ = self
 			if part.__parent__ is self:
