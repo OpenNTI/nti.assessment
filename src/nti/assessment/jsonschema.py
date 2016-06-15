@@ -20,11 +20,19 @@ from nti.assessment.interfaces import IQPart
 from nti.assessment.interfaces import IQPoll
 from nti.assessment.interfaces import IQSurvey
 from nti.assessment.interfaces import IQuestion
+from nti.assessment.interfaces import IQFilePart
 from nti.assessment.interfaces import IQuestionSet
 from nti.assessment.interfaces import IQAssignment
 from nti.assessment.interfaces import IQAssessment
+from nti.assessment.interfaces import IQOrderingPart
+from nti.assessment.interfaces import IQMatchingPart
+from nti.assessment.interfaces import IQConnectingPart
 from nti.assessment.interfaces import IQAssignmentPart
+from nti.assessment.interfaces import IQFreeResponsePart
+from nti.assessment.interfaces import IQMultipleChoicePart
+from nti.assessment.interfaces import IQModeledContentPart
 from nti.assessment.interfaces import IQEvaluationJsonSchemaMaker
+from nti.assessment.interfaces import IQMultipleChoiceMultipleAnswerPart
 
 from nti.coremetadata.jsonschema import CoreJsonSchemafier
 
@@ -102,14 +110,17 @@ class QuestionSetJsonSchemaMaker(ItemContainerJsonSchemaMaker):
 class QuestionJsonSchemaMaker(ItemContainerJsonSchemaMaker):
 
 	has_items = False
-	# FIXME: parts
-	ref_interfaces = ()
+	# XXX: Only a subset so far.
+	ref_interfaces = (IQMatchingPart, IQMultipleChoicePart, IQOrderingPart,
+					  IQMultipleChoiceMultipleAnswerPart, IQFreeResponsePart,
+					  IQConnectingPart, IQFilePart, IQModeledContentPart)
 
 	def make_schema(self, schema=IQuestion, user=None):
 		result = super(QuestionJsonSchemaMaker, self).make_schema(schema, user)
 		return result
 
 class PartJsonSchemaMaker(ItemContainerJsonSchemaMaker):
+
 	has_items = False
 	# FIXME: solutions
 	ref_interfaces = ()

@@ -11,6 +11,7 @@ from hamcrest import is_
 from hamcrest import has_key
 from hamcrest import not_none
 from hamcrest import has_entry
+from hamcrest import contains
 from hamcrest import has_length
 from hamcrest import has_entries
 from hamcrest import assert_that
@@ -62,6 +63,18 @@ class TestJsonSchema(unittest.TestCase):
 		assert_that(fields, has_length(3))
 		assert_that(fields, has_entry('content', has_entry('type', 'string')))
 		assert_that(fields, has_entry('parts', has_entry('type', 'List')))
+
+		assert_that(schema, has_key(ACCEPTS))
+		accepts = schema[ACCEPTS]
+		assert_that(accepts, has_length(8))
+		assert_that(accepts, contains(u'application/vnd.nextthought.assessment.matchingpart',
+									  u'application/vnd.nextthought.assessment.filepart',
+									  u'application/vnd.nextthought.assessment.multiplechoicemultipleanswerpart',
+									  u'application/vnd.nextthought.assessment.orderingpart',
+									  u'application/vnd.nextthought.assessment.multiplechoicepart',
+									  u'application/vnd.nextthought.assessment.modeledcontentpart',
+									  u'application/vnd.nextthought.assessment.connectingpart',
+									  u'application/vnd.nextthought.assessment.freeresponsepart'))
 
 	def test_qpart(self):
 		a = QMatchingPart()
