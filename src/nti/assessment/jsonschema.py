@@ -63,13 +63,17 @@ class ItemContainerJsonSchemaMaker(EvaluationJsonSchemaMaker):
 
 	has_items = True
 	ref_interfaces = ()
+	full_ref_schema = False
 
 	def make_schema(self, schema=IQAssessment, user=None):
 		result = super(ItemContainerJsonSchemaMaker, self).make_schema(schema, user)
 		accepts = result[ACCEPTS] = {}
 		for iface in self.ref_interfaces:
 			mimeType = iface.getTaggedValue('_ext_mime_type')
-			accepts[mimeType] = make_schema(schema=iface).get(FIELDS)
+			if self.full_ref_schema:
+				accepts[mimeType] = make_schema(schema=iface)
+			else:
+				accepts[mimeType] = make_schema(schema=iface).get(FIELDS)
 		if self.has_items:
 			fields = result[FIELDS]
 			base_types = sorted(accepts.keys())
@@ -101,6 +105,7 @@ class QuestionSetJsonSchemaMaker(ItemContainerJsonSchemaMaker):
 
 	has_items = False
 	ref_interfaces = (IQuestion,)
+	full_ref_schema = True
 
 	def make_schema(self, schema=IQuestionSet, user=None):
 		result = super(QuestionSetJsonSchemaMaker, self).make_schema(schema, user)

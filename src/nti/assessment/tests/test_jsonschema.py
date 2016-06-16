@@ -11,10 +11,10 @@ from hamcrest import is_
 from hamcrest import has_key
 from hamcrest import not_none
 from hamcrest import has_entry
-from hamcrest import contains
 from hamcrest import has_length
 from hamcrest import has_entries
 from hamcrest import assert_that
+from hamcrest import contains_inanyorder
 
 import unittest
 
@@ -67,14 +67,15 @@ class TestJsonSchema(unittest.TestCase):
 		assert_that(schema, has_key(ACCEPTS))
 		accepts = schema[ACCEPTS]
 		assert_that(accepts, has_length(8))
-		assert_that(accepts, contains(u'application/vnd.nextthought.assessment.matchingpart',
-									  u'application/vnd.nextthought.assessment.filepart',
-									  u'application/vnd.nextthought.assessment.multiplechoicemultipleanswerpart',
-									  u'application/vnd.nextthought.assessment.orderingpart',
-									  u'application/vnd.nextthought.assessment.multiplechoicepart',
-									  u'application/vnd.nextthought.assessment.modeledcontentpart',
-									  u'application/vnd.nextthought.assessment.connectingpart',
-									  u'application/vnd.nextthought.assessment.freeresponsepart'))
+		assert_that(accepts, contains_inanyorder(
+								u'application/vnd.nextthought.assessment.matchingpart',
+								u'application/vnd.nextthought.assessment.filepart',
+								u'application/vnd.nextthought.assessment.multiplechoicemultipleanswerpart',
+								u'application/vnd.nextthought.assessment.orderingpart',
+								u'application/vnd.nextthought.assessment.multiplechoicepart',
+								u'application/vnd.nextthought.assessment.modeledcontentpart',
+								u'application/vnd.nextthought.assessment.connectingpart',
+								u'application/vnd.nextthought.assessment.freeresponsepart'))
 
 	def test_qpart(self):
 		a = QMatchingPart()
@@ -102,6 +103,7 @@ class TestJsonSchema(unittest.TestCase):
 		accepts = schema[ACCEPTS]
 		assert_that(accepts, has_length(1))
 		assert_that(accepts, has_key(QUESTION_MIME_TYPE))
+		assert_that(accepts.get( QUESTION_MIME_TYPE ).get( ACCEPTS ), has_length( 8 ))
 
 	def test_assignment(self):
 		# TODO: ntiid, no_submit, publishable (exclude?)
