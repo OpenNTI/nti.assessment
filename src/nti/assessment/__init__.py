@@ -11,6 +11,12 @@ logger = __import__('logging').getLogger(__name__)
 
 from zope.interface.interfaces import IMethod
 
+#: Evaluation NTIID type
+from nti.assessment.interfaces import NTIID_TYPE as NAQ
+
+#: Part NTIID type
+from nti.assessment.interfaces import PART_NTIID_TYPE as PART_NAQ
+
 from nti.assessment.interfaces import IQPart
 from nti.assessment.interfaces import IQPoll
 from nti.assessment.interfaces import IQSurvey

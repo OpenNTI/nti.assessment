@@ -84,6 +84,7 @@ from nti.schema.jsonschema import TAG_REQUIRED_IN_UI
 from nti.schema.jsonschema import TAG_READONLY_IN_UI
 
 NTIID_TYPE = 'NAQ'
+PART_NTIID_TYPE = 'NAQPart'
 POLL_MIME_TYPE = u'application/vnd.nextthought.napoll'
 SURVEY_MIME_TYPE = u'application/vnd.nextthought.nasurvey'
 QUESTION_MIME_TYPE = u'application/vnd.nextthought.naquestion'
