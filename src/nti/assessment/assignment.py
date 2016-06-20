@@ -29,6 +29,7 @@ from nti.assessment._util import make_sublocations as _make_sublocations
 
 from nti.assessment.common import make_schema
 from nti.assessment.common import get_containerId
+from nti.assessment.common import compute_part_ntiid
 
 from nti.assessment.common import VersionedMixin
 from nti.assessment.common import AssessmentSchemaMixin
@@ -60,8 +61,7 @@ from nti.schema.fieldproperty import AdaptingFieldProperty
 from nti.schema.fieldproperty import createDirectFieldProperties
 
 @WithRepr
-@interface.implementer(IQAssignmentPart,
-					   IContentTypeAware)
+@interface.implementer(IQAssignmentPart, IContentTypeAware)
 class QAssignmentPart(SchemaConfigured,
 					  Persistent,
 					  Contained):
@@ -70,6 +70,13 @@ class QAssignmentPart(SchemaConfigured,
 	title = AdaptingFieldProperty(IQAssignmentPart['title'])
 
 	mimeType = mime_type = 'application/vnd.nextthought.assessment.assignmentpart'
+
+	@readproperty
+	def ntiid(self):
+		result = compute_part_ntiid(self)
+		if result:
+			self.ntiid = result
+		return result
 
 	def schema(self):
 		result = make_schema(schema=IQAssignmentPart)

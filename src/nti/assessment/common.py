@@ -33,12 +33,15 @@ from persistent import Persistent
 
 from nti.assessment import ASSESSMENT_INTERFACES
 
+from nti.assessment.interfaces import PART_NTIID_TYPE
+
 from nti.assessment.interfaces import IQPart
 from nti.assessment.interfaces import IQAssessment
 from nti.assessment.interfaces import IQAssignment
 from nti.assessment.interfaces import IQSubmittable
 from nti.assessment.interfaces import IQSubmittedPart
 from nti.assessment.interfaces import IQNonGradablePart
+from nti.assessment.interfaces import IQEditableEvaluation
 from nti.assessment.interfaces import IQPartResponseNormalizer
 from nti.assessment.interfaces import IQAssessmentJsonSchemaMaker
 from nti.assessment.interfaces import IQLatexSymbolicMathSolution
@@ -59,7 +62,13 @@ from nti.dublincore.time_mixins import CreatedAndModifiedTimeMixin
 
 from nti.externalization.externalization import toExternalObject
 
+from nti.externalization.oids import to_external_oid
+
 from nti.externalization.representation import WithRepr
+
+from nti.ntiids.ntiids import get_parts
+from nti.ntiids.ntiids import make_ntiid
+from nti.ntiids.ntiids import make_specific_safe
 
 from nti.schema.field import SchemaConfigured
 
@@ -160,6 +169,22 @@ def get_containerId(item):
 			if result:
 				break
 	return result
+
+def compute_part_ntiid(part):
+	parent = part.__parent__
+	parts = getattr(parent, 'parts', ())
+	base_ntiid = getattr(parent, 'ntiid', None)
+	if base_ntiid and parts:
+		uid = to_external_oid(part) if IQEditableEvaluation.providedBy(parent) else None
+		uid = make_specific_safe(uid or str(parts.index(part)))  # legacy
+		parts = get_parts(base_ntiid)
+		specific = "%s.%s" % (parts.specific, uid)
+		result = make_ntiid(parts.date, 
+							parts.provider, 
+							PART_NTIID_TYPE, 
+							specific)
+		return result
+	return None
 
 # classes
 
