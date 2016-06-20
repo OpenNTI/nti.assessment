@@ -24,6 +24,8 @@ from persistent import Persistent
 from nti.assessment.common import make_schema
 from nti.assessment.common import grader_for_solution_and_response
 
+from nti.assessment.interfaces import PART_NTIID_TYPE
+
 from nti.assessment.interfaces import IQPart
 from nti.assessment.interfaces import IQFilePart
 from nti.assessment.interfaces import IQMathPart
@@ -85,11 +87,16 @@ from nti.assessment.randomized.interfaces import IQRandomizedMultipleChoicePartG
 from nti.assessment.randomized.interfaces import IQRandomizedMultipleChoiceMultipleAnswerPart
 from nti.assessment.randomized.interfaces import IQRandomizedMultipleChoiceMultipleAnswerPartGrader
 
+from nti.common.property import readproperty
+
 from nti.contentfragments.interfaces import UnicodeContentFragment as _u
 
 from nti.externalization.representation import WithRepr
 
 from nti.namedfile.constraints import FileConstraints
+
+from nti.ntiids.ntiids import get_parts
+from nti.ntiids.ntiids import make_ntiid
 
 from nti.schema.field import SchemaConfigured
 
@@ -113,6 +120,21 @@ class QNonGradablePart(SchemaConfigured, Persistent):
 	hints = ()
 	content = _u('')
 	explanation = _u('')
+	
+	@readproperty
+	def ntiid(self):
+		result = None
+		parts = getattr(self.__parent__, 'parts', ())
+		base_ntiid = getattr(self.__parent__, 'ntiid', None)
+		if base_ntiid and parts:
+			uid = parts.index(self)
+			parts = get_parts(base_ntiid)
+			specific = "%s.%s" % (parts.specific, uid)
+			result = self.ntiid = make_ntiid(parts.date, 
+											 parts.provider, 
+											 PART_NTIID_TYPE, 
+											 specific)
+		return result
 
 @interface.implementer(IQPart)
 @EqHash('content', 'hints', 'explanation',
