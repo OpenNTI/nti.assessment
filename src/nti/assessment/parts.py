@@ -15,8 +15,6 @@ from zope import interface
 
 from zope.component.interfaces import ComponentLookupError
 
-from zope.container.contained import Contained
-
 from zope.location.interfaces import IContained
 
 from zope.schema.interfaces import ConstraintNotSatisfied
@@ -459,7 +457,7 @@ class QFillInTheBlankShortAnswerPart(QPart, QNonGradableFillInTheBlankShortAnswe
 	grader_interface = IQFillInTheBlankShortAnswerGrader
 
 @interface.implementer(IQNonGradableFillInTheBlankWithWordBankPart)
-class QNonGradableFillInTheBlankWithWordBankPart(QNonGradablePart, Contained):
+class QNonGradableFillInTheBlankWithWordBankPart(QNonGradablePart):
 
 	mimeType = mime_type = 'application/vnd.nextthought.assessment.nongradablefillintheblankwithwordbankpart'
 	response_interface = IQDictResponse
