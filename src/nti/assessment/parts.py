@@ -112,9 +112,9 @@ def compute_part_ntiid(part):
 	base_ntiid = getattr(parent, 'ntiid', None)
 	if base_ntiid and parts:
 		uid = to_external_oid(part) if IQEditableEvaluation.providedBy(parent) else None
-		uid = uid or parts.index(self)  # legacy
+		uid = make_specific_safe(uid or str(parts.index(part)))  # legacy
 		parts = get_parts(base_ntiid)
-		specific = make_specific_safe("%s.%s" % (parts.specific, uid))
+		specific = "%s.%s" % (parts.specific, uid)
 		result = make_ntiid(parts.date, 
 							parts.provider, 
 							PART_NTIID_TYPE, 
