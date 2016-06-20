@@ -11,6 +11,8 @@ logger = __import__('logging').getLogger(__name__)
 
 from zope import interface
 
+from zope.location.interfaces import IContained
+
 from persistent import Persistent
 
 from nti.assessment._util import TrivialValuedMixin as _TrivialValuedMixin
@@ -45,13 +47,16 @@ from nti.externalization.representation import WithRepr
 from nti.schema.schema import EqHash
 
 @WithRepr
-@interface.implementer(IQSolution)
+@interface.implementer(IQSolution, IContained)
 class QSolution(Persistent):
 	"""
 	Base class for solutions. Its :meth:`grade` method
 	will attempt to transform the input based on the interfaces
 	this object implements and then call the :meth:`.QPart.grade` method.
 	"""
+	__name__ = None
+	__parent__ = None
+
 	#: Defines the factory used by the :meth:`grade` method to construct
 	#: a :class:`.IQPart` object. Also, instances are only equal if this value
 	#: is equal
@@ -59,7 +64,7 @@ class QSolution(Persistent):
 
 	weight = 1.0
 
-	def grade( self, response ):
+	def grade(self, response):
 		"""
 		Convenience method for grading solutions that can be graded independent
 		of their question parts.
@@ -71,13 +76,13 @@ class QMathSolution(QSolution):
 	"""
 	Base class for the math hierarchy.
 	"""
-	allowed_units = None # No defined unit handling
+	allowed_units = None  # No defined unit handling
 
-	def __init__( self, *args, **kwargs ):
-		super(QMathSolution,self).__init__()
+	def __init__(self, *args, **kwargs):
+		super(QMathSolution, self).__init__()
 		allowed_units = args[1] if len(args) > 1 else kwargs.get('allowed_units')
 		if allowed_units is not None:
-			self.allowed_units = allowed_units # TODO: Do we need to defensively copy?
+			self.allowed_units = allowed_units  # TODO: Do we need to defensively copy?
 
 @EqHash('_part_type', 'weight', 'value',
 		superhash=True)
@@ -127,7 +132,7 @@ class QMatchingSolution(QConenctionSolution):
 @interface.implementer(IQOrderingSolution)
 class QOrderingSolution(QConenctionSolution):
 	_part_type = QOrderingPart
-	
+
 @interface.implementer(IQMultipleChoiceSolution)
 class QMultipleChoiceSolution(_EqualityValuedMixin, QSolution):
 	_part_type = QMultipleChoicePart

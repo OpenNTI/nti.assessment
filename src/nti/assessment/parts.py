@@ -35,6 +35,7 @@ from nti.assessment.interfaces import IQConnectingPart
 from nti.assessment.interfaces import IQNumericMathPart
 from nti.assessment.interfaces import IQFreeResponsePart
 from nti.assessment.interfaces import IQSymbolicMathPart
+from nti.assessment.interfaces import IQEditableEvaluation
 from nti.assessment.interfaces import IQModeledContentPart
 from nti.assessment.interfaces import IQMultipleChoicePart
 from nti.assessment.interfaces import IQFillInTheBlankShortAnswerPart
@@ -91,16 +92,35 @@ from nti.common.property import readproperty
 
 from nti.contentfragments.interfaces import UnicodeContentFragment as _u
 
+from nti.externalization.oids import to_external_oid
+
 from nti.externalization.representation import WithRepr
 
 from nti.namedfile.constraints import FileConstraints
 
 from nti.ntiids.ntiids import get_parts
 from nti.ntiids.ntiids import make_ntiid
+from nti.ntiids.ntiids import make_specific_safe
 
 from nti.schema.field import SchemaConfigured
 
 from nti.schema.schema import EqHash
+
+def compute_part_ntiid(part):
+	parent = part.__parent__
+	parts = getattr(parent, 'parts', ())
+	base_ntiid = getattr(parent, 'ntiid', None)
+	if base_ntiid and parts:
+		uid = to_external_oid(part) if IQEditableEvaluation.providedBy(parent) else None
+		uid = uid or parts.index(self)  # legacy
+		parts = get_parts(base_ntiid)
+		specific = make_specific_safe("%s.%s" % (parts.specific, uid))
+		result = make_ntiid(parts.date, 
+							parts.provider, 
+							PART_NTIID_TYPE, 
+							specific)
+		return result
+	return None
 
 @WithRepr
 @interface.implementer(IQNonGradablePart, IContained)
@@ -123,17 +143,9 @@ class QNonGradablePart(SchemaConfigured, Persistent):
 	
 	@readproperty
 	def ntiid(self):
-		result = None
-		parts = getattr(self.__parent__, 'parts', ())
-		base_ntiid = getattr(self.__parent__, 'ntiid', None)
-		if base_ntiid and parts:
-			uid = parts.index(self)
-			parts = get_parts(base_ntiid)
-			specific = "%s.%s" % (parts.specific, uid)
-			result = self.ntiid = make_ntiid(parts.date, 
-											 parts.provider, 
-											 PART_NTIID_TYPE, 
-											 specific)
+		result = compute_part_ntiid(self)
+		if result:
+			self.ntiid = result
 		return result
 
 @interface.implementer(IQPart)
@@ -232,6 +244,15 @@ class QPart(QNonGradablePart):
 		interfaces = tuple(self.__implemented__.interfaces())
 		result = make_schema(interfaces[0])
 		return result
+
+	def __setattr__(self, name, value):
+		super(QPart, self).__setattr__(name, value)
+		if name == "solutions":
+			for x in self.solutions or ():
+				try:
+					x.__parent__ = self  # take ownership
+				except AttributeError:
+					pass
 
 # Math
 
