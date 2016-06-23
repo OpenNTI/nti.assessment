@@ -78,6 +78,7 @@ from nti.wref.interfaces import IWeakRef
 @interface.implementer(IQInquiry, INTIContained)
 class QInquiry(QPersistentSubmittable, EvaluationSchemaMixin):
 
+	tags = ()
 	closed = False
 	is_non_public = False
 	disclosure = DISCLOSURE_TERMINATION

@@ -120,6 +120,8 @@ class IQEvaluation(IContained):
 	"""
 	__home__ = interface.Attribute("home location")
 	__home__.setTaggedValue('_ext_excluded_out', True)
+	
+	tags = ListOrTuple(TextLine(title="A single tag"), required=False)
 
 IQEvaluation.setTaggedValue('_ext_jsonschema', u'')
 IQEvaluation.setTaggedValue('_ext_is_marker_interface', True)

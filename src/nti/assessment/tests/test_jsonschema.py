@@ -60,9 +60,11 @@ class TestJsonSchema(unittest.TestCase):
 		schema = a.schema()
 		assert_that(schema, has_key(FIELDS))
 		fields = schema[FIELDS]
-		assert_that(fields, has_length(3))
+		assert_that(fields, has_length(4))
 		assert_that(fields, has_entry('content', has_entry('type', 'string')))
 		assert_that(fields, has_entry('parts', has_entry('type', 'List')))
+		assert_that(fields, has_entry('tags', has_entry('type', 'List')))
+		assert_that(fields, has_entry('tags', has_entry('base_type', 'string')))
 
 		assert_that(schema, has_key(ACCEPTS))
 		accepts = schema[ACCEPTS]
@@ -95,7 +97,7 @@ class TestJsonSchema(unittest.TestCase):
 		schema = a.schema()
 		assert_that(schema, has_key(FIELDS))
 		fields = schema[FIELDS]
-		assert_that(fields, has_length(3))
+		assert_that(fields, has_length(4))
 		assert_that(fields, has_entry('title', has_entry('min_length', is_(0))))
 		assert_that(fields, has_entry('questions', has_entry('type', 'List')))
 
@@ -106,12 +108,11 @@ class TestJsonSchema(unittest.TestCase):
 		assert_that(accepts.get( QUESTION_MIME_TYPE ).get( ACCEPTS ), has_length( 8 ))
 
 	def test_assignment(self):
-		# TODO: ntiid, no_submit, publishable (exclude?)
 		a = QAssignment()
 		schema = a.schema()
 		assert_that(schema, has_key(FIELDS))
 		fields = schema[FIELDS]
-		assert_that(fields, has_length(12))
+		assert_that(fields, has_length(13))
 		assert_that(fields, has_entry('parts', has_entry('base_type',
 														 'application/vnd.nextthought.assessment.assignmentpart')))
 		assert_that(fields, has_entry('title', has_entry('min_length', is_(0))))
@@ -127,4 +128,3 @@ class TestJsonSchema(unittest.TestCase):
 		accepts = schema[ACCEPTS]
 		assert_that(accepts, has_length(1))
 		assert_that(accepts, has_key('application/vnd.nextthought.assessment.assignmentpart'))
-

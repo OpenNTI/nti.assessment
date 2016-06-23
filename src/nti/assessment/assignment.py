@@ -94,6 +94,7 @@ class QAssignment(QPersistentSubmittable, AssessmentSchemaMixin):
 
 	id = alias('ntiid')
 
+	tags = ()
 	parts = ()
 
 	@readproperty

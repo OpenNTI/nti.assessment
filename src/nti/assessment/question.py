@@ -70,9 +70,10 @@ class QBaseMixin(SchemaConfigured,
 				 EvaluationSchemaMixin,
 				 Contained):
 
+	tags = ()
 	ntiid = None
 	id = alias('ntiid')
-
+	
 	parameters = {}  # IContentTypeAware
 
 	def __init__(self, *args, **kwargs):
