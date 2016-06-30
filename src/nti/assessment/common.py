@@ -172,17 +172,31 @@ def get_containerId(item):
 
 def compute_part_ntiid(part):
 	parent = part.__parent__
-	parts = getattr(parent, 'parts', ())
+	parent_parts = getattr(parent, 'parts', ())
 	base_ntiid = getattr(parent, 'ntiid', None)
-	if base_ntiid and parts:
+	if base_ntiid and parent_parts:
+		parent_part_ids = []
+		# Gather all child parts ntiids.
+		for child_part in parent_parts or ():
+			child_part_ntiid = child_part.__dict__.get( 'ntiid' )
+			parent_part_ids.append( child_part_ntiid )
+
 		uid = to_external_oid(part) if IQEditableEvaluation.providedBy(parent) else None
-		uid = make_specific_safe(uid or str(parts.index(part)))  # legacy
+		uid = make_specific_safe(uid or str(0))  # legacy
 		parts = get_parts(base_ntiid)
-		specific = "%s.%s" % (parts.specific, uid)
-		result = make_ntiid(parts.date, 
-							parts.provider, 
-							PART_NTIID_TYPE, 
-							specific)
+
+		idx = 0
+		# Iterate until we find an ntiid that does not collide.
+		while True:
+			specific = "%s.%s" % (parts.specific, uid)
+			result = make_ntiid( parts.date,
+								 parts.provider,
+								 PART_NTIID_TYPE,
+								 specific)
+			if result not in parent_part_ids:
+				break
+			idx += 1
+			uid = idx
 		return result
 	return None
 
