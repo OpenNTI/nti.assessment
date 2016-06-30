@@ -120,7 +120,7 @@ class IQEvaluation(IContained):
 	"""
 	__home__ = interface.Attribute("home location")
 	__home__.setTaggedValue('_ext_excluded_out', True)
-	
+
 	tags = ListOrTuple(TextLine(title="A single tag"), required=False)
 
 IQEvaluation.setTaggedValue('_ext_jsonschema', u'')
@@ -953,10 +953,12 @@ IQAssignment.setTaggedValue('_ext_jsonschema', u'assignment')
 
 class IQTimedAssignment(IQAssignment):
 
+	# Give students at least 60s.
 	maximum_time_allowed = Int(	title="Maximum Time Allowed (Seconds)",
 						 		description="""When present, this specifies the maximum time allowed (in
 								seconds) students have to submit the assignments""",
-								required=True)
+								required=True,
+								min=60)
 
 IQTimedAssignment['title'].setTaggedValue(TAG_HIDDEN_IN_UI, False)
 IQTimedAssignment['title'].setTaggedValue(TAG_REQUIRED_IN_UI, False)
