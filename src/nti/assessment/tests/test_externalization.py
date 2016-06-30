@@ -20,12 +20,12 @@ from hamcrest import assert_that
 from hamcrest import has_property
 does_not = is_not
 
-from nti.testing.matchers import verifiably_provides
-
 import os
 import json
 
 import fudge
+
+from copy import deepcopy
 
 from nti.assessment.interfaces import IQuestionSet
 from nti.assessment.interfaces import IQPartSolutionsExternalizer
@@ -42,6 +42,8 @@ from nti.externalization.externalization import to_external_object
 from nti.externalization.tests import externalizes
 
 from nti.assessment.tests import AssessmentTestCase
+
+from nti.testing.matchers import verifiably_provides
 
 GIF_DATAURL = b'data:image/gif;base64,R0lGODlhCwALAIAAAAAA3pn/ZiH5BAEAAAEALAAAAAALAAsAAAIUhA+hkcuO4lmNVindo7qyrIXiGBYAOw=='
 
@@ -213,6 +215,10 @@ class TestExternalization(AssessmentTestCase):
 								 ],
 				   u'Class': 'FillInTheBlankShortAnswerPart',
 				    'hints': []}
+		missing_classes_ext = deepcopy( ext_obj )
+		solution_ext = missing_classes_ext.get('solutions')[0]
+		solution_ext.pop( 'Class', None )
+		missing_classes_ext.pop( 'Class', None )
 
 		assert_that(internalization.find_factory_for(ext_obj),
 					is_(not_none()))
@@ -226,6 +232,12 @@ class TestExternalization(AssessmentTestCase):
 		assert_that(internal, has_property('weight', is_( .5 )))
 		sol = internal.solutions[0]
 		assert_that(sol, has_property('value', has_entry('001', has_property('solution', 'yes, I will'))))
+
+		# Validate we can internalize without class
+		internal = internalization.find_factory_for( missing_classes_ext )()
+		internalization.update_from_external_object(internal,
+													missing_classes_ext,
+													require_updater=True)
 
 	def test_question_set(self):
 		path = os.path.join(os.path.dirname(__file__), "questionset.json")
@@ -288,14 +300,14 @@ class TestExternalization(AssessmentTestCase):
 													has_entry('Class', is_('QuestionSet')),
 													has_entry('MimeType', is_('application/vnd.nextthought.naquestionbank')),
 													has_entry('ranges', has_length(2)))))
-		
+
 		ext_obj = to_external_object(internal)
 		assert_that(ext_obj, has_entry('questions', has_length(20)))
 		rand_question = ext_obj['questions'][1]
 		assert_that(rand_question, has_entry('parts', has_length(1)))
 		assert_that(rand_question['parts'][0], has_entry('randomized', is_(True)))
 		assert_that(rand_question['parts'][0], has_entry('MimeType', is_('application/vnd.nextthought.assessment.multiplechoicepart')))
-		
+
 	def test_assignment(self):
 		path = os.path.join(os.path.dirname(__file__), "assignment_no_solutions.json")
 		with open(path, "r") as fp:
