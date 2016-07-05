@@ -25,6 +25,8 @@ from nti.assessment.common import make_schema
 from nti.assessment.common import compute_part_ntiid
 from nti.assessment.common import grader_for_solution_and_response
 
+from nti.assessment.interfaces import DEFAULT_MAX_SIZE_BYTES
+
 from nti.assessment.interfaces import IQPart
 from nti.assessment.interfaces import IQFilePart
 from nti.assessment.interfaces import IQMathPart
@@ -412,9 +414,10 @@ class QFreeResponsePart(QPart, QNonGradableFreeResponsePart):  # order matters
 class QNonGradableFilePart(QNonGradablePart, FileConstraints):  # order matters
 
 	mimeType = mime_type = 'application/vnd.nextthought.assessment.nongradablefilepart'
-	max_file_size = None
+
 	allowed_mime_types = ()
 	allowed_extensions = ()
+	max_file_size = DEFAULT_MAX_SIZE_BYTES
 
 @interface.implementer(IQFilePart)
 @EqHash('allowed_mime_types', 'allowed_extensions', 'max_file_size',
@@ -423,11 +426,13 @@ class QNonGradableFilePart(QNonGradablePart, FileConstraints):  # order matters
 class QFilePart(QPart, QNonGradableFilePart):  # order matters
 
 	mimeType = mime_type = 'application/vnd.nextthought.assessment.filepart'
-	response_interface = IQFileResponse
+
 	grader_interface = None
+	response_interface = IQFileResponse
 
 	def grade(self, response):
 		response = self.response_interface(response)
+
 		# We first check our own constraints for submission
 		# and refuse to even grade if they are not met
 		value = response.value

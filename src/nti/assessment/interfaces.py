@@ -609,6 +609,8 @@ class IQOrderingPartGrader(IQConnectingPartGrader):
 
 # file part
 
+DEFAULT_MAX_SIZE_BYTES = 20971520 # 20 mb
+
 class IQNonGradableFilePart(IQNonGradablePart):
 	"""
 	A part that requires the student to upload a file from their own
@@ -632,7 +634,8 @@ class IQNonGradableFilePart(IQNonGradablePart):
 
 	max_file_size = Int(title="Maximum size in bytes for the file",
 						min=1,
-						required=False)
+						required=False,
+						default=DEFAULT_MAX_SIZE_BYTES)
 
 	def is_mime_type_allowed(mime_type):
 		"""
