@@ -25,7 +25,6 @@ from nti.assessment.interfaces import IQMultipleChoiceMultipleAnswerPart
 from nti.assessment.interfaces import IQMultipleChoiceMultipleAnswerPartGrader
 
 from nti.schema.field import Int
-from nti.schema.field import Bool
 from nti.schema.field import Object
 from nti.schema.field import ListOrTuple
 
@@ -126,6 +125,8 @@ class ISha224RandomizedMultipleChoiceMultipleAnswerPart(IQRandomizedMultipleChoi
 class IRandomizedQuestionSet(IQuestionSet):
 	pass
 
+IRandomizedQuestionSet.setTaggedValue('__external_class_name__', "QuestionSet")
+
 class IRandomizedPartsContainer(interface.Interface):
 	"""
 	A marker interface that indicates the underlying `IQParts` should
@@ -157,11 +158,11 @@ class IQuestionBank(IQuestionSet):
 	def copy(questions=None, ranges=None):
 		"""
 		Copy this question bank
-		
+
 		:param questions: Questions to add to this bank
 		:param ranges: Question bank ranges
 		"""
-		
+
 IQuestionBank['draw'].setTaggedValue(TAG_HIDDEN_IN_UI, False)
 IQuestionBank['draw'].setTaggedValue(TAG_REQUIRED_IN_UI, False)
 IQuestionBank['ranges'].setTaggedValue(TAG_HIDDEN_IN_UI, False)
