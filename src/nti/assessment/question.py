@@ -73,7 +73,7 @@ class QBaseMixin(SchemaConfigured,
 	tags = ()
 	ntiid = None
 	id = alias('ntiid')
-	
+
 	parameters = {}  # IContentTypeAware
 
 	def __init__(self, *args, **kwargs):
@@ -160,7 +160,6 @@ class QQuestionSet(QBaseMixin, RecordableContainerMixin):
 
 	def append(self, item):
 		item = self._validate_insert(item)
-		item.__parent__ = self  # take ownership
 		self.questions = PersistentList() if not self.questions else self.questions
 		self.questions.append(item)
 	add = append
@@ -174,7 +173,6 @@ class QQuestionSet(QBaseMixin, RecordableContainerMixin):
 			# Default to append.
 			self.append(item)
 		else:
-			item.__parent__ = self  # take ownership
 			self.questions.insert(index, item)
 
 @EqHash('wordbank', include_super=True)

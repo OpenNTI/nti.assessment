@@ -15,7 +15,7 @@ import simplejson
 from zope.interface.registry import Components
 
 from zope.proxy import isProxy
-from zope.proxy import ProxyBase 
+from zope.proxy import ProxyBase
 
 from nti.assessment.common import iface_of_assessment as _iface_to_register
 
