@@ -19,7 +19,6 @@ from nti.assessment.parts import QConnectingPart
 from nti.assessment.parts import QMultipleChoicePart
 from nti.assessment.parts import QMultipleChoiceMultipleAnswerPart
 
-from nti.assessment.randomized.interfaces import IQRandomizedPart
 from nti.assessment.randomized.interfaces import IQRandomizedMatchingPart
 from nti.assessment.randomized.interfaces import IQRandomizedOrderingPart
 from nti.assessment.randomized.interfaces import IQRandomizedConnectingPart
@@ -54,7 +53,6 @@ class QRandomizedMultipleChoiceMultipleAnswerPart(QMultipleChoiceMultipleAnswerP
 def _get_randomized_object( factory ):
 	result = factory()
 	result.randomized = True
-	interface.alsoProvides( result, IQRandomizedPart )
 	return result
 
 def randomized_matching_part_factory(ext_obj):
