@@ -19,6 +19,7 @@ from nti.assessment.parts import QConnectingPart
 from nti.assessment.parts import QMultipleChoicePart
 from nti.assessment.parts import QMultipleChoiceMultipleAnswerPart
 
+from nti.assessment.randomized.interfaces import IQRandomizedPart
 from nti.assessment.randomized.interfaces import IQRandomizedMatchingPart
 from nti.assessment.randomized.interfaces import IQRandomizedOrderingPart
 from nti.assessment.randomized.interfaces import IQRandomizedConnectingPart
@@ -50,30 +51,28 @@ deprecated('QRandomizedMultipleChoiceMultipleAnswerPart', 'No longer used')
 class QRandomizedMultipleChoiceMultipleAnswerPart(QMultipleChoiceMultipleAnswerPart):
 	mimeType = mime_type = "application/vnd.nextthought.assessment.randomizedmultiplechoicemultipleanswerpart"
 
+def _get_randomized_object( factory ):
+	result = factory()
+	result.randomized = True
+	interface.alsoProvides( result, IQRandomizedPart )
+	return result
+
 def randomized_matching_part_factory(ext_obj):
 	def _factory():
-		result = QMatchingPart()
-		result.randomized = True
-		return result
+		return _get_randomized_object( QMatchingPart )
 	return _factory
 
 def randomized_ordering_part_factory(ext_obj):
 	def _factory():
-		result = QOrderingPart()
-		result.randomized = True
-		return result
+		return _get_randomized_object( QOrderingPart )
 	return _factory
 
 def randomized_multiple_choice_part_factory(ext_obj):
 	def _factory():
-		result = QMultipleChoicePart()
-		result.randomized = True
-		return result
+		return _get_randomized_object( QMultipleChoicePart )
 	return _factory
 
 def randomized_multiple_choice_multiple_answer_part_factory(ext_obj):
 	def _factory():
-		result = QMultipleChoiceMultipleAnswerPart()
-		result.randomized = True
-		return result
+		return _get_randomized_object( QMultipleChoiceMultipleAnswerPart )
 	return _factory
