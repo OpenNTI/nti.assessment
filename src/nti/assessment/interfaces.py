@@ -1071,13 +1071,18 @@ class QAssessmentDateContextModified(ObjectModifiedEvent):
 
 class IQAssessmentPoliciesModified(IObjectModifiedEvent):
 	assesment = interface.Attribute("Assesment identifier")
-
+	key = interface.Attribute("Key set")
+	value = interface.Attribute("Value set")
+	
 @interface.implementer(IQAssessmentPoliciesModified)
 class QAssessmentPoliciesModified(ObjectModifiedEvent):
 
-	def __init__(self, obj, assesment=None, *descriptions):
+	def __init__(self, obj, assesment=None, key=None, value=None, *descriptions):
 		super(QAssessmentPoliciesModified, self).__init__(obj, *descriptions)
+		self.key = key
+		self.value = value
 		self.assesment = assesment
+
 
 # set solutions response types
 
