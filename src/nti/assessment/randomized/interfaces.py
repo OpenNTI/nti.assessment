@@ -190,3 +190,4 @@ class IRandomizedPartGraderUnshuffleValidator(interface.Interface):
 		"""
 		returns True if the given part context needs to be unshuffled.
 		"""
+	needsUnshuffled = needs_unshuffled

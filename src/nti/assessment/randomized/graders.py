@@ -30,7 +30,7 @@ def _needs_unshuffled( grader, creator ):
 	Check if our response should be unshuffled (only for students).
 	"""
 	utility = component.queryUtility( IRandomizedPartGraderUnshuffleValidator )
-	question = grader.part.__parent__
+	question = grader.part.question
 	return utility is None or utility.needs_unshuffled( question, creator )
 
 class RandomizedConnectingPartGrader(ConnectingPartGrader):
