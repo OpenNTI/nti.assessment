@@ -88,6 +88,7 @@ from nti.assessment.randomized.interfaces import IQRandomizedMultipleChoicePartG
 from nti.assessment.randomized.interfaces import IQRandomizedMultipleChoiceMultipleAnswerPart
 from nti.assessment.randomized.interfaces import IQRandomizedMultipleChoiceMultipleAnswerPartGrader
 
+from nti.common.property import alias
 from nti.common.property import readproperty
 
 from nti.contentfragments.interfaces import UnicodeContentFragment as _u
@@ -118,6 +119,8 @@ class QNonGradablePart(SchemaConfigured, Persistent):
 	hints = ()
 	content = _u('')
 	explanation = _u('')
+	
+	evaluation = alias('__parent__')
 	
 	@readproperty
 	def ntiid(self):
@@ -171,6 +174,8 @@ class QPart(QNonGradablePart):
 	weight = 1.0
 
 	solutions = ()
+	
+	question = alias('__parent__')
 
 	def _get_randomzied(self):
 		return bool(self.randomized_interface is not None
