@@ -60,7 +60,7 @@ class TestJsonSchema(unittest.TestCase):
 		schema = a.schema()
 		assert_that(schema, has_key(FIELDS))
 		fields = schema[FIELDS]
-		assert_that(fields, has_length(4))
+		assert_that(fields, has_length(5))
 		assert_that(fields, has_entry('content', has_entry('type', 'string')))
 		assert_that(fields, has_entry('parts', has_entry('type', 'List')))
 		assert_that(fields, has_entry('tags', has_entry('type', 'List')))
@@ -112,7 +112,7 @@ class TestJsonSchema(unittest.TestCase):
 		schema = a.schema()
 		assert_that(schema, has_key(FIELDS))
 		fields = schema[FIELDS]
-		assert_that(fields, has_length(13))
+		assert_that(fields, has_length(14))
 		assert_that(fields, has_entry('parts', has_entry('base_type',
 														 'application/vnd.nextthought.assessment.assignmentpart')))
 		assert_that(fields, has_entry('title', has_entry('min_length', is_(0))))

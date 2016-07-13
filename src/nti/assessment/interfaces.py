@@ -271,6 +271,17 @@ class IQNonGradablePart(interface.Interface):
 							value_type=Object(IQHint, title="A hint for the part"),
 							required=False)
 
+class IQPartGrader(interface.Interface):
+	"""
+	An object that knows how to grade solutions, given a response. Should be registered
+	as a multi-adapter on the question part, solution, and response types.
+	"""
+
+	def __call__():
+		"""
+		Implement the contract of :meth:`IQPart.grade`.
+		"""
+
 class IQPart(IQNonGradablePart, IGradable):
 	"""
 	One generally unnumbered (or only locally numbered) portion of a :class:`Question`
@@ -315,17 +326,6 @@ class IQPart(IQNonGradablePart, IGradable):
 		"""
 
 IQGradablePart = IQPart  # alias
-
-class IQPartGrader(interface.Interface):
-	"""
-	An object that knows how to grade solutions, given a response. Should be registered
-	as a multi-adapter on the question part, solution, and response types.
-	"""
-
-	def __call__():
-		"""
-		Implement the contract of :meth:`IQPart.grade`.
-		"""
 
 class IQSingleValuedSolution(IQSolution):
 	"""
@@ -1073,7 +1073,7 @@ class IQAssessmentPoliciesModified(IObjectModifiedEvent):
 	assesment = interface.Attribute("Assesment identifier")
 	key = interface.Attribute("Key set")
 	value = interface.Attribute("Value set")
-	
+
 @interface.implementer(IQAssessmentPoliciesModified)
 class QAssessmentPoliciesModified(ObjectModifiedEvent):
 
