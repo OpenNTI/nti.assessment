@@ -25,18 +25,18 @@ from nti.assessment.randomized.interfaces import IQRandomizedMultipleChoicePartG
 from nti.assessment.randomized.interfaces import IRandomizedPartGraderUnshuffleValidator
 from nti.assessment.randomized.interfaces import IQRandomizedMultipleChoiceMultipleAnswerPartGrader
 
-def _needs_unshuffled( grader ):
+def _needs_unshuffled( grader, creator ):
 	"""
 	Check if our response should be unshuffled (only for students).
 	"""
 	utility = component.queryUtility( IRandomizedPartGraderUnshuffleValidator )
 	question = grader.part.__parent__
-	return utility is None or utility.needs_unshuffled( question )
+	return utility is None or utility.needs_unshuffled( question, creator )
 
 class RandomizedConnectingPartGrader(ConnectingPartGrader):
 
 	def unshuffle(self, the_dict, user=None, context=None):
-		if not _needs_unshuffled( self ):
+		if not _needs_unshuffled( self, user ):
 			return the_dict
 		the_dict = ConnectingPartGrader._to_int_dict(self, the_dict)
 		generator = randomize(user=user, context=context)
@@ -73,7 +73,7 @@ class RandomizedMultipleChoiceGrader(EqualityGrader):
 			return self._compare(self.solution.value, self.response)
 
 	def unshuffle(self, the_value, user=None, context=None):
-		if not _needs_unshuffled( self ):
+		if not _needs_unshuffled( self, user ):
 			return the_value
 		generator = randomize(user=user, context=context)
 		if generator is not None:
@@ -90,7 +90,7 @@ class RandomizedMultipleChoiceGrader(EqualityGrader):
 class RandomizedMultipleChoiceMultipleAnswerGrader(MultipleChoiceMultipleAnswerGrader):
 
 	def unshuffle(self, the_values, user=None, context=None):
-		if not _needs_unshuffled( self ):
+		if not _needs_unshuffled( self, user ):
 			return the_values
 		generator = randomize(user=user, context=context)
 		if generator is not None:

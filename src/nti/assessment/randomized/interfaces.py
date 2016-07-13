@@ -186,7 +186,7 @@ class IRandomizedPartGraderUnshuffleValidator(interface.Interface):
 	the incoming submission values.
 	"""
 
-	def needs_unshuffled(context):
+	def needs_unshuffled(context, creator):
 		"""
 		returns True if the given part context needs to be unshuffled.
 		"""
