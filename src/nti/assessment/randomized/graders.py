@@ -10,6 +10,7 @@ __docformat__ = "restructuredtext en"
 logger = __import__('logging').getLogger(__name__)
 
 from zope import interface
+from zope import component
 
 from nti.assessment.graders import EqualityGrader
 from nti.assessment.graders import ConnectingPartGrader
@@ -21,11 +22,22 @@ from nti.assessment.randomized import shuffle_list
 from nti.assessment.randomized.interfaces import IQRandomizedMatchingPartGrader
 from nti.assessment.randomized.interfaces import IQRandomizedOrderingPartGrader
 from nti.assessment.randomized.interfaces import IQRandomizedMultipleChoicePartGrader
+from nti.assessment.randomized.interfaces import IRandomizedPartGraderUnshuffleValidator
 from nti.assessment.randomized.interfaces import IQRandomizedMultipleChoiceMultipleAnswerPartGrader
+
+def _needs_unshuffled( grader ):
+	"""
+	Check if our response should be unshuffled (only for students).
+	"""
+	utility = component.queryUtility( IRandomizedPartGraderUnshuffleValidator )
+	question = grader.part.__parent__
+	return utility is None or utility.needs_unshuffled( question )
 
 class RandomizedConnectingPartGrader(ConnectingPartGrader):
 
 	def unshuffle(self, the_dict, user=None, context=None):
+		if not _needs_unshuffled( self ):
+			return the_dict
 		the_dict = ConnectingPartGrader._to_int_dict(self, the_dict)
 		generator = randomize(user=user, context=context)
 		if generator is not None:
@@ -61,6 +73,8 @@ class RandomizedMultipleChoiceGrader(EqualityGrader):
 			return self._compare(self.solution.value, self.response)
 
 	def unshuffle(self, the_value, user=None, context=None):
+		if not _needs_unshuffled( self ):
+			return the_value
 		generator = randomize(user=user, context=context)
 		if generator is not None:
 			the_value = int(the_value)
@@ -76,6 +90,8 @@ class RandomizedMultipleChoiceGrader(EqualityGrader):
 class RandomizedMultipleChoiceMultipleAnswerGrader(MultipleChoiceMultipleAnswerGrader):
 
 	def unshuffle(self, the_values, user=None, context=None):
+		if not _needs_unshuffled( self ):
+			return the_values
 		generator = randomize(user=user, context=context)
 		if generator is not None:
 			the_values = list(the_values)

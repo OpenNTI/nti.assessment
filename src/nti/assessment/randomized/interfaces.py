@@ -179,3 +179,14 @@ class IPrincipalSeedSelector(interface.Interface):
 		"""
 		return a random seed for the specified principal
 		"""
+
+class IRandomizedPartGraderUnshuffleValidator(interface.Interface):
+	"""
+	Determines if the randomized grader part needs to unshuffle
+	the incoming submission values.
+	"""
+
+	def needs_unshuffled(context):
+		"""
+		returns True if the given part context needs to be unshuffled.
+		"""
