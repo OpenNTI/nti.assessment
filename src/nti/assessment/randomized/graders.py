@@ -36,6 +36,7 @@ def _needs_unshuffled( grader, creator ):
 class RandomizedConnectingPartGrader(ConnectingPartGrader):
 
 	def unshuffle(self, the_dict, user=None, context=None):
+		the_dict = {k:int(v) for k,v in the_dict.items()}
 		if not _needs_unshuffled( self, user ):
 			return the_dict
 		the_dict = ConnectingPartGrader._to_int_dict(self, the_dict)
@@ -44,8 +45,8 @@ class RandomizedConnectingPartGrader(ConnectingPartGrader):
 			values = list(self.part.values)
 			original = {v:idx for idx, v in enumerate(values)}
 			shuffled = {idx:v for idx, v in enumerate(shuffle_list(generator, values))}
-			for k in list(the_dict.keys()):
-				idx = int(the_dict[k])
+			for k in list(the_dict):
+				idx = the_dict[k]
 				uidx = original.get(shuffled.get(idx), idx)
 				the_dict[k] = uidx
 		return the_dict
@@ -73,11 +74,11 @@ class RandomizedMultipleChoiceGrader(EqualityGrader):
 			return self._compare(self.solution.value, self.response)
 
 	def unshuffle(self, the_value, user=None, context=None):
+		the_value = int(the_value)
 		if not _needs_unshuffled( self, user ):
 			return the_value
 		generator = randomize(user=user, context=context)
 		if generator is not None:
-			the_value = int(the_value)
 			choices = list(self.part.choices)
 			original = {v:idx for idx, v in enumerate(choices)}
 			shuffled = {idx:v for idx, v in enumerate(shuffle_list(generator, choices))}
@@ -90,18 +91,17 @@ class RandomizedMultipleChoiceGrader(EqualityGrader):
 class RandomizedMultipleChoiceMultipleAnswerGrader(MultipleChoiceMultipleAnswerGrader):
 
 	def unshuffle(self, the_values, user=None, context=None):
+		the_values = sorted( [int(x) for x in the_values] )
 		if not _needs_unshuffled( self, user ):
 			return the_values
 		generator = randomize(user=user, context=context)
 		if generator is not None:
-			the_values = list(the_values)
 			choices = list(self.part.choices)
 			original = {v:idx for idx, v in enumerate(choices)}
 			shuffled = {idx:v for idx, v in enumerate(shuffle_list(generator, choices))}
-			for pos, value in enumerate(the_values):
-				idx = int(value)
+			for idx in list(the_values):
 				uidx = original[shuffled[idx]]
-				the_values[pos] = uidx
+				the_values[idx] = uidx
 			the_values = sorted(the_values)
 		return the_values
 
