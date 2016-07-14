@@ -99,9 +99,9 @@ class RandomizedMultipleChoiceMultipleAnswerGrader(MultipleChoiceMultipleAnswerG
 			choices = list(self.part.choices)
 			original = {v:idx for idx, v in enumerate(choices)}
 			shuffled = {idx:v for idx, v in enumerate(shuffle_list(generator, choices))}
-			for idx in list(the_values):
+			for pos, idx in enumerate(the_values):
 				uidx = original[shuffled[idx]]
-				the_values[idx] = uidx
+				the_values[pos] = uidx
 			the_values = sorted(the_values)
 		return the_values
 
