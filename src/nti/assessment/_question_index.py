@@ -17,7 +17,7 @@ from zope.interface.registry import Components
 from zope.proxy import isProxy
 from zope.proxy import ProxyBase
 
-from nti.assessment.common import iface_of_assessment as _iface_to_register
+from nti.assessment.common import iface_of_assessment
 
 from nti.assessment.interfaces import IQPoll
 from nti.assessment.interfaces import IQSurvey
@@ -153,7 +153,7 @@ class QuestionIndex(object):
 	def _register_and_canonicalize(self, things_to_register, registry):
 		registered = set()
 		for thing_to_register in things_to_register or ():
-			provided = _iface_to_register(thing_to_register)
+			provided = iface_of_assessment(thing_to_register)
 
 			# Previously, we were very careful not to re-register things
 			# that we could find utilities for.
