@@ -33,6 +33,9 @@ from nti.assessment.interfaces import IQAssessedQuestion
 from nti.assessment.interfaces import IQuestionSubmission
 from nti.assessment.interfaces import IQAssessedQuestionSet
 
+from nti.assessment.randomized.interfaces import IQRandomizedPart
+from nti.assessment.randomized.interfaces import IRandomizedPartsContainer
+
 from nti.coremetadata.interfaces import ICreated
 from nti.coremetadata.interfaces import ILastModified
 
@@ -150,18 +153,7 @@ def assess_question_submission(submission, registry=component):
 	result = QAssessedQuestion(questionId=submission.questionId, parts=assessed_parts)
 	return result
 
-def assess_question_set_submission(set_submission, registry=component):
-	"""
-	Assess the given question set submission.
-
-	:return: An :class:`.interfaces.IQAssessedQuestionSet`.
-	:param set_submission: An :class:`.interfaces.IQuestionSetSubmission`.
-	:param registry: If given, an :class:`.IComponents`. If
-		not given, the current component registry will be used.
-		Used to look up the question set and question by id.
-	:raises LookupError: If no question can be found for the submission.
-	"""
-	question_set = registry.getUtility(IQuestionSet, name=set_submission.questionSetId)
+def _do_assess_question_set_submission( question_set, set_submission, registry ):
 	questions_ntiids = {q.ntiid for q in question_set.questions}
 
 	# NOTE: At this point we need to decide what to do for missing values
@@ -181,4 +173,36 @@ def assess_question_set_submission(set_submission, registry=component):
 	# NOTE: We're not really creating some sort of aggregate grade here
 	result = QAssessedQuestionSet(questionSetId=set_submission.questionSetId,
 								  questions=assessed)
+	return result
+
+def assess_question_set_submission(set_submission, registry=component):
+	"""
+	Assess the given question set submission.
+
+	:return: An :class:`.interfaces.IQAssessedQuestionSet`.
+	:param set_submission: An :class:`.interfaces.IQuestionSetSubmission`.
+	:param registry: If given, an :class:`.IComponents`. If
+		not given, the current component registry will be used.
+		Used to look up the question set and question by id.
+	:raises LookupError: If no question can be found for the submission.
+	"""
+	question_set = registry.getUtility(IQuestionSet, name=set_submission.questionSetId)
+	# For marked randomized parts question sets, mark all parts
+	# randomized and then undo post assessment.
+	if IRandomizedPartsContainer.providedBy( question_set ):
+		try:
+			for question in question_set.questions:
+				for part in question.parts or ():
+					interface.alsoProvides(part, IQRandomizedPart)
+			result = _do_assess_question_set_submission( question_set, set_submission, registry )
+		finally:
+			for question in question_set.questions:
+				for part in question.parts or ():
+					try:
+						interface.noLongerProvides(part, IQRandomizedPart)
+					except ValueError:
+						# Concrete randomized type already.
+						pass
+	else:
+		result = _do_assess_question_set_submission( question_set, set_submission, registry )
 	return result
