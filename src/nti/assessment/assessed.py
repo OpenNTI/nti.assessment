@@ -153,8 +153,8 @@ def assess_question_submission(submission, registry=component):
 	result = QAssessedQuestion(questionId=submission.questionId, parts=assessed_parts)
 	return result
 
-def _do_assess_question_set_submission( question_set, set_submission, registry ):
-	questions_ntiids = {q.ntiid for q in question_set.questions}
+def _do_assess_question_set_submission(question_set, set_submission, registry):
+	questions_ntiids = {q.ntiid for q in question_set.Items}
 
 	# NOTE: At this point we need to decide what to do for missing values
 	# We are currently not really grading them at all, which is what we
@@ -163,7 +163,9 @@ def _do_assess_question_set_submission( question_set, set_submission, registry )
 	assessed = PersistentList()
 	for sub_question in set_submission.questions:
 		question = registry.getUtility(IQuestion, name=sub_question.questionId)
-		if question in question_set.questions or question.ntiid in questions_ntiids:
+		ntiid = getattr(question, 'ntiid', None)
+		if 		ntiid in questions_ntiids \
+			or	question in question_set.Items:
 			sub_assessed = IQAssessedQuestion(sub_question)  # Raises ComponentLookupError
 			assessed.append(sub_assessed)
 		else: # pragma: no cover
@@ -191,12 +193,12 @@ def assess_question_set_submission(set_submission, registry=component):
 	# randomized and then undo post assessment.
 	if IRandomizedPartsContainer.providedBy( question_set ):
 		try:
-			for question in question_set.questions:
+			for question in question_set.Items:
 				for part in question.parts or ():
 					interface.alsoProvides(part, IQRandomizedPart)
 			result = _do_assess_question_set_submission( question_set, set_submission, registry )
 		finally:
-			for question in question_set.questions:
+			for question in question_set.Items:
 				for part in question.parts or ():
 					try:
 						interface.noLongerProvides(part, IQRandomizedPart)
