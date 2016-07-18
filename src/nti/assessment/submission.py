@@ -61,7 +61,7 @@ from nti.wref.interfaces import IWeakRef
 class CreatorMixin(object):
 	
 	def __init__(self, *args, **kwargs):
-		CreatorMixin.__init__(self, *args, **kwargs)
+		super(CreatorMixin, self).__init__(*args, **kwargs)
 
 	def _get_creator(self):
 		result = self.__dict__.get('creator')
@@ -75,7 +75,7 @@ class CreatorMixin(object):
 
 @WithRepr
 @interface.implementer(IQuestionSubmission, ISublocations, IFiniteSequence)
-class QuestionSubmission(SchemaConfigured, VersionedMixin, Contained):
+class QuestionSubmission(SchemaConfigured, VersionedMixin, CreatorMixin, Contained):
 	createDirectFieldProperties(IQBaseSubmission)
 	createDirectFieldProperties(IQuestionSubmission)
 
@@ -95,7 +95,7 @@ class QuestionSubmission(SchemaConfigured, VersionedMixin, Contained):
 	
 @WithRepr
 @interface.implementer(IQuestionSetSubmission, ISublocations, IWriteMapping)
-class QuestionSetSubmission(SchemaConfigured, VersionedMixin, Contained):
+class QuestionSetSubmission(SchemaConfigured, VersionedMixin, CreatorMixin, Contained):
 	createDirectFieldProperties(IQBaseSubmission)
 	createDirectFieldProperties(IQuestionSetSubmission)
 
@@ -144,6 +144,7 @@ class QuestionSetSubmission(SchemaConfigured, VersionedMixin, Contained):
 class AssignmentSubmission(ContainedMixin,
 						   SchemaConfigured,
 						   VersionedMixin,
+						   CreatorMixin,
 						   PersistentCreatedModDateTrackingObject):
 	"""
 	We do expect assignment submissions to be stored in the database
