@@ -50,27 +50,27 @@ deprecated('QRandomizedMultipleChoiceMultipleAnswerPart', 'No longer used')
 class QRandomizedMultipleChoiceMultipleAnswerPart(QMultipleChoiceMultipleAnswerPart):
 	mimeType = mime_type = "application/vnd.nextthought.assessment.randomizedmultiplechoicemultipleanswerpart"
 
-def _get_randomized_object( factory ):
+def _get_randomized_object(factory):
 	result = factory()
 	result.randomized = True
 	return result
 
 def randomized_matching_part_factory(ext_obj):
 	def _factory():
-		return _get_randomized_object( QMatchingPart )
+		return _get_randomized_object(QMatchingPart)
 	return _factory
 
 def randomized_ordering_part_factory(ext_obj):
 	def _factory():
-		return _get_randomized_object( QOrderingPart )
+		return _get_randomized_object(QOrderingPart)
 	return _factory
 
 def randomized_multiple_choice_part_factory(ext_obj):
 	def _factory():
-		return _get_randomized_object( QMultipleChoicePart )
+		return _get_randomized_object(QMultipleChoicePart)
 	return _factory
 
 def randomized_multiple_choice_multiple_answer_part_factory(ext_obj):
 	def _factory():
-		return _get_randomized_object( QMultipleChoiceMultipleAnswerPart )
+		return _get_randomized_object(QMultipleChoiceMultipleAnswerPart)
 	return _factory

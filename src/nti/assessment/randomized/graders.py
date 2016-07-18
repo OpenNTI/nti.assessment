@@ -9,8 +9,8 @@ __docformat__ = "restructuredtext en"
 
 logger = __import__('logging').getLogger(__name__)
 
-from zope import interface
 from zope import component
+from zope import interface
 
 from nti.assessment.graders import EqualityGrader
 from nti.assessment.graders import ConnectingPartGrader
@@ -25,20 +25,20 @@ from nti.assessment.randomized.interfaces import IQRandomizedMultipleChoicePartG
 from nti.assessment.randomized.interfaces import IRandomizedPartGraderUnshuffleValidator
 from nti.assessment.randomized.interfaces import IQRandomizedMultipleChoiceMultipleAnswerPartGrader
 
-def _needs_unshuffled( grader, creator ):
+def _needs_unshuffled(grader, creator):
 	"""
 	Check if our response should be unshuffled (only for students).
 	"""
-	utility = component.queryUtility( IRandomizedPartGraderUnshuffleValidator )
+	utility = component.queryUtility(IRandomizedPartGraderUnshuffleValidator)
 	question = grader.part.question
-	return utility is None or utility.needs_unshuffled( question, creator )
+	return utility is None or utility.needs_unshuffled(question, creator)
 
 class RandomizedConnectingPartGrader(ConnectingPartGrader):
 
 	def unshuffle(self, the_dict, user=None, context=None):
 		user = user if user else self.creator
-		the_dict = {k:int(v) for k,v in the_dict.items()}
-		if not _needs_unshuffled( self, user ):
+		the_dict = {k:int(v) for k, v in the_dict.items()}
+		if not _needs_unshuffled(self, user):
 			return the_dict
 		the_dict = ConnectingPartGrader._to_int_dict(self, the_dict)
 		generator = randomize(user=user, context=context)
@@ -77,7 +77,7 @@ class RandomizedMultipleChoiceGrader(EqualityGrader):
 	def unshuffle(self, the_value, user=None, context=None):
 		the_value = int(the_value)
 		user = user if user else self.creator
-		if not _needs_unshuffled( self, user ):
+		if not _needs_unshuffled(self, user):
 			return the_value
 		generator = randomize(user=user, context=context)
 		if generator is not None:
@@ -94,8 +94,8 @@ class RandomizedMultipleChoiceMultipleAnswerGrader(MultipleChoiceMultipleAnswerG
 
 	def unshuffle(self, the_values, user=None, context=None):
 		user = user if user else self.creator
-		the_values = sorted( [int(x) for x in the_values] )
-		if not _needs_unshuffled( self, user ):
+		the_values = sorted([int(x) for x in the_values])
+		if not _needs_unshuffled(self, user):
 			return the_values
 		generator = randomize(user=user, context=context)
 		if generator is not None:
