@@ -79,7 +79,7 @@ class _AbstractGrader(object):
 		self.part = part
 		self.solution = solution
 		self.response = response
-		self.creator = IPrincipal( creator, None )
+		self.creator = creator
 
 	def __call__(self):
 		raise NotImplementedError()
