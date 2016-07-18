@@ -17,6 +17,8 @@ from nti.common.representation import WithRepr
 
 from nti.schema.schema import EqHash
 
+from nti.wref.interfaces import IWeakRef
+
 _marker = object()
 
 # classes
@@ -49,6 +51,21 @@ class TrivialValuedMixin(object):
 
 	def __str__(self):
 		return str(self.value)
+
+class CreatorMixin(object):
+	
+	def __init__(self, *args, **kwargs):
+		super(CreatorMixin, self).__init__(*args, **kwargs)
+
+	def _get_creator(self):
+		result = self.__dict__.get('creator', None)
+		if IWeakRef.providedBy(result):
+			result = result()
+		return result
+	def _set_creator(self, creator):
+		wref = IWeakRef(creator, creator)
+		self.__dict__['creator'] = wref
+	creator = property(_get_creator, _set_creator)
 
 # functions
 
