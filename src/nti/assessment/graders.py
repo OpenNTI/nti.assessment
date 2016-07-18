@@ -19,8 +19,6 @@ from zope import interface
 
 from zope.location import LocationIterator
 
-from zope.security.interfaces import IPrincipal
-
 import repoze.lru
 
 from nti.assessment.interfaces import IRegEx
