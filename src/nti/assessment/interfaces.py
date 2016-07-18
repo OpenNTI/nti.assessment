@@ -182,7 +182,7 @@ class IQHTMLHint(IQHint):
 
 class IQSolution(interface.Interface):
 
-	weight = Float( title="The relative correctness of this solution, from 0 to 1",
+	weight = Number(title="The relative correctness of this solution, from 0 to 1",
 					description="""If a question has multiple possible solutions, some may
 					be more right than others. This is captured by the weight field. If there is only
 					one right answer, then it has a weight of 1.0.
@@ -302,7 +302,7 @@ class IQPart(IQNonGradablePart, IGradable):
 					  default=False,
 					  required=False)
 
-	weight = Float( title="The relative point value of this part, compared to other parts.",
+	weight = Number(title="The relative point value of this part, compared to other parts.",
 					description="""When calculating points per part, the weight is used to
 					calculate what part of a :class:`IQuestion` total_points goes towards
 					this part.

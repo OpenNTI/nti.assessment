@@ -86,7 +86,8 @@ class TestJsonSchema(unittest.TestCase):
 		fields = schema[FIELDS]
 		assert_that(fields, has_length(8))
 		assert_that(fields, has_entry('explanation', has_entry('base_type', 'string')))
-		assert_that(fields, has_entry('weight', has_entry('type', 'float')))
+		assert_that(fields, has_entry('weight', has_entry('type', 'Number')))
+		assert_that(fields, has_entry('weight', has_entry('base_type', 'float')))
 		assert_that(fields, has_entry('labels', has_entry('type', 'list')))
 		assert_that(fields, has_entry('content', has_entry('base_type', 'string')))
 		assert_that(fields, has_entry('solutions', has_entry('type', 'List')))
