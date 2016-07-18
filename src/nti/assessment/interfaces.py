@@ -806,7 +806,7 @@ class IQAssignmentPart(ITitledContent):
 						  title="The question set to submit with this part")
 
 	auto_grade = Bool(title="Should this part be run through the grading machinery?",
-					  default=False)
+					  default=True)
 
 IQAssignmentPart.setTaggedValue('_ext_jsonschema', u'assignmentpart')
 
