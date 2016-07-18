@@ -134,13 +134,15 @@ def assess_question_submission(submission, registry=component):
 		raise ValueError("Question (%s) and submission (%s) have different numbers of parts." %
 						 (len(question.parts), len(submission.parts)))
 
+	creator = getattr( submission, 'creator', None )
+
 	assessed_parts = PersistentList()
 
 	for sub_part, q_part in zip(submission.parts, question.parts):
 		# Grade what they submitted, if they submitted something. If they didn't
 		# submit anything, it's automatically "wrong."
 		try:
-			grade = q_part.grade(sub_part) if sub_part is not None else 0.0
+			grade = q_part.grade(sub_part, creator) if sub_part is not None else 0.0
 		except (LookupError, ValueError):
 			# We couldn't grade the part because the submission was in the wrong
 			# format. Translate this error to something more useful.

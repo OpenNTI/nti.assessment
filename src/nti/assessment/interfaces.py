@@ -311,7 +311,7 @@ class IQPart(IQNonGradablePart, IGradable):
 					max=1.0,
 					default=1.0)
 
-	def grade(response):
+	def grade(response, creator=None):
 		"""
 		Determine the correctness of the given response. Usually this will do its work
 		by delegating to a registered :class:`IQPartGrader`.
@@ -319,6 +319,8 @@ class IQPart(IQNonGradablePart, IGradable):
 		:param response: An :class:`IResponse` object representing the student's input for this
 			part of the question. If the response is an inappropriate type for the part,
 			an exception may be raised.
+		:param response: An :class:`IPrincipal` object representing the user taking the
+			assessment. May be necessary for accurate grading.
 		:return: A value that can be interpreted as a boolean, indicating correct (``True``) or incorrect
 			(``False``) response. A return value of ``None`` indicates no opinion, typically because
 			there are no provided solutions. If solution weights are

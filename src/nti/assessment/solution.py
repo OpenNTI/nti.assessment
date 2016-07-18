@@ -64,12 +64,12 @@ class QSolution(Persistent):
 
 	weight = 1.0
 
-	def grade(self, response):
+	def grade(self, response, creator=None):
 		"""
 		Convenience method for grading solutions that can be graded independent
 		of their question parts.
 		"""
-		return self._part_type(solutions=(self,)).grade(response)
+		return self._part_type(solutions=(self,)).grade(response, creator)
 
 @interface.implementer(IQMathSolution)
 class QMathSolution(QSolution):

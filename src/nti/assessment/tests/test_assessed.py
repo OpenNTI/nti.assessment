@@ -258,16 +258,16 @@ class TestAssessedQuestionSet(AssessmentTestCase):
 											   has_property( 'parts', contains( assessed.QAssessedPart( submittedResponse='correct', assessedValue=1.0 ) ) ) ) ) )
 		# consistent hashing
 		assert_that( hash(result), is_(hash(result)))
-		
+
 		for question in result.questions:
 			parents = list(lineage(question))
 			assert_that(parents, has_length(1))
-		
+
 		ext_obj = toExternalObject( result )
 		assert_that( ext_obj, has_entry( 'questions', has_length( 1 ) ) )
 
 		_check_old_dublin_core( result )
-		
+
 		for question in result.questions:
 			parents = list(lineage(question))
 			assert_that(parents[-1], is_(result))
@@ -280,7 +280,7 @@ class TestAssessedQuestionSet(AssessmentTestCase):
 	def test_assess_not_same_instance_question_but_id_matches(self):
 		part = parts.QFreeResponsePart(solutions=(solutions.QFreeResponseSolution(value='correct'),))
 		question = QQuestion( parts=(part,) )
-		ntiid = 'tag:nextthought.com,2015-11-30:Test' 
+		ntiid = 'tag:nextthought.com,2015-11-30:Test'
 		question.ntiid = ntiid
 		question_set = QQuestionSet( questions=(question,) )
 

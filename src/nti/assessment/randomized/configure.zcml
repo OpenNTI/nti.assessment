@@ -38,6 +38,34 @@
 			 	  dict"
 			 provides=".interfaces.IQRandomizedMatchingPartGrader" />
 
+	<adapter factory=".graders.RandomizedMatchingPartGrader"
+			 for=".interfaces.IQRandomizedMatchingPart
+			 	  nti.assessment.interfaces.IQMatchingSolution
+			 	  nti.assessment.interfaces.IQDictResponse
+			 	  nti.dataserver_core.interfaces.IUser"
+			 provides=".interfaces.IQRandomizedMatchingPartGrader" />
+
+	<adapter factory=".graders.RandomizedMatchingPartGrader"
+			 for=".interfaces.IQRandomizedMatchingPart
+			 	  nti.assessment.interfaces.IQMatchingSolution
+			 	  dict
+			 	  nti.dataserver_core.interfaces.IUser"
+			 provides=".interfaces.IQRandomizedMatchingPartGrader" />
+
+	<adapter factory=".graders.RandomizedMatchingPartGrader"
+			 for=".interfaces.IQMatchingPart
+			 	  nti.assessment.interfaces.IQMatchingSolution
+			 	  nti.assessment.interfaces.IQDictResponse
+			 	  nti.dataserver_core.interfaces.IUser"
+			 provides=".interfaces.IQRandomizedMatchingPartGrader" />
+
+	<adapter factory=".graders.RandomizedMatchingPartGrader"
+			 for=".interfaces.IQMatchingPart
+			 	  nti.assessment.interfaces.IQMatchingSolution
+			 	  dict
+			 	  nti.dataserver_core.interfaces.IUser"
+			 provides=".interfaces.IQRandomizedMatchingPartGrader" />
+
 	<!-- Ordering -->
 	<adapter factory=".graders.RandomizedOrderingPartGrader"
 			 for=".interfaces.IQRandomizedOrderingPart
@@ -49,6 +77,20 @@
 			 for=".interfaces.IQRandomizedOrderingPart
 			 	  nti.assessment.interfaces.IQOrderingSolution
 			 	  dict"
+			 provides=".interfaces.IQRandomizedOrderingPartGrader" />
+
+	<adapter factory=".graders.RandomizedOrderingPartGrader"
+			 for=".interfaces.IQRandomizedOrderingPart
+			 	  nti.assessment.interfaces.IQOrderingSolution
+			 	  nti.assessment.interfaces.IQDictResponse
+			 	  nti.dataserver_core.interfaces.IUser"
+			 provides=".interfaces.IQRandomizedOrderingPartGrader" />
+
+	<adapter factory=".graders.RandomizedOrderingPartGrader"
+			 for=".interfaces.IQRandomizedOrderingPart
+			 	  nti.assessment.interfaces.IQOrderingSolution
+			 	  dict
+			 	  nti.dataserver_core.interfaces.IUser"
 			 provides=".interfaces.IQRandomizedOrderingPartGrader" />
 
 	<!-- Multiple choice -->
@@ -88,6 +130,48 @@
 			 	  basestring"
 			 provides=".interfaces.IQRandomizedMultipleChoicePartGrader" />
 
+	<adapter factory=".graders.RandomizedMultipleChoiceGrader"
+			 for=".interfaces.IQRandomizedMultipleChoicePart
+			 	  nti.assessment.interfaces.IQSingleValuedSolution
+			 	  nti.assessment.interfaces.IQTextResponse
+			 	  nti.dataserver_core.interfaces.IUser"
+			 provides=".interfaces.IQRandomizedMultipleChoicePartGrader" />
+
+	<adapter factory=".graders.RandomizedMultipleChoiceGrader"
+			 for=".interfaces.IQRandomizedMultipleChoicePart
+			 	  nti.assessment.interfaces.IQSingleValuedSolution
+			 	  int
+			 	  nti.dataserver_core.interfaces.IUser"
+			 provides=".interfaces.IQRandomizedMultipleChoicePartGrader" />
+
+	<adapter factory=".graders.RandomizedMultipleChoiceGrader"
+			 for=".interfaces.IQRandomizedMultipleChoicePart
+			 	  nti.assessment.interfaces.IQSingleValuedSolution
+			 	  basestring
+			 	  nti.dataserver_core.interfaces.IUser"
+			 provides=".interfaces.IQRandomizedMultipleChoicePartGrader" />
+
+	<adapter factory=".graders.RandomizedMultipleChoiceGrader"
+			 for=".interfaces.IQMultipleChoicePart
+			 	  nti.assessment.interfaces.IQSingleValuedSolution
+			 	  nti.assessment.interfaces.IQTextResponse
+			 	  nti.dataserver_core.interfaces.IUser"
+			 provides=".interfaces.IQRandomizedMultipleChoicePartGrader" />
+
+	<adapter factory=".graders.RandomizedMultipleChoiceGrader"
+			 for=".interfaces.IQMultipleChoicePart
+			 	  nti.assessment.interfaces.IQSingleValuedSolution
+			 	  int
+			 	  nti.dataserver_core.interfaces.IUser"
+			 provides=".interfaces.IQRandomizedMultipleChoicePartGrader" />
+
+	<adapter factory=".graders.RandomizedMultipleChoiceGrader"
+			 for=".interfaces.IQMultipleChoicePart
+			 	  nti.assessment.interfaces.IQSingleValuedSolution
+			 	  basestring
+			 	  nti.dataserver_core.interfaces.IUser"
+			 provides=".interfaces.IQRandomizedMultipleChoicePartGrader" />
+
 	<!-- Multiple choice, Multiple answer -->
 	<adapter factory=".graders.RandomizedMultipleChoiceMultipleAnswerGrader"
 			 for=".interfaces.IQRandomizedMultipleChoiceMultipleAnswerPart
@@ -111,6 +195,34 @@
 			 for=".interfaces.IQMultipleChoiceMultipleAnswerPart
 			 	  nti.assessment.interfaces.IQMultiValuedSolution
 			 	  list"
+			 provides=".interfaces.IQRandomizedMultipleChoiceMultipleAnswerPartGrader" />
+
+	<adapter factory=".graders.RandomizedMultipleChoiceMultipleAnswerGrader"
+			 for=".interfaces.IQRandomizedMultipleChoiceMultipleAnswerPart
+			 	  nti.assessment.interfaces.IQMultiValuedSolution
+			 	  nti.assessment.interfaces.IQListResponse
+			 	  nti.dataserver_core.interfaces.IUser"
+			 provides=".interfaces.IQRandomizedMultipleChoiceMultipleAnswerPartGrader" />
+
+	<adapter factory=".graders.RandomizedMultipleChoiceMultipleAnswerGrader"
+			 for=".interfaces.IQRandomizedMultipleChoiceMultipleAnswerPart
+			 	  nti.assessment.interfaces.IQMultiValuedSolution
+			 	  list
+			 	  nti.dataserver_core.interfaces.IUser"
+			 provides=".interfaces.IQRandomizedMultipleChoiceMultipleAnswerPartGrader" />
+
+	<adapter factory=".graders.RandomizedMultipleChoiceMultipleAnswerGrader"
+			 for=".interfaces.IQMultipleChoiceMultipleAnswerPart
+			 	  nti.assessment.interfaces.IQMultiValuedSolution
+			 	  nti.assessment.interfaces.IQListResponse
+			 	  nti.dataserver_core.interfaces.IUser"
+			 provides=".interfaces.IQRandomizedMultipleChoiceMultipleAnswerPartGrader" />
+
+	<adapter factory=".graders.RandomizedMultipleChoiceMultipleAnswerGrader"
+			 for=".interfaces.IQMultipleChoiceMultipleAnswerPart
+			 	  nti.assessment.interfaces.IQMultiValuedSolution
+			 	  list
+			 	  nti.dataserver_core.interfaces.IUser"
 			 provides=".interfaces.IQRandomizedMultipleChoiceMultipleAnswerPartGrader" />
 
 	<adapter factory="list .question._range_adapter"

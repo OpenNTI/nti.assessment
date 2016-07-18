@@ -119,9 +119,9 @@ class QNonGradablePart(SchemaConfigured, Persistent):
 	hints = ()
 	content = _u('')
 	explanation = _u('')
-	
+
 	evaluation = alias('__parent__')
-	
+
 	@readproperty
 	def ntiid(self):
 		result = compute_part_ntiid(self)
@@ -174,7 +174,7 @@ class QPart(QNonGradablePart):
 	weight = 1.0
 
 	solutions = ()
-	
+
 	question = alias('__parent__')
 
 	def _get_randomzied(self):
@@ -191,8 +191,7 @@ class QPart(QNonGradablePart):
 				self._p_changed = True
 	randomized = property(_get_randomzied, _set_randomized)
 
-	def grade(self, response):
-
+	def grade(self, response, creator=None):
 		if self.response_interface is not None:
 			response = self.response_interface(response)
 
@@ -206,7 +205,7 @@ class QPart(QNonGradablePart):
 			converted = convert_response_for_solution(solution, response)
 			# Graders return a true or false value. We are responsible
 			# for applying weights to that
-			value = self._grade(solution, converted)
+			value = self._grade(solution, converted, creator)
 			if value:
 				result = self._weight(value, solution)
 				break
@@ -215,9 +214,9 @@ class QPart(QNonGradablePart):
 	def _weight(self, result, solution):
 		return self.weight * solution.weight
 
-	def _grade(self, solution, response):
+	def _grade(self, solution, response, creator):
 		__traceback_info__ = solution, response, self.grader_name
-		grader = grader_for_solution_and_response(self, solution, response)
+		grader = grader_for_solution_and_response(self, solution, response, creator)
 		if grader is None:
 			objects = (self, solution, response)
 			raise ComponentLookupError(objects, self.grader_interface, self.grader_name)
@@ -435,7 +434,7 @@ class QFilePart(QPart, QNonGradableFilePart):  # order matters
 	grader_interface = None
 	response_interface = IQFileResponse
 
-	def grade(self, response):
+	def grade(self, response, creator=None):
 		response = self.response_interface(response)
 
 		# We first check our own constraints for submission
@@ -451,7 +450,7 @@ class QFilePart(QPart, QNonGradableFilePart):  # order matters
 		if self.max_file_size is not None and value.getSize() > self.max_file_size:
 			raise ConstraintNotSatisfied(value.getSize(), 'max_file_size')
 
-		super(QFilePart, self).grade(response)
+		super(QFilePart, self).grade(response, creator)
 
 # Modeled Content
 

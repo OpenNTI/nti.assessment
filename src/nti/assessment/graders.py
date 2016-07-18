@@ -19,6 +19,8 @@ from zope import interface
 
 from zope.location import LocationIterator
 
+from zope.security.interfaces import IPrincipal
+
 import repoze.lru
 
 from nti.assessment.interfaces import IRegEx
@@ -73,10 +75,11 @@ class _AbstractGrader(object):
 	a grader for any combination of inputs.
 	"""
 
-	def __init__(self, part, solution, response):
+	def __init__(self, part, solution, response, creator=None):
 		self.part = part
 		self.solution = solution
 		self.response = response
+		self.creator = IPrincipal( creator, None )
 
 	def __call__(self):
 		raise NotImplementedError()
@@ -127,7 +130,7 @@ class LowerQuoteNormalizedStringEqualityGrader(StringEqualityGrader):
 	"""
 	solution_converter = _lower_normalized
 	response_converter = _lower_normalized
-	
+
 	def _compare(self, solution_value, response_value):
 		if IRegEx.providedBy(solution_value):
 			pattern = solution_value.pattern

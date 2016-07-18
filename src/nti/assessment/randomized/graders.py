@@ -36,6 +36,7 @@ def _needs_unshuffled( grader, creator ):
 class RandomizedConnectingPartGrader(ConnectingPartGrader):
 
 	def unshuffle(self, the_dict, user=None, context=None):
+		user = user if user else self.creator
 		the_dict = {k:int(v) for k,v in the_dict.items()}
 		if not _needs_unshuffled( self, user ):
 			return the_dict
@@ -75,6 +76,7 @@ class RandomizedMultipleChoiceGrader(EqualityGrader):
 
 	def unshuffle(self, the_value, user=None, context=None):
 		the_value = int(the_value)
+		user = user if user else self.creator
 		if not _needs_unshuffled( self, user ):
 			return the_value
 		generator = randomize(user=user, context=context)
@@ -91,6 +93,7 @@ class RandomizedMultipleChoiceGrader(EqualityGrader):
 class RandomizedMultipleChoiceMultipleAnswerGrader(MultipleChoiceMultipleAnswerGrader):
 
 	def unshuffle(self, the_values, user=None, context=None):
+		user = user if user else self.creator
 		the_values = sorted( [int(x) for x in the_values] )
 		if not _needs_unshuffled( self, user ):
 			return the_values
