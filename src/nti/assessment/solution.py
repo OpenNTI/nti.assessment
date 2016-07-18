@@ -17,17 +17,6 @@ from persistent import Persistent
 
 from nti.assessment._util import TrivialValuedMixin as _TrivialValuedMixin
 
-from nti.assessment.parts import QPart
-from nti.assessment.parts import QMatchingPart
-from nti.assessment.parts import QOrderingPart
-from nti.assessment.parts import QNumericMathPart
-from nti.assessment.parts import QFreeResponsePart
-from nti.assessment.parts import QSymbolicMathPart
-from nti.assessment.parts import QMultipleChoicePart
-from nti.assessment.parts import QFillInTheBlankShortAnswerPart
-from nti.assessment.parts import QFillInTheBlankWithWordBankPart
-from nti.assessment.parts import QMultipleChoiceMultipleAnswerPart
-
 from nti.assessment.interfaces import IQSolution
 from nti.assessment.interfaces import IQMathSolution
 from nti.assessment.interfaces import IQMatchingSolution
@@ -41,6 +30,17 @@ from nti.assessment.interfaces import IQLatexSymbolicMathSolution
 from nti.assessment.interfaces import IQFillInTheBlankShortAnswerSolution
 from nti.assessment.interfaces import IQFillInTheBlankWithWordBankSolution
 from nti.assessment.interfaces import IQMultipleChoiceMultipleAnswerSolution
+
+from nti.assessment.parts import QPart
+from nti.assessment.parts import QMatchingPart
+from nti.assessment.parts import QOrderingPart
+from nti.assessment.parts import QNumericMathPart
+from nti.assessment.parts import QFreeResponsePart
+from nti.assessment.parts import QSymbolicMathPart
+from nti.assessment.parts import QMultipleChoicePart
+from nti.assessment.parts import QFillInTheBlankShortAnswerPart
+from nti.assessment.parts import QFillInTheBlankWithWordBankPart
+from nti.assessment.parts import QMultipleChoiceMultipleAnswerPart
 
 from nti.externalization.representation import WithRepr
 
