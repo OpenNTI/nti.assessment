@@ -36,6 +36,8 @@ from nti.externalization.representation import WithRepr
 from nti.schema.field import SchemaConfigured
 from nti.schema.fieldproperty import createDirectFieldProperties
 
+from nti.wref.interfaces import IWeakRef
+
 # NOTE that these objects are not Persistent. Originally this is
 # because they were never intended for storage in the database; only
 # the assessed versions were stored in the database.
@@ -55,6 +57,21 @@ from nti.schema.fieldproperty import createDirectFieldProperties
 # is that they get added to the user's _p_jar *before* being
 # transformed; the transformed object may or may not
 # be directly added.
+
+class CreatorMixin(object):
+	
+	def __init__(self, *args, **kwargs):
+		CreatorMixin.__init__(self, *args, **kwargs)
+
+	def _get_creator(self):
+		result = self.__dict__.get('creator')
+		if IWeakRef.providedBy(result):
+			result = result()
+		return result
+	def _set_creator(self, creator):
+		wref = IWeakRef(creator, creator)
+		self.__dict__['creator'] = wref
+	creator = property(_get_creator, _set_creator)
 
 @WithRepr
 @interface.implementer(IQuestionSubmission, ISublocations, IFiniteSequence)
