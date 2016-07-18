@@ -27,8 +27,6 @@ from nti.assessment.interfaces import IQuestionSubmission
 from nti.assessment.interfaces import IQuestionSetSubmission
 from nti.assessment.interfaces import IQAssignmentSubmission
 
-from nti.coremetadata.interfaces import ICreated
-
 from nti.dataserver_core.mixins import ContainedMixin
 
 from nti.dublincore.datastructures import PersistentCreatedModDateTrackingObject
@@ -60,7 +58,6 @@ from nti.wref.interfaces import IWeakRef
 # transformed; the transformed object may or may not
 # be directly added.
 
-@interface.implementer(ICreated)
 class CreatorMixin(object):
 	
 	def __init__(self, *args, **kwargs):
