@@ -109,21 +109,22 @@ def assess(quiz, responses):
 
 def grader_for_solution_and_response(part, solution, response, creator=None):
 	result = None
-	if part.randomized or IQRandomizedPart.providedBy( part ):
+	if 		(part.randomized or IQRandomizedPart.providedBy( part )) \
+		and part.randomized_grader_interface:
 		grader_interface = part.randomized_grader_interface
 
 		# Only randomized graders care about creators; do this here so
 		# we do not accidentally get randomized graders unintentionally.
 		result = component.queryMultiAdapter((part, solution, response, creator),
-										  grader_interface,
-										  name=part.grader_name)
+										  	grader_interface,
+										  	name=part.grader_name)
 	else:
 		grader_interface = part.grader_interface
 
 	if result is None:
 		result = component.queryMultiAdapter((part, solution, response),
-										  grader_interface,
-										  name=part.grader_name)
+										  	grader_interface,
+										  	name=part.grader_name)
 	return result
 grader = grader_for_solution_and_response  # alias BWC
 
