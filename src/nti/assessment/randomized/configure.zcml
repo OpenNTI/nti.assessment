@@ -27,13 +27,13 @@
 			 provides=".interfaces.IQRandomizedMatchingPartGrader" />
 
 	<adapter factory=".graders.RandomizedMatchingPartGrader"
-			 for=".interfaces.IQMatchingPart
+			 for="nti.assessment.interfaces.IQMatchingPart
 			 	  nti.assessment.interfaces.IQMatchingSolution
 			 	  nti.assessment.interfaces.IQDictResponse"
 			 provides=".interfaces.IQRandomizedMatchingPartGrader" />
 
 	<adapter factory=".graders.RandomizedMatchingPartGrader"
-			 for=".interfaces.IQMatchingPart
+			 for="nti.assessment.interfaces.IQMatchingPart
 			 	  nti.assessment.interfaces.IQMatchingSolution
 			 	  dict"
 			 provides=".interfaces.IQRandomizedMatchingPartGrader" />
@@ -53,14 +53,14 @@
 			 provides=".interfaces.IQRandomizedMatchingPartGrader" />
 
 	<adapter factory=".graders.RandomizedMatchingPartGrader"
-			 for=".interfaces.IQMatchingPart
+			 for="nti.assessment.interfaces.IQMatchingPart
 			 	  nti.assessment.interfaces.IQMatchingSolution
 			 	  nti.assessment.interfaces.IQDictResponse
 			 	  nti.dataserver_core.interfaces.IUser"
 			 provides=".interfaces.IQRandomizedMatchingPartGrader" />
 
 	<adapter factory=".graders.RandomizedMatchingPartGrader"
-			 for=".interfaces.IQMatchingPart
+			 for="nti.assessment.interfaces.IQMatchingPart
 			 	  nti.assessment.interfaces.IQMatchingSolution
 			 	  dict
 			 	  nti.dataserver_core.interfaces.IUser"
@@ -93,6 +93,32 @@
 			 	  nti.dataserver_core.interfaces.IUser"
 			 provides=".interfaces.IQRandomizedOrderingPartGrader" />
 
+	<adapter factory=".graders.RandomizedOrderingPartGrader"
+			 for="nti.assessment.interfaces.IQOrderingPart
+			 	  nti.assessment.interfaces.IQOrderingSolution
+			 	  nti.assessment.interfaces.IQDictResponse"
+			 provides=".interfaces.IQRandomizedOrderingPartGrader" />
+
+	<adapter factory=".graders.RandomizedOrderingPartGrader"
+			 for="nti.assessment.interfaces.IQOrderingPart
+			 	  nti.assessment.interfaces.IQOrderingSolution
+			 	  dict"
+			 provides=".interfaces.IQRandomizedOrderingPartGrader" />
+
+	<adapter factory=".graders.RandomizedOrderingPartGrader"
+			 for="nti.assessment.interfaces.IQOrderingPart
+			 	  nti.assessment.interfaces.IQOrderingSolution
+			 	  nti.assessment.interfaces.IQDictResponse
+			 	  nti.dataserver_core.interfaces.IUser"
+			 provides=".interfaces.IQRandomizedOrderingPartGrader" />
+
+	<adapter factory=".graders.RandomizedOrderingPartGrader"
+			 for="nti.assessment.interfaces.IQOrderingPart
+			 	  nti.assessment.interfaces.IQOrderingSolution
+			 	  dict
+			 	  nti.dataserver_core.interfaces.IUser"
+			 provides=".interfaces.IQRandomizedOrderingPartGrader" />
+
 	<!-- Multiple choice -->
 	<adapter factory=".graders.RandomizedMultipleChoiceGrader"
 			 for=".interfaces.IQRandomizedMultipleChoicePart
@@ -113,19 +139,19 @@
 			 provides=".interfaces.IQRandomizedMultipleChoicePartGrader" />
 
 	<adapter factory=".graders.RandomizedMultipleChoiceGrader"
-			 for=".interfaces.IQMultipleChoicePart
+			 for="nti.assessment.interfaces.IQMultipleChoicePart
 			 	  nti.assessment.interfaces.IQSingleValuedSolution
 			 	  nti.assessment.interfaces.IQTextResponse"
 			 provides=".interfaces.IQRandomizedMultipleChoicePartGrader" />
 
 	<adapter factory=".graders.RandomizedMultipleChoiceGrader"
-			 for=".interfaces.IQMultipleChoicePart
+			 for="nti.assessment.interfaces.IQMultipleChoicePart
 			 	  nti.assessment.interfaces.IQSingleValuedSolution
 			 	  int"
 			 provides=".interfaces.IQRandomizedMultipleChoicePartGrader" />
 
 	<adapter factory=".graders.RandomizedMultipleChoiceGrader"
-			 for=".interfaces.IQMultipleChoicePart
+			 for="nti.assessment.interfaces.IQMultipleChoicePart
 			 	  nti.assessment.interfaces.IQSingleValuedSolution
 			 	  basestring"
 			 provides=".interfaces.IQRandomizedMultipleChoicePartGrader" />
@@ -152,21 +178,21 @@
 			 provides=".interfaces.IQRandomizedMultipleChoicePartGrader" />
 
 	<adapter factory=".graders.RandomizedMultipleChoiceGrader"
-			 for=".interfaces.IQMultipleChoicePart
+			 for="nti.assessment.interfaces.IQMultipleChoicePart
 			 	  nti.assessment.interfaces.IQSingleValuedSolution
 			 	  nti.assessment.interfaces.IQTextResponse
 			 	  nti.dataserver_core.interfaces.IUser"
 			 provides=".interfaces.IQRandomizedMultipleChoicePartGrader" />
 
 	<adapter factory=".graders.RandomizedMultipleChoiceGrader"
-			 for=".interfaces.IQMultipleChoicePart
+			 for="nti.assessment.interfaces.IQMultipleChoicePart
 			 	  nti.assessment.interfaces.IQSingleValuedSolution
 			 	  int
 			 	  nti.dataserver_core.interfaces.IUser"
 			 provides=".interfaces.IQRandomizedMultipleChoicePartGrader" />
 
 	<adapter factory=".graders.RandomizedMultipleChoiceGrader"
-			 for=".interfaces.IQMultipleChoicePart
+			 for="nti.assessment.interfaces.IQMultipleChoicePart
 			 	  nti.assessment.interfaces.IQSingleValuedSolution
 			 	  basestring
 			 	  nti.dataserver_core.interfaces.IUser"
@@ -186,13 +212,13 @@
 			 provides=".interfaces.IQRandomizedMultipleChoiceMultipleAnswerPartGrader" />
 
 	<adapter factory=".graders.RandomizedMultipleChoiceMultipleAnswerGrader"
-			 for=".interfaces.IQMultipleChoiceMultipleAnswerPart
+			 for="nti.assessment.interfaces.IQMultipleChoiceMultipleAnswerPart
 			 	  nti.assessment.interfaces.IQMultiValuedSolution
 			 	  nti.assessment.interfaces.IQListResponse"
 			 provides=".interfaces.IQRandomizedMultipleChoiceMultipleAnswerPartGrader" />
 
 	<adapter factory=".graders.RandomizedMultipleChoiceMultipleAnswerGrader"
-			 for=".interfaces.IQMultipleChoiceMultipleAnswerPart
+			 for="nti.assessment.interfaces.IQMultipleChoiceMultipleAnswerPart
 			 	  nti.assessment.interfaces.IQMultiValuedSolution
 			 	  list"
 			 provides=".interfaces.IQRandomizedMultipleChoiceMultipleAnswerPartGrader" />
@@ -212,14 +238,14 @@
 			 provides=".interfaces.IQRandomizedMultipleChoiceMultipleAnswerPartGrader" />
 
 	<adapter factory=".graders.RandomizedMultipleChoiceMultipleAnswerGrader"
-			 for=".interfaces.IQMultipleChoiceMultipleAnswerPart
+			 for="nti.assessment.interfaces.IQMultipleChoiceMultipleAnswerPart
 			 	  nti.assessment.interfaces.IQMultiValuedSolution
 			 	  nti.assessment.interfaces.IQListResponse
 			 	  nti.dataserver_core.interfaces.IUser"
 			 provides=".interfaces.IQRandomizedMultipleChoiceMultipleAnswerPartGrader" />
 
 	<adapter factory=".graders.RandomizedMultipleChoiceMultipleAnswerGrader"
-			 for=".interfaces.IQMultipleChoiceMultipleAnswerPart
+			 for="nti.assessment.interfaces.IQMultipleChoiceMultipleAnswerPart
 			 	  nti.assessment.interfaces.IQMultiValuedSolution
 			 	  list
 			 	  nti.dataserver_core.interfaces.IUser"
