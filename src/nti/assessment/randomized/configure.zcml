@@ -250,6 +250,27 @@
 			 for=".interfaces.IQRandomizedMultipleChoiceMultipleAnswerPart"
 			 provides="nti.assessment.interfaces.IQPartSolutionsExternalizer" />
 
+	<!-- Named random ext adapters for those regular types converted to random -->
+	<adapter factory=".externalization._RandomizedMatchingPartSolutionsExternalizer"
+			 for="nti.assessment.interfaces.IQMatchingPart"
+			 provides="..interfaces.IQPartSolutionsExternalizer"
+			 name="random" />
+
+	<adapter factory=".externalization._RandomizedOrderingPartSolutionsExternalizer"
+			 for="nti.assessment.interfaces.IQOrderingPart"
+			 provides="..interfaces.IQPartSolutionsExternalizer"
+			 name="random" />
+
+	<adapter factory=".externalization._RandomizedMultipleChoicePartSolutionsExternalizer"
+			 for="nti.assessment.interfaces.IQMultipleChoicePart"
+			 provides="nti.assessment.interfaces.IQPartSolutionsExternalizer"
+			 name="random" />
+
+	<adapter factory=".externalization._RandomizedMultipleChoiceMultipleAnswerPartSolutionsExternalizer"
+			 for="nti.assessment.interfaces.IQMultipleChoiceMultipleAnswerPart"
+			 provides="nti.assessment.interfaces.IQPartSolutionsExternalizer"
+			 name="random" />
+
 	<!-- Externalization -->
 	<include package="nti.externalization" file="meta.zcml" />
 	<include package="nti.externalization" />
