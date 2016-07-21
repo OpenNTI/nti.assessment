@@ -21,6 +21,7 @@ from zope.location.interfaces import ISublocations
 from persistent import Persistent
 from persistent.list import PersistentList
 
+from nti.assessment._util import CreatorMixin
 from nti.assessment._util import make_sublocations as _make_sublocations
 from nti.assessment._util import dctimes_property_fallback as _dctimes_property_fallback
 
@@ -52,7 +53,7 @@ from nti.schema.schema import EqHash
 @WithRepr
 @interface.implementer(IQAssessedPart, ISublocations)
 @EqHash('assessedValue', 'submittedResponse', superhash=True)
-class QAssessedPart(QSubmittedPart):
+class QAssessedPart(QSubmittedPart, CreatorMixin):
 	createDirectFieldProperties(IQAssessedPart)
 
 @WithRepr
@@ -63,6 +64,7 @@ class QAssessedPart(QSubmittedPart):
 @EqHash('questionId', 'parts', superhash=True)
 class QAssessedQuestion(SchemaConfigured,
 						ContainedMixin,
+						CreatorMixin,
 						Persistent):
 	createDirectFieldProperties(IQAssessedQuestion)
 
@@ -89,6 +91,7 @@ class QAssessedQuestion(SchemaConfigured,
 @EqHash('questionSetId', 'questions', superhash=True)
 class QAssessedQuestionSet(SchemaConfigured,
 						   ContainedMixin,
+						   CreatorMixin,
 						   Persistent):
 
 	createDirectFieldProperties(IQAssessedQuestionSet)
