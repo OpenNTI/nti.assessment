@@ -38,9 +38,9 @@ class RandomizedConnectingPartGrader(ConnectingPartGrader):
 	def unshuffle(self, the_dict, user=None, context=None):
 		user = user if user else self.creator
 		the_dict = {k:int(v) for k, v in the_dict.items()}
+		the_dict = ConnectingPartGrader._to_int_dict(self, the_dict)
 		if not _needs_unshuffled(self, user):
 			return the_dict
-		the_dict = ConnectingPartGrader._to_int_dict(self, the_dict)
 		generator = randomize(user=user, context=context)
 		if generator is not None:
 			values = list(self.part.values)
