@@ -13,6 +13,8 @@ import time
 
 from zope.datetime import parseDatetimetz
 
+from persistent.interfaces import IPersistent
+
 from nti.common.representation import WithRepr
 
 from nti.schema.schema import EqHash
@@ -65,6 +67,8 @@ class CreatorMixin(object):
 	def _set_creator(self, creator):
 		wref = IWeakRef(creator, creator)
 		self.__dict__['creator'] = wref
+		if IPersistent.providedBy(self):
+			self._p_changed = True
 	creator = property(_get_creator, _set_creator)
 
 # functions
