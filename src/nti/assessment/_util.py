@@ -21,8 +21,6 @@ from nti.schema.schema import EqHash
 
 from nti.wref.interfaces import IWeakRef
 
-_marker = object()
-
 # classes
 
 @WithRepr
