@@ -68,7 +68,7 @@ class CreatorMixin(object):
 		wref = IWeakRef(creator, creator)
 		self.__dict__['creator'] = wref
 		if IPersistent.providedBy(self):
-			self._p_changed = True
+			self._p_changed = True # mark as changed
 	creator = property(_get_creator, _set_creator)
 
 # functions

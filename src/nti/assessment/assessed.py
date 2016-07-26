@@ -201,7 +201,9 @@ def assess_question_set_submission(set_submission, registry=component):
 			for question in question_set.Items:
 				for part in question.parts or ():
 					interface.alsoProvides(part, IQRandomizedPart)
-			result = _do_assess_question_set_submission( question_set, set_submission, registry )
+			result = _do_assess_question_set_submission(question_set,
+														set_submission, 
+														registry )
 		finally:
 			for question in question_set.Items:
 				for part in question.parts or ():
@@ -211,5 +213,7 @@ def assess_question_set_submission(set_submission, registry=component):
 						# Concrete randomized type already.
 						pass
 	else:
-		result = _do_assess_question_set_submission( question_set, set_submission, registry )
+		result = _do_assess_question_set_submission(question_set,
+													set_submission,
+													registry )
 	return result
