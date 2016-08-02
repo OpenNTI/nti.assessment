@@ -147,8 +147,7 @@ class TestAssignmentSubmission(AssessmentTestCase):
 			update_from_external_object( asub,
 										 {'parts': [submission.QuestionSetSubmission()]},
 										 require_updater=True )
-		assert_that( wct.exception.args[0][0][0][0][1], is_(RequiredMissing ) )
-
+		assert_that( wct.exception.args[0][0][0][0], is_(RequiredMissing ) )
 
 		update_from_external_object( asub,
 									 {'parts': [submission.QuestionSetSubmission(questionSetId='foo', questions=())],
