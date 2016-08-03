@@ -44,7 +44,7 @@ from nti.assessment.parts import QMultipleChoiceMultipleAnswerPart
 
 from nti.externalization.representation import WithRepr
 
-from nti.schema.schema import EqHash
+from nti.schema.eqhash import EqHash
 
 @WithRepr
 @interface.implementer(IQSolution, IContained)

@@ -97,9 +97,9 @@ from nti.externalization.representation import WithRepr
 
 from nti.namedfile.constraints import FileConstraints
 
-from nti.schema.field import SchemaConfigured
+from nti.schema.eqhash import EqHash
 
-from nti.schema.schema import EqHash
+from nti.schema.field import SchemaConfigured
 
 @WithRepr
 @interface.implementer(IQNonGradablePart, IContained)

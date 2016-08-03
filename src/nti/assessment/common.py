@@ -72,14 +72,14 @@ from nti.ntiids.ntiids import get_parts
 from nti.ntiids.ntiids import make_ntiid
 from nti.ntiids.ntiids import make_specific_safe
 
+from nti.schema.eqhash import EqHash
+
 from nti.schema.field import SchemaConfigured
 
 from nti.schema.fieldproperty import AdaptingFieldProperty
 from nti.schema.fieldproperty import createDirectFieldProperties
 
 from nti.schema.interfaces import find_most_derived_interface
-
-from nti.schema.schema import EqHash
 
 # functions
 

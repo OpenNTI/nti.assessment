@@ -19,9 +19,9 @@ from zope import interface
 from nti.assessment.interfaces import IQPoll
 from nti.assessment.interfaces import IQuestion 
 
-from nti.schema.schema import EqHash
-
 from nti.ntiids.ntiids import validate_ntiid_string
+
+from nti.schema.eqhash import EqHash
 
 from nti.wref.interfaces import IWeakRef
 
