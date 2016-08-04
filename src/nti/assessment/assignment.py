@@ -88,8 +88,6 @@ class QAssignment(QPersistentSubmittable, AssessmentSchemaMixin):
 
 	createDirectFieldProperties(IQAssignment)
 
-	title = AdaptingFieldProperty(IQAssignment['title'])
-
 	mimeType = mime_type = ASSIGNMENT_MIME_TYPE
 
 	id = alias('ntiid')

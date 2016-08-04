@@ -929,6 +929,8 @@ class IQAssignment(IQAssessment, IQSubmittable, ITitledContent, IAttributeAnnota
 						 not be public""",
 						 default=False)
 
+	title = TextLine(title="Assignment title", required=True)
+
 	# A note on handling assignments that have an associated time limit
 	# (e.g., you have one hour to complete this assignment once you begin):
 	# That information will be encoded as a timedelta on the assignment.
@@ -944,7 +946,7 @@ class IQAssignment(IQAssessment, IQSubmittable, ITitledContent, IAttributeAnnota
 		"""
 
 IQAssignment['title'].setTaggedValue(TAG_HIDDEN_IN_UI, False)
-IQAssignment['title'].setTaggedValue(TAG_REQUIRED_IN_UI, False)
+IQAssignment['title'].setTaggedValue(TAG_REQUIRED_IN_UI, True)
 IQAssignment['category_name'].setTaggedValue(TAG_HIDDEN_IN_UI, False)
 IQAssignment['category_name'].setTaggedValue(TAG_REQUIRED_IN_UI, False)
 IQAssignment['is_non_public'].setTaggedValue(TAG_HIDDEN_IN_UI, False)

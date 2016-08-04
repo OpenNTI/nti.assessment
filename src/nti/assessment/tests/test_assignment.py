@@ -47,6 +47,7 @@ class TestAssignment(AssessmentTestCase):
 		assert_that( part, validly_provides( interfaces.IQAssignmentPart ) )
 
 		assign_obj = assignment.QAssignment()
+		assign_obj.title = 'title'
 		assert_that( assign_obj, verifiably_provides( interfaces.IQAssignment ) )
 		# This is now valid since we default to empty parts.
 		assert_that( assign_obj, validly_provides( interfaces.IQAssignment ) )
@@ -60,7 +61,7 @@ class TestAssignment(AssessmentTestCase):
 		assign_obj.update_version()
 		assert_that( assign_obj, externalizes( has_entry( 'version', not_none() )))
 
-		assert_that( assignment.QAssignment(parts=[part]),
+		assert_that( assignment.QAssignment(parts=[part], title='title'),
 					 validly_provides(interfaces.IQAssignment) )
 
 		assert_that( assignment.QAssignmentSubmissionPendingAssessment(),
@@ -72,7 +73,7 @@ class TestAssignment(AssessmentTestCase):
 		a = assignment.QAssignment()
 		a.lastModified = a.createdTime = 0
 		assert_that(signature(a),
-					is_('95b7941fc7a84dd6a2eb676dc0c3fcad70fe65524a699b6aad07aade7fdfbe52') )
+					is_('e836931af90dbaca9b36f54e74f50d2641cc7d0b65e1719e6261a63d2f424383') )
 
 		path = os.path.join(os.path.dirname(__file__), "questionbank.json")
 		with open(path, "rb") as fp:
