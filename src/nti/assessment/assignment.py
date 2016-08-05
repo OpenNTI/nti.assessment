@@ -55,12 +55,15 @@ from nti.dublincore.datastructures import PersistentCreatedModDateTrackingObject
 
 from nti.externalization.representation import WithRepr
 
+from nti.schema.eqhash import EqHash
+
 from nti.schema.field import SchemaConfigured
 
 from nti.schema.fieldproperty import AdaptingFieldProperty
 from nti.schema.fieldproperty import createDirectFieldProperties
 
 @WithRepr
+@EqHash('ntiid')
 @interface.implementer(IQAssignmentPart, IContentTypeAware)
 class QAssignmentPart(SchemaConfigured,
 					  Persistent,
@@ -83,6 +86,7 @@ class QAssignmentPart(SchemaConfigured,
 		return result
 
 @WithRepr
+@EqHash('ntiid')
 @interface.implementer(IQAssignment, INTIContained)
 class QAssignment(QPersistentSubmittable, AssessmentSchemaMixin):
 
