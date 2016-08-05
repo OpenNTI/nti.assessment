@@ -116,7 +116,7 @@ class TestJsonSchema(unittest.TestCase):
 		assert_that(fields, has_length(14))
 		assert_that(fields, has_entry('parts', has_entry('base_type',
 														 'application/vnd.nextthought.assessment.assignmentpart')))
-		assert_that(fields, has_entry('title', has_entry('min_length', is_(0))))
+		assert_that(fields, has_entry('title', has_entry('min_length', is_(1))))
 		assert_that(fields, has_entry('is_non_public', has_entry('type', 'bool')))
 		assert_that(fields, has_entry('available_for_submission_beginning',
 									  has_entry( 'type', 'datetime' )))
