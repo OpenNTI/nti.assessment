@@ -1003,6 +1003,11 @@ class IQAssessmentContextMixin(interface.Interface):
 		Set the attribute value for the specified assessment
 		"""
 
+	def remove(assessment, name):
+		"""
+		Remove the attribute value for the specified assessment
+		"""
+		
 	def size():
 		"""
 		return the number of assessments
@@ -1087,6 +1092,17 @@ class QAssessmentPoliciesModified(ObjectModifiedEvent):
 		self.value = value
 		self.assesment = assesment
 
+class IUnlockQAssessmentPolicies(IObjectEvent):
+	assesment = interface.Attribute("Assesment identifier")
+	courses = interface.Attribute("Courses set")
+
+@interface.implementer(IUnlockQAssessmentPolicies)
+class UnlockQAssessmentPolicies(ObjectEvent):
+
+	def __init__(self, obj, courses=None):
+		super(UnlockQAssessmentPolicy, self).__init__(obj)
+		self.assesment = assesment
+		self.courses = courses or ()
 
 # set solutions response types
 
