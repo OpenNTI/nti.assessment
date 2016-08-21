@@ -1093,7 +1093,6 @@ class QAssessmentPoliciesModified(ObjectModifiedEvent):
 		self.assesment = assesment
 
 class IUnlockQAssessmentPolicies(IObjectEvent):
-	assesment = interface.Attribute("Assesment identifier")
 	courses = interface.Attribute("Courses set")
 
 @interface.implementer(IUnlockQAssessmentPolicies)
