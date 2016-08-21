@@ -39,8 +39,6 @@ from dolmen.builtins.interfaces import INumeric
 from dolmen.builtins.interfaces import IUnicode
 from dolmen.builtins.interfaces import IIterable
 
-from nti.common.property import alias
-
 from nti.contentfragments.schema import Tag
 from nti.contentfragments.schema import LatexFragmentTextLine as _LatexTextLine
 from nti.contentfragments.schema import HTMLContentFragment as _HTMLContentFragment
@@ -61,6 +59,8 @@ from nti.dataserver_fragments.interfaces import ITitledContent
 from nti.dataserver_fragments.schema import ExtendedCompoundModeledContentBody
 
 from nti.ntiids.schema import ValidNTIID
+
+from nti.property.property import alias
 
 from nti.schema.field import Int
 from nti.schema.field import Bool
@@ -1100,8 +1100,7 @@ class IUnlockQAssessmentPolicies(IObjectEvent):
 class UnlockQAssessmentPolicies(ObjectEvent):
 
 	def __init__(self, obj, courses=None):
-		super(UnlockQAssessmentPolicy, self).__init__(obj)
-		self.assesment = assesment
+		super(UnlockQAssessmentPolicies, self).__init__(obj)
 		self.courses = courses or ()
 
 # set solutions response types
