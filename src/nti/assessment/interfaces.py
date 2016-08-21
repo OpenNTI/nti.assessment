@@ -1098,6 +1098,8 @@ class IUnlockQAssessmentPolicies(IObjectEvent):
 @interface.implementer(IUnlockQAssessmentPolicies)
 class UnlockQAssessmentPolicies(ObjectEvent):
 
+	assessment = alias('object')
+	
 	def __init__(self, obj, courses=None):
 		super(UnlockQAssessmentPolicies, self).__init__(obj)
 		self.courses = courses or ()
