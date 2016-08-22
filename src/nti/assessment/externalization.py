@@ -55,6 +55,9 @@ from nti.mimetype import decorateMimeType
 from nti.ntiids.ntiids import TYPE_OID
 from nti.ntiids.ntiids import is_ntiid_of_type
 
+from nti.coremetadata.interfaces import IRecordable
+from nti.coremetadata.interfaces import IPublishable
+
 OID = StandardExternalFields.OID
 NTIID = StandardExternalFields.NTIID
 MIMETYPE = StandardExternalFields.MIMETYPE
@@ -271,4 +274,8 @@ class _EvaluationExporter(object):
 		mod_args['decorate_callback'] = self._decorate_callback
 		result = to_external_object(self.evaluation, **mod_args)
 		result = self._remover(result)
+		if IRecordable.providedBy(self.evaluation):
+			result['isLocked'] = self.evaluation.isLocked()
+		if IPublishable.providedBy(self.evaluation):
+			result['isPublished'] = self.evaluation.isPublished()
 		return result
