@@ -79,6 +79,7 @@ setup(
  		'nti.ntiids',
  		'nti.openmath',
  		'nti.plasTeX',
+ 		'nti.property',
  		'nti.schema',
  		'nti.wref'
 	],
