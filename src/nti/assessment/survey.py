@@ -55,10 +55,6 @@ from nti.assessment.interfaces import IQAggregatedModeledContentPart
 from nti.assessment.interfaces import IQAggregatedMultipleChoicePart
 from nti.assessment.interfaces import IQAggregatedMultipleChoiceMultipleAnswerPart
 
-from nti.common.property import alias
-from nti.common.property import readproperty
-from nti.common.property import CachedProperty
-
 from nti.dataserver_core.interfaces import IContained as INTIContained
 
 from nti.dataserver_core.mixins import ContainedMixin
@@ -66,6 +62,10 @@ from nti.dataserver_core.mixins import ContainedMixin
 from nti.dublincore.datastructures import PersistentCreatedModDateTrackingObject
 
 from nti.externalization.representation import WithRepr
+
+from nti.property.property import alias
+from nti.property.property import readproperty
+from nti.property.property import CachedProperty
 
 from nti.schema.eqhash import EqHash
 

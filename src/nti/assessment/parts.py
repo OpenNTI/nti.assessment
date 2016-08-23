@@ -88,14 +88,14 @@ from nti.assessment.randomized.interfaces import IQRandomizedMultipleChoicePartG
 from nti.assessment.randomized.interfaces import IQRandomizedMultipleChoiceMultipleAnswerPart
 from nti.assessment.randomized.interfaces import IQRandomizedMultipleChoiceMultipleAnswerPartGrader
 
-from nti.common.property import alias
-from nti.common.property import readproperty
-
 from nti.contentfragments.interfaces import UnicodeContentFragment as _u
 
 from nti.externalization.representation import WithRepr
 
 from nti.namedfile.constraints import FileConstraints
+
+from nti.property.property import alias
+from nti.property.property import readproperty
 
 from nti.schema.eqhash import EqHash
 

@@ -49,8 +49,6 @@ from nti.assessment.interfaces import IQEvaluationContainerIdGetter
 
 from nti.assessment.randomized.interfaces import IQRandomizedPart
 
-from nti.common.property import alias
-
 from nti.coremetadata.mixins import RecordableMixin
 from nti.coremetadata.mixins import CalendarPublishableMixin
 
@@ -71,6 +69,8 @@ from nti.externalization.representation import WithRepr
 from nti.ntiids.ntiids import get_parts
 from nti.ntiids.ntiids import make_ntiid
 from nti.ntiids.ntiids import make_specific_safe
+
+from nti.property.property import alias
 
 from nti.schema.eqhash import EqHash
 

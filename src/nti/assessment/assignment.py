@@ -44,9 +44,6 @@ from nti.assessment.interfaces import IQBaseSubmission
 from nti.assessment.interfaces import IQTimedAssignment
 from nti.assessment.interfaces import IQAssignmentSubmissionPendingAssessment
 
-from nti.common.property import alias
-from nti.common.property import readproperty
-
 from nti.dataserver_core.interfaces import IContained as INTIContained
 
 from nti.dataserver_core.mixins import ContainedMixin
@@ -54,6 +51,9 @@ from nti.dataserver_core.mixins import ContainedMixin
 from nti.dublincore.datastructures import PersistentCreatedModDateTrackingObject
 
 from nti.externalization.representation import WithRepr
+
+from nti.property.property import alias
+from nti.property.property import readproperty
 
 from nti.schema.eqhash import EqHash
 

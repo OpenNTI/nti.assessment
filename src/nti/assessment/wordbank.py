@@ -23,13 +23,13 @@ from nti.assessment.interfaces import IWordEntry
 
 from nti.common.maps import CaseInsensitiveDict
 
-from nti.common.property import CachedProperty
-
 from nti.common.string import to_unicode
 
 from nti.contentfragments.interfaces import HTMLContentFragment
 
 from nti.externalization.representation import WithRepr
+
+from nti.property.property import CachedProperty
 
 from nti.schema.eqhash import EqHash
 
