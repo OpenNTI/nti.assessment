@@ -108,8 +108,9 @@ class QAssignment(QPersistentSubmittable, AssessmentSchemaMixin):
 		return self.category_name == 'no_submit'
 
 	def iter_question_sets(self):
-		for part in self.parts:
-			yield part.question_set
+		for part in self.parts or ():
+			if part.question_set is not None:
+				yield part.question_set
 
 	@readproperty
 	def containerId(self):
