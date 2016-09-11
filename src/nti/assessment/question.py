@@ -49,8 +49,6 @@ from nti.dublincore.datastructures import PersistentCreatedModDateTrackingObject
 from nti.property.property import alias
 from nti.property.property import readproperty
 
-from nti.schema.eqhash import EqHash
-
 from nti.schema.field import SchemaConfigured
 
 from nti.schema.fieldproperty import AdaptingFieldProperty
@@ -97,7 +95,6 @@ class QBaseMixin(SchemaConfigured,
 	__repr__ = __str__
 
 @interface.implementer(IQuestion)
-@EqHash('content', 'parts', superhash=True)
 class QQuestion(QBaseMixin):
 
 	parts = ()
@@ -119,7 +116,6 @@ class QQuestion(QBaseMixin):
 			for x in self.parts or ():
 				x.__parent__ = self  # take ownership
 
-@EqHash('title', 'questions', superhash=True)
 @interface.implementer(IQuestionSet)
 class QQuestionSet(QBaseMixin, RecordableContainerMixin):
 
@@ -175,7 +171,6 @@ class QQuestionSet(QBaseMixin, RecordableContainerMixin):
 		else:
 			self.questions.insert(index, item)
 
-@EqHash('wordbank', include_super=True)
 @interface.implementer(IQFillInTheBlankWithWordBankQuestion)
 class QFillInTheBlankWithWordBankQuestion(QQuestion):
 

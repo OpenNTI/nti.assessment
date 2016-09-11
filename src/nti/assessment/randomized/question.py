@@ -38,7 +38,6 @@ class QRandomizedQuestionSet(QQuestionSet):
 	mimeType = mime_type = RANDOMIZED_QUESTION_SET_MIME_TYPE
 
 @interface.implementer(IQuestionBank)
-@EqHash('draw', include_super=True)
 class QQuestionBank(QQuestionSet):
 	createDirectFieldProperties(IQuestionBank)
 

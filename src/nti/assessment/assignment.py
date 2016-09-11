@@ -86,7 +86,6 @@ class QAssignmentPart(SchemaConfigured,
 		return result
 
 @WithRepr
-@EqHash('ntiid')
 @interface.implementer(IQAssignment, INTIContained)
 class QAssignment(QPersistentSubmittable, AssessmentSchemaMixin):
 

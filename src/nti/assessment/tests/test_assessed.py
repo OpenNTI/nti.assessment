@@ -325,12 +325,7 @@ class TestAssessedQuestionSet(AssessmentTestCase):
 		part = parts.QFreeResponsePart(solutions=(solutions.QFreeResponseSolution(value='correct'),))
 		question = QQuestion( content='foo', parts=(part,) )
 
-		assert_that( question, is_( question_set.questions[0] ) )
-		# Some quick coverage things
-		assert_that( hash( question ), is_( hash( question_set.questions[0] ) ) )
 		hash( question_set )
-		assert_that( question != question, is_false() )
-		assert_that( question_set != question_set, is_false() )
 
 		component.provideUtility( question,
 								  provides=interfaces.IQuestion,
