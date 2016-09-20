@@ -28,8 +28,6 @@ from zope.interface.interfaces import ObjectEvent
 from zope.lifecycleevent import ObjectModifiedEvent
 from zope.lifecycleevent.interfaces import IObjectModifiedEvent
 
-from zope.mimetype.interfaces import mimeTypeConstraint
-
 from zope.schema import vocabulary
 
 from dolmen.builtins.interfaces import IDict
@@ -57,6 +55,8 @@ from nti.dataserver_core.interfaces import INeverStoredInSharedStream
 from nti.dataserver_fragments.interfaces import ITitledContent
 
 from nti.dataserver_fragments.schema import ExtendedCompoundModeledContentBody
+
+from nti.mimetype.mimetype import mimeTypeConstraint
 
 from nti.ntiids.schema import ValidNTIID
 
