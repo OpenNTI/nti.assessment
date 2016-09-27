@@ -11,6 +11,7 @@ from hamcrest import is_
 from hamcrest import is_not
 from hamcrest import all_of
 from hamcrest import has_key
+from hamcrest import has_item
 from hamcrest import equal_to
 from hamcrest import not_none
 from hamcrest import has_entry
@@ -269,6 +270,31 @@ class TestExternalization(AssessmentTestCase):
 										  'MimeType', 'application/vnd.nextthought.naquestionset',
 										  'questions', has_length(20)))
 
+	def test_question_set_summary(self):
+		path = os.path.join(os.path.dirname(__file__), "questionset.json")
+		with open(path, "r") as fp:
+			ext_obj = json.load(fp)
+
+		factory = internalization.find_factory_for(ext_obj)
+		assert_that(factory, is_(not_none()))
+
+		internal = factory()
+		internalization.update_from_external_object(internal, ext_obj, require_updater=True)
+
+		ntiid = u"tag:nextthought.com,2011-10:OU-NAQ-BIOL2124_F_2014_Human_Physiology.naq.set.qset:intro_quiz1"
+		internal.ntiid = ntiid
+
+		assert_that(internal, verifiably_provides(IQuestionSet) )
+		assert_that(internal, has_property('questions', has_length(20)))
+
+		assert_that(list(internal.Items), has_length(20))
+
+		ext_obj = to_external_object( internal, name="summary" )
+		assert_that( ext_obj, has_entries( 'NTIID', is_(ntiid),
+										   'Class', is_('QuestionSet'),
+										   'MimeType', is_('application/vnd.nextthought.naquestionset')))
+		assert_that( ext_obj, does_not( has_item( 'questions' )))
+
 	@fudge.patch('nti.assessment.randomized.get_seed')
 	def test_question_bank(self, mock_gs):
 
@@ -316,6 +342,21 @@ class TestExternalization(AssessmentTestCase):
 		assert_that(factory, is_(not_none()))
 		internal = factory()
 		internalization.update_from_external_object(internal, ext_obj, require_updater=True)
+
+	def test_assignment_summary(self):
+		path = os.path.join(os.path.dirname(__file__), "assignment_no_solutions.json")
+		with open(path, "r") as fp:
+			ext_obj = json.load(fp)
+		factory = internalization.find_factory_for(ext_obj)
+		assert_that(factory, is_(not_none()))
+		internal = factory()
+		internalization.update_from_external_object(internal, ext_obj, require_updater=True)
+
+		ext_obj = to_external_object( internal, name="summary" )
+		parts_ext = ext_obj.get( 'parts' )[0]
+		assert_that( parts_ext, has_entries( 'Class', is_('AssignmentPart'),
+											 'MimeType', is_('application/vnd.nextthought.assessment.assignmentpart')))
+		assert_that( parts_ext, does_not( has_item( 'question_set' )))
 
 	@fudge.patch('nti.assessment.randomized.get_seed')
 	def test_solutions_externalizer(self, mock_gs):

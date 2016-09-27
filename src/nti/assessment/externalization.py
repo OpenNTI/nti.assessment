@@ -21,6 +21,7 @@ from nti.assessment.interfaces import IQuestionSet
 from nti.assessment.interfaces import IQAssessedPart
 from nti.assessment.interfaces import IQUploadedFile
 from nti.assessment.interfaces import IQSubmittedPart
+from nti.assessment.interfaces import IQAssignmentPart
 from nti.assessment.interfaces import IQAssessedQuestion
 from nti.assessment.interfaces import IQuestionSubmission
 from nti.assessment.interfaces import IQAssessedQuestionSet
@@ -168,6 +169,22 @@ class _QuestionSetExternalizer(InterfaceObjectIO):
 			for question in context.Items: # resolve weaf refs
 				questions.append(to_external_object(question, **kwargs))
 		return result
+
+@component.adapter(IQuestionSet)
+@interface.implementer(IInternalObjectExternalizer)
+class _QuestionSetSummaryExternalizer(InterfaceObjectIO):
+
+	_excluded_out_ivars_ = ('questions',)
+
+	_ext_iface_upper_bound = IQuestionSet
+
+@component.adapter(IQAssignmentPart)
+@interface.implementer(IInternalObjectExternalizer)
+class _AssignmentPartSummaryExternalizer(InterfaceObjectIO):
+
+	_excluded_out_ivars_ = ('question_set',)
+
+	_ext_iface_upper_bound = IQAssignmentPart
 
 # Submission and Assessed objects
 
