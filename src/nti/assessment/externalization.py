@@ -16,6 +16,7 @@ from collections import Sequence
 from zope import component
 from zope import interface
 
+from nti.assessment.interfaces import IQSurvey
 from nti.assessment.interfaces import IQEvaluation
 from nti.assessment.interfaces import IQuestionSet
 from nti.assessment.interfaces import IQAssessedPart
@@ -169,6 +170,14 @@ class _QuestionSetExternalizer(InterfaceObjectIO):
 			for question in context.Items: # resolve weaf refs
 				questions.append(to_external_object(question, **kwargs))
 		return result
+
+@component.adapter(IQSurvey)
+@interface.implementer(IInternalObjectExternalizer)
+class _SurveySummaryExternalizer(InterfaceObjectIO):
+
+	_excluded_out_ivars_ = ('questions',)
+
+	_ext_iface_upper_bound = IQuestionSet
 
 @component.adapter(IQuestionSet)
 @interface.implementer(IInternalObjectExternalizer)

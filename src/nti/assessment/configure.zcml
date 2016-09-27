@@ -260,6 +260,11 @@
 			 provides="nti.externalization.interfaces.IInternalObjectExternalizer"
 			 name="summary" />
 
+	<adapter factory=".externalization._SurveySummaryExternalizer"
+			 for=".interfaces.IQSurvey"
+			 provides="nti.externalization.interfaces.IInternalObjectExternalizer"
+			 name="summary" />
+
 	<!--
 	Register mimeType factories for the QNonGradablePart and QPart classes.
 	Registration is not done in ext:registerAutoPackageIO.
