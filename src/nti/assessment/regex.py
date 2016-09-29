@@ -20,7 +20,7 @@ from persistent import Persistent
 
 from nti.assessment.interfaces import IRegEx
 
-from nti.contentfragments.interfaces import HTMLContentFragment
+from nti.contentfragments.interfaces import IHTMLContentFragment
 
 from nti.externalization.representation import WithRepr
 
@@ -50,7 +50,7 @@ class RegEx(SchemaConfigured, Persistent, Contained):
 @interface.implementer(IRegEx)
 def _regex_str_adapter(pattern, solution=None):
 	result = RegEx(pattern=pattern)
-	result.solution = HTMLContentFragment(solution) if solution else None
+	result.solution = IHTMLContentFragment(solution) if solution else None
 	return result
 
 @interface.implementer(IRegEx)
