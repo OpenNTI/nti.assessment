@@ -65,7 +65,12 @@ class WordEntry(Persistent, SchemaConfigured, Contained):
 			return self is other or self.wid == other.wid
 		except AttributeError:
 			return NotImplemented
-		
+
+	def __hash__(self):
+		xhash = 47
+		xhash ^= hash(self.wid)
+		return xhash
+
 	def __lt__(self, other):
 		try:
 			return (self.word.lower(), self.lang) < (other.word.lower(), other.self.lang)
@@ -95,11 +100,11 @@ class WordBank(SchemaConfigured, Persistent, Contained):
 
 	@CachedProperty('entries')
 	def words(self):
-		return frozenset({x.word for x in self.entries})
+		return frozenset(x.word for x in self.entries)
 
 	@CachedProperty('entries')
 	def ids(self):
-		return frozenset({x.wid for x in self.entries})
+		return frozenset(x.wid for x in self.entries)
 
 	def sorted(self):
 		return sorted(self.entries)
@@ -121,6 +126,12 @@ class WordBank(SchemaConfigured, Persistent, Contained):
 		except AttributeError:
 			return NotImplemented
 		
+	def __hash__(self):
+		xhash = 47
+		xhash ^= hash(self.ids)
+		xhash ^= hash(self.unique)
+		return xhash
+
 	def __contains__(self, wid):
 		return wid in self._id_map
 	contains_id = __contains__

@@ -48,6 +48,11 @@ class RegEx(Persistent, SchemaConfigured, Contained):
 			return self is other or self.pattern == other.pattern
 		except AttributeError:
 			return NotImplemented
+		
+	def __hash__(self):
+		xhash = 47
+		xhash ^= hash(self.pattern)
+		return xhash
 
 @component.adapter(IString)
 @interface.implementer(IRegEx)
