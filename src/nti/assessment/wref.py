@@ -21,12 +21,9 @@ from nti.assessment.interfaces import IQuestion
 
 from nti.ntiids.ntiids import validate_ntiid_string
 
-from nti.schema.eqhash import EqHash
-
 from nti.wref.interfaces import IWeakRef
 
 @total_ordering
-@EqHash('ntiid')
 @interface.implementer(IWeakRef)
 class ItemWeakRef(object):
 	
@@ -34,8 +31,23 @@ class ItemWeakRef(object):
 		self.ntiid = item.ntiid
 		validate_ntiid_string(self.ntiid)
 
+	def __eq__(self, other):
+		try:
+			return self is other or self.ntiid == other.ntiid
+		except AttributeError:
+			return NotImplemented
+
 	def __lt__(self, other):
-		return self.ntiid < other.ntiid
+		try:
+			return self.ntiid < other.ntiid
+		except AttributeError:
+			return NotImplemented
+
+	def __gt__(self, other):
+		try:
+			return self.ntiid > other.ntiid
+		except AttributeError:
+			return NotImplemented
 
 	def __getstate__(self):
 		return (1, self.ntiid)
