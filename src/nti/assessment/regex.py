@@ -24,16 +24,13 @@ from nti.contentfragments.interfaces import IHTMLContentFragment
 
 from nti.externalization.representation import WithRepr
 
-from nti.schema.eqhash import EqHash
-
 from nti.schema.field import SchemaConfigured
 
 from nti.schema.fieldproperty import createDirectFieldProperties
 
 @WithRepr
-@EqHash("pattern",)
 @interface.implementer(IRegEx)
-class RegEx(SchemaConfigured, Persistent, Contained):
+class RegEx(Persistent, SchemaConfigured, Contained):
 	createDirectFieldProperties(IRegEx)
 
 	__external_can_create__ = True
@@ -45,7 +42,13 @@ class RegEx(SchemaConfigured, Persistent, Contained):
 
 	def __str__(self):
 		return self.pattern
-					
+				
+	def __eq__(self, other):
+		try:
+			return self is other or self.pattern == other.pattern
+		except AttributeError:
+			return NotImplemented
+
 @component.adapter(IString)
 @interface.implementer(IRegEx)
 def _regex_str_adapter(pattern, solution=None):
