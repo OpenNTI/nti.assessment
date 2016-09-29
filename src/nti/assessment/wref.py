@@ -37,6 +37,11 @@ class ItemWeakRef(object):
 		except AttributeError:
 			return NotImplemented
 
+	def __hash__(self):
+		xhash = 47
+		xhash ^= hash(self.ntiid)
+		return xhash
+
 	def __lt__(self, other):
 		try:
 			return self.ntiid < other.ntiid

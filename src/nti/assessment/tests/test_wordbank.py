@@ -36,6 +36,7 @@ class TestWordBank(AssessmentTestCase):
 												 'word', 'bankai',
 												 'wid', '1',
 												 'lang', 'en')))
+		assert_that(hash(we), is_(6272018847))
 
 		lst = ['1', 'bankai']
 		awe = asm_interfaces.IWordEntry(lst)
@@ -62,6 +63,8 @@ class TestWordBank(AssessmentTestCase):
 
 		assert_that(bank.words, has_length(2))
 		assert_that(sorted(bank.words), is_(['bankai', 'shikai']))
+		
+		assert_that(hash(bank), is_(-3327345582876087053))
 
 		w1 = bank.get('1')
 		assert_that(w1, has_property('wid', is_('1')))
