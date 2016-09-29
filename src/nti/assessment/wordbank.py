@@ -25,13 +25,11 @@ from nti.common.maps import CaseInsensitiveDict
 
 from nti.common.string import to_unicode
 
-from nti.contentfragments.interfaces import HTMLContentFragment
+from nti.contentfragments.interfaces import IHTMLContentFragment
 
 from nti.externalization.representation import WithRepr
 
 from nti.property.property import CachedProperty
-
-from nti.schema.eqhash import EqHash
 
 from nti.schema.field import SchemaConfigured
 
@@ -46,10 +44,9 @@ def safe_encode(word, encoding="UTF-8"):
 	return word
 
 @WithRepr
-@EqHash("wid")
 @total_ordering
 @interface.implementer(IWordEntry)
-class WordEntry(SchemaConfigured, Persistent, Contained):
+class WordEntry(Persistent, SchemaConfigured, Contained):
 	createDirectFieldProperties(IWordEntry)
 
 	__external_can_create__ = True
@@ -63,6 +60,12 @@ class WordEntry(SchemaConfigured, Persistent, Contained):
 		Persistent.__init__(self)
 		SchemaConfigured.__init__(self, *args, **kwargs)
 
+	def __eq__(self, other):
+		try:
+			return self is other or self.wid == other.wid
+		except AttributeError:
+			return NotImplemented
+		
 	def __lt__(self, other):
 		try:
 			return (self.word.lower(), self.lang) < (other.word.lower(), other.self.lang)
@@ -76,7 +79,6 @@ class WordEntry(SchemaConfigured, Persistent, Contained):
 			return NotImplemented
 
 @WithRepr
-@EqHash("ids", "unique")
 @interface.implementer(IWordBank)
 class WordBank(SchemaConfigured, Persistent, Contained):
 	createDirectFieldProperties(IWordBank)
@@ -113,6 +115,12 @@ class WordBank(SchemaConfigured, Persistent, Contained):
 		result = self._id_map.get(wid, default)
 		return result
 
+	def __eq__(self, other):
+		try:
+			return self is other or (self.ids, self.unique) == (other.ids, other.unique)
+		except AttributeError:
+			return NotImplemented
+		
 	def __contains__(self, wid):
 		return wid in self._id_map
 	contains_id = __contains__
@@ -132,13 +140,11 @@ class WordBank(SchemaConfigured, Persistent, Contained):
 		if other is not None:
 			entries.update(other.entries)
 			unique = unique and other.unique
-		result = WordBank(entries=list(entries), unique=unique)
-		return result
+		return WordBank(entries=list(entries), unique=unique)
 
 	@CachedProperty('entries')
 	def _id_map(self):
-		result = {x.wid: x for x in self.entries}
-		return result
+		return {x.wid: x for x in self.entries}
 
 	@CachedProperty('entries')
 	def _word_map(self):
@@ -158,7 +164,7 @@ def _wordentry_adapter(sequence):
 		content = to_unicode(sequence[3])
 	else:
 		content = result.word
-	result.content = HTMLContentFragment(content)
+	result.content = IHTMLContentFragment(content)
 	return result
 
 @interface.implementer(IWordBank)
