@@ -129,7 +129,7 @@ class AssignmentSubmission(ContainedMixin,
 						   SchemaConfigured,
 						   VersionedMixin,
 						   CreatorMixin,
-						   PersistentCreatedModDateTrackingObject):
+						   PersistentCreatedModDateTrackingObject): # order matters
 	"""
 	We do expect assignment submissions to be stored in the database
 	for some period of time so it should be persistent. When you set
