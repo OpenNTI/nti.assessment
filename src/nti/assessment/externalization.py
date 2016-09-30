@@ -171,9 +171,17 @@ class _QuestionSetExternalizer(InterfaceObjectIO):
 				questions.append(to_external_object(question, **kwargs))
 		return result
 
+@interface.implementer(IInternalObjectExternalizer)
+class _BasicSummaryExternalizer(InterfaceObjectIO):
+
+	def toExternalObject(self, *args, **kwargs):
+		result = super(_BasicSummaryExternalizer, self).toExternalObject(*args, **kwargs)
+		result['IsSummary'] = True
+		return result
+
 @component.adapter(IQSurvey)
 @interface.implementer(IInternalObjectExternalizer)
-class _SurveySummaryExternalizer(InterfaceObjectIO):
+class _SurveySummaryExternalizer(_BasicSummaryExternalizer):
 
 	_excluded_out_ivars_ = ('questions',)
 
@@ -181,7 +189,7 @@ class _SurveySummaryExternalizer(InterfaceObjectIO):
 
 @component.adapter(IQuestionSet)
 @interface.implementer(IInternalObjectExternalizer)
-class _QuestionSetSummaryExternalizer(InterfaceObjectIO):
+class _QuestionSetSummaryExternalizer(_BasicSummaryExternalizer):
 
 	_excluded_out_ivars_ = ('questions',)
 
@@ -189,7 +197,7 @@ class _QuestionSetSummaryExternalizer(InterfaceObjectIO):
 
 @component.adapter(IQAssignmentPart)
 @interface.implementer(IInternalObjectExternalizer)
-class _AssignmentPartSummaryExternalizer(InterfaceObjectIO):
+class _AssignmentPartSummaryExternalizer(_BasicSummaryExternalizer):
 
 	_excluded_out_ivars_ = ('question_set',)
 
