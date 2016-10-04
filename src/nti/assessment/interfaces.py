@@ -960,12 +960,12 @@ IQAssignment.setTaggedValue('_ext_jsonschema', u'assignment')
 
 class IQTimedAssignment(IQAssignment):
 
-	# Give students at least 60s.
+	# Give students at least 59s.
 	maximum_time_allowed = Int(	title="Maximum Time Allowed (Seconds)",
 						 		description="""When present, this specifies the maximum time allowed (in
 								seconds) students have to submit the assignments""",
 								required=True,
-								min=60)
+								min=59)
 
 IQTimedAssignment['title'].setTaggedValue(TAG_HIDDEN_IN_UI, False)
 IQTimedAssignment['title'].setTaggedValue(TAG_REQUIRED_IN_UI, False)
