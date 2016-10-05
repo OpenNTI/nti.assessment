@@ -206,7 +206,6 @@
 	<adapter factory=".adapters.NonGradableMultipleChoiceMultipleAnswerPartFactory" />
 
 	<!-- Utilities -->
-	<utility factory=".jsonschema.AssessmentJsonSchemaMaker" />
 	<utility factory=".jsonschema.PartJsonSchemaMaker" name="part" />
 	<utility factory=".jsonschema.PollJsonSchemaMaker" name="poll" />
 	<utility factory=".jsonschema.SurveyJsonSchemaMaker" name="survey" />
