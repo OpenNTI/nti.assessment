@@ -292,6 +292,9 @@ class EvaluationSchemaMixin(object):
 
 	def schema(self, user=None):
 		schema = find_most_derived_interface(self, IQAssessment)
-		result = make_schema(schema=schema, user=None, maker=IQAssessmentJsonSchemaMaker)
+		result = make_schema(schema=schema, 
+							 user=None,
+							 name='default', # in case not in schema
+							 maker=IQAssessmentJsonSchemaMaker)
 		return result
 AssessmentSchemaMixin = EvaluationSchemaMixin
