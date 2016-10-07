@@ -516,8 +516,7 @@ class QAggregatedSurvey(ContainedMixin,
 		return self
 
 def aggregated_part_factory(part):
-	result = IQAggregatedPartFactory(part)
-	return result
+	return IQAggregatedPartFactory(part)
 
 def aggregate_poll_submission(submission, registry=component):
 	"""
@@ -546,9 +545,9 @@ def aggregate_poll_submission(submission, registry=component):
 		if sub_part is None:  # null responses
 			logger.debug("Null response for part (%s) in poll (%s)", q_part, pollId)
 		response = IQResponse(sub_part) if sub_part is not None else None
-		response = normalize_response(q_part, response) if response is not None else None
+		normalized = normalize_response(q_part, response) if response is not None else None
 		aggregated_part = aggregated_part_factory(q_part)()
-		aggregated_part.append(response)
+		aggregated_part.append(normalized)
 		aggregated_parts.append(aggregated_part)
 
 	aggregated = QAggregatedPoll(pollId=pollId, parts=aggregated_parts)
