@@ -611,6 +611,7 @@ class IQOrderingPartGrader(IQConnectingPartGrader):
 
 # file part
 
+DEFAULT_MIN_SIZE_BYTES = 10485760 # 10 mb
 DEFAULT_MAX_SIZE_BYTES = 20971520 # 20 mb
 
 class IQNonGradableFilePart(IQNonGradablePart):
@@ -635,7 +636,7 @@ class IQNonGradableFilePart(IQNonGradablePart):
 										 value_type=Text(title="An allowed extension"))
 
 	max_file_size = Int(title="Maximum size in bytes for the file",
-						min=1,
+						min=DEFAULT_MIN_SIZE_BYTES,
 						required=False,
 						default=DEFAULT_MAX_SIZE_BYTES)
 
@@ -1007,7 +1008,7 @@ class IQAssessmentContextMixin(interface.Interface):
 		"""
 		Remove the attribute value for the specified assessment
 		"""
-		
+
 	def size():
 		"""
 		return the number of assessments
@@ -1099,7 +1100,7 @@ class IUnlockQAssessmentPolicies(IObjectEvent):
 class UnlockQAssessmentPolicies(ObjectEvent):
 
 	assessment = alias('object')
-	
+
 	def __init__(self, obj, courses=None):
 		super(UnlockQAssessmentPolicies, self).__init__(obj)
 		self.courses = courses or ()
