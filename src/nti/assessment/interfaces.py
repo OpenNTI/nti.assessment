@@ -636,9 +636,9 @@ class IQNonGradableFilePart(IQNonGradablePart):
 										 value_type=Text(title="An allowed extension"))
 
 	max_file_size = Int(title="Maximum size in bytes for the file",
-						min=DEFAULT_MIN_SIZE_BYTES,
+						max=DEFAULT_MAX_SIZE_BYTES,
 						required=False,
-						default=DEFAULT_MAX_SIZE_BYTES)
+						default=DEFAULT_MIN_SIZE_BYTES)
 
 	def is_mime_type_allowed(mime_type):
 		"""
