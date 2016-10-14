@@ -636,7 +636,6 @@ class IQNonGradableFilePart(IQNonGradablePart):
 										 value_type=Text(title="An allowed extension"))
 
 	max_file_size = Int(title="Maximum size in bytes for the file",
-						max=DEFAULT_MAX_SIZE_BYTES,
 						required=False,
 						default=DEFAULT_MIN_SIZE_BYTES)
 
