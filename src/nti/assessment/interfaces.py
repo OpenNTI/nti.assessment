@@ -612,7 +612,7 @@ class IQOrderingPartGrader(IQConnectingPartGrader):
 # file part
 
 DEFAULT_MIN_SIZE_BYTES = 10485760 # 10 mb
-DEFAULT_MAX_SIZE_BYTES = 20971520 # 20 mb
+DEFAULT_MAX_SIZE_BYTES = 52428800 # 50 mb
 
 class IQNonGradableFilePart(IQNonGradablePart):
 	"""
