@@ -442,12 +442,15 @@ class QFilePart(QPart, QNonGradableFilePart):  # order matters
 		value = response.value
 
 		if not self.is_mime_type_allowed(value.contentType):
+			__traceback_info__ = value.contentType
 			raise ConstraintNotSatisfied(value.contentType, 'mimeType')
 
 		if not self.is_filename_allowed(value.filename):
+			__traceback_info__ = value.filename
 			raise ConstraintNotSatisfied(value.filename, 'filename')
 
 		if self.max_file_size is not None and value.getSize() > self.max_file_size:
+			__traceback_info__ = value.getSize()
 			raise ConstraintNotSatisfied(value.getSize(), 'max_file_size')
 
 		super(QFilePart, self).grade(response, creator)
