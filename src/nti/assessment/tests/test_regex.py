@@ -39,7 +39,7 @@ class TestRegex(AssessmentTestCase):
 
 		arex = asm_interfaces.IRegEx('^1\$')
 		assert_that(arex, has_property('pattern', '^1\$'))
-		
+
 		lst = ['bankai', 'bankai']
 		arex = asm_interfaces.IRegEx(lst)
 		assert_that(rex, is_(equal_to(arex)))

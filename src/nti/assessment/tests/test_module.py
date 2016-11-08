@@ -32,7 +32,6 @@ class TestAssessedPart(AssessmentTestCase):
 				IQuestion,
 				IQSurvey,
 				IQuestionBank,
-				IRandomizedQuestionSet,
 				IQuestionSet,
 				IQTimedAssignment,
 				IQAssignment

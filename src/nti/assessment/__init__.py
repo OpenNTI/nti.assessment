@@ -27,7 +27,6 @@ from nti.assessment.interfaces import IQNonGradablePart
 from nti.assessment.interfaces import IQTimedAssignment
 
 from nti.assessment.randomized.interfaces import IQuestionBank
-from nti.assessment.randomized.interfaces import IRandomizedQuestionSet
 
 from nti.schema.jsonschema import TAG_HIDDEN_IN_UI
 
@@ -42,7 +41,6 @@ EVALUATION_INTERFACES = ASSESSMENT_INTERFACES = ( # order matters
         IQuestion,
         IQSurvey,
         IQuestionBank,
-        IRandomizedQuestionSet,
         IQuestionSet,
         IQTimedAssignment,
         IQAssignment
