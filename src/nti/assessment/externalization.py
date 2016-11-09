@@ -322,9 +322,25 @@ class _EvaluationExporter(object):
 @interface.implementer(IInternalObjectExternalizer)
 class _EvalWithPartsExporter(_EvaluationExporter):
 
-	def toExternalObject(self, **kwargs):
-		result =_EvaluationExporter.toExternalObject(self, **kwargs)
+	def _remove_part_ntiids(self, result):
 		for part in result.get('parts') or ():
 			if isinstance(part, Mapping):
 				part.pop(NTIID, None)
 				part.pop(NTIID.lower(), None)
+		return result
+
+	def toExternalObject(self, **kwargs):
+		result =_EvaluationExporter.toExternalObject(self, **kwargs)
+		return self._remove_part_ntiids(result)
+
+@component.adapter(IQuestionSet)
+@interface.implementer(IInternalObjectExternalizer)
+class _QuestionSetExporter(_EvalWithPartsExporter):
+
+	def toExternalObject(self, **kwargs):
+		result = _EvalWithPartsExporter.toExternalObject(self, **kwargs)
+		for question in result.get('questions') or ():
+			if isinstance(question, Mapping):
+				self._remove_part_ntiids(question)
+		return result
+

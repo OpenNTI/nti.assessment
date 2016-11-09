@@ -464,4 +464,8 @@
 			 for=".interfaces.IQAssignment"
 			 name="exporter" />
 
+	<adapter factory=".externalization._QuestionSetExporter"
+			 for=".interfaces.IQuestionSet"
+			 name="exporter" />
+
 </configure>
