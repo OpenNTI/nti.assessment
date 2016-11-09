@@ -1285,6 +1285,11 @@ class IQAssignmentSubmissionPendingAssessment(IQBaseSubmission):
 								 (Object(IQAssessedQuestionSet),
 								  Object(IQuestionSetSubmission))))
 
+class IPlaceholderAssignmentSubmission(IQAssignmentSubmission):
+	"""
+	Marker interface for submissions created as placeholders.
+	"""
+
 class IQAssessmentItemContainer(IEnumerableMapping):
 	"""
 	Something that is an unordered bag of assessment items (such as
