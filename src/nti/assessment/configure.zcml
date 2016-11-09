@@ -456,4 +456,12 @@
 			 for=".interfaces.IQEvaluation"
 			 name="exporter" />
 
+	<adapter factory=".externalization._EvalWithPartsExporter"
+			 for=".interfaces.IQuestion"
+			 name="exporter" />
+
+	<adapter factory=".externalization._EvalWithPartsExporter"
+			 for=".interfaces.IQAssignment"
+			 name="exporter" />
+
 </configure>

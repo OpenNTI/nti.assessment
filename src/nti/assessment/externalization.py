@@ -17,6 +17,8 @@ from zope import component
 from zope import interface
 
 from nti.assessment.interfaces import IQSurvey
+from nti.assessment.interfaces import IQuestion
+from nti.assessment.interfaces import IQAssignment
 from nti.assessment.interfaces import IQEvaluation
 from nti.assessment.interfaces import IQuestionSet
 from nti.assessment.interfaces import IQAssessedPart
@@ -60,6 +62,7 @@ from nti.ntiids.ntiids import is_ntiid_of_type
 from nti.coremetadata.interfaces import IRecordable
 from nti.coremetadata.interfaces import IPublishable
 
+ID = StandardExternalFields.ID
 OID = StandardExternalFields.OID
 NTIID = StandardExternalFields.NTIID
 MIMETYPE = StandardExternalFields.MIMETYPE
@@ -290,7 +293,7 @@ class _EvaluationExporter(object):
 	def _remover(self, result):
 		if isinstance(result, Mapping):
 			for name, value in list(result.items()):
-				if name in (OID, CONTAINER_ID_EXT, CONTAINER_ID_INT):
+				if name in (ID, OID, CONTAINER_ID_EXT, CONTAINER_ID_INT):
 					result.pop(name, None)
 				elif name == NTIID and is_ntiid_of_type(value, TYPE_OID):
 					result.pop(name, None)
@@ -313,3 +316,15 @@ class _EvaluationExporter(object):
 		if IPublishable.providedBy(self.evaluation):
 			result['isPublished'] = self.evaluation.isPublished()
 		return result
+
+@component.adapter(IQuestion)
+@component.adapter(IQAssignment)
+@interface.implementer(IInternalObjectExternalizer)
+class _EvalWithPartsExporter(_EvaluationExporter):
+
+	def toExternalObject(self, **kwargs):
+		result =_EvaluationExporter.toExternalObject(self, **kwargs)
+		for part in result.get('parts') or ():
+			if isinstance(part, Mapping):
+				part.pop(NTIID, None)
+				part.pop(NTIID.lower(), None)
