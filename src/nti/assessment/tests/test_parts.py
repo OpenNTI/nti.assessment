@@ -323,13 +323,15 @@ class TestFilePart(AssessmentTestCase):
 
 		# Bad input
 		af(None)
-		af('noext')
 
-		# empty list
-		af('file.doc')
+		# No extensions defined is the same as wildcard
+		at('noext')
+		at('file.doc')
 
 		part.allowed_extensions = ('.doc',)
 		at('file.DOC')
+		at('file.doc')
+		af('file.docx')
 
 		part.allowed_extensions = ('*',)
 		at('file.doc')
