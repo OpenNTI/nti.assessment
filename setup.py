@@ -71,7 +71,6 @@ setup(
  		'nti.contentfragments',
  		'nti.coremetadata',
  		'nti.dataserver_core',
- 		'nti.dataserver_fragments',
  		'nti.dublincore',
  		'nti.externalization',
  		'nti.mimetype',

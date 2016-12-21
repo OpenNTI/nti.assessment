@@ -45,16 +45,15 @@ from nti.contentfragments.schema import TextUnicodeContentFragment as _ContentFr
 from nti.coremetadata.interfaces import IRecordable
 from nti.coremetadata.interfaces import IPublishable
 from nti.coremetadata.interfaces import INoPublishLink
+from nti.coremetadata.interfaces import ITitledContent
 from nti.coremetadata.interfaces import ICalendarPublishable
 from nti.coremetadata.interfaces import IRecordableContainer
 from nti.coremetadata.interfaces import IObjectJsonSchemaMaker
 
+from nti.coremetadata.schema import ExtendedCompoundModeledContentBody
+
 from nti.dataserver_core.interfaces import IContextAnnotatable
 from nti.dataserver_core.interfaces import INeverStoredInSharedStream
-
-from nti.dataserver_fragments.interfaces import ITitledContent
-
-from nti.dataserver_fragments.schema import ExtendedCompoundModeledContentBody
 
 from nti.mimetype.mimetype import mimeTypeConstraint
 
