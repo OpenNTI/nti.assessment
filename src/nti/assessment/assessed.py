@@ -40,7 +40,7 @@ from nti.assessment.randomized.interfaces import IRandomizedPartsContainer
 from nti.coremetadata.interfaces import ICreated
 from nti.coremetadata.interfaces import ILastModified
 
-from nti.dataserver_core.mixins import ContainedMixin
+from nti.coremetadata.mixins import ContainedMixin
 
 from nti.externalization.representation import WithRepr
 

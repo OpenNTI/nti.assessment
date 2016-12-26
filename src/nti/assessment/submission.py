@@ -28,7 +28,7 @@ from nti.assessment.interfaces import IQuestionSubmission
 from nti.assessment.interfaces import IQuestionSetSubmission
 from nti.assessment.interfaces import IQAssignmentSubmission
 
-from nti.dataserver_core.mixins import ContainedMixin
+from nti.coremetadata.mixins import ContainedMixin
 
 from nti.dublincore.datastructures import PersistentCreatedModDateTrackingObject
 

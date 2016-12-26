@@ -44,9 +44,9 @@ from nti.assessment.interfaces import IQBaseSubmission
 from nti.assessment.interfaces import IQTimedAssignment
 from nti.assessment.interfaces import IQAssignmentSubmissionPendingAssessment
 
-from nti.dataserver_core.interfaces import IContained as INTIContained
+from nti.coremetadata.interfaces import IContained as INTIContained
 
-from nti.dataserver_core.mixins import ContainedMixin
+from nti.coremetadata.mixins import ContainedMixin
 
 from nti.dublincore.datastructures import PersistentCreatedModDateTrackingObject
 
