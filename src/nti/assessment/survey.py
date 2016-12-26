@@ -55,9 +55,9 @@ from nti.assessment.interfaces import IQAggregatedModeledContentPart
 from nti.assessment.interfaces import IQAggregatedMultipleChoicePart
 from nti.assessment.interfaces import IQAggregatedMultipleChoiceMultipleAnswerPart
 
-from nti.dataserver_core.interfaces import IContained as INTIContained
+from nti.coremetadata.interfaces import IContained as INTIContained
 
-from nti.dataserver_core.mixins import ContainedMixin
+from nti.coremetadata.mixins import ContainedMixin
 
 from nti.dublincore.datastructures import PersistentCreatedModDateTrackingObject
 
