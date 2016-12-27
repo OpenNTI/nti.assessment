@@ -15,7 +15,8 @@
 
 	<include package="nti.mimetype" />
 	<include package="nti.contentfragments" />
-
+	<include package="nti.namedfile" file="configure_named.zcml" />
+	
 	<include package="plone.namedfile" file="z3c-blobfile.zcml" />
 
 	<!-- Response types -->
