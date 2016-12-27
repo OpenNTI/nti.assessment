@@ -28,7 +28,7 @@ from nti.assessment.interfaces import IQTextResponse
 from nti.assessment.interfaces import IQUploadedFile
 from nti.assessment.interfaces import IQModeledContentResponse
 
-from nti.dataserver_core.schema import BodyFieldProperty
+from nti.coremetadata.schema import BodyFieldProperty
 
 from nti.dublincore.datastructures import PersistentCreatedModDateTrackingObject
 
