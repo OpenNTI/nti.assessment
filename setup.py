@@ -70,7 +70,6 @@ setup(
  		'nti.common',
  		'nti.contentfragments',
  		'nti.coremetadata',
- 		'nti.dataserver_core',
  		'nti.dublincore',
  		'nti.externalization',
  		'nti.mimetype',
