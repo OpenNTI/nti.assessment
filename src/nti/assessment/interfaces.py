@@ -1407,7 +1407,7 @@ class IQNonGradableFillInTheBlankWithWordBankPart(IQFillInTheBlankPart):
 	wordbank = Object(IWordBank, required=False,
 					  title="The wordbank to present to the user.")
 
-	input = _ContentFragment(title="The input to present to the user.")
+	input = _HTMLContentFragment(title="The input to present to the user.")
 
 class IQFillInTheBlankWithWordBankPart(IQNonGradableFillInTheBlankWithWordBankPart,
 									   IQFillInTheBlankPart):

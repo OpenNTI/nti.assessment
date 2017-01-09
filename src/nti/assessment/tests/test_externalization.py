@@ -19,6 +19,7 @@ from hamcrest import has_length
 from hamcrest import has_entries
 from hamcrest import assert_that
 from hamcrest import has_property
+from hamcrest import contains_string
 does_not = is_not
 
 import os
@@ -48,6 +49,7 @@ from nti.testing.matchers import verifiably_provides
 
 GIF_DATAURL = b'data:image/gif;base64,R0lGODlhCwALAIAAAAAA3pn/ZiH5BAEAAAEALAAAAAALAAsAAAIUhA+hkcuO4lmNVindo7qyrIXiGBYAOw=='
 
+
 class TestExternalization(AssessmentTestCase):
 
 	def test_file_upload(self):
@@ -55,7 +57,7 @@ class TestExternalization(AssessmentTestCase):
 			'MimeType': 'application/vnd.nextthought.assessment.uploadedfile',
 			'value': GIF_DATAURL,
 			'filename': r'file.gif',
-			'name':'ichigo'
+			'name': 'ichigo'
 		}
 
 		assert_that(internalization.find_factory_for(ext_obj),
@@ -79,7 +81,7 @@ class TestExternalization(AssessmentTestCase):
 
 		assert_that(internal, externalizes(all_of(	has_key('FileMimeType'),
 													has_key('filename'),
-													has_key('name') )))
+													has_key('name'))))
 		# But we have no URL because we're not in a connection anywhere
 
 	def test_file_upload_2(self):
@@ -88,7 +90,7 @@ class TestExternalization(AssessmentTestCase):
 			'MimeType': 'application/vnd.nextthought.assessment.quploadedfile',
 			'value': GIF_DATAURL,
 			'filename': r'file.gif',
-			'name':'ichigo'
+			'name': 'ichigo'
 		}
 
 		assert_that(internalization.find_factory_for(ext_obj),
@@ -112,7 +114,7 @@ class TestExternalization(AssessmentTestCase):
 
 		assert_that(internal, externalizes(all_of(	has_key('FileMimeType'),
 													has_key('filename'),
-													has_key('name')  )))
+													has_key('name'))))
 		# But we have no URL because we're not in a connection anywhere
 
 	def test_modeled_response_uploaded(self):
@@ -157,13 +159,13 @@ class TestExternalization(AssessmentTestCase):
 		ext_obj = {
 			u'Class': 'WordBank',
 			u'MimeType': u'application/vnd.nextthought.naqwordbank',
-			u'entries':[ {u'Class': 'WordEntry',
+			u'entries': [{u'Class': 'WordEntry',
 						  u'MimeType': u'application/vnd.nextthought.naqwordentry',
 						  u'lang': u'en',
 						  u'wid': u'14',
 						  u'word': u'at'}
 						],
-			u'unique':False
+			u'unique': False
 			}
 
 		assert_that(internalization.find_factory_for(ext_obj),
@@ -181,7 +183,36 @@ class TestExternalization(AssessmentTestCase):
 		assert_that(word, has_property('content', 'at'))
 
 	def test_question(self):
-		internal = QFillInTheBlankWithWordBankQuestion()
+		ext_obj = {
+			u'Class': 'Question',
+			"MimeType": "application/vnd.nextthought.naquestionfillintheblankwordbank",
+			u'parts': [	{"Class": "FillInTheBlankWithWordBankPart",
+						 "MimeType": "application/vnd.nextthought.assessment.fillintheblankwithwordbankpart",
+						 "content": "",
+						 "explanation": "",
+						 "hints": [],
+						 "input": "Step 1 <input type=\"blankfield\" name=\"001\" /><br />Step 2 <input type=\"blankfield\" name=\"002\" /><br />Step 3 <input type=\"blankfield\" name=\"003\" /><br />Step 4 <input type=\"blankfield\" name=\"004\" /><br />",
+						 "randomized": False},
+					 ],
+			"wordbank": { "Class": "WordBank",
+						  "MimeType": "application/vnd.nextthought.naqwordbank",
+						  u'entries': [{u'Class': 'WordEntry',
+						  				u'MimeType': u'application/vnd.nextthought.naqwordentry',
+						  				u'wid': u'14',
+						  				u'word': u'at'}
+						],}
+			}
+
+		assert_that(internalization.find_factory_for(ext_obj),
+					is_(not_none()))
+
+		internal = internalization.find_factory_for(ext_obj)()
+		internalization.update_from_external_object(internal,
+													 ext_obj,
+													 require_updater=True)
+
+		part = internal.parts[0]
+		assert_that(part, has_property('input', contains_string('<input')))
 		assert_that(internal, externalizes(all_of(has_entry('Class', 'Question')))),
 
 	def test_regex(self):
@@ -198,7 +229,8 @@ class TestExternalization(AssessmentTestCase):
 													 require_updater=True)
 
 		assert_that(internal, has_property('solution', is_(u'yes, I will')))
-		assert_that(internal, has_property('pattern', is_(u"(^yes\\s*[,|\\s]\\s*I will(\\.)?$)|(^no\\s*[,|\\s]\\s*I (won't|will not)(\\.)?$)")))
+		assert_that(internal, has_property('pattern', is_(
+		    u"(^yes\\s*[,|\\s]\\s*I will(\\.)?$)|(^no\\s*[,|\\s]\\s*I (won't|will not)(\\.)?$)")))
 
 	def test_regex_part(self):
 		ext_obj = {u'MimeType': 'application/vnd.nextthought.assessment.fillintheblankshortanswerpart',
@@ -216,10 +248,10 @@ class TestExternalization(AssessmentTestCase):
 								 ],
 				   u'Class': 'FillInTheBlankShortAnswerPart',
 				    'hints': []}
-		missing_classes_ext = deepcopy( ext_obj )
+		missing_classes_ext = deepcopy(ext_obj)
 		solution_ext = missing_classes_ext.get('solutions')[0]
-		solution_ext.pop( 'Class', None )
-		missing_classes_ext.pop( 'Class', None )
+		solution_ext.pop('Class', None)
+		missing_classes_ext.pop('Class', None)
 
 		assert_that(internalization.find_factory_for(ext_obj),
 					is_(not_none()))
@@ -230,12 +262,13 @@ class TestExternalization(AssessmentTestCase):
 		hash(internal)
 
 		assert_that(internal, has_property('solutions', has_length(1)))
-		assert_that(internal, has_property('weight', is_( .5 )))
+		assert_that(internal, has_property('weight', is_(.5)))
 		sol = internal.solutions[0]
-		assert_that(sol, has_property('value', has_entry('001', has_property('solution', 'yes, I will'))))
+		assert_that(sol, has_property(
+		    'value', has_entry('001', has_property('solution', 'yes, I will'))))
 
 		# Validate we can internalize without class
-		internal = internalization.find_factory_for( missing_classes_ext )()
+		internal = internalization.find_factory_for(missing_classes_ext)()
 		internalization.update_from_external_object(internal,
 													missing_classes_ext,
 													require_updater=True)
@@ -249,19 +282,21 @@ class TestExternalization(AssessmentTestCase):
 		assert_that(factory, is_(not_none()))
 
 		internal = factory()
-		internalization.update_from_external_object(internal, ext_obj, require_updater=True)
+		internalization.update_from_external_object(
+		    internal, ext_obj, require_updater=True)
 
 		ntiid = u"tag:nextthought.com,2011-10:OU-NAQ-BIOL2124_F_2014_Human_Physiology.naq.set.qset:intro_quiz1"
 		internal.ntiid = ntiid
 
-		assert_that(internal, verifiably_provides(IQuestionSet) )
+		assert_that(internal, verifiably_provides(IQuestionSet))
 		assert_that(internal, has_property('questions', has_length(20)))
 
 		assert_that(list(internal.Items), has_length(20))
 
 		assert_that(internal, externalizes(all_of(has_entry('NTIID', is_(ntiid)),
 												  has_entry('Class', is_('QuestionSet')),
-												  has_entry('MimeType', is_('application/vnd.nextthought.naquestionset')),
+												  has_entry(
+												      'MimeType', is_('application/vnd.nextthought.naquestionset')),
 												  has_entry('questions', has_length(20)))))
 
 		exported = to_external_object(internal, name="exporter")
@@ -279,21 +314,22 @@ class TestExternalization(AssessmentTestCase):
 		assert_that(factory, is_(not_none()))
 
 		internal = factory()
-		internalization.update_from_external_object(internal, ext_obj, require_updater=True)
+		internalization.update_from_external_object(
+		    internal, ext_obj, require_updater=True)
 
 		ntiid = u"tag:nextthought.com,2011-10:OU-NAQ-BIOL2124_F_2014_Human_Physiology.naq.set.qset:intro_quiz1"
 		internal.ntiid = ntiid
 
-		assert_that(internal, verifiably_provides(IQuestionSet) )
+		assert_that(internal, verifiably_provides(IQuestionSet))
 		assert_that(internal, has_property('questions', has_length(20)))
 
 		assert_that(list(internal.Items), has_length(20))
 
-		ext_obj = to_external_object( internal, name="summary" )
-		assert_that( ext_obj, has_entries( 'NTIID', is_(ntiid),
+		ext_obj = to_external_object(internal, name="summary")
+		assert_that(ext_obj, has_entries('NTIID', is_(ntiid),
 										   'Class', is_('QuestionSet'),
 										   'MimeType', is_('application/vnd.nextthought.naquestionset')))
-		assert_that( ext_obj, does_not( has_item( 'questions' )))
+		assert_that(ext_obj, does_not(has_item('questions')))
 
 	@fudge.patch('nti.assessment.randomized.get_seed')
 	def test_question_bank(self, mock_gs):
@@ -308,23 +344,25 @@ class TestExternalization(AssessmentTestCase):
 		assert_that(factory, is_(not_none()))
 
 		internal = factory()
-		internalization.update_from_external_object(internal, ext_obj, require_updater=True)
+		internalization.update_from_external_object(
+		    internal, ext_obj, require_updater=True)
 
 		ntiid = u"tag:nextthought.com,2011-10:OU-NAQ-BIOL2124_F_2014_Human_Physiology.naq.set.qset:intro_quiz1"
 		internal.ntiid = ntiid
 
-		assert_that(internal, verifiably_provides(IQuestionBank) )
+		assert_that(internal, verifiably_provides(IQuestionBank))
 
 		assert_that(internal, has_property('draw', is_(5)))
 		assert_that(internal, has_property('questions', has_length(20)))
 
 		internal.draw = 2
-		internal.ranges = [IQuestionIndexRange([0,5]), IQuestionIndexRange([6, 10])]
+		internal.ranges = [IQuestionIndexRange([0, 5]), IQuestionIndexRange([6, 10])]
 
 		assert_that(internal, externalizes(all_of(	has_entry('draw', is_(2)),
 													has_entry('NTIID', is_(ntiid)),
 													has_entry('Class', is_('QuestionSet')),
-													has_entry('MimeType', is_('application/vnd.nextthought.naquestionbank')),
+													has_entry(
+													    'MimeType', is_('application/vnd.nextthought.naquestionbank')),
 													has_entry('ranges', has_length(2)))))
 
 		ext_obj = to_external_object(internal)
@@ -332,31 +370,36 @@ class TestExternalization(AssessmentTestCase):
 		rand_question = ext_obj['questions'][1]
 		assert_that(rand_question, has_entry('parts', has_length(1)))
 		assert_that(rand_question['parts'][0], has_entry('randomized', is_(True)))
-		assert_that(rand_question['parts'][0], has_entry('MimeType', is_('application/vnd.nextthought.assessment.multiplechoicepart')))
+		assert_that(rand_question['parts'][0], has_entry(
+		    'MimeType', is_('application/vnd.nextthought.assessment.multiplechoicepart')))
 
 	def test_assignment(self):
-		path = os.path.join(os.path.dirname(__file__), "assignment_no_solutions.json")
+		path = os.path.join(
+		    os.path.dirname(__file__), "assignment_no_solutions.json")
 		with open(path, "r") as fp:
 			ext_obj = json.load(fp)
 		factory = internalization.find_factory_for(ext_obj)
 		assert_that(factory, is_(not_none()))
 		internal = factory()
-		internalization.update_from_external_object(internal, ext_obj, require_updater=True)
+		internalization.update_from_external_object(
+		    internal, ext_obj, require_updater=True)
 
 	def test_assignment_summary(self):
-		path = os.path.join(os.path.dirname(__file__), "assignment_no_solutions.json")
+		path = os.path.join(
+		    os.path.dirname(__file__), "assignment_no_solutions.json")
 		with open(path, "r") as fp:
 			ext_obj = json.load(fp)
 		factory = internalization.find_factory_for(ext_obj)
 		assert_that(factory, is_(not_none()))
 		internal = factory()
-		internalization.update_from_external_object(internal, ext_obj, require_updater=True)
+		internalization.update_from_external_object(
+		    internal, ext_obj, require_updater=True)
 
-		ext_obj = to_external_object( internal, name="summary" )
-		parts_ext = ext_obj.get( 'parts' )[0]
-		assert_that( parts_ext, has_entries( 'Class', is_('AssignmentPart'),
+		ext_obj = to_external_object(internal, name="summary")
+		parts_ext = ext_obj.get('parts')[0]
+		assert_that(parts_ext, has_entries('Class', is_('AssignmentPart'),
 											 'MimeType', is_('application/vnd.nextthought.assessment.assignmentpart')))
-		assert_that( parts_ext, does_not( has_item( 'question_set' )))
+		assert_that(parts_ext, does_not(has_item('question_set')))
 
 	@fudge.patch('nti.assessment.randomized.get_seed')
 	def test_solutions_externalizer(self, mock_gs):
@@ -378,10 +421,12 @@ class TestExternalization(AssessmentTestCase):
 		externalizer = IQPartSolutionsExternalizer(part)
 		rand_solutions = externalizer.to_external_object()
 
-		assert_that(org_solutions[0]['value'], is_not(equal_to(rand_solutions[0]['value'])))
+		assert_that(org_solutions[0]['value'], is_not(
+		    equal_to(rand_solutions[0]['value'])))
 
 		part.randomized = False
 		externalizer = IQPartSolutionsExternalizer(part)
 		no_rand_solutions = externalizer.to_external_object()
 
-		assert_that(org_solutions[0]['value'], is_(equal_to(no_rand_solutions[0]['value'])))
+		assert_that(org_solutions[0]['value'], is_(
+		    equal_to(no_rand_solutions[0]['value'])))
