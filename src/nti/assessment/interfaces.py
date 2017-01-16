@@ -985,6 +985,11 @@ class IQDiscussionAssignment(IQAssignment):
 
 	discussion_ntiid = ntiid = ValidNTIID(title="Discussion NTIID", required=True)
 
+	parts = IndexedIterable(title="The ordered parts of the assignment.",
+						description="Discussion assignments should have no parts.",
+						max_length=0,
+						default=())
+
 IQDiscussionAssignment['title'].setTaggedValue(TAG_HIDDEN_IN_UI, False)
 IQDiscussionAssignment['title'].setTaggedValue(TAG_REQUIRED_IN_UI, True)
 IQDiscussionAssignment['category_name'].setTaggedValue(TAG_HIDDEN_IN_UI, False)
