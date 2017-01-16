@@ -16,6 +16,7 @@ from nti.assessment.interfaces import IQuestion
 from nti.assessment.interfaces import IQuestionSet
 from nti.assessment.interfaces import IQAssignment
 from nti.assessment.interfaces import IQTimedAssignment
+from nti.assessment.interfaces import IQDiscussionAssignment
 
 from nti.assessment.randomized.interfaces import IQuestionBank
 
@@ -32,6 +33,7 @@ class TestAssessedPart(AssessmentTestCase):
 				IQSurvey,
 				IQuestionBank,
 				IQuestionSet,
+				IQDiscussionAssignment,
 				IQTimedAssignment,
 				IQAssignment
 		)
