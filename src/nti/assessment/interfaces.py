@@ -91,6 +91,7 @@ QUESTION_BANK_MIME_TYPE = u'application/vnd.nextthought.naquestionbank'
 ASSIGNMENT_MIME_TYPE = u'application/vnd.nextthought.assessment.assignment'
 TIMED_ASSIGNMENT_MIME_TYPE = u'application/vnd.nextthought.assessment.timedassignment'
 RANDOMIZED_QUESTION_SET_MIME_TYPE = u'application/vnd.nextthought.narandomizedquestionset'
+DISCUSSION_ASSIGNMENT_MIME_TYPE = u'application/vnd.nextthought.assessment.discussionassignment'
 QUESTION_FILL_IN_THE_BLANK_MIME_TYPE = u'application/vnd.nextthought.naquestionfillintheblankwordbank'
 
 ASSESSMENT_MIME_TYPES = (QUESTION_MIME_TYPE,
@@ -975,6 +976,25 @@ IQTimedAssignment['available_for_submission_ending'].setTaggedValue(TAG_HIDDEN_I
 IQTimedAssignment['available_for_submission_ending'].setTaggedValue(TAG_REQUIRED_IN_UI, False)
 IQTimedAssignment['available_for_submission_beginning'].setTaggedValue(TAG_HIDDEN_IN_UI, False)
 IQTimedAssignment['available_for_submission_beginning'].setTaggedValue(TAG_REQUIRED_IN_UI, False)
+
+class IQDiscussionAssignment(IQAssignment):
+	"""
+	An assignment without parts or questions that merely contains a pointer to
+	a discussion.
+	"""
+
+	discussion_ntiid = ntiid = ValidNTIID(title="Discussion NTIID", required=True)
+
+IQDiscussionAssignment['title'].setTaggedValue(TAG_HIDDEN_IN_UI, False)
+IQDiscussionAssignment['title'].setTaggedValue(TAG_REQUIRED_IN_UI, True)
+IQDiscussionAssignment['category_name'].setTaggedValue(TAG_HIDDEN_IN_UI, False)
+IQDiscussionAssignment['category_name'].setTaggedValue(TAG_REQUIRED_IN_UI, False)
+IQDiscussionAssignment['is_non_public'].setTaggedValue(TAG_HIDDEN_IN_UI, False)
+IQDiscussionAssignment['is_non_public'].setTaggedValue(TAG_REQUIRED_IN_UI, False)
+IQDiscussionAssignment['available_for_submission_ending'].setTaggedValue(TAG_HIDDEN_IN_UI, False)
+IQDiscussionAssignment['available_for_submission_ending'].setTaggedValue(TAG_REQUIRED_IN_UI, False)
+IQDiscussionAssignment['available_for_submission_beginning'].setTaggedValue(TAG_HIDDEN_IN_UI, False)
+IQDiscussionAssignment['available_for_submission_beginning'].setTaggedValue(TAG_REQUIRED_IN_UI, False)
 
 class IQAssessmentContextMixin(interface.Interface):
 

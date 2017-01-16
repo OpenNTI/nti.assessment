@@ -32,8 +32,6 @@ from copy import deepcopy
 from nti.assessment.interfaces import IQuestionSet
 from nti.assessment.interfaces import IQPartSolutionsExternalizer
 
-from nti.assessment.question import QFillInTheBlankWithWordBankQuestion
-
 from nti.assessment.randomized.interfaces import IQuestionBank
 from nti.assessment.randomized.interfaces import IQuestionIndexRange
 
@@ -383,6 +381,32 @@ class TestExternalization(AssessmentTestCase):
 		internal = factory()
 		internalization.update_from_external_object(
 		    internal, ext_obj, require_updater=True)
+
+	def test_discussion_assignment(self):
+		discussion_ntiid = 'tag:nextthought.com,2015-11-30:DiscussionTest'
+		ext_obj = {
+			"CategoryName": "homework",
+			"Class": "DiscussionAssignment",
+			"MimeType": u'application/vnd.nextthought.assessment.discussionassignment',
+			"NoSubmit": True,
+			"available_for_submission_beginning": "2015-05-12T05:00:00Z",
+			"available_for_submission_ending": "2024-07-16T04:59:00Z",
+			"category_name": "homework",
+			"content": "This is a description of an <b>assignment.</b>",
+			"is_non_public": False,
+			"no_submit": True,
+			"parts": [],
+			"publishBeginning": None,
+			"publishEnding": None,
+			"discussion_ntiid": discussion_ntiid,
+			"title": "Test Discussion assignment"
+		}
+		factory = internalization.find_factory_for(ext_obj)
+		assert_that(factory, is_(not_none()))
+		internal = factory()
+		internalization.update_from_external_object(
+		    internal, ext_obj, require_updater=True)
+		assert_that( internal.discussion_ntiid, is_( discussion_ntiid ))
 
 	def test_assignment_summary(self):
 		path = os.path.join(

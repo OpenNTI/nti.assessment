@@ -37,11 +37,13 @@ from nti.assessment.common import QPersistentSubmittable
 
 from nti.assessment.interfaces import ASSIGNMENT_MIME_TYPE
 from nti.assessment.interfaces import TIMED_ASSIGNMENT_MIME_TYPE
+from nti.assessment.interfaces import DISCUSSION_ASSIGNMENT_MIME_TYPE
 
 from nti.assessment.interfaces import IQAssignment
 from nti.assessment.interfaces import IQAssignmentPart
 from nti.assessment.interfaces import IQBaseSubmission
 from nti.assessment.interfaces import IQTimedAssignment
+from nti.assessment.interfaces import IQDiscussionAssignment
 from nti.assessment.interfaces import IQAssignmentSubmissionPendingAssessment
 
 from nti.coremetadata.interfaces import IContained as INTIContained
@@ -129,6 +131,13 @@ class QTimedAssignment(QAssignment):
 	maximum_time_allowed = FP(IQTimedAssignment['maximum_time_allowed'])
 
 	mimeType = mime_type = TIMED_ASSIGNMENT_MIME_TYPE
+
+@WithRepr
+@interface.implementer(IQDiscussionAssignment)
+class QDiscussionAssignment(QAssignment):
+	createDirectFieldProperties(IQDiscussionAssignment)
+
+	mimeType = mime_type = DISCUSSION_ASSIGNMENT_MIME_TYPE
 
 @WithRepr
 @interface.implementer(IQAssignmentSubmissionPendingAssessment,
