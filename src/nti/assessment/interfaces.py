@@ -983,7 +983,7 @@ class IQDiscussionAssignment(IQAssignment):
 	a discussion.
 	"""
 
-	discussion_ntiid = ValidNTIID(title="Discussion NTIID", required=True)
+	discussion_ntiid = ValidNTIID(title="Discussion NTIID", required=False)
 
 	parts = IndexedIterable(title="The ordered parts of the assignment.",
 						description="Discussion assignments should have no parts.",
