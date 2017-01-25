@@ -138,6 +138,7 @@ class QDiscussionAssignment(QAssignment):
 	createDirectFieldProperties(IQDiscussionAssignment)
 
 	mimeType = mime_type = DISCUSSION_ASSIGNMENT_MIME_TYPE
+	category_name = 'no_submit'
 
 @WithRepr
 @interface.implementer(IQAssignmentSubmissionPendingAssessment,
