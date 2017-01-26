@@ -46,6 +46,8 @@ from nti.assessment.interfaces import IQTimedAssignment
 from nti.assessment.interfaces import IQDiscussionAssignment
 from nti.assessment.interfaces import IQAssignmentSubmissionPendingAssessment
 
+from nti.contentfragments.interfaces import IPlainTextContentFragment
+
 from nti.coremetadata.interfaces import IContained as INTIContained
 
 from nti.coremetadata.mixins import ContainedMixin
@@ -138,7 +140,10 @@ class QDiscussionAssignment(QAssignment):
 	createDirectFieldProperties(IQDiscussionAssignment)
 
 	mimeType = mime_type = DISCUSSION_ASSIGNMENT_MIME_TYPE
-	category_name = 'no_submit'
+
+	@property
+	def category_name(self):
+		return IPlainTextContentFragment('no_submit')
 
 @WithRepr
 @interface.implementer(IQAssignmentSubmissionPendingAssessment,
