@@ -931,7 +931,7 @@ class IQAssignment(IQAssessment, IQSubmittable, ITitledContent, IAttributeAnnota
 						 not be public""",
 						 default=False)
 
-	title = TextLine(title="Assignment title", required=True, min_length=1)
+	title = TextLine(title="Assignment title", required=True, min_length=1, max_length=140)
 
 	# A note on handling assignments that have an associated time limit
 	# (e.g., you have one hour to complete this assignment once you begin):
