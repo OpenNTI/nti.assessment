@@ -57,6 +57,7 @@ from nti.dublincore.datastructures import PersistentCreatedModDateTrackingObject
 from nti.externalization.representation import WithRepr
 
 from nti.property.property import alias
+from nti.property.property import Lazy
 from nti.property.property import readproperty
 
 from nti.schema.eqhash import EqHash
@@ -141,7 +142,7 @@ class QDiscussionAssignment(QAssignment):
 
 	mimeType = mime_type = DISCUSSION_ASSIGNMENT_MIME_TYPE
 
-	@property
+	@Lazy
 	def category_name(self):
 		return IPlainTextContentFragment('no_submit')
 
