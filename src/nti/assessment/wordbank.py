@@ -75,15 +75,13 @@ class WordEntry(Persistent, SchemaConfigured, Contained):
 
     def __lt__(self, other):
         try:
-            return (self.word.lower(), self.lang) < (
-                other.word.lower(), other.self.lang)
+            return (self.word.lower(), self.lang) < (other.word.lower(), other.self.lang)
         except AttributeError:
             return NotImplemented
 
     def __gt__(self, other):
         try:
-            return (self.word.lower(), self.lang) > (
-                other.word.lower(), other.self.lang)
+            return (self.word.lower(), self.lang) > (other.word.lower(), other.self.lang)
         except AttributeError:
             return NotImplemented
 
@@ -128,8 +126,7 @@ class WordBank(SchemaConfigured, Persistent, Contained):
 
     def __eq__(self, other):
         try:
-            return self is other or (self.ids, self.unique) == (
-                other.ids, other.unique)
+            return self is other or (self.ids, self.unique) == (other.ids, other.unique)
         except AttributeError:
             return NotImplemented
 
@@ -173,10 +170,8 @@ class WordBank(SchemaConfigured, Persistent, Contained):
 
 @interface.implementer(IWordEntry)
 def _wordentry_adapter(sequence):
-    result = WordEntry(
-        wid=to_unicode(
-            sequence[0]), word=to_unicode(
-            sequence[1]))
+    result = WordEntry(wid=to_unicode(sequence[0]), 
+                       word=to_unicode(sequence[1]))
     if len(sequence) > 2 and sequence[2]:
         result.lang = to_unicode(sequence[2]).lower()
     else:
