@@ -17,90 +17,93 @@ from zope import component
 from zope import interface
 
 from nti.assessment.interfaces import IQPoll
-from nti.assessment.interfaces import IQuestion 
+from nti.assessment.interfaces import IQuestion
 
 from nti.ntiids.ntiids import validate_ntiid_string
 
 from nti.wref.interfaces import IWeakRef
 
+
 @total_ordering
 @interface.implementer(IWeakRef)
 class ItemWeakRef(object):
-	
-	def __init__(self, item):
-		self.ntiid = item.ntiid
-		validate_ntiid_string(self.ntiid)
 
-	def __eq__(self, other):
-		try:
-			return self is other or self.ntiid == other.ntiid
-		except AttributeError:
-			return NotImplemented
+    def __init__(self, item):
+        self.ntiid = item.ntiid
+        validate_ntiid_string(self.ntiid)
 
-	def __hash__(self):
-		xhash = 47
-		xhash ^= hash(self.ntiid)
-		return xhash
+    def __eq__(self, other):
+        try:
+            return self is other or self.ntiid == other.ntiid
+        except AttributeError:
+            return NotImplemented
 
-	def __lt__(self, other):
-		try:
-			return self.ntiid < other.ntiid
-		except AttributeError:
-			return NotImplemented
+    def __hash__(self):
+        xhash = 47
+        xhash ^= hash(self.ntiid)
+        return xhash
 
-	def __gt__(self, other):
-		try:
-			return self.ntiid > other.ntiid
-		except AttributeError:
-			return NotImplemented
+    def __lt__(self, other):
+        try:
+            return self.ntiid < other.ntiid
+        except AttributeError:
+            return NotImplemented
 
-	def __getstate__(self):
-		return (1, self.ntiid)
+    def __gt__(self, other):
+        try:
+            return self.ntiid > other.ntiid
+        except AttributeError:
+            return NotImplemented
 
-	def __setstate__(self, state):
-		assert state[0] == 1
-		self.ntiid = state[1]
+    def __getstate__(self):
+        return (1, self.ntiid)
+
+    def __setstate__(self, state):
+        assert state[0] == 1
+        self.ntiid = state[1]
+
 
 @component.adapter(IQuestion)
 class QuestionWeakRef(ItemWeakRef):
 
-	def __call__(self):
-		# We're not a caching weak ref
-		result = component.queryUtility(IQuestion, name=self.ntiid)
-		return result
+    def __call__(self):
+        # We're not a caching weak ref
+        return component.queryUtility(IQuestion, name=self.ntiid)
+
 
 @component.adapter(IQPoll)
 class PollWeakRef(ItemWeakRef):
 
-	def __call__(self):
-		# We're not a caching weak ref
-		result = component.queryUtility(IQPoll, name=self.ntiid)
-		return result
+    def __call__(self):
+        # We're not a caching weak ref
+        return component.queryUtility(IQPoll, name=self.ntiid)
+
 
 def question_wref_to_missing_ntiid(ntiid):
-	"""
-	If you have an NTIID, and the question lookup failed, but you expect
-	the NTIID to appear in the future, you
-	may use this function. Simply pass in a valid
-	question ntiid, and a weak ref will be returned
-	which you can attempt to resolve in the future.
-	"""
+    """
+    If you have an NTIID, and the question lookup failed, but you expect
+    the NTIID to appear in the future, you
+    may use this function. Simply pass in a valid
+    question ntiid, and a weak ref will be returned
+    which you can attempt to resolve in the future.
+    """
 
-	validate_ntiid_string(ntiid)
-	wref = QuestionWeakRef.__new__(QuestionWeakRef)
-	wref.ntiid = ntiid
-	return wref
+    validate_ntiid_string(ntiid)
+    wref = QuestionWeakRef.__new__(QuestionWeakRef)
+    wref.ntiid = ntiid
+    return wref
+
 
 def poll_wref_to_missing_ntiid(ntiid):
-	"""
-	If you have an NTIID, and the poll lookup failed, but you expect
-	the NTIID to appear in the future, you
-	may use this function. Simply pass in a valid
-	poll ntiid, and a weak ref will be returned
-	which you can attempt to resolve in the future.
-	"""
+    """
+    If you have an NTIID, and the poll lookup failed, but you expect
+    the NTIID to appear in the future, you
+    may use this function. Simply pass in a valid
+    poll ntiid, and a weak ref will be returned
+    which you can attempt to resolve in the future.
+    """
 
-	validate_ntiid_string(ntiid)
-	wref = PollWeakRef.__new__(PollWeakRef)
-	wref.ntiid = ntiid
-	return wref
+    validate_ntiid_string(ntiid)
+    wref = PollWeakRef.__new__(PollWeakRef)
+    wref.ntiid = ntiid
+    return wref
