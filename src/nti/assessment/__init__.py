@@ -37,21 +37,23 @@ FIELDS = 'Fields'
 #: Accepts attribute
 ACCEPTS = 'Accepts'
 
-EVALUATION_INTERFACES = ASSESSMENT_INTERFACES = ( # order matters
-        IQPoll,
-        IQuestion,
-        IQSurvey,
-        IQuestionBank,
-        IQuestionSet,
-        IQDiscussionAssignment,
-        IQTimedAssignment,
-        IQAssignment
+EVALUATION_INTERFACES = ASSESSMENT_INTERFACES = (  # order matters
+    IQPoll,
+    IQuestion,
+    IQSurvey,
+    IQuestionBank,
+    IQuestionSet,
+    IQDiscussionAssignment,
+    IQTimedAssignment,
+    IQAssignment
 )
+
 
 def _set_ifaces():
     for iSchema in ASSESSMENT_INTERFACES:
         for k, v in iSchema.namesAndDescriptions(all=True):
-            if IMethod.providedBy(v) or v.queryTaggedValue(TAG_HIDDEN_IN_UI) is not None:
+            if     IMethod.providedBy(v) \
+                or v.queryTaggedValue(TAG_HIDDEN_IN_UI) is not None:
                 continue
             iSchema[k].setTaggedValue(TAG_HIDDEN_IN_UI, True)
 _set_ifaces()
