@@ -17,8 +17,9 @@ from zope import interface
 from nti.assessment.common import get_containerId
 
 from nti.assessment.interfaces import IQPart
-from nti.assessment.interfaces import IQMathPart 
-from nti.assessment.interfaces import IVersioned 
+from nti.assessment.interfaces import IQMathPart
+
+from nti.coremetadata.interfaces import IVersioned
 
 from nti.externalization.interfaces import IExternalObjectDecorator
 from nti.externalization.interfaces import IExternalMappingDecorator

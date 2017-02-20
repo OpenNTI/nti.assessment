@@ -42,6 +42,7 @@ from nti.contentfragments.schema import LatexFragmentTextLine as _LatexTextLine
 from nti.contentfragments.schema import HTMLContentFragment as _HTMLContentFragment
 from nti.contentfragments.schema import TextUnicodeContentFragment as _ContentFragment
 
+from nti.coremetadata.interfaces import IVersioned
 from nti.coremetadata.interfaces import IRecordable
 from nti.coremetadata.interfaces import IPublishable
 from nti.coremetadata.interfaces import INoPublishLink
@@ -79,7 +80,6 @@ from nti.schema.field import ValidDatetime as Datetime
 
 from nti.schema.jsonschema import TAG_HIDDEN_IN_UI
 from nti.schema.jsonschema import TAG_REQUIRED_IN_UI
-from nti.schema.jsonschema import TAG_READONLY_IN_UI
 
 NTIID_TYPE = 'NAQ'
 PART_NTIID_TYPE = 'NAQPart'
@@ -812,28 +812,6 @@ class IQAssignmentPart(ITitledContent):
 
 IQAssignmentPart.setTaggedValue('_ext_jsonschema', u'assignmentpart')
 
-class IVersioned(interface.Interface):
-	"""
-	An interface containing version information. Useful when comparing
-	submission versions to submittable versions.
-	"""
-
-	version = TextLine(
-			title="The structural version of this object.",
-			description="""An artificial string signifying the 'structural version'
-				of this object. Typically used to determine if submissions
-				align with the currently submittable state.""",
-			required=False)
-
-	def update_version( version=None ):
-		"""
-		Update the version for this object. If no arg given, the
-		default algorithm will be used.
-		"""
-
-IVersioned['version'].setTaggedValue(TAG_HIDDEN_IN_UI, True)
-IVersioned['version'].setTaggedValue(TAG_REQUIRED_IN_UI, False)
-IVersioned['version'].setTaggedValue(TAG_READONLY_IN_UI, True)
 
 class IQSubmittable(IRecordable, ICalendarPublishable, IVersioned):
 

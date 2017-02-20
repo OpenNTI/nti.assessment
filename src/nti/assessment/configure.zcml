@@ -424,7 +424,7 @@
 
 	<subscriber
 		factory=".decorators._VersionedDecorator"
-		for=".interfaces.IVersioned"
+		for="nti.coremetadata.interfaces.IVersioned"
 		provides="nti.externalization.interfaces.IExternalObjectDecorator" />
 
 	<!--
