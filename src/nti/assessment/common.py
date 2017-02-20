@@ -9,12 +9,8 @@ __docformat__ = "restructuredtext en"
 
 logger = __import__('logging').getLogger(__name__)
 
-import time
 import hashlib
-from datetime import datetime
 from collections import Mapping
-
-import isodate
 
 import simplejson as json
 
@@ -49,6 +45,7 @@ from nti.assessment.interfaces import IQEvaluationContainerIdGetter
 
 from nti.assessment.randomized.interfaces import IQRandomizedPart
 
+from nti.coremetadata.mixins import VersionedMixin
 from nti.coremetadata.mixins import RecordableMixin
 from nti.coremetadata.mixins import CalendarPublishableMixin
 
@@ -216,21 +213,6 @@ def compute_part_ntiid(part):
 
 # classes
 
-class VersionedMixin(object):
-
-	version = None  # Default to None
-	Version = alias('version')
-
-	def __init__(self, *args, **kwargs):
-		super(VersionedMixin, self).__init__(*args, **kwargs)
-
-	def _get_version_timestamp(self):
-		value = datetime.fromtimestamp(time.time())
-		return unicode(isodate.datetime_isoformat(value))
-
-	def update_version(self, version=None):
-		self.version = version if version else self._get_version_timestamp()
-		return self.version
 
 @WithRepr
 @interface.implementer(IQSubmittable, IContentTypeAware, IAttributeAnnotatable)
@@ -292,7 +274,7 @@ class EvaluationSchemaMixin(object):
 
 	def schema(self, user=None):
 		schema = find_most_derived_interface(self, IQAssessment)
-		result = make_schema(schema=schema, 
+		result = make_schema(schema=schema,
 							 user=None,
 							 name='default', # in case not in schema
 							 maker=IQAssessmentJsonSchemaMaker)
