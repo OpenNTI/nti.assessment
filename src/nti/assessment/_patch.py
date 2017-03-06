@@ -26,10 +26,10 @@ def _patch():
     # set mimetypes on interfaces
     for name in os.listdir(os.path.dirname(__file__)):
         # ignore modules we may have trouble importing
-        if     name in ('jsonschema.py',
-                        'externalization.py',
-                        'internalization.py',
-                        'wref.py') \
+        if name in ('jsonschema.py',
+                    'externalization.py',
+                    'internalization.py',
+                    'wref.py') \
             or name[-3:] != '.py' \
             or name.startswith('_'):
             continue
