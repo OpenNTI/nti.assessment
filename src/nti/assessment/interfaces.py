@@ -1022,6 +1022,9 @@ class IQAssessmentContextMixin(interface.Interface):
 		return the number of assessments
 		"""
 
+	def __delitem__(key):
+		pass
+
 class IQAssessmentDateContext(IQAssessmentContextMixin):
 	"""
 	An object that can be used as context to adapt an assessment
