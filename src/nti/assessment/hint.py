@@ -19,20 +19,23 @@ from nti.assessment.interfaces import IQHint
 from nti.assessment.interfaces import IQHTMLHint
 from nti.assessment.interfaces import IQTextHint
 
+
 @interface.implementer(IQHint)
 class QHint(Persistent):
-	"""
-	Base class for hints.
-	"""
+    """
+    Base class for hints.
+    """
+
 
 @interface.implementer(IQTextHint)
 class QTextHint(TrivialValuedMixin, QHint):
-	"""
-	A text hint.
-	"""
+    """
+    A text hint.
+    """
+
 
 @interface.implementer(IQHTMLHint)
 class QHTMLHint(TrivialValuedMixin, QHint):
-	"""
-	A text hint.
-	"""
+    """
+    A text hint.
+    """

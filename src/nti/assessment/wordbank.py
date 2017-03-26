@@ -12,11 +12,11 @@ logger = __import__('logging').getLogger(__name__)
 import six
 from functools import total_ordering
 
+from requests.structures import CaseInsensitiveDict
+
 from zope import interface
 
 from zope.container.contained import Contained
-
-from requests.structures import CaseInsensitiveDict
 
 from persistent import Persistent
 
@@ -170,7 +170,7 @@ class WordBank(SchemaConfigured, Persistent, Contained):
 
 @interface.implementer(IWordEntry)
 def _wordentry_adapter(sequence):
-    result = WordEntry(wid=to_unicode(sequence[0]), 
+    result = WordEntry(wid=to_unicode(sequence[0]),
                        word=to_unicode(sequence[1]))
     if len(sequence) > 2 and sequence[2]:
         result.lang = to_unicode(sequence[2]).lower()
