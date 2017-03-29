@@ -43,13 +43,11 @@ from nti.contentfragments.schema import HTMLContentFragment as _HTMLContentFragm
 from nti.contentfragments.schema import TextUnicodeContentFragment as _ContentFragment
 
 from nti.coremetadata.interfaces import IVersioned
-from nti.coremetadata.interfaces import IRecordable
 from nti.coremetadata.interfaces import IPublishable
 from nti.coremetadata.interfaces import INoPublishLink
 from nti.coremetadata.interfaces import ITitledContent
 from nti.coremetadata.interfaces import IContextAnnotatable
 from nti.coremetadata.interfaces import ICalendarPublishable
-from nti.coremetadata.interfaces import IRecordableContainer
 from nti.coremetadata.interfaces import IObjectJsonSchemaMaker
 from nti.coremetadata.interfaces import INeverStoredInSharedStream
 
@@ -60,6 +58,9 @@ from nti.mimetype.mimetype import mimeTypeConstraint
 from nti.ntiids.schema import ValidNTIID
 
 from nti.property.property import alias
+
+from nti.recorder.interfaces import IRecordable
+from nti.recorder.interfaces import IRecordableContainer
 
 from nti.schema.field import Int
 from nti.schema.field import Bool

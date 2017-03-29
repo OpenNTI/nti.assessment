@@ -40,14 +40,15 @@ from nti.assessment.interfaces import IQFillInTheBlankWithWordBankQuestion
 
 from nti.coremetadata.interfaces import IContained as INTIContained
 
-from nti.coremetadata.mixins import RecordableMixin
 from nti.coremetadata.mixins import PublishableMixin
-from nti.coremetadata.mixins import RecordableContainerMixin
 
 from nti.dublincore.datastructures import PersistentCreatedModDateTrackingObject
 
 from nti.property.property import alias
 from nti.property.property import readproperty
+
+from nti.recorder.mixins import RecordableMixin
+from nti.recorder.mixins import RecordableContainerMixin
 
 from nti.schema.field import SchemaConfigured
 

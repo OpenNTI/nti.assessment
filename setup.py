@@ -58,6 +58,7 @@ setup(
         'nti.openmath',
         'nti.plasTeX',
         'nti.property',
+        'nti.recorder',
         'nti.schema',
         'nti.wref',
         'persistent',
