@@ -67,109 +67,113 @@ from nti.schema.field import SchemaConfigured
 from nti.schema.fieldproperty import AdaptingFieldProperty
 from nti.schema.fieldproperty import createDirectFieldProperties
 
+
 @WithRepr
 @EqHash('ntiid')
 @interface.implementer(IQAssignmentPart, IContentTypeAware)
 class QAssignmentPart(SchemaConfigured,
-					  Persistent,
-					  Contained):
-	createDirectFieldProperties(IQAssignmentPart)
+                      Persistent,
+                      Contained):
+    createDirectFieldProperties(IQAssignmentPart)
 
-	title = AdaptingFieldProperty(IQAssignmentPart['title'])
+    title = AdaptingFieldProperty(IQAssignmentPart['title'])
 
-	mimeType = mime_type = 'application/vnd.nextthought.assessment.assignmentpart'
+    mimeType = mime_type = 'application/vnd.nextthought.assessment.assignmentpart'
 
-	@readproperty
-	def ntiid(self):
-		result = compute_part_ntiid(self)
-		if result:
-			self.ntiid = result
-		return result
+    @readproperty
+    def ntiid(self):
+        result = compute_part_ntiid(self)
+        if result:
+            self.ntiid = result
+        return result
 
-	def schema(self):
-		result = make_schema(schema=IQAssignmentPart)
-		return result
+    def schema(self):
+        result = make_schema(schema=IQAssignmentPart)
+        return result
+
 
 @WithRepr
 @interface.implementer(IQAssignment, INTIContained)
 class QAssignment(QPersistentSubmittable, AssessmentSchemaMixin):
+    createDirectFieldProperties(IQAssignment)
 
-	createDirectFieldProperties(IQAssignment)
+    mimeType = mime_type = ASSIGNMENT_MIME_TYPE
 
-	mimeType = mime_type = ASSIGNMENT_MIME_TYPE
+    id = alias('ntiid')
 
-	id = alias('ntiid')
+    tags = ()
+    parts = ()
 
-	tags = ()
-	parts = ()
+    @readproperty
+    def __home__(self):
+        return self.__parent__
 
-	@readproperty
-	def __home__(self):
-		return self.__parent__
+    @readproperty
+    def no_submit(self):
+        return self.category_name == 'no_submit'
 
-	@readproperty
-	def no_submit(self):
-		return self.category_name == 'no_submit'
+    def iter_question_sets(self):
+        for part in self.parts or ():
+            if part.question_set is not None:
+                yield part.question_set
 
-	def iter_question_sets(self):
-		for part in self.parts or ():
-			if part.question_set is not None:
-				yield part.question_set
+    @readproperty
+    def containerId(self):
+        return get_containerId(self)
 
-	@readproperty
-	def containerId(self):
-		return get_containerId(self)
+    def __setattr__(self, name, value):
+        super(QAssignment, self).__setattr__(name, value)
+        if name == "parts":
+            for x in self.parts or ():
+                x.__parent__ = self  # take ownership
 
-	def __setattr__(self, name, value):
-		super(QAssignment, self).__setattr__(name, value)
-		if name == "parts":
-			for x in self.parts or ():
-				x.__parent__ = self  # take ownership
 
 @WithRepr
 @interface.implementer(IQTimedAssignment)
 class QTimedAssignment(QAssignment):
-	createDirectFieldProperties(IQTimedAssignment)
+    createDirectFieldProperties(IQTimedAssignment)
 
-	maximum_time_allowed = FP(IQTimedAssignment['maximum_time_allowed'])
+    mimeType = mime_type = TIMED_ASSIGNMENT_MIME_TYPE
 
-	mimeType = mime_type = TIMED_ASSIGNMENT_MIME_TYPE
+    maximum_time_allowed = FP(IQTimedAssignment['maximum_time_allowed'])
+
 
 @WithRepr
 @interface.implementer(IQDiscussionAssignment)
 class QDiscussionAssignment(QAssignment):
-	createDirectFieldProperties(IQDiscussionAssignment)
+    createDirectFieldProperties(IQDiscussionAssignment)
 
-	mimeType = mime_type = DISCUSSION_ASSIGNMENT_MIME_TYPE
+    mimeType = mime_type = DISCUSSION_ASSIGNMENT_MIME_TYPE
 
-	@Lazy
-	def category_name(self):
-		return IPlainTextContentFragment('no_submit')
+    @Lazy
+    def category_name(self):
+        return IPlainTextContentFragment('no_submit')
+
 
 @WithRepr
 @interface.implementer(IQAssignmentSubmissionPendingAssessment,
-					   IContentTypeAware,
-					   IAttributeAnnotatable,
-					   ISublocations)
+                       IContentTypeAware,
+                       IAttributeAnnotatable,
+                       ISublocations)
 class QAssignmentSubmissionPendingAssessment(ContainedMixin,
-											 SchemaConfigured,
-											 VersionedMixin,
-											 PersistentCreatedModDateTrackingObject):
-	createDirectFieldProperties(IQBaseSubmission)
-	createDirectFieldProperties(IQAssignmentSubmissionPendingAssessment)
+                                             SchemaConfigured,
+                                             VersionedMixin,
+                                             PersistentCreatedModDateTrackingObject):
+    createDirectFieldProperties(IQBaseSubmission)
+    createDirectFieldProperties(IQAssignmentSubmissionPendingAssessment)
 
-	# We get nti.dataserver.interfaces.IContained from ContainedMixin (containerId, id)
-	# However, because these objects are new and not seen before, we can
-	# safely cause name and id to be aliases
-	__name__ = alias('id')
+    # We get nti.dataserver.interfaces.IContained from ContainedMixin (containerId, id)
+    # However, because these objects are new and not seen before, we can
+    # safely cause name and id to be aliases
+    __name__ = alias('id')
 
-	mime_type = 'application/vnd.nextthought.assessment.assignmentsubmissionpendingassessment'
+    mime_type = 'application/vnd.nextthought.assessment.assignmentsubmissionpendingassessment'
 
-	__external_can_create__ = False
+    __external_can_create__ = False
 
-	sublocations = _make_sublocations()
+    sublocations = _make_sublocations()
 
-	def __init__(self, *args, **kwargs):
-		# schema configured is not cooperative
-		ContainedMixin.__init__(self, *args, **kwargs)
-		PersistentCreatedModDateTrackingObject.__init__(self)
+    def __init__(self, *args, **kwargs):
+        # schema configured is not cooperative
+        ContainedMixin.__init__(self, *args, **kwargs)
+        PersistentCreatedModDateTrackingObject.__init__(self)
