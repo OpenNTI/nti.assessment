@@ -147,7 +147,6 @@ def assess_question_submission(submission, registry=component):
                  (len(question.parts), len(submission.parts)))
 
     creator = getattr(submission, 'creator', None)
-
     assessed_parts = PersistentList()
 
     for sub_part, q_part in zip(submission.parts, question.parts):
@@ -169,8 +168,8 @@ def assess_question_submission(submission, registry=component):
                                   assessedValue=grade)
             assessed_parts.append(apart)
 
-    result = QAssessedQuestion(
-        questionId=submission.questionId, parts=assessed_parts)
+    result = QAssessedQuestion(questionId=submission.questionId, 
+							   parts=assessed_parts)
     return result
 
 
@@ -192,7 +191,7 @@ def _do_assess_question_set_submission(question_set, set_submission, registry):
             # Raises ComponentLookupError
             sub_assessed = IQAssessedQuestion(sub_question)  
             assessed.append(sub_assessed)
-        else:  # pragma: no cover
+        else: # pragma: no cover
             logger.warn("Bad input, question (%s) not in question set (%s) (known: %s)",
                         question, question_set, questions_ntiids)
 
