@@ -84,7 +84,8 @@ class QMathSolution(QSolution):
         super(QMathSolution, self).__init__()
         allowed_units = args[1] if len(args) > 1 else kwargs.get('allowed_units')
         if allowed_units is not None:
-            self.allowed_units = allowed_units  # TODO: Do we need to defensively copy?
+            # TODO: Do we need to defensively copy?
+            self.allowed_units = allowed_units
 
 
 @EqHash('_part_type', 'weight', 'value',

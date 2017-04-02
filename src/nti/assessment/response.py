@@ -37,67 +37,75 @@ from nti.namedfile.file import NamedBlobImage
 
 from nti.schema.fieldproperty import AdaptingFieldProperty
 
+
 @interface.implementer(IQResponse)
 class QResponse(Persistent, Contained):
-	"""
-	Base class for responses.
+    """
+    Base class for responses.
 
-	In general, responses are not expected to be created
-	directly by clients. Subclasses may change this, however.
-	"""
-	__external_can_create__ = False
+    In general, responses are not expected to be created
+    directly by clients. Subclasses may change this, however.
+    """
+    __external_can_create__ = False
+
 
 @interface.implementer(IQTextResponse)
 class QTextResponse(TrivialValuedMixin, QResponse):
-	"""
-	A text response.
-	"""
+    """
+    A text response.
+    """
 
-	def __init__(self, *args, **kwargs):
-		super(QTextResponse, self).__init__(*args, **kwargs)
-		if self.value is not None and not isinstance(self.value, string_types):
-			# Convert e.g., numbers, to text values
-			self.value = text_type(self.value)
-		if isinstance(self.value, bytes):  # pragma: no cover
-			# Decode incoming byte strings to text
-			self.value = text_type(self.value, 'utf-8')
+    def __init__(self, *args, **kwargs):
+        super(QTextResponse, self).__init__(*args, **kwargs)
+        if self.value is not None and not isinstance(self.value, string_types):
+            # Convert e.g., numbers, to text values
+            self.value = text_type(self.value)
+        if isinstance(self.value, bytes):  # pragma: no cover
+            # Decode incoming byte strings to text
+            self.value = text_type(self.value, 'utf-8')
+
 
 @interface.implementer(IQListResponse)
 class QListResponse(TrivialValuedMixin, QResponse):
-	"""
-	A list response.
-	"""
+    """
+    A list response.
+    """
+
 
 @interface.implementer(IQDictResponse)
 class QDictResponse(TrivialValuedMixin, QResponse):
-	"""
-	A dictionary response.
-	"""
+    """
+    A dictionary response.
+    """
+
 
 @interface.implementer(IQUploadedFile)
 class QUploadedFile(PersistentCreatedModDateTrackingObject,  # Order matters
-					NamedBlobFile):
-	pass
+                    NamedBlobFile):
+    pass
+
 
 @interface.implementer(IQUploadedFile)
 class QUploadedImageFile(PersistentCreatedModDateTrackingObject,  # Order matters
-						 NamedBlobImage):
-	pass
+                         NamedBlobImage):
+    pass
+
 
 @interface.implementer(IQFileResponse)
 class QFileResponse(TrivialValuedMixin, QResponse):
-	"""
-	An uploaded file response.
-	"""
+    """
+    An uploaded file response.
+    """
+
 
 @interface.implementer(IQModeledContentResponse)
 class QModeledContentResponse(TrivialValuedMixin, QResponse):
-	"""
-	A modeled content response, intended to be created
-	from external objects.
-	"""
+    """
+    A modeled content response, intended to be created
+    from external objects.
+    """
 
-	__external_can_create__ = True
+    __external_can_create__ = True
 
-	value = BodyFieldProperty(IQModeledContentResponse['value'])
-	title = AdaptingFieldProperty(IQModeledContentResponse['title'])
+    value = BodyFieldProperty(IQModeledContentResponse['value'])
+    title = AdaptingFieldProperty(IQModeledContentResponse['title'])
