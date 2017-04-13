@@ -43,7 +43,10 @@ from nti.assessment.interfaces import IQAssessmentJsonSchemaMaker
 from nti.assessment.interfaces import IQLatexSymbolicMathSolution
 from nti.assessment.interfaces import IQEvaluationContainerIdGetter
 
+from nti.assessment.randomized.interfaces import IQuestionBank
 from nti.assessment.randomized.interfaces import IQRandomizedPart
+from nti.assessment.randomized.interfaces import IRandomizedQuestionSet
+from nti.assessment.randomized.interfaces import IRandomizedPartsContainer
 
 from nti.coremetadata.mixins import VersionedMixin
 from nti.coremetadata.mixins import CalendarPublishableMixin
@@ -79,138 +82,164 @@ from nti.schema.fieldproperty import createDirectFieldProperties
 
 from nti.schema.interfaces import find_most_derived_interface
 
+
 # functions
 
-def grade_one_response(questionResponse, possible_answers):
-	"""
-	:param questionResponse: The string to evaluate. It may be in latex notation
-		or openmath XML notation, or plain text. We may edit the response
-		to get something parseable.
-	:param list possible_answers: A sequence of possible answers to compare
-		`questionResponse` with.
-	"""
 
-	match = False
-	answers = [IQLatexSymbolicMathSolution(t) for t in possible_answers]
-	for answer in answers:
-		match = answer.grade(questionResponse)
-		if match:
-			return match
-	return False
+def grade_one_response(questionResponse, possible_answers):
+    """
+    :param questionResponse: The string to evaluate. It may be in latex notation
+            or openmath XML notation, or plain text. We may edit the response
+            to get something parseable.
+    :param list possible_answers: A sequence of possible answers to compare
+            `questionResponse` with.
+    """
+
+    match = False
+    answers = [IQLatexSymbolicMathSolution(t) for t in possible_answers]
+    for answer in answers:
+        match = answer.grade(questionResponse)
+        if match:
+            return match
+    return False
+
 
 def assess(quiz, responses):
-	result = {}
-	for questionId, questionResponse in responses.iteritems():
-		answers = quiz[questionId].answers
-		result[questionId] = grade_one_response(questionResponse, answers)
-	return result
+    result = {}
+    for questionId, questionResponse in responses.iteritems():
+        answers = quiz[questionId].answers
+        result[questionId] = grade_one_response(questionResponse, answers)
+    return result
+
 
 def grader_for_solution_and_response(part, solution, response, creator=None):
-	result = None
-	if 		(part.randomized or IQRandomizedPart.providedBy( part )) \
-		and part.randomized_grader_interface:
-		grader_interface = part.randomized_grader_interface
+    result = None
+    if      (part.randomized or IQRandomizedPart.providedBy(part)) \
+        and part.randomized_grader_interface:
+        grader_interface = part.randomized_grader_interface
 
-		# Only randomized graders care about creators; do this here so
-		# we do not accidentally get randomized graders unintentionally.
-		result = component.queryMultiAdapter((part, solution, response, creator),
-										  	grader_interface,
-										  	name=part.grader_name)
-	else:
-		grader_interface = part.grader_interface
+        # Only randomized graders care about creators; do this here so
+        # we do not accidentally get randomized graders unintentionally.
+        result = component.queryMultiAdapter((part, solution, response, creator),
+                                             grader_interface,
+                                             name=part.grader_name)
+    else:
+        grader_interface = part.grader_interface
 
-	if result is None:
-		result = component.queryMultiAdapter((part, solution, response),
-										  	grader_interface,
-										  	name=part.grader_name)
-	return result
+    if result is None:
+        result = component.queryMultiAdapter((part, solution, response),
+                                             grader_interface,
+                                             name=part.grader_name)
+    return result
+
+
 grader = grader_for_solution_and_response  # alias BWC
 
+
 def grader_for_response(part, response):
-	for solution in part.solutions or ():
-		grader = grader_for_solution_and_response(part, solution, response)
-		if grader is not None:
-			return grader
-	return None
+    for solution in part.solutions or ():
+        grader = grader_for_solution_and_response(part, solution, response)
+        if grader is not None:
+            return grader
+    return None
+
 
 def normalize_response(part, response):
-	normalizer = component.queryMultiAdapter((part, response),
-										 	 IQPartResponseNormalizer)
-	result = normalizer()
-	return result
+    normalizer = component.queryMultiAdapter((part, response),
+                                             IQPartResponseNormalizer)
+    result = normalizer()
+    return result
+
 
 def hexdigest(data, hasher=None):
-	hasher = hashlib.sha256() if hasher is None else hasher
-	hasher.update(data)
-	result = hasher.hexdigest()
-	return result
+    hasher = hashlib.sha256() if hasher is None else hasher
+    hasher.update(data)
+    result = hasher.hexdigest()
+    return result
+
 
 def signature(data, decorate=False):
-	if not isinstance(data, Mapping):
-		data = toExternalObject(data, decorate=decorate)
-	result = hexdigest(json.dumps(data, sort_keys=True))
-	return result
+    if not isinstance(data, Mapping):
+        data = toExternalObject(data, decorate=decorate)
+    result = hexdigest(json.dumps(data, sort_keys=True))
+    return result
+
 
 def hashfile(afile, hasher=None, blocksize=65536):
-	hasher = hashlib.sha256() if hasher is None else hasher
-	buf = afile.read(blocksize)
-	while len(buf) > 0:
-		hasher.update(buf)
-		buf = afile.read(blocksize)
-	return hasher.hexdigest()
+    hasher = hashlib.sha256() if hasher is None else hasher
+    buf = afile.read(blocksize)
+    while len(buf) > 0:
+        hasher.update(buf)
+        buf = afile.read(blocksize)
+    return hasher.hexdigest()
+
 
 def iface_of_assessment(thing):
-	for iface in ASSESSMENT_INTERFACES:
-		if iface.providedBy(thing):
-			return iface
-	for iface in (IQPart, IQNonGradablePart):
-		if iface.providedBy(thing):
-			return iface
-	return None
+    for iface in ASSESSMENT_INTERFACES:
+        if iface.providedBy(thing):
+            return iface
+    for iface in (IQPart, IQNonGradablePart):
+        if iface.providedBy(thing):
+            return iface
+    return None
+
 
 def get_containerId(item):
-	getter = component.queryUtility(IQEvaluationContainerIdGetter)
-	if getter is not None:
-		result = getter(item)
-	else:
-		for name in ('__home__', '__parent__'):
-			attribute = getattr(item, name, None)
-			result = getattr(attribute, 'ntiid', None)
-			if result:
-				break
-	return result
+    getter = component.queryUtility(IQEvaluationContainerIdGetter)
+    if getter is not None:
+        result = getter(item)
+    else:
+        for name in ('__home__', '__parent__'):
+            attribute = getattr(item, name, None)
+            result = getattr(attribute, 'ntiid', None)
+            if result:
+                break
+    return result
+
 
 def compute_part_ntiid(part):
-	parent = part.__parent__
-	parent_parts = getattr(parent, 'parts', ())
-	base_ntiid = getattr(parent, 'ntiid', None)
-	if base_ntiid and parent_parts:
-		# Gather all child parts ntiids.
-		parent_part_ids = set()
-		for child_part in parent_parts or ():
-			child_part_ntiid = child_part.__dict__.get( 'ntiid' )
-			parent_part_ids.add(child_part_ntiid)
-		parent_part_ids.discard(None)
+    parent = part.__parent__
+    parent_parts = getattr(parent, 'parts', ())
+    base_ntiid = getattr(parent, 'ntiid', None)
+    if base_ntiid and parent_parts:
+        # Gather all child parts ntiids.
+        parent_part_ids = set()
+        for child_part in parent_parts or ():
+            child_part_ntiid = child_part.__dict__.get('ntiid')
+            parent_part_ids.add(child_part_ntiid)
+        parent_part_ids.discard(None)
 
-		# Get initial part unique id
-		uid = to_external_oid(part) if IQEditableEvaluation.providedBy(parent) else None
-		uid = make_specific_safe(uid or str(0))  # legacy
-		parts = get_parts(base_ntiid)
+        # Get initial part unique id
+        uid = None
+        if IQEditableEvaluation.providedBy(parent):
+            uid = to_external_oid(part)
+        uid = make_specific_safe(uid or str(0))  # legacy
+        parts = get_parts(base_ntiid)
 
-		idx = 0
-		# Iterate until we find an ntiid that does not collide.
-		while True:
-			specific = "%s.%s" % (parts.specific, uid)
-			result = make_ntiid(parts.date,
-								parts.provider,
-								PART_NTIID_TYPE,
-								specific)
-			if result not in parent_part_ids:
-				break
-			idx += 1
-			uid = idx
-		return result
-	return None
+        idx = 0
+        # Iterate until we find an ntiid that does not collide.
+        while True:
+            specific = "%s.%s" % (parts.specific, uid)
+            result = make_ntiid(parts.date,
+                                parts.provider,
+                                PART_NTIID_TYPE,
+                                specific)
+            if result not in parent_part_ids:
+                break
+            idx += 1
+            uid = idx
+        return result
+    return None
+
+
+def is_randomized_assignment(assignment):
+    return not IQuestionBank.providedBy(assignment) \
+           and IRandomizedQuestionSet.providedBy(assignment)
+
+
+def is_randomized_assignment_part(assignment):
+    return IRandomizedPartsContainer.providedBy(assignment)
+
 
 # classes
 
@@ -218,66 +247,75 @@ def compute_part_ntiid(part):
 @WithRepr
 @interface.implementer(IQSubmittable, IContentTypeAware, IAttributeAnnotatable)
 class QSubmittable(SchemaConfigured,
-				   VersionedMixin,
-				   RecordableMixin,
-				   CalendarPublishableMixin,
-				   CreatedAndModifiedTimeMixin,
-				   Contained):
+                   VersionedMixin,
+                   RecordableMixin,
+                   CalendarPublishableMixin,
+                   CreatedAndModifiedTimeMixin,
+                   Contained):
 
-	ntiid = None
+    ntiid = None
 
-	available_for_submission_ending = AdaptingFieldProperty(IQAssignment['available_for_submission_ending'])
-	available_for_submission_beginning = AdaptingFieldProperty(IQAssignment['available_for_submission_beginning'])
+    available_for_submission_ending = \
+        AdaptingFieldProperty(IQAssignment['available_for_submission_ending'])
 
-	not_after = alias('available_for_submission_ending')
-	not_before = alias('available_for_submission_beginning')
+    available_for_submission_beginning = \
+        AdaptingFieldProperty(IQAssignment['available_for_submission_beginning'])
 
-	parameters = {}  # IContentTypeAware
+    not_after = alias('available_for_submission_ending')
+    not_before = alias('available_for_submission_beginning')
 
-	def __init__(self, *args, **kwargs):
-		SchemaConfigured.__init__(self, *args, **kwargs)
+    parameters = {}  # IContentTypeAware
+
+    def __init__(self, *args, **kwargs):
+        SchemaConfigured.__init__(self, *args, **kwargs)
+
 
 class QPersistentSubmittable(QSubmittable, PersistentCreatedModDateTrackingObject):
 
-	createdTime = 0
-	creator = SYSTEM_USER_ID
+    createdTime = 0
+    creator = SYSTEM_USER_ID
 
-	def __init__(self, *args, **kwargs):
-		# schema configured is not cooperative
-		QSubmittable.__init__(self, *args, **kwargs)
-		PersistentCreatedModDateTrackingObject.__init__(self)
+    def __init__(self, *args, **kwargs):
+        # schema configured is not cooperative
+        QSubmittable.__init__(self, *args, **kwargs)
+        PersistentCreatedModDateTrackingObject.__init__(self)
+
 
 @WithRepr
 @EqHash('submittedResponse', superhash=True)
 @interface.implementer(IQSubmittedPart, ISublocations)
 class QSubmittedPart(SchemaConfigured, Persistent, Contained):
 
-	submittedResponse = None
+    submittedResponse = None
 
-	__external_can_create__ = False
+    __external_can_create__ = False
 
-	createDirectFieldProperties(IQSubmittedPart)
+    createDirectFieldProperties(IQSubmittedPart)
 
-	def sublocations(self):
-		part = self.submittedResponse
-		if hasattr(part, '__parent__'):  # take ownership
-			if part.__parent__ is None:
-				part.__parent__ = self
-			if part.__parent__ is self:
-				yield part
+    def sublocations(self):
+        part = self.submittedResponse
+        if hasattr(part, '__parent__'):  # take ownership
+            if part.__parent__ is None:
+                part.__parent__ = self
+            if part.__parent__ is self:
+                yield part
+
 
 # schema
 
-class EvaluationSchemaMixin(object):
-	"""
-	Mixin to pull a schema for a given implementation.
-	"""
 
-	def schema(self, user=None):
-		schema = find_most_derived_interface(self, IQAssessment)
-		result = make_schema(schema=schema,
-							 user=None,
-							 name='default', # in case not in schema
-							 maker=IQAssessmentJsonSchemaMaker)
-		return result
+class EvaluationSchemaMixin(object):
+    """
+    Mixin to pull a schema for a given implementation.
+    """
+
+    def schema(self, user=None):
+        schema = find_most_derived_interface(self, IQAssessment)
+        result = make_schema(schema=schema,
+                             user=None,
+                             name='default',  # in case not in schema
+                             maker=IQAssessmentJsonSchemaMaker)
+        return result
+
+
 AssessmentSchemaMixin = EvaluationSchemaMixin
