@@ -123,7 +123,10 @@ class ISha224RandomizedMultipleChoiceMultipleAnswerPart(IQRandomizedMultipleChoi
 # question set
 
 class IRandomizedQuestionSet(IQuestionSet):
-	pass
+	"""
+	A marker interface that indicates this IQuestionSet contains questions
+	in random order.
+	"""
 
 IRandomizedQuestionSet.setTaggedValue('__external_class_name__', "QuestionSet")
 

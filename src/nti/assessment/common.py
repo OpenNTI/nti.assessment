@@ -232,13 +232,21 @@ def compute_part_ntiid(part):
     return None
 
 
-def is_randomized_assignment(assignment):
-    return not IQuestionBank.providedBy(assignment) \
-           and IRandomizedQuestionSet.providedBy(assignment)
+def is_randomized_question_set(question_set):
+    """
+    Determines whether the question set has questions in a
+    random order.
+    """
+    return not IQuestionBank.providedBy(question_set) \
+           and IRandomizedQuestionSet.providedBy(question_set)
 
 
-def is_randomized_assignment_part(assignment):
-    return IRandomizedPartsContainer.providedBy(assignment)
+def is_randomized_parts_container(assessment):
+    """
+    Determines whether the question set has questions in a
+    random order. Currently only applicable on an IQuestionSet.
+    """
+    return IRandomizedPartsContainer.providedBy(assessment)
 
 
 # classes
