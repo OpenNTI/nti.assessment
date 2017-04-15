@@ -101,403 +101,444 @@ from nti.schema.eqhash import EqHash
 
 from nti.schema.field import SchemaConfigured
 
+
 @WithRepr
 @interface.implementer(IQNonGradablePart, IContained)
 @EqHash('content', 'hints', 'explanation',
-		superhash=True,
-		include_type=True)
+        superhash=True,
+        include_type=True)
 class QNonGradablePart(SchemaConfigured, Persistent):
-	"""
-	Base class for parts.
-	"""
+    """
+    Base class for parts.
+    """
 
-	__name__ = None
-	__parent__ = None
+    __name__ = None
+    __parent__ = None
 
-	response_interface = None
+    response_interface = None
 
-	hints = ()
-	content = _u('')
-	explanation = _u('')
+    hints = ()
+    content = _u('')
+    explanation = _u('')
 
-	evaluation = alias('__parent__')
+    evaluation = alias('__parent__')
 
-	@readproperty
-	def ntiid(self):
-		result = compute_part_ntiid(self)
-		if result:
-			self.ntiid = result
-		return result
+    @readproperty
+    def ntiid(self):
+        result = compute_part_ntiid(self)
+        if result:
+            self.ntiid = result
+        return result
+
 
 @interface.implementer(IQPart)
 @EqHash('content', 'hints', 'explanation',
-		'solutions', 'grader_interface', 'grader_name',
-		superhash=True,
-		include_type=True)
+        'solutions', 'grader_interface', 'grader_name',
+        superhash=True,
+        include_type=True)
 class QPart(QNonGradablePart):
-	"""
-	Base class for parts. Its :meth:`grade` method will attempt to
-	transform the input based on the interfaces this object
-	implements, plus the interfaces of the solution, and then call the
-	:meth:`_grade` method.
+    """
+    Base class for parts. Its :meth:`grade` method will attempt to
+    transform the input based on the interfaces this object
+    implements, plus the interfaces of the solution, and then call the
+    :meth:`_grade` method.
 
-	If response_interface is non-None, then we will always attempt to convert the
-	response to this interface before attempting to grade.
-	In this way parts that may not have a solution
-	can always be sure that the response is at least
-	of an appropriate type.
-	"""
+    If response_interface is non-None, then we will always attempt to convert the
+    response to this interface before attempting to grade.
+    In this way parts that may not have a solution
+    can always be sure that the response is at least
+    of an appropriate type.
+    """
 
-	#: The interface to implement when this this part IS randomized
-	randomized_interface = None
+    #: The interface to implement when this this part IS randomized
+    randomized_interface = None
 
-	#: The interface to implement when this this part IS sha224 randomized
-	#: This option is deprecated
-	sha224randomized_interface = None
+    #: The interface to implement when this this part IS sha224 randomized
+    #: This option is deprecated
+    sha224randomized_interface = None
 
-	#: The interface to which we will attempt to adapt ourself, the
-	#: solution and the response when grading a NON randomized part. Should be a
-	#: class:`.IQPartGrader`. The response will have first been converted
-	#: for the solution.
-	grader_interface = IQPartGrader
+    #: The interface to which we will attempt to adapt ourself, the
+    #: solution and the response when grading a NON randomized part. Should be a
+    #: class:`.IQPartGrader`. The response will have first been converted
+    #: for the solution.
+    grader_interface = IQPartGrader
 
-	#: The interface to which we will attempt to adapt ourself, the
-	#: solution and the response when grading a randomized part.
-	#: The response will have first been converted for the solution.
-	randomized_grader_interface = None
+    #: The interface to which we will attempt to adapt ourself, the
+    #: solution and the response when grading a randomized part.
+    #: The response will have first been converted for the solution.
+    randomized_grader_interface = None
 
-	#: The name of the grader we will attempt to adapt to. Defaults to the default,
-	#: unnamed, adapter
-	grader_name = _u('')
+    #: The name of the grader we will attempt to adapt to. Defaults to the default,
+    #: unnamed, adapter
+    grader_name = _u('')
 
-	#: Part weight when grading
-	weight = 1.0
+    #: Part weight when grading
+    weight = 1.0
 
-	solutions = ()
+    solutions = ()
 
-	question = alias('__parent__')
+    question = alias('__parent__')
 
-	def _get_randomzied(self):
-		return bool(self.randomized_interface is not None
-					and self.randomized_interface.providedBy(self))
-	def _set_randomized(self, nv):
-		if self.randomized_interface is not None:
-			if nv:
-				if not IQRandomizedPart.providedBy(self):
-					interface.alsoProvides(self, self.randomized_interface)
-					self._p_changed = True
-			elif IQRandomizedPart.providedBy(self):
-				interface.noLongerProvides(self, self.randomized_interface)
-				self._p_changed = True
-	randomized = property(_get_randomzied, _set_randomized)
+    def _get_randomzied(self):
+        return bool(self.randomized_interface is not None
+                    and self.randomized_interface.providedBy(self))
 
-	def grade(self, response, creator=None):
-		if self.response_interface is not None:
-			response = self.response_interface(response)
+    def _set_randomized(self, nv):
+        if self.randomized_interface is not None:
+            if nv:
+                if not IQRandomizedPart.providedBy(self):
+                    interface.alsoProvides(self, self.randomized_interface)
+                    self._p_changed = True
+            elif IQRandomizedPart.providedBy(self):
+                interface.noLongerProvides(self, self.randomized_interface)
+                self._p_changed = True
+    randomized = property(_get_randomzied, _set_randomized)
 
-		if not self.solutions:
-			# No solutions, no opinion
-			return None
+    def grade(self, response, creator=None):
+        if self.response_interface is not None:
+            response = self.response_interface(response)
 
-		result = 0.0
-		for solution in self.solutions:
-			# Attempt to get a proper solution
-			converted = convert_response_for_solution(solution, response)
-			# Graders return a true or false value. We are responsible
-			# for applying weights to that
-			value = self._grade(solution, converted, creator)
-			if value:
-				result = self._weight(value, solution)
-				break
-		return result
+        if not self.solutions:
+            # No solutions, no opinion
+            return None
 
-	def _weight(self, result, solution):
-		return self.weight * solution.weight
+        result = 0.0
+        for solution in self.solutions:
+            # Attempt to get a proper solution
+            converted = convert_response_for_solution(solution, response)
+            # Graders return a true or false value. We are responsible
+            # for applying weights to that
+            value = self._grade(solution, converted, creator)
+            if value:
+                result = self._weight(value, solution)
+                break
+        return result
 
-	def _grade(self, solution, response, creator):
-		__traceback_info__ = solution, response, self.grader_name
-		grader = grader_for_solution_and_response(self, solution, response, creator)
-		if grader is None:
-			objects = (self, solution, response)
-			raise ComponentLookupError(objects, self.grader_interface, self.grader_name)
-		return grader()
+    def _weight(self, result, solution):
+        return self.weight * solution.weight
 
-	def schema(self):
-		interfaces = tuple(self.__implemented__.interfaces())
-		result = make_schema(interfaces[0])
-		return result
+    def _grade(self, solution, response, creator):
+        __traceback_info__ = solution, response, self.grader_name
+        grader = grader_for_solution_and_response(self, solution,
+												  response, creator)
+        if grader is None:
+            objects = (self, solution, response)
+            raise ComponentLookupError(objects, 
+                                       self.grader_interface, 
+                                       self.grader_name)
+        return grader()
 
-	def __setattr__(self, name, value):
-		super(QPart, self).__setattr__(name, value)
-		if name == "solutions":
-			for x in self.solutions or ():
-				try:
-					x.__parent__ = self  # take ownership
-				except AttributeError:
-					pass
+    def schema(self):
+        interfaces = tuple(self.__implemented__.interfaces())
+        result = make_schema(interfaces[0])
+        return result
+
+    def __setattr__(self, name, value):
+        super(QPart, self).__setattr__(name, value)
+        if name == "solutions":
+            for x in self.solutions or ():
+                try:
+                    x.__parent__ = self  # take ownership
+                except AttributeError:
+                    pass
+
 
 # Math
+
 
 @interface.implementer(IQNonGradableMathPart)
 @EqHash(include_super=True, include_type=True)
 class QNonGradableMathPart(QNonGradablePart):
 
-	mimeType = mime_type = 'application/vnd.nextthought.assessment.nongradablemathpart'
+    mimeType = mime_type = 'application/vnd.nextthought.assessment.nongradablemathpart'
 
-	def _eq_instance(self, other):
-		return isinstance(other, QNonGradableMathPart)
+    def _eq_instance(self, other):
+        return isinstance(other, QNonGradableMathPart)
+
 
 @interface.implementer(IQMathPart)
 @EqHash(include_super=True, include_type=True)
 class QMathPart(QPart, QNonGradableMathPart):  # order matters
 
-	mimeType = mime_type = 'application/vnd.nextthought.assessment.mathpart'
+    mimeType = mime_type = 'application/vnd.nextthought.assessment.mathpart'
 
-	def _eq_instance(self, other):
-		return isinstance(other, QMathPart)
+    def _eq_instance(self, other):
+        return isinstance(other, QMathPart)
+
 
 @interface.implementer(IQSymbolicMathPart)
 @EqHash(include_super=True, include_type=True)
 class QSymbolicMathPart(QMathPart):
 
-	mimeType = mime_type = 'application/vnd.nextthought.assessment.symbolicmathpart'
-	grader_interface = IQSymbolicMathGrader
+    mimeType = mime_type = 'application/vnd.nextthought.assessment.symbolicmathpart'
+    grader_interface = IQSymbolicMathGrader
+
 
 @interface.implementer(IQNumericMathPart)
 @EqHash(include_super=True,
-		include_type=True)
+        include_type=True)
 class QNumericMathPart(QMathPart):
 
-	mimeType = mime_type = 'application/vnd.nextthought.assessment.numericmathpart'
+    mimeType = mime_type = 'application/vnd.nextthought.assessment.numericmathpart'
+
 
 # Multiple Choice
 
+
 @interface.implementer(IQNonGradableMultipleChoicePart)
 @EqHash('choices',
-		include_super=True,
-		include_type=True,
-		superhash=True)
+        include_super=True,
+        include_type=True,
+        superhash=True)
 class QNonGradableMultipleChoicePart(QNonGradablePart):
 
-	mimeType = mime_type = 'application/vnd.nextthought.assessment.nongradablemultiplechoicepart'
-	choices = ()
-	response_interface = IQTextResponse
+    mimeType = mime_type = 'application/vnd.nextthought.assessment.nongradablemultiplechoicepart'
+    choices = ()
+    response_interface = IQTextResponse
+
 
 @interface.implementer(IQMultipleChoicePart)
 @EqHash('choices',
-		include_super=True,
-		include_type=True,
-		superhash=True)
+        include_super=True,
+        include_type=True,
+        superhash=True)
 class QMultipleChoicePart(QPart, QNonGradableMultipleChoicePart):  # order matters
 
-	mimeType = mime_type = 'application/vnd.nextthought.assessment.multiplechoicepart'
-	response_interface = None
+    mimeType = mime_type = 'application/vnd.nextthought.assessment.multiplechoicepart'
+    response_interface = None
 
-	# graders
-	grader_interface = IQMultipleChoicePartGrader
-	randomized_grader_interface = IQRandomizedMultipleChoicePartGrader
+    # graders
+    grader_interface = IQMultipleChoicePartGrader
+    randomized_grader_interface = IQRandomizedMultipleChoicePartGrader
 
-	# randomized
-	randomized_interface = IQRandomizedMultipleChoicePart
-	sha224randomized_interface = ISha224RandomizedMultipleChoicePart
+    # randomized
+    randomized_interface = IQRandomizedMultipleChoicePart
+    sha224randomized_interface = ISha224RandomizedMultipleChoicePart
+
 
 # Multiple Choice Multiple Answer
+
 
 @interface.implementer(IQNonGradableMultipleChoiceMultipleAnswerPart)
 class QNonGradableMultipleChoiceMultipleAnswerPart(QNonGradableMultipleChoicePart):
 
-	mimeType = mime_type = 'application/vnd.nextthought.assessment.nongradablemultiplechoicemultipleanswerpart'
-	response_interface = IQListResponse
+    mimeType = mime_type = 'application/vnd.nextthought.assessment.nongradablemultiplechoicemultipleanswerpart'
+    response_interface = IQListResponse
+
 
 @interface.implementer(IQMultipleChoiceMultipleAnswerPart)
 class QMultipleChoiceMultipleAnswerPart(QMultipleChoicePart,
-										QNonGradableMultipleChoiceMultipleAnswerPart):  # order matters
+                                        QNonGradableMultipleChoiceMultipleAnswerPart):  # order matters
 
-	mimeType = mime_type = 'application/vnd.nextthought.assessment.multiplechoicemultipleanswerpart'
-	response_interface = None
+    mimeType = mime_type = 'application/vnd.nextthought.assessment.multiplechoicemultipleanswerpart'
+    response_interface = None
 
-	# graders
-	grader_interface = IQMultipleChoiceMultipleAnswerPartGrader
-	randomized_grader_interface = IQRandomizedMultipleChoiceMultipleAnswerPartGrader
+    # graders
+    grader_interface = IQMultipleChoiceMultipleAnswerPartGrader
+    randomized_grader_interface = IQRandomizedMultipleChoiceMultipleAnswerPartGrader
 
-	# randomized
-	randomized_interface = IQRandomizedMultipleChoiceMultipleAnswerPart
-	sha224randomized_interface = ISha224RandomizedMultipleChoiceMultipleAnswerPart
+    # randomized
+    randomized_interface = IQRandomizedMultipleChoiceMultipleAnswerPart
+    sha224randomized_interface = ISha224RandomizedMultipleChoiceMultipleAnswerPart
+
 
 # Connecting
 
+
 @interface.implementer(IQNonGradableConnectingPart)
 @EqHash('labels', 'values',
-		include_super=True,
-		superhash=True)
+        include_super=True,
+        superhash=True)
 class QNonGradableConnectingPart(QNonGradablePart):
 
-	mimeType = mime_type = 'application/vnd.nextthought.assessment.nongradableconnectingpart'
-	labels = ()
-	values = ()
+    mimeType = mime_type = 'application/vnd.nextthought.assessment.nongradableconnectingpart'
+    labels = ()
+    values = ()
+
 
 @interface.implementer(IQConnectingPart)
 @EqHash('labels', 'values',
-		include_super=True,
-		superhash=True)
+        include_super=True,
+        superhash=True)
 class QConnectingPart(QPart, QNonGradableConnectingPart):  # order matters
 
-	mimeType = mime_type = 'application/vnd.nextthought.assessment.connectingpart'
+    mimeType = mime_type = 'application/vnd.nextthought.assessment.connectingpart'
 
-	randomized_interface = IQRandomizedConnectingPart
+    randomized_interface = IQRandomizedConnectingPart
+
 
 # CS: Spelling mistake. There maybe objects stored with
 # this invalid class name
 import zope.deferredimport
 zope.deferredimport.initialize()
 zope.deferredimport.deprecated(
-	"Import from QConnectingPart instead",
-	QConenctingPart='nti.assessment.parts:QConnectingPart')
+    "Import from QConnectingPart instead",
+    QConenctingPart='nti.assessment.parts:QConnectingPart')
+
 
 @interface.implementer(IQNonGradableMatchingPart)
 class QNonGradableMatchingPart(QNonGradableConnectingPart):
 
-	mimeType = mime_type = 'application/vnd.nextthought.assessment.nongradablematchingpart'
+    mimeType = mime_type = 'application/vnd.nextthought.assessment.nongradablematchingpart'
+
 
 @interface.implementer(IQMatchingPart)
 class QMatchingPart(QConnectingPart, QNonGradableMatchingPart):
 
-	mimeType = mime_type = 'application/vnd.nextthought.assessment.matchingpart'
+    mimeType = mime_type = 'application/vnd.nextthought.assessment.matchingpart'
 
-	# graders
-	grader_interface = IQMatchingPartGrader
-	randomized_grader_interface = IQRandomizedMatchingPartGrader
+    # graders
+    grader_interface = IQMatchingPartGrader
+    randomized_grader_interface = IQRandomizedMatchingPartGrader
 
-	# randomized
-	randomized_interface = IQRandomizedMatchingPart
-	sha224randomized_interface = ISha224RandomizedMatchingPart
+    # randomized
+    randomized_interface = IQRandomizedMatchingPart
+    sha224randomized_interface = ISha224RandomizedMatchingPart
+
 
 @interface.implementer(IQNonGradableOrderingPart)
 class QNonGradableOrderingPart(QNonGradableConnectingPart):
 
-	mimeType = mime_type = 'application/vnd.nextthought.assessment.nongradableorderingpart'
+    mimeType = mime_type = 'application/vnd.nextthought.assessment.nongradableorderingpart'
+
 
 @interface.implementer(IQOrderingPart)
 class QOrderingPart(QConnectingPart, QNonGradableOrderingPart):  # order matters
 
-	mimeType = mime_type = 'application/vnd.nextthought.assessment.orderingpart'
+    mimeType = mime_type = 'application/vnd.nextthought.assessment.orderingpart'
 
-	# graders
-	grader_interface = IQOrderingPartGrader
-	randomized_grader_interface = IQRandomizedOrderingPartGrader
+    # graders
+    grader_interface = IQOrderingPartGrader
+    randomized_grader_interface = IQRandomizedOrderingPartGrader
 
-	# randomized
-	randomized_interface = IQRandomizedOrderingPart
-	sha224randomized_interface = ISha224RandomizedOrderingPart
+    # randomized
+    randomized_interface = IQRandomizedOrderingPart
+    sha224randomized_interface = ISha224RandomizedOrderingPart
+
 
 # Free Response
 
+
 @interface.implementer(IQNonGradableFreeResponsePart)
 @EqHash(include_super=True,
-		include_type=True)
+        include_type=True)
 class QNonGradableFreeResponsePart(QNonGradablePart):
 
-	mimeType = mime_type = 'application/vnd.nextthought.assessment.nongradablefreeresponsepart'
-	response_interface = IQTextResponse
+    mimeType = mime_type = 'application/vnd.nextthought.assessment.nongradablefreeresponsepart'
+    response_interface = IQTextResponse
+
 
 @interface.implementer(IQFreeResponsePart)
 @EqHash(include_super=True,
-		include_type=True)
+        include_type=True)
 class QFreeResponsePart(QPart, QNonGradableFreeResponsePart):  # order matters
 
-	mimeType = mime_type = 'application/vnd.nextthought.assessment.freeresponsepart'
-	response_interface = None
-	grader_name = 'LowerQuoteNormalizedStringEqualityGrader'
+    mimeType = mime_type = 'application/vnd.nextthought.assessment.freeresponsepart'
+    response_interface = None
+    grader_name = 'LowerQuoteNormalizedStringEqualityGrader'
+
 
 # File part
 
+
 @interface.implementer(IQNonGradableFilePart)
 @EqHash('allowed_mime_types', 'allowed_extensions', 'max_file_size',
-		include_super=True,
-		superhash=True)
+        include_super=True,
+        superhash=True)
 class QNonGradableFilePart(QNonGradablePart, FileConstraints):  # order matters
 
-	mimeType = mime_type = 'application/vnd.nextthought.assessment.nongradablefilepart'
+    mimeType = mime_type = 'application/vnd.nextthought.assessment.nongradablefilepart'
 
-	allowed_mime_types = ()
-	allowed_extensions = ()
-	max_file_size = DEFAULT_MAX_SIZE_BYTES
+    allowed_mime_types = ()
+    allowed_extensions = ()
+    max_file_size = DEFAULT_MAX_SIZE_BYTES
+
 
 @interface.implementer(IQFilePart)
 @EqHash('allowed_mime_types', 'allowed_extensions', 'max_file_size',
-		include_super=True,
-		superhash=True)
+        include_super=True,
+        superhash=True)
 class QFilePart(QPart, QNonGradableFilePart):  # order matters
 
-	mimeType = mime_type = 'application/vnd.nextthought.assessment.filepart'
+    mimeType = mime_type = 'application/vnd.nextthought.assessment.filepart'
 
-	grader_interface = None
-	response_interface = IQFileResponse
+    grader_interface = None
+    response_interface = IQFileResponse
 
-	def grade(self, response, creator=None):
-		response = self.response_interface(response)
+    def grade(self, response, creator=None):
+        response = self.response_interface(response)
 
-		# We first check our own constraints for submission
-		# and refuse to even grade if they are not met
-		value = response.value
+        # We first check our own constraints for submission
+        # and refuse to even grade if they are not met
+        value = response.value
 
-		if not self.is_mime_type_allowed(value.contentType):
-			__traceback_info__ = value.contentType
-			raise ConstraintNotSatisfied(value.contentType, 'mimeType')
+        if not self.is_mime_type_allowed(value.contentType):
+            __traceback_info__ = value.contentType
+            raise ConstraintNotSatisfied(value.contentType, 'mimeType')
 
-		if not self.is_filename_allowed(value.filename):
-			__traceback_info__ = value.filename
-			raise ConstraintNotSatisfied(value.filename, 'filename')
+        if not self.is_filename_allowed(value.filename):
+            __traceback_info__ = value.filename
+            raise ConstraintNotSatisfied(value.filename, 'filename')
 
-		if self.max_file_size is not None and value.getSize() > self.max_file_size:
-			__traceback_info__ = value.getSize()
-			raise ConstraintNotSatisfied(value.getSize(), 'max_file_size')
+        if self.max_file_size is not None and value.getSize() > self.max_file_size:
+            __traceback_info__ = value.getSize()
+            raise ConstraintNotSatisfied(value.getSize(), 'max_file_size')
 
-		super(QFilePart, self).grade(response, creator)
+        super(QFilePart, self).grade(response, creator)
+
 
 # Modeled Content
 
+
 @interface.implementer(IQNonGradableModeledContentPart)
 @EqHash(include_super=True,
-		include_type=True)
+        include_type=True)
 class QNonGradableModeledContentPart(QNonGradablePart):
 
-	mimeType = mime_type = 'application/vnd.nextthought.assessment.nongradablemodeledcontentpart'
-	response_interface = IQModeledContentResponse
+    mimeType = mime_type = 'application/vnd.nextthought.assessment.nongradablemodeledcontentpart'
+    response_interface = IQModeledContentResponse
+
 
 @interface.implementer(IQModeledContentPart)
 @EqHash(include_super=True,
-		include_type=True)
+        include_type=True)
 class QModeledContentPart(QPart, QNonGradableModeledContentPart):  # order matters
 
-	mimeType = mime_type = 'application/vnd.nextthought.assessment.modeledcontentpart'
-	grader_interface = None
+    mimeType = mime_type = 'application/vnd.nextthought.assessment.modeledcontentpart'
+    grader_interface = None
+
 
 # Fill in the Blank
+
 
 @interface.implementer(IQNonGradableFillInTheBlankShortAnswerPart)
 class QNonGradableFillInTheBlankShortAnswerPart(QNonGradablePart):
 
-	mimeType = mime_type = 'application/vnd.nextthought.assessment.nongradablefillintheblankshortanswerpart'
-	response_interface = IQDictResponse
+    mimeType = mime_type = 'application/vnd.nextthought.assessment.nongradablefillintheblankshortanswerpart'
+    response_interface = IQDictResponse
+
 
 @interface.implementer(IQFillInTheBlankShortAnswerPart)
-class QFillInTheBlankShortAnswerPart(QPart, QNonGradableFillInTheBlankShortAnswerPart):  # order matters
+class QFillInTheBlankShortAnswerPart(QPart, 
+									 QNonGradableFillInTheBlankShortAnswerPart): # order matters
 
-	mimeType = mime_type = 'application/vnd.nextthought.assessment.fillintheblankshortanswerpart'
-	grader_interface = IQFillInTheBlankShortAnswerGrader
+    mimeType = mime_type = 'application/vnd.nextthought.assessment.fillintheblankshortanswerpart'
+    grader_interface = IQFillInTheBlankShortAnswerGrader
+
 
 @interface.implementer(IQNonGradableFillInTheBlankWithWordBankPart)
 class QNonGradableFillInTheBlankWithWordBankPart(QNonGradablePart):
 
-	mimeType = mime_type = 'application/vnd.nextthought.assessment.nongradablefillintheblankwithwordbankpart'
-	response_interface = IQDictResponse
+    mimeType = mime_type = 'application/vnd.nextthought.assessment.nongradablefillintheblankwithwordbankpart'
+    response_interface = IQDictResponse
+
 
 @interface.implementer(IQFillInTheBlankWithWordBankPart)
-class QFillInTheBlankWithWordBankPart(QPart, QNonGradableFillInTheBlankWithWordBankPart):  # order matters
+# order matters
+class QFillInTheBlankWithWordBankPart(QPart, QNonGradableFillInTheBlankWithWordBankPart):
 
-	mimeType = mime_type = 'application/vnd.nextthought.assessment.fillintheblankwithwordbankpart'
-	grader_interface = IQFillInTheBlankWithWordBankGrader
+    mimeType = mime_type = 'application/vnd.nextthought.assessment.fillintheblankwithwordbankpart'
+    grader_interface = IQFillInTheBlankWithWordBankGrader
 
-	def _weight(self, result, solution):
-		return result * solution.weight
+    def _weight(self, result, solution):
+        return result * solution.weight
