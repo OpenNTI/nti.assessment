@@ -26,10 +26,10 @@ def _patch():
     # set mimetypes on interfaces
     for name in os.listdir(os.path.dirname(__file__)):
         # ignore modules we may have trouble importing
-        if name in ('jsonschema.py',
-                    'externalization.py',
-                    'internalization.py',
-                    'wref.py') \
+        if  name in ('jsonschema.py',
+                     'externalization.py',
+                     'internalization.py',
+                     'wref.py') \
             or name[-3:] != '.py' \
             or name.startswith('_'):
             continue
@@ -43,15 +43,15 @@ def _patch():
             try:
                 mimeType = getattr(item, 'mimeType', None) \
                         or getattr(item, 'mime_type', None)
-                assert mimeType
+                if not mimeType:
+                    continue
                 # first interface is the externalizable object
                 interfaces = tuple(item.__implemented__.interfaces())
                 root = interfaces[0]
                 root.setTaggedValue('_ext_mime_type', mimeType)
                 if root.isOrExtends(IQPart):
                     root.setTaggedValue('_ext_jsonschema', u'part')
-
-            except (AttributeError, TypeError, AssertionError):
+            except (AttributeError, TypeError, IndexError):
                 pass
 
 _patch()
