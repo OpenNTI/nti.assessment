@@ -249,6 +249,23 @@ def is_randomized_parts_container(assessment):
     return IRandomizedPartsContainer.providedBy(assessment)
 
 
+def is_part_auto_gradable(part):
+    # Validate every part has grader.
+    result = getattr(part, 'grader_interface', None) \
+          or getattr(part, 'grader_name', None)
+    return bool(result)
+
+
+def can_be_auto_graded(assignment):
+    for part in assignment.parts or ():
+        question_set = part.question_set
+        for question in question_set.questions or ():
+            for part in question.parts or ():
+                if not is_part_auto_gradable(part):
+                    return False
+    return True
+
+
 # classes
 
 
