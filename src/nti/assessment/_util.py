@@ -21,6 +21,7 @@ from nti.schema.eqhash import EqHash
 
 from nti.wref.interfaces import IWeakRef
 
+
 # classes
 
 
@@ -73,6 +74,7 @@ class CreatorMixin(object):
             self._p_changed = True  # mark as changed
     creator = property(_get_creator, _set_creator)
 
+
 # functions
 
 
@@ -97,8 +99,7 @@ def dctimes_property_fallback(attrname, dcname):
             return self.__dict__[attrname]
         if '__annotations__' in self.__dict__:
             try:
-                dcdata = self.__annotations__[
-                    'zope.app.dublincore.ZopeDublinCore']
+                dcdata = self.__annotations__['zope.app.dublincore.ZopeDublinCore']
                 date_modified = dcdata[dcname]  # tuple of a string
                 datetime = parseDatetimetz(date_modified[0])
                 result = time.mktime(datetime.timetuple())

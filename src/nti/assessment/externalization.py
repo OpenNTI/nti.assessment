@@ -70,6 +70,7 @@ MIMETYPE = StandardExternalFields.MIMETYPE
 CONTAINER_ID_EXT = StandardExternalFields.CONTAINER_ID
 CONTAINER_ID_INT = StandardInternalFields.CONTAINER_ID
 
+
 # Base internal IO
 
 
@@ -97,6 +98,7 @@ class _AssessmentInternalObjectIOBase(object):
         k = a_type.__name__
         ext_class_name = k[1:] if not k.startswith('Question') else k
         return ext_class_name
+
 
 # Solution parts
 
@@ -153,6 +155,7 @@ class _FillInTheBlankWithWordBankPartSolutionsExternalizer(object):
             result.append(ext)
         return result
 
+
 # Question Sets
 
 
@@ -208,6 +211,7 @@ class _AssignmentPartSummaryExternalizer(_BasicSummaryExternalizer):
     _excluded_out_ivars_ = ('question_set',)
 
     _ext_iface_upper_bound = IQAssignmentPart
+
 
 # Submission and Assessed objects
 
@@ -290,6 +294,7 @@ class _QUploadedFileObjectIO(NamedFileObjectIO):
 def _QUploadedFileFactory(ext_obj):
     factory = BaseFactory(ext_obj, QUploadedFile, QUploadedImageFile)
     return factory
+
 
 # custom externalization
 
