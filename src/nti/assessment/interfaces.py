@@ -53,7 +53,7 @@ from nti.coremetadata.interfaces import INeverStoredInSharedStream
 
 from nti.coremetadata.schema import ExtendedCompoundModeledContentBody
 
-from nti.mimetype.mimetype import mimeTypeConstraint
+from nti.mimetype.mimetype import rfc2047MimeTypeConstraint
 
 from nti.ntiids.schema import ValidNTIID
 
@@ -632,7 +632,7 @@ class IQNonGradableFilePart(IQNonGradablePart):
 	allowed_mime_types = IndexedIterable(title="Mime types that are accepted for upload",
 										 min_length=1,
 										 value_type=Text(title="An allowed mimetype",
-													 	 constraint=mimeTypeConstraint))
+													 	 constraint=rfc2047MimeTypeConstraint))
 
 	allowed_extensions = IndexedIterable(title="Extensions like '.doc' that are accepted for upload",
 										 min_length=0,
