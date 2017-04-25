@@ -16,6 +16,8 @@ from requests.structures import CaseInsensitiveDict
 
 from zope import interface
 
+from zope.cachedescriptors.property import CachedProperty
+
 from zope.container.contained import Contained
 
 from persistent import Persistent
@@ -28,8 +30,6 @@ from nti.base._compat import to_unicode
 from nti.contentfragments.interfaces import IHTMLContentFragment
 
 from nti.externalization.representation import WithRepr
-
-from nti.property.property import CachedProperty
 
 from nti.schema.field import SchemaConfigured
 
