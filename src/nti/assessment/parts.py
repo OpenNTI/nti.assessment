@@ -13,6 +13,8 @@ logger = __import__('logging').getLogger(__name__)
 
 from zope import interface
 
+from zope.cachedescriptors.property import readproperty
+
 from zope.component.interfaces import ComponentLookupError
 
 from zope.location.interfaces import IContained
@@ -95,7 +97,6 @@ from nti.externalization.representation import WithRepr
 from nti.namedfile.constraints import FileConstraints
 
 from nti.property.property import alias
-from nti.property.property import readproperty
 
 from nti.schema.eqhash import EqHash
 
@@ -223,8 +224,8 @@ class QPart(QNonGradablePart):
 												  response, creator)
         if grader is None:
             objects = (self, solution, response)
-            raise ComponentLookupError(objects, 
-                                       self.grader_interface, 
+            raise ComponentLookupError(objects,
+                                       self.grader_interface,
                                        self.grader_name)
         return grader()
 
@@ -519,7 +520,7 @@ class QNonGradableFillInTheBlankShortAnswerPart(QNonGradablePart):
 
 
 @interface.implementer(IQFillInTheBlankShortAnswerPart)
-class QFillInTheBlankShortAnswerPart(QPart, 
+class QFillInTheBlankShortAnswerPart(QPart,
 									 QNonGradableFillInTheBlankShortAnswerPart): # order matters
 
     mimeType = mime_type = 'application/vnd.nextthought.assessment.fillintheblankshortanswerpart'

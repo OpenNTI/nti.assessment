@@ -15,6 +15,8 @@ from zope import interface
 
 from zope.annotation.interfaces import IAttributeAnnotatable
 
+from zope.cachedescriptors.property import readproperty
+
 from zope.container.contained import Contained
 
 from zope.interface.common.sequence import IFiniteSequence
@@ -45,7 +47,6 @@ from nti.coremetadata.mixins import PublishableMixin
 from nti.dublincore.datastructures import PersistentCreatedModDateTrackingObject
 
 from nti.property.property import alias
-from nti.property.property import readproperty
 
 from nti.recorder.mixins import RecordableMixin
 from nti.recorder.mixins import RecordableContainerMixin

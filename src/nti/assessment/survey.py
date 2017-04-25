@@ -12,6 +12,9 @@ logger = __import__('logging').getLogger(__name__)
 from zope import component
 from zope import interface
 
+from zope.cachedescriptors.property import readproperty
+from zope.cachedescriptors.property import CachedProperty
+
 from zope.interface.common.mapping import IWriteMapping
 from zope.interface.common.sequence import IFiniteSequence
 
@@ -64,8 +67,6 @@ from nti.dublincore.datastructures import PersistentCreatedModDateTrackingObject
 from nti.externalization.representation import WithRepr
 
 from nti.property.property import alias
-from nti.property.property import readproperty
-from nti.property.property import CachedProperty
 
 from nti.schema.eqhash import EqHash
 
