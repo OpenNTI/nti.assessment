@@ -15,6 +15,9 @@ from zope import interface
 
 from zope.annotation.interfaces import IAttributeAnnotatable
 
+from zope.cachedescriptors.property import Lazy
+from zope.cachedescriptors.property import readproperty
+
 from zope.container.contained import Contained
 
 from zope.location.interfaces import ISublocations
@@ -57,8 +60,6 @@ from nti.dublincore.datastructures import PersistentCreatedModDateTrackingObject
 from nti.externalization.representation import WithRepr
 
 from nti.property.property import alias
-from nti.property.property import Lazy
-from nti.property.property import readproperty
 
 from nti.schema.eqhash import EqHash
 
