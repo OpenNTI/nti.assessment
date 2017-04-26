@@ -44,8 +44,6 @@ from nti.assessment.interfaces import IQFillInTheBlankWithWordBankSolution
 from nti.assessment.response import QUploadedFile
 from nti.assessment.response import QUploadedImageFile
 
-from nti.coremetadata.interfaces import IPublishable
-
 from nti.externalization.datastructures import InterfaceObjectIO
 
 from nti.externalization.externalization import to_external_object
@@ -60,6 +58,8 @@ from nti.mimetype.externalization import decorateMimeType
 
 from nti.ntiids.ntiids import TYPE_OID
 from nti.ntiids.ntiids import is_ntiid_of_type
+
+from nti.publishing.interfaces import IPublishable
 
 from nti.recorder.interfaces import IRecordable
 

@@ -49,7 +49,6 @@ from nti.assessment.randomized.interfaces import IRandomizedQuestionSet
 from nti.assessment.randomized.interfaces import IRandomizedPartsContainer
 
 from nti.coremetadata.mixins import VersionedMixin
-from nti.coremetadata.mixins import CalendarPublishableMixin
 
 from nti.coremetadata.utils import make_schema
 
@@ -70,6 +69,8 @@ from nti.ntiids.ntiids import make_ntiid
 from nti.ntiids.ntiids import make_specific_safe
 
 from nti.property.property import alias
+
+from nti.publishing.mixins import CalendarPublishableMixin
 
 from nti.recorder.mixins import RecordableMixin
 

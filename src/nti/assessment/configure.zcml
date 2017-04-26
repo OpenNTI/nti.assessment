@@ -14,6 +14,7 @@
 	<include package="zope.annotation" />
 
 	<include package="nti.mimetype" />
+	<include package="nti.publishing" />
 	<include package="nti.contentfragments" />
 	<include package="nti.namedfile" file="configure_named.zcml" />
 

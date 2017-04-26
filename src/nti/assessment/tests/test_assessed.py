@@ -20,7 +20,6 @@ from hamcrest import has_entries
 from hamcrest import greater_than
 from hamcrest import has_property
 
-from nti.testing.matchers import is_false
 from nti.testing.matchers import verifiably_provides
 
 from zope import component
@@ -36,7 +35,7 @@ from nti.assessment import solution as solutions
 from nti.assessment.question import QQuestion
 from nti.assessment.question import QQuestionSet
 
-from nti.coremetadata.interfaces import ILastModified
+from nti.base.interfaces import ILastModified
 
 from nti.externalization import internalization
 from nti.externalization.externalization import toExternalObject
