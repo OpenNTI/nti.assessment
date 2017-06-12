@@ -42,6 +42,8 @@ from nti.contentfragments.schema import LatexFragmentTextLine as _LatexTextLine
 from nti.contentfragments.schema import HTMLContentFragment as _HTMLContentFragment
 from nti.contentfragments.schema import TextUnicodeContentFragment as _ContentFragment
 
+from nti.contenttypes.reports.interfaces import IReportContext
+
 from nti.coremetadata.interfaces import IVersioned
 from nti.coremetadata.interfaces import ITitledContent
 from nti.coremetadata.interfaces import IContextAnnotatable
@@ -919,7 +921,7 @@ class IQSubmittable(IRecordable, ICalendarPublishable, IVersioned):
                      default=False)
 
 
-class IQAssignment(IQAssessment, IQSubmittable, ITitledContent, IAttributeAnnotatable):
+class IQAssignment(IQAssessment, IQSubmittable, ITitledContent, IAttributeAnnotatable, IReportContext):
     """
     An assignment differs from either plain questions or question sets
     in that there is an expectation that it must be completed,
@@ -1639,7 +1641,7 @@ DISCLOSURE_VOCABULARY = vocabulary.SimpleVocabulary(
     [vocabulary.SimpleTerm(_x) for _x in DISCLOSURE_STATES])
 
 
-class IQInquiry(IQSubmittable, IQEvaluation, IAttributeAnnotatable):
+class IQInquiry(IQSubmittable, IQEvaluation, IAttributeAnnotatable, IReportContext):
 
     ntiid = ValidNTIID(title=u"Object NTIID", required=False)
 
