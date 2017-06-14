@@ -313,22 +313,22 @@
 	Randomized parts are regular parts with marker interface
 	-->
 	<adapter factory=".parts.randomized_matching_part_factory"
-			 for="dolmen.builtins.IDict"
+			 for="nti.base.interfaces.IDict"
 			 provides="nti.externalization.interfaces.IMimeObjectFactory"
 			 name="application/vnd.nextthought.assessment.randomizedmatchingpart" />
 
 	<adapter factory=".parts.randomized_ordering_part_factory"
-			 for="dolmen.builtins.IDict"
+			 for="nti.base.interfaces.IDict"
 			 provides="nti.externalization.interfaces.IMimeObjectFactory"
 			 name="application/vnd.nextthought.assessment.randomizedorderingpart" />
 
 	<adapter factory=".parts.randomized_multiple_choice_part_factory"
-			 for="dolmen.builtins.IDict"
+			 for="nti.base.interfaces.IDict"
 			 provides="nti.externalization.interfaces.IMimeObjectFactory"
 			 name="application/vnd.nextthought.assessment.randomizedmultiplechoicepart" />
 
 	<adapter factory=".parts.randomized_multiple_choice_multiple_answer_part_factory"
-			 for="dolmen.builtins.IDict"
+			 for="nti.base.interfaces.IDict"
 			 provides="nti.externalization.interfaces.IMimeObjectFactory"
 			 name="application/vnd.nextthought.assessment.randomizedmultiplechoicemultipleanswerpart" />
 

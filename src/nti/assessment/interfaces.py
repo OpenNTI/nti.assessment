@@ -30,12 +30,12 @@ from zope.lifecycleevent.interfaces import IObjectModifiedEvent
 
 from zope.schema import vocabulary
 
-from dolmen.builtins.interfaces import IDict
-from dolmen.builtins.interfaces import IList
-from dolmen.builtins.interfaces import IString
-from dolmen.builtins.interfaces import INumeric
-from dolmen.builtins.interfaces import IUnicode
-from dolmen.builtins.interfaces import IIterable
+from nti.base.interfaces import IDict
+from nti.base.interfaces import IList
+from nti.base.interfaces import IString
+from nti.base.interfaces import INumeric
+from nti.base.interfaces import IUnicode
+from nti.base.interfaces import IIterable
 
 from nti.contentfragments.schema import Tag
 from nti.contentfragments.schema import LatexFragmentTextLine as _LatexTextLine

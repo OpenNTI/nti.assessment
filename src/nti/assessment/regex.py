@@ -14,11 +14,11 @@ from zope import interface
 
 from zope.container.contained import Contained
 
-from dolmen.builtins.interfaces import IString
-
 from persistent import Persistent
 
 from nti.assessment.interfaces import IRegEx
+
+from nti.base.interfaces import IString
 
 from nti.contentfragments.interfaces import IHTMLContentFragment
 

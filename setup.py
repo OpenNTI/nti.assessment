@@ -46,7 +46,6 @@ setup(
     install_requires=[
         'setuptools',
         'persistent',
-        'dolmen.builtins',
         'nti.base',
         'nti.contentfragments',
         'nti.coremetadata',

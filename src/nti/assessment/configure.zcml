@@ -433,13 +433,13 @@
 	they deviate from the pattern.
 	-->
 	<adapter factory=".externalization._QUploadedFileFactory"
-			 for="dolmen.builtins.IDict"
+			 for="nti.base.interfaces.IDict"
 			 provides="nti.externalization.interfaces.IMimeObjectFactory"
 			 name="application/vnd.nextthought.assessment.uploadedfile" />
 
 	<!-- Temporary workaround for iPad bug JZ - 01.02.2015 -->
 	<adapter factory=".externalization._QUploadedFileFactory"
-			 for="dolmen.builtins.IDict"
+			 for="nti.base.interfaces.IDict"
 			 provides="nti.externalization.interfaces.IMimeObjectFactory"
 			 name="application/vnd.nextthought.assessment.quploadedfile" />
 
