@@ -32,10 +32,11 @@ from zope.schema import vocabulary
 
 from nti.base.interfaces import IDict
 from nti.base.interfaces import IList
-from nti.base.interfaces import IString
 from nti.base.interfaces import INumeric
-from nti.base.interfaces import IUnicode
 from nti.base.interfaces import IIterable
+
+from nti.contentfragments.interfaces import IString
+from nti.contentfragments.interfaces import IUnicode
 
 from nti.contentfragments.schema import Tag
 from nti.contentfragments.schema import LatexFragmentTextLine as _LatexTextLine
