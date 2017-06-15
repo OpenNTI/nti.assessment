@@ -13,13 +13,8 @@ entry_points = {
 }
 
 TESTS_REQUIRE = [
-    'nose',
-    'nose-timer',
-    'nose-pudb',
-    'nose-progressive',
-    'nose2[coverage_plugin]',
-    'pyhamcrest',
-    'nti.testing'
+    'nti.testing',
+    'zope.testrunner',
 ]
 
 setup(
