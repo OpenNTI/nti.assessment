@@ -18,8 +18,7 @@ from persistent import Persistent
 
 from nti.assessment.interfaces import IRegEx
 
-from nti.base.interfaces import IString
-
+from nti.contentfragments.interfaces import IString
 from nti.contentfragments.interfaces import IHTMLContentFragment
 
 from nti.externalization.representation import WithRepr
