@@ -54,11 +54,11 @@ def questionbank_question_index_chooser(context, questions=None, user=None):
     if generator and questions and context.draw and context.draw < len(questions):
         ranges = context.ranges or ()
         if not ranges:
-            result = generator.sample(xrange(0, len(questions)), context.draw)
+            result = generator.sample(range(0, len(questions)), context.draw)
         else:
             result = []
             for r in ranges:
-                indices = xrange(r.start, r.end + 1)
+                indices = range(r.start, r.end + 1)
                 generated = generator.sample(indices, r.draw)
                 result.extend(generated)
                 generator = questionbank_random(context, user=user)
