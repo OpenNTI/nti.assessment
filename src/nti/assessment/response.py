@@ -4,7 +4,7 @@
 .. $Id$
 """
 
-from __future__ import unicode_literals, print_function, absolute_import, division
+from __future__ import print_function, absolute_import, division
 __docformat__ = "restructuredtext en"
 
 logger = __import__('logging').getLogger(__name__)
@@ -27,6 +27,8 @@ from nti.assessment.interfaces import IQListResponse
 from nti.assessment.interfaces import IQTextResponse
 from nti.assessment.interfaces import IQUploadedFile
 from nti.assessment.interfaces import IQModeledContentResponse
+
+from nti.base._compat import text_
 
 from nti.coremetadata.schema import BodyFieldProperty
 
@@ -60,9 +62,7 @@ class QTextResponse(TrivialValuedMixin, QResponse):
         if self.value is not None and not isinstance(self.value, string_types):
             # Convert e.g., numbers, to text values
             self.value = text_type(self.value)
-        if isinstance(self.value, bytes):  # pragma: no cover
-            # Decode incoming byte strings to text
-            self.value = text_type(self.value, 'utf-8')
+        self.value = text_(self.value)
 
 
 @interface.implementer(IQListResponse)

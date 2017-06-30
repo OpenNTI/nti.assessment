@@ -4,7 +4,7 @@
 .. $Id$
 """
 
-from __future__ import unicode_literals, print_function, absolute_import, division
+from __future__ import print_function, absolute_import, division
 __docformat__ = "restructuredtext en"
 
 logger = __import__('logging').getLogger(__name__)
@@ -25,7 +25,7 @@ from persistent import Persistent
 from nti.assessment.interfaces import IWordBank
 from nti.assessment.interfaces import IWordEntry
 
-from nti.base._compat import to_unicode
+from nti.base._compat import text_
 
 from nti.contentfragments.interfaces import IHTMLContentFragment
 
@@ -56,7 +56,7 @@ class WordEntry(Persistent, SchemaConfigured, Contained):
 
     wid = None
     word = None
-    lang = 'en'
+    lang = u'en'
 
     def __init__(self, *args, **kwargs):
         Persistent.__init__(self)
@@ -170,15 +170,15 @@ class WordBank(SchemaConfigured, Persistent, Contained):
 
 @interface.implementer(IWordEntry)
 def _wordentry_adapter(sequence):
-    result = WordEntry(wid=to_unicode(sequence[0]),
-                       word=to_unicode(sequence[1]))
+    result = WordEntry(wid=text_(sequence[0]),
+                       word=text_(sequence[1]))
     if len(sequence) > 2 and sequence[2]:
-        result.lang = to_unicode(sequence[2]).lower()
+        result.lang = text_(sequence[2]).lower()
     else:
         result.lang = u'en'
 
     if len(sequence) > 3 and sequence[3]:
-        content = to_unicode(sequence[3])
+        content = text_(sequence[3])
     else:
         content = result.word
     result.content = IHTMLContentFragment(content)

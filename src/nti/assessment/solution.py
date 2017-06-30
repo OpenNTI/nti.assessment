@@ -4,7 +4,7 @@
 .. $Id$
 """
 
-from __future__ import unicode_literals, print_function, absolute_import, division
+from __future__ import print_function, absolute_import, division
 __docformat__ = "restructuredtext en"
 
 logger = __import__('logging').getLogger(__name__)
@@ -127,7 +127,6 @@ class QLatexSymbolicMathSolution(_EqualityValuedMixin, QSymbolicMathSolution):
     """
     The answer is defined to be in latex.
     """
-    # TODO: Verification of the value? Minor transforms like adding $$?
 
 
 @interface.implementer(IQConnectingSolution)
