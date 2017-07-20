@@ -22,6 +22,8 @@ from plasTeX.TeX import TeX
 
 from nti.assessment.interfaces import IResponseToSymbolicMathConverter
 
+from nti.base._compat import text_
+
 import nti.openmath as openmath
 
 _counter = 0
@@ -44,7 +46,7 @@ def _buildDomFromString(docString):
 
 def _simpleLatexDocument(maths):
     doc = """\\documentclass[12pt]{article} \\usepackage{amsmath} \\begin{document} """
-    mathString = '\n'.join((unicode(m) for m in maths))
+    mathString = '\n'.join(text_(m) for m in maths)
     doc = doc + '\n' + mathString + '\n\\end{document}'
     return doc
 

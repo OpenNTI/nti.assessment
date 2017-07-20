@@ -25,6 +25,8 @@ from nti.assessment.interfaces import IQuestion
 from nti.assessment.interfaces import IQAssignment
 from nti.assessment.interfaces import IQuestionSet
 
+from nti.base._compat import text_
+
 from nti.contentfragments.interfaces import LatexContentFragment
 from nti.contentfragments.interfaces import PlainTextContentFragment
 from nti.contentfragments.interfaces import SanitizedHTMLContentFragment
@@ -207,7 +209,7 @@ class QuestionIndex(object):
 
 			obj.ntiid = k
 			obj.signature = signatures_dict.get(k) if signatures_dict else None
-			obj.__name__ = unicode(k).encode('utf8').decode('utf8')
+			obj.__name__ = text_(k).encode('utf8').decode('utf8')
 
 			# No matter if we got an assignment or question set first or the questions
 			# first, register the question objects exactly once. Replace
