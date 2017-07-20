@@ -289,10 +289,7 @@ def _load_question_map_json(asm_index_text):
 
 	if not asm_index_text:
 		return
-
-	if isinstance(asm_index_text, bytes):
-		asm_index_text = unicode(asm_index_text, 'utf-8')
-
+	asm_index_text = text_(asm_index_text)
 	# In this one specific case, we know that these are already
 	# content fragments (probably HTML content fragments)
 	# If we go through the normal adapter process from string to
