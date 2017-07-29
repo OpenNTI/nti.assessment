@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 
 from __future__ import print_function, unicode_literals, absolute_import, division
+from hamcrest.library.object.hasproperty import has_property
 __docformat__ = "restructuredtext en"
 
 # disable: accessing protected members, too many methods
@@ -69,6 +70,12 @@ class TestAssignment(AssessmentTestCase):
 		assert_that( assignment.QAssignmentSubmissionPendingAssessment(),
 					 externalizes( has_entry( 'Class', 'AssignmentSubmissionPendingAssessment' )))
 
+	def test_props(self):
+		assign_obj = assignment.QAssignment()
+		assign_obj.ntiid = u'tag:nextthought.com,2011-10:OU-NAQ-quiz1'
+		assert_that(assign_obj, has_property('ntiid', 'tag:nextthought.com,2011-10:OU-NAQ-quiz1'))
+		assert_that(assign_obj, has_property('__name__', 'tag:nextthought.com,2011-10:OU-NAQ-quiz1'))
+				
 	def test_signature(self):
 		a = assignment.QAssignment()
 		a.lastModified = a.createdTime = 0

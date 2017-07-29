@@ -15,8 +15,6 @@ from zope.annotation.interfaces import IAttributeAnnotatable
 
 from zope.cachedescriptors.property import readproperty
 
-from zope.container.contained import Contained
-
 from zope.interface.common.sequence import IFiniteSequence
 
 from zope.mimetype.interfaces import IContentTypeAware
@@ -66,18 +64,22 @@ class QBaseMixin(SchemaConfigured,
                  RecordableMixin,
                  PublishableMixin,
                  VersionedMixin,
-                 EvaluationSchemaMixin,
-                 Contained):
+                 EvaluationSchemaMixin):
 
     tags = ()
-    ntiid = None
     id = alias('ntiid')
-
+    
+    __parent__ = None
+    
     parameters = {}  # IContentTypeAware
 
     def __init__(self, *args, **kwargs):
         SchemaConfigured.__init__(self, *args, **kwargs)
         PersistentCreatedModDateTrackingObject.__init__(self)
+
+    @readproperty
+    def __name__(self):
+        return self.ntiid
 
     @readproperty
     def __home__(self):
@@ -87,7 +89,7 @@ class QBaseMixin(SchemaConfigured,
     def containerId(self):
         return get_containerId(self)
 
-    def __str__(self, *args, **kwargs):
+    def __str__(self):
         try:
             result = "%s(ntiid=%s)" % (self.__class__.__name__, self.ntiid)
             return result

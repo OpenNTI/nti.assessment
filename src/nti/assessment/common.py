@@ -4,7 +4,7 @@
 .. $Id$
 """
 
-from __future__ import unicode_literals, print_function, absolute_import, division
+from __future__ import print_function, absolute_import, division
 __docformat__ = "restructuredtext en"
 
 logger = __import__('logging').getLogger(__name__)
@@ -19,8 +19,11 @@ from zope import interface
 
 from zope.annotation.interfaces import IAttributeAnnotatable
 
+from zope.cachedescriptors.property import readproperty
+
 from zope.container.contained import Contained
 
+from zope.location.interfaces import IContained
 from zope.location.interfaces import ISublocations
 
 from zope.mimetype.interfaces import IContentTypeAware
@@ -33,7 +36,6 @@ from nti.assessment.interfaces import PART_NTIID_TYPE
 
 from nti.assessment.interfaces import IQPart
 from nti.assessment.interfaces import IQAssessment
-from nti.assessment.interfaces import IQAssignment
 from nti.assessment.interfaces import IQSubmittable
 from nti.assessment.interfaces import IQSubmittedPart
 from nti.assessment.interfaces import IQNonGradablePart
@@ -132,8 +134,6 @@ def grader_for_solution_and_response(part, solution, response, creator=None):
                                              grader_interface,
                                              name=part.grader_name)
     return result
-
-
 grader = grader_for_solution_and_response  # alias BWC
 
 
@@ -271,29 +271,35 @@ def can_be_auto_graded(assignment):
 
 
 @WithRepr
-@interface.implementer(IQSubmittable, IContentTypeAware, IAttributeAnnotatable)
+@interface.implementer(IQSubmittable, 
+                       IContained,
+                       IContentTypeAware, 
+                       IAttributeAnnotatable)
 class QSubmittable(SchemaConfigured,
                    VersionedMixin,
                    RecordableMixin,
                    CalendarPublishableMixin,
-                   CreatedAndModifiedTimeMixin,
-                   Contained):
-
-    ntiid = None
-
+                   CreatedAndModifiedTimeMixin):
+    
     available_for_submission_ending = \
-        AdaptingFieldProperty(IQAssignment['available_for_submission_ending'])
+        AdaptingFieldProperty(IQSubmittable['available_for_submission_ending'])
 
     available_for_submission_beginning = \
-        AdaptingFieldProperty(IQAssignment['available_for_submission_beginning'])
+        AdaptingFieldProperty(IQSubmittable['available_for_submission_beginning'])
 
     not_after = alias('available_for_submission_ending')
     not_before = alias('available_for_submission_beginning')
 
     parameters = {}  # IContentTypeAware
 
+    __parent__ = None
+    
     def __init__(self, *args, **kwargs):
         SchemaConfigured.__init__(self, *args, **kwargs)
+
+    @readproperty
+    def __name__(self):
+        return self.ntiid
 
 
 class QPersistentSubmittable(QSubmittable, PersistentCreatedModDateTrackingObject):
@@ -305,6 +311,10 @@ class QPersistentSubmittable(QSubmittable, PersistentCreatedModDateTrackingObjec
         # schema configured is not cooperative
         QSubmittable.__init__(self, *args, **kwargs)
         PersistentCreatedModDateTrackingObject.__init__(self)
+        
+    @readproperty
+    def __home__(self):
+        return self.__parent__
 
 
 @WithRepr

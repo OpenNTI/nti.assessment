@@ -106,10 +106,6 @@ class QAssignment(QPersistentSubmittable, AssessmentSchemaMixin):
     parts = ()
 
     @readproperty
-    def __home__(self):
-        return self.__parent__
-
-    @readproperty
     def no_submit(self):
         return self.category_name == 'no_submit'
 

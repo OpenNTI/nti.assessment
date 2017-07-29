@@ -99,11 +99,7 @@ class QInquiry(QPersistentSubmittable, EvaluationSchemaMixin):
     def containerId(self):
         return get_containerId(self)
 
-    @readproperty
-    def __home__(self):
-        return self.__parent__
-
-    def __str__(self, *args, **kwargs):
+    def __str__(self):
         try:
             result = "%s(ntiid=%s)" % (self.__class__.__name__, self.ntiid)
             return result
