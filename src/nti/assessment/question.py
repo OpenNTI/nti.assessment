@@ -143,7 +143,7 @@ class QQuestionSet(QBaseMixin, RecordableContainerMixin):
 
     def __len__(self):
         return len(self.questions or ())
-
+    
     def pop(self, index):
         return self.questions.pop(index)
 
@@ -173,6 +173,10 @@ class QQuestionSet(QBaseMixin, RecordableContainerMixin):
             self.append(item)
         else:
             self.questions.insert(index, item)
+
+    @property
+    def question_count(self):
+        return len(self)
 
 
 @interface.implementer(IQFillInTheBlankWithWordBankQuestion)

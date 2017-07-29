@@ -170,6 +170,11 @@ class QSurvey(QInquiry):
                 return self.questions.pop(idx)
         return None
 
+    @property
+    def question_count(self):
+        return len(self)
+    poll_count = question_count
+
 
 @WithRepr
 @interface.implementer(IQPollSubmission, ISublocations, IFiniteSequence)
