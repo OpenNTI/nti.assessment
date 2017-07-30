@@ -301,6 +301,10 @@ class QSubmittable(SchemaConfigured,
     def __name__(self):
         return self.ntiid
 
+    @readproperty
+    def __home__(self):
+        return self.__parent__
+
 
 class QPersistentSubmittable(QSubmittable, PersistentCreatedModDateTrackingObject):
 
@@ -311,10 +315,6 @@ class QPersistentSubmittable(QSubmittable, PersistentCreatedModDateTrackingObjec
         # schema configured is not cooperative
         QSubmittable.__init__(self, *args, **kwargs)
         PersistentCreatedModDateTrackingObject.__init__(self)
-        
-    @readproperty
-    def __home__(self):
-        return self.__parent__
 
 
 @WithRepr
@@ -352,6 +352,4 @@ class EvaluationSchemaMixin(object):
                              name='default',  # in case not in schema
                              maker=IQAssessmentJsonSchemaMaker)
         return result
-
-
 AssessmentSchemaMixin = EvaluationSchemaMixin

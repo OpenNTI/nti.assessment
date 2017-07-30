@@ -4,7 +4,7 @@
 .. $Id$
 """
 
-from __future__ import unicode_literals, print_function, absolute_import, division
+from __future__ import print_function, absolute_import, division
 __docformat__ = "restructuredtext en"
 
 logger = __import__('logging').getLogger(__name__)
@@ -62,25 +62,25 @@ def _get_randomized_object(factory):
     return result
 
 
-def randomized_matching_part_factory(ext_obj):
+def randomized_matching_part_factory(_):
     def _factory():
         return _get_randomized_object(QMatchingPart)
     return _factory
 
 
-def randomized_ordering_part_factory(ext_obj):
+def randomized_ordering_part_factory(_):
     def _factory():
         return _get_randomized_object(QOrderingPart)
     return _factory
 
 
-def randomized_multiple_choice_part_factory(ext_obj):
+def randomized_multiple_choice_part_factory(_):
     def _factory():
         return _get_randomized_object(QMultipleChoicePart)
     return _factory
 
 
-def randomized_multiple_choice_multiple_answer_part_factory(ext_obj):
+def randomized_multiple_choice_multiple_answer_part_factory(_):
     def _factory():
         return _get_randomized_object(QMultipleChoiceMultipleAnswerPart)
     return _factory

@@ -4,7 +4,7 @@
 .. $Id$
 """
 
-from __future__ import unicode_literals, print_function, absolute_import, division
+from __future__ import print_function, absolute_import, division
 __docformat__ = "restructuredtext en"
 
 logger = __import__('logging').getLogger(__name__)
@@ -166,9 +166,9 @@ IRandomizedPartsContainer.setTaggedValue('_ext_is_marker_interface', True)
 
 
 class IQuestionIndexRange(interface.Interface):
-    start = Int(title="start index range", min=0, required=True)
-    end = Int(title="end index range", min=0, required=True)
-    draw = Int(title="number of questions to draw in range", 
+    start = Int(title=u"start index range", min=0, required=True)
+    end = Int(title=u"end index range", min=0, required=True)
+    draw = Int(title=u"number of questions to draw in range", 
 			   min=1, 
 			   required=True,
                default=1)
@@ -181,10 +181,10 @@ class IQuestionBank(IQuestionSet):
     A maximum total of questions of the question set is drawn to be presented and evaluated.
     """
 
-    draw = Int(title="number of questions to be randomly drawn", min=1,
+    draw = Int(title=u"number of questions to be randomly drawn", min=1,
                required=True, default=1)
 
-    ranges = ListOrTuple(Object(IQuestionIndexRange), title="Question index ranges",
+    ranges = ListOrTuple(Object(IQuestionIndexRange), title=u"Question index ranges",
                          required=False, default=())
 
     def copy(questions=None, ranges=None):
