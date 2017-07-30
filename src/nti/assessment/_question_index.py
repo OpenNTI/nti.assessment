@@ -54,7 +54,7 @@ def _ntiid_object_hook(k, v, x):
         # and if we re-convert when we read, we tend to over-escape
         # One thing we do need to do, though, is replace long dashes with standard
         # minus signs
-        v.value = LatexContentFragment(x['value'].replace(u'\u2212', '-'))
+        v.value = LatexContentFragment(x['value'].replace(u'\u2212', u'-'))
     return v
 
 
