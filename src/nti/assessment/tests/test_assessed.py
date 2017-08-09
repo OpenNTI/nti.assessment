@@ -35,6 +35,8 @@ from nti.assessment import solution as solutions
 from nti.assessment.question import QQuestion
 from nti.assessment.question import QQuestionSet
 
+from nti.base.interfaces import DEFAULT_CONTENT_TYPE
+
 from nti.base.interfaces import ILastModified
 
 from nti.externalization import internalization
@@ -187,7 +189,7 @@ class TestAssessedQuestion(AssessmentTestCase):
 
 		# Now if the part gets constraints on filename or mimeType or size
 		# submission can fail
-		part.allowed_mime_types = ('application/octet-stream',)
+		part.allowed_mime_types = (DEFAULT_CONTENT_TYPE,)
 		assert_that( calling( interfaces.IQAssessedQuestion ).with_args(sub),
 					 raises( interface.Invalid, 'mimeType' ))
 
