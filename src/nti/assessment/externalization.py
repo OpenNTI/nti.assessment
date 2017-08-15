@@ -4,7 +4,7 @@
 .. $Id$
 """
 
-from __future__ import unicode_literals, print_function, absolute_import, division
+from __future__ import print_function, absolute_import, division
 __docformat__ = "restructuredtext en"
 
 logger = __import__('logging').getLogger(__name__)
@@ -85,8 +85,10 @@ class _AssessmentInternalObjectIOBase(object):
         result = getattr(impl, '__external_class_name__', None)
         if not result:
             # Strip off 'IQ' if it's not 'IQuestionXYZ'
-            result = iface.__name__[2:] if not iface.__name__.startswith('IQuestion') \
-                     else iface.__name__[1:]
+            if not iface.__name__.startswith('IQuestion'):
+                result = iface.__name__[2:]
+            else:
+                result = iface.__name__[1:]
             # Strip NonGradable
             idx = result.find('NonGradable')
             if idx >= 0:
@@ -272,6 +274,7 @@ class _QPollSubmissionExternalizer(_QContainedObjectExternalizer):
 class _QSurveySubmissionSubmissionExternalizer(_QContainedObjectExternalizer):
     interface = IQSurveySubmission
 
+
 # File uploads
 
 from nti.namedfile.datastructures import BaseFactory
@@ -283,11 +286,11 @@ class _QUploadedFileObjectIO(NamedFileObjectIO):
 
     _excluded_in_ivars_ = {'download_url', 'url', 'value'}.union(NamedFileObjectIO._excluded_in_ivars_)
 
-    def _ext_mimeType(self, obj):
-        return u'application/vnd.nextthought.assessment.uploadedfile'
+    def _ext_mimeType(self, _):
+        return 'application/vnd.nextthought.assessment.uploadedfile'
 
-    def toExternalObject(self, mergeFrom=None, **kwargs):
-        ext_dict = super(_QUploadedFileObjectIO, self).toExternalObject(**kwargs)
+    def toExternalObject(self, *args, **kwargs):
+        ext_dict = super(_QUploadedFileObjectIO, self).toExternalObject(*args, **kwargs)
         return ext_dict
 
 
