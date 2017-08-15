@@ -264,10 +264,13 @@ class QSubmittable(SchemaConfigured,
     parameters = {}  # IContentTypeAware
 
     __parent__ = None
-    __name__ = alias('ntiid')
     
     def __init__(self, *args, **kwargs):
         SchemaConfigured.__init__(self, *args, **kwargs)
+
+    @readproperty
+    def __name__(self):
+        return self.ntiid
 
     @readproperty
     def __home__(self):

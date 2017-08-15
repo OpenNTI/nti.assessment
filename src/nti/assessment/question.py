@@ -70,13 +70,16 @@ class QBaseMixin(SchemaConfigured,
     id = alias('ntiid')
     
     __parent__ = None
-    __name__ = alias('ntiid')
 
     parameters = {}  # IContentTypeAware
 
     def __init__(self, *args, **kwargs):
         SchemaConfigured.__init__(self, *args, **kwargs)
         PersistentCreatedModDateTrackingObject.__init__(self)
+
+    @readproperty
+    def __name__(self):
+        return self.ntiid
 
     @readproperty
     def __home__(self):
