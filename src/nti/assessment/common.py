@@ -9,11 +9,6 @@ __docformat__ = "restructuredtext en"
 
 logger = __import__('logging').getLogger(__name__)
 
-import hashlib
-from collections import Mapping
-
-import simplejson as json
-
 from zope import component
 from zope import interface
 
@@ -59,8 +54,6 @@ from nti.coremetadata.interfaces import SYSTEM_USER_ID
 from nti.dublincore.datastructures import PersistentCreatedModDateTrackingObject
 
 from nti.dublincore.time_mixins import CreatedAndModifiedTimeMixin
-
-from nti.externalization.externalization import toExternalObject
 
 from nti.externalization.oids import to_external_oid
 
@@ -152,37 +145,15 @@ def normalize_response(part, response):
     return result
 
 
-def hexdigest(data, hasher=None):
-    hasher = hashlib.sha256() if hasher is None else hasher
-    hasher.update(data)
-    result = hasher.hexdigest()
-    return result
-
-
-def signature(data, decorate=False):
-    if not isinstance(data, Mapping):
-        data = toExternalObject(data, decorate=decorate)
-    result = hexdigest(json.dumps(data, sort_keys=True))
-    return result
-
-
-def hashfile(afile, hasher=None, blocksize=65536):
-    hasher = hashlib.sha256() if hasher is None else hasher
-    buf = afile.read(blocksize)
-    while len(buf) > 0:
-        hasher.update(buf)
-        buf = afile.read(blocksize)
-    return hasher.hexdigest()
-
-
-def iface_of_assessment(thing):
-    for iface in ASSESSMENT_INTERFACES:
-        if iface.providedBy(thing):
-            return iface
-    for iface in (IQPart, IQNonGradablePart):
-        if iface.providedBy(thing):
-            return iface
+def interface_of_assessment(thing):
+    for provided in ASSESSMENT_INTERFACES:
+        if provided.providedBy(thing):
+            return provided
+    for provided in (IQPart, IQNonGradablePart):
+        if provided.providedBy(thing):
+            return provided
     return None
+iface_of_assessment = interface_of_assessment
 
 
 def get_containerId(item):
@@ -271,8 +242,8 @@ def can_be_auto_graded(assignment):
 
 
 @WithRepr
-@interface.implementer(IQSubmittable, 
-                       IContained,
+@interface.implementer(IContained,
+                       IQSubmittable, 
                        IContentTypeAware, 
                        IAttributeAnnotatable)
 class QSubmittable(SchemaConfigured,
@@ -293,20 +264,18 @@ class QSubmittable(SchemaConfigured,
     parameters = {}  # IContentTypeAware
 
     __parent__ = None
+    __name__ = alias('ntiid')
     
     def __init__(self, *args, **kwargs):
         SchemaConfigured.__init__(self, *args, **kwargs)
-
-    @readproperty
-    def __name__(self):
-        return self.ntiid
 
     @readproperty
     def __home__(self):
         return self.__parent__
 
 
-class QPersistentSubmittable(QSubmittable, PersistentCreatedModDateTrackingObject):
+class QPersistentSubmittable(QSubmittable, 
+                             PersistentCreatedModDateTrackingObject):
 
     createdTime = 0
     creator = SYSTEM_USER_ID
@@ -345,7 +314,7 @@ class EvaluationSchemaMixin(object):
     Mixin to pull a schema for a given implementation.
     """
 
-    def schema(self, user=None):
+    def schema(self, unused_user=None):
         schema = find_most_derived_interface(self, IQAssessment)
         result = make_schema(schema=schema,
                              user=None,
