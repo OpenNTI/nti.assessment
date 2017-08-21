@@ -4,7 +4,7 @@
 .. $Id$
 """
 
-from __future__ import unicode_literals, print_function, absolute_import, division
+from __future__ import print_function, absolute_import, division
 __docformat__ = "restructuredtext en"
 
 logger = __import__('logging').getLogger(__name__)
@@ -89,16 +89,17 @@ from nti.schema.jsonschema import TAG_REQUIRED_IN_UI
 
 NTIID_TYPE = u'NAQ'
 PART_NTIID_TYPE = u'NAQPart'
-POLL_MIME_TYPE = u'application/vnd.nextthought.napoll'
-SURVEY_MIME_TYPE = u'application/vnd.nextthought.nasurvey'
-QUESTION_MIME_TYPE = u'application/vnd.nextthought.naquestion'
-QUESTION_SET_MIME_TYPE = u'application/vnd.nextthought.naquestionset'
-QUESTION_BANK_MIME_TYPE = u'application/vnd.nextthought.naquestionbank'
-ASSIGNMENT_MIME_TYPE = u'application/vnd.nextthought.assessment.assignment'
-TIMED_ASSIGNMENT_MIME_TYPE = u'application/vnd.nextthought.assessment.timedassignment'
-RANDOMIZED_QUESTION_SET_MIME_TYPE = u'application/vnd.nextthought.narandomizedquestionset'
-DISCUSSION_ASSIGNMENT_MIME_TYPE = u'application/vnd.nextthought.assessment.discussionassignment'
-QUESTION_FILL_IN_THE_BLANK_MIME_TYPE = u'application/vnd.nextthought.naquestionfillintheblankwordbank'
+
+POLL_MIME_TYPE = 'application/vnd.nextthought.napoll'
+SURVEY_MIME_TYPE = 'application/vnd.nextthought.nasurvey'
+QUESTION_MIME_TYPE = 'application/vnd.nextthought.naquestion'
+QUESTION_SET_MIME_TYPE = 'application/vnd.nextthought.naquestionset'
+QUESTION_BANK_MIME_TYPE = 'application/vnd.nextthought.naquestionbank'
+ASSIGNMENT_MIME_TYPE = 'application/vnd.nextthought.assessment.assignment'
+TIMED_ASSIGNMENT_MIME_TYPE = 'application/vnd.nextthought.assessment.timedassignment'
+RANDOMIZED_QUESTION_SET_MIME_TYPE = 'application/vnd.nextthought.narandomizedquestionset'
+DISCUSSION_ASSIGNMENT_MIME_TYPE = 'application/vnd.nextthought.assessment.discussionassignment'
+QUESTION_FILL_IN_THE_BLANK_MIME_TYPE = 'application/vnd.nextthought.naquestionfillintheblankwordbank'
 
 ASSESSMENT_MIME_TYPES = (QUESTION_MIME_TYPE,
                          ASSIGNMENT_MIME_TYPE,
@@ -262,7 +263,7 @@ class IQModeledContentResponse(IQResponse,
 
     value = ExtendedCompoundModeledContentBody()
     value.required = True
-    value.__name__ = 'value'
+    value.__name__ = u'value'
 
 
 from nti.namedfile.interfaces import INamedFile
@@ -295,7 +296,7 @@ class IQNonGradablePart(interface.Interface):
     content = _ContentFragment(title=u"The content to present to the user for this portion, if any.")
 
     hints = IndexedIterable(title=u"Any hints that pertain to this part",
-                            value_type=Object(IQHint, 
+                            value_type=Object(IQHint,
                                               title=u"A hint for the part"),
                             required=False)
 
@@ -319,12 +320,12 @@ class IQPart(IQNonGradablePart, IGradable):
     """
 
     explanation = _ContentFragment(title=u"An explanation of how the solution is arrived at.",
-                                   default='',
+                                   default=u'',
                                    required=False)
 
     solutions = IndexedIterable(title=u"Acceptable solutions for this question part in no particular order.",
                                 description=u"All solutions must be of the same type, and there must be at least one.",
-                                value_type=Object(IQSolution, 
+                                value_type=Object(IQSolution,
                                                   title=u"A solution for this part"),
                                 min_length=0,
                                 required=False)
@@ -373,7 +374,7 @@ class IQMultiValuedSolution(IQSolution):
     """
     value = ListOrTuple(title=u"The correct answer selections",
                         description=u"The correct answer as a tuple of items which are a "
-                        "zero-based index into the choices list.",
+                        u"zero-based index into the choices list.",
                         min_length=0,
                         value_type=TextLine(title=u"The value"))
 
@@ -424,8 +425,7 @@ class IQNumericMathSolution(IQMathSolution, IQSingleValuedSolution):
     should be graded according to numeric equivalence.
     """
 
-    value = Float(title=u"The correct numeric answer; "
-                  "really an arbitrary number")
+    value = Float(title=u"The correct numeric answer; really an arbitrary number")
 
 
 class IQSymbolicMathSolution(IQMathSolution):
@@ -494,6 +494,7 @@ class IQNonGradableMultipleChoicePart(IQNonGradablePart, IPollable):
                           description=u"""Presentation order may matter, hence the list. But for grading purposes,
                             the order does not matter and simple existence within the set is sufficient.""",
                           value_type=_ContentFragment(title=u"A rendered value"))
+
 IQNonGradableMultipleChoicePart.setTaggedValue('response_type', IQTextResponse)
 
 
@@ -650,10 +651,9 @@ class IQMatchingPart(IQNonGradableMatchingPart, IQConnectingPart):
 
     solutions = IndexedIterable(title=u"The matching solution",
                                 min_length=0,
-                                value_type=Object(
-                                    IQMatchingSolution, title=u"Matching solution"),
+                                value_type=Object(IQMatchingSolution, 
+                                                  title=u"Matching solution"),
                                 required=False)
-
 IQGradableMatchingPart = IQMatchingPart  # alias
 
 
@@ -661,8 +661,8 @@ class IQOrderingPart(IQNonGradableOrderingPart, IQConnectingPart):
 
     solutions = IndexedIterable(title=u"The matching solution",
                                 min_length=0,
-                                value_type=Object(
-                                    IQOrderingSolution, title=u"Ordering solution"),
+                                value_type=Object(IQOrderingSolution, 
+                                                  title=u"Ordering solution"),
                                 required=False)
 IQGradableOrderingPart = IQMatchingPart  # alias
 
@@ -796,8 +796,8 @@ class IQuestion(IQAssessment, IPublishable, INoPublishLink, IAttributeAnnotatabl
 
     ntiid = ValidNTIID(title=u"Question NTIID", required=False)
 
-    content = Text(    title=u"The content to present to the user, if any.",
-                    default='')
+    content = Text(title=u"The content to present to the user, if any.",
+                   default=u'')
 
     parts = IndexedIterable(title=u"The ordered parts of the question.",
                             min_length=1,
@@ -957,7 +957,7 @@ class IQAssignment(IQAssessment, IQSubmittable, ITitledContent, IAttributeAnnota
     ntiid = ValidNTIID(title=u"Assignment NTIID", required=False)
 
     content = Text(title=u"The content to present to the user, if any.",
-                   default='')
+                   default=u'')
 
     category_name = Tag(title=u"Assignments can be grouped into categories.",
                         description=u"""By providing this information, assignments
@@ -976,7 +976,7 @@ class IQAssignment(IQAssessment, IQSubmittable, ITitledContent, IAttributeAnnota
                         course-level assignments like participation or attendance
                         or final grade). That should be documented here.
                         """,
-                        default='default',
+                        default=u'default',
                         required=True)
 
     parts = IndexedIterable(title=u"The ordered parts of the assignment.",
@@ -1011,7 +1011,6 @@ class IQAssignment(IQAssessment, IQSubmittable, ITitledContent, IAttributeAnnota
         """
         return an iterator with the question sets in this assignment
         """
-
 
 IQAssignment['title'].setTaggedValue(TAG_HIDDEN_IN_UI, False)
 IQAssignment['title'].setTaggedValue(TAG_REQUIRED_IN_UI, True)
@@ -1064,7 +1063,7 @@ class IQDiscussionAssignment(IQAssignment):
 IQDiscussionAssignment['title'].setTaggedValue(TAG_HIDDEN_IN_UI, False)
 IQDiscussionAssignment['title'].setTaggedValue(TAG_REQUIRED_IN_UI, True)
 IQDiscussionAssignment['category_name'].setTaggedValue(TAG_HIDDEN_IN_UI, False)
-IQDiscussionAssignment['category_name'].setTaggedValue( TAG_REQUIRED_IN_UI, False)
+IQDiscussionAssignment['category_name'].setTaggedValue(TAG_REQUIRED_IN_UI, False)
 IQDiscussionAssignment['is_non_public'].setTaggedValue(TAG_HIDDEN_IN_UI, False)
 IQDiscussionAssignment['is_non_public'].setTaggedValue(TAG_REQUIRED_IN_UI, False)
 IQDiscussionAssignment['available_for_submission_ending'].setTaggedValue(TAG_HIDDEN_IN_UI, False)
@@ -1177,8 +1176,7 @@ class IQAssessmentDateContextModified(IObjectModifiedEvent):
 class QAssessmentDateContextModified(ObjectModifiedEvent):
 
     def __init__(self, obj, assesment=None, *descriptions):
-        super(QAssessmentDateContextModified,
-              self).__init__(obj, *descriptions)
+        super(QAssessmentDateContextModified, self).__init__(obj, *descriptions)
         self.assesment = assesment
 
 
@@ -1257,12 +1255,12 @@ class IQBaseSubmission(IContained, IVersioned):
 
     CreatorRecordedEffortDuration = Number(
         title=u"A fractional count of seconds spent creating the submission",
-        description=u"If desired, the creator (i.e., external client) can "
-        "optionally track the amount of time spent creating the submission and "
-        "submit it here with the initial submission; after that it is immutable and "
-        "(currently) unseen. NOTE: Because this is tracked and submitted by the client, "
-        "it is NOT suitable to use for any actual assessment purposes such as imposing time "
-        "limits.",
+        description=u"""If desired, the creator (i.e., external client) can
+        "optionally track the amount of time spent creating the submission and
+        "submit it here with the initial submission; after that it is immutable and
+        "(currently) unseen. NOTE: Because this is tracked and submitted by the client,
+        "it is NOT suitable to use for any actual assessment purposes such as imposing time
+        "limits.""",
         min=0.0,
         required=False,
         readonly=True,
@@ -1484,6 +1482,7 @@ class IQFillInTheBlankShortAnswerSolution(IQSolution):
                  title=u"The correct answer regexes",
                  description=u"The correct word id map.",
                  min_length=1)
+
 IQFillInTheBlankShortAnswerSolution.setTaggedValue('response_type', IQDictResponse)
 
 
@@ -1513,6 +1512,7 @@ class IQFillInTheBlankWithWordBankSolution(IQSolution):
                  title=u"The correct answer selections",
                  description=u"The correct word id map.",
                  min_length=1)
+
 IQFillInTheBlankWithWordBankSolution.setTaggedValue('response_type', IQDictResponse)
 
 
@@ -1522,8 +1522,8 @@ IQFillInTheBlankWithWordBankSolution.setTaggedValue('response_type', IQDictRespo
 class IWordEntry(interface.Interface):
     wid = TextLine(title=u"word identifier")
     word = TextLine(title=u"the word")
-    lang = TextLine(title=u"language identifier", default="en", required=False)
-    content = _ContentFragment(title=u"The input to present to the user.", 
+    lang = TextLine(title=u"language identifier", default=u"en", required=False)
+    content = _ContentFragment(title=u"The input to present to the user.",
                                required=False)
 
 
@@ -1636,7 +1636,7 @@ DISCLOSURE_ALWAYS = u'always'
 DISCLOSURE_TERMINATION = u'termination'
 
 DISCLOSURE_STATES = (DISCLOSURE_NEVER,
-					 DISCLOSURE_ALWAYS,
+                     DISCLOSURE_ALWAYS,
                      DISCLOSURE_TERMINATION)
 DISCLOSURE_VOCABULARY = vocabulary.SimpleVocabulary(
     [vocabulary.SimpleTerm(_x) for _x in DISCLOSURE_STATES])
@@ -1672,7 +1672,7 @@ class IQPoll(IQInquiry, IFiniteSequence):
     """
 
     content = Text(title=u"The content to present to the user, if any.",
-                   default='', required=False)
+                   default=u'', required=False)
 
     parts = IndexedIterable(title=u"The ordered parts of the question.",
                             min_length=1,

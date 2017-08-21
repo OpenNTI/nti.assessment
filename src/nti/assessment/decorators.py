@@ -6,7 +6,7 @@ Decorators for assessment objects.
 .. $Id$
 """
 
-from __future__ import unicode_literals, print_function, absolute_import, division
+from __future__ import print_function, absolute_import, division
 __docformat__ = "restructuredtext en"
 
 logger = __import__('logging').getLogger(__name__)
@@ -50,7 +50,7 @@ class _MathPartDecorator(object):
     def __init__(self, part):
         self.part = part
 
-    def decorateExternalMapping(self, original, external):
+    def decorateExternalMapping(self, unused_original, external):
         # For this use-case, the client just wants to display *some*
         # units.  So we just give them the flattened units.
         all_allowed_units = []
@@ -68,7 +68,7 @@ class _VersionedDecorator(object):
 
     __metaclass__ = SingletonDecorator
 
-    def decorateExternalObject(self, context, mapping):
+    def decorateExternalObject(self, unused_context, mapping):
         if not mapping.get('version'):
             mapping.pop('version', None)
 
@@ -119,5 +119,5 @@ class _QInquiryObjectDecorator(object):
 
     __metaclass__ = SingletonDecorator
 
-    def decorateExternalObject(self, context, mapping):
+    def decorateExternalObject(self, unused_context, mapping):
         mapping.pop('no_submit', None)

@@ -6,7 +6,7 @@ Convenient functions for creating simple math doms from latex expressions.
 .. $Id$
 """
 
-from __future__ import unicode_literals, print_function, absolute_import, division
+from __future__ import print_function, absolute_import, division
 __docformat__ = "restructuredtext en"
 
 logger = __import__('logging').getLogger(__name__)
@@ -64,7 +64,7 @@ def _mathTexToDOMNodes(maths):
         # I know no way to predict in advance that will happen, but we can
         # catch it here
         return ()
-    return dom.getElementsByTagName(b'math')
+    return dom.getElementsByTagName('math')
 
 
 def _response_text_to_latex(response):
@@ -123,5 +123,6 @@ class EmptyResponseConverter(object):
 
 def factory(solution, response):
     return sys.modules[__name__] if response.value else EmptyResponseConverter
+
 
 interface.moduleProvides(IResponseToSymbolicMathConverter)

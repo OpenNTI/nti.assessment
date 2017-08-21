@@ -6,7 +6,7 @@ Having to do with submitting external data for grading.
 .. $Id$
 """
 
-from __future__ import unicode_literals, print_function, absolute_import, division
+from __future__ import print_function, absolute_import, division
 __docformat__ = "restructuredtext en"
 
 logger = __import__('logging').getLogger(__name__)
@@ -19,6 +19,7 @@ from zope import interface
 from zope.location.interfaces import ISublocations
 
 from persistent import Persistent
+
 from persistent.list import PersistentList
 
 from nti.assessment._util import CreatorMixin
@@ -83,7 +84,7 @@ class QAssessedQuestion(SchemaConfigured,
 
     def updateLastMod(self, t=None):
         self.lastModified = (
-            t if t is not None and t >self.lastModified else time.time()
+            t if t is not None and t > self.lastModified else time.time()
         )
         return self.lastModified
 
@@ -143,8 +144,8 @@ def assess_question_submission(submission, registry=component):
     question = registry.getUtility(IQuestion, name=submission.questionId)
     if len(question.parts) != len(submission.parts):
         raise ValueError(
-                 "Question (%s) and submission (%s) have different numbers of parts." %
-                 (len(question.parts), len(submission.parts)))
+            "Question (%s) and submission (%s) have different numbers of parts." %
+            (len(question.parts), len(submission.parts)))
 
     creator = getattr(submission, 'creator', None)
     assessed_parts = PersistentList()
@@ -154,7 +155,7 @@ def assess_question_submission(submission, registry=component):
         # submit anything, it's automatically "wrong."
         try:
             if sub_part is not None:
-                grade = q_part.grade(sub_part, creator) 
+                grade = q_part.grade(sub_part, creator)
             else:
                 grade = 0.0
         except (LookupError, ValueError):
@@ -168,8 +169,8 @@ def assess_question_submission(submission, registry=component):
                                   assessedValue=grade)
             assessed_parts.append(apart)
 
-    result = QAssessedQuestion(questionId=submission.questionId, 
-							   parts=assessed_parts)
+    result = QAssessedQuestion(questionId=submission.questionId,
+                               parts=assessed_parts)
     return result
 
 
@@ -182,16 +183,16 @@ def _do_assess_question_set_submission(question_set, set_submission, registry):
 
     assessed = PersistentList()
     for sub_question in set_submission.questions:
-        question = registry.getUtility(IQuestion, 
+        question = registry.getUtility(IQuestion,
                                        name=sub_question.questionId)
 
         ntiid = getattr(question, 'ntiid', None)
         if     ntiid in questions_ntiids \
             or question in question_set.Items:
             # Raises ComponentLookupError
-            sub_assessed = IQAssessedQuestion(sub_question)  
+            sub_assessed = IQAssessedQuestion(sub_question)
             assessed.append(sub_assessed)
-        else: # pragma: no cover
+        else:  # pragma: no cover
             logger.warn("Bad input, question (%s) not in question set (%s) (known: %s)",
                         question, question_set, questions_ntiids)
 
@@ -212,7 +213,7 @@ def assess_question_set_submission(set_submission, registry=component):
             Used to look up the question set and question by id.
     :raises LookupError: If no question can be found for the submission.
     """
-    question_set = registry.getUtility(IQuestionSet, 
+    question_set = registry.getUtility(IQuestionSet,
                                        name=set_submission.questionSetId)
     # For marked randomized parts question sets, mark all parts
     # randomized and then undo post assessment.

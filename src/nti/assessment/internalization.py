@@ -4,7 +4,7 @@
 .. $Id$
 """
 
-from __future__ import print_function, unicode_literals, absolute_import, division
+from __future__ import print_function, absolute_import, division
 __docformat__ = "restructuredtext en"
 
 logger = __import__('logging').getLogger(__name__)
@@ -42,13 +42,13 @@ class _WordEntryUpdater(object):
     def __init__(self, obj):
         self.obj = obj
 
-    def updateFromExternalObject(self, parsed, *args, **kwargs):
+    def updateFromExternalObject(self, parsed, *unused_args, **unused_kwargs):
         if 'content' not in parsed or not parsed['content']:
             parsed['content'] = parsed['word']
         if parsed.get('lang'):
             parsed['lang'] = parsed['lang'].lower()
         result = InterfaceObjectIO(
-                    self.obj, 
+                    self.obj,
                     IWordEntry).updateFromExternalObject(parsed)
         return result
 
@@ -62,7 +62,7 @@ class _QFillInTheBlankShortAnswerSolutionUpdater(object):
     def __init__(self, obj):
         self.obj = obj
 
-    def updateFromExternalObject(self, parsed, *args, **kwargs):
+    def updateFromExternalObject(self, parsed, *unused_args, **unused_kwargs):
         value = parsed.get('value', {})
         for key in tuple(value.keys()):  # mutating
             regex = value.get(key)
@@ -88,7 +88,7 @@ class _QFillInTheBlankWithWordBankSolutionUpdater(object):
     def __init__(self, obj):
         self.obj = obj
 
-    def updateFromExternalObject(self, parsed, *args, **kwargs):
+    def updateFromExternalObject(self, parsed, *unused_args, **unused_kwargs):
         value = parsed.get('value', {})
         for key in tuple(value.keys()):  # mutating
             data = value.get(key)
@@ -110,7 +110,7 @@ class _QModeledContentResponseUpdater(object):
     def __init__(self, obj):
         self.obj = obj
 
-    def updateFromExternalObject(self, parsed, *args, **kwargs):
+    def updateFromExternalObject(self, parsed, *unused_args, **unused_kwargs):
         value = parsed.get('value', None)
         if value is not None:
             if isinstance(value, six.string_types):
@@ -133,7 +133,7 @@ class _QInquiryUpdater(object):
     def __init__(self, obj):
         self.obj = obj
 
-    def updateFromExternalObject(self, parsed, *args, **kwargs):
+    def updateFromExternalObject(self, parsed, *unused_args, **unused_kwargs):
         value = parsed.get('disclosure', None) or DISCLOSURE_TERMINATION
         parsed['disclosure'] = value.lower()
         result = InterfaceObjectIO(

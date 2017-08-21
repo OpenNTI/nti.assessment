@@ -4,7 +4,7 @@
 .. $Id$
 """
 
-from __future__ import unicode_literals, print_function, absolute_import, division
+from __future__ import print_function, absolute_import, division
 __docformat__ = "restructuredtext en"
 
 logger = __import__('logging').getLogger(__name__)
@@ -32,10 +32,10 @@ from nti.assessment.randomized.interfaces import IQuestionBank
 from nti.schema.jsonschema import TAG_HIDDEN_IN_UI
 
 #: Fields attribute
-FIELDS = 'Fields'
+FIELDS = u'Fields'
 
 #: Accepts attribute
-ACCEPTS = 'Accepts'
+ACCEPTS = u'Accepts'
 
 EVALUATION_INTERFACES = ASSESSMENT_INTERFACES = (  # order matters
     IQPoll,
@@ -56,6 +56,7 @@ def _set_ifaces():
                 or v.queryTaggedValue(TAG_HIDDEN_IN_UI) is not None:
                 continue
             iSchema[k].setTaggedValue(TAG_HIDDEN_IN_UI, True)
+
 _set_ifaces()
 del _set_ifaces
 

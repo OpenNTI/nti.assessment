@@ -65,7 +65,7 @@ class AssessmentProxy(ProxyBase):
         lambda s, v: s.__dict__.__setitem__('_v__container__', v)
     )
 
-    def __new__(cls, base, *args, **kwargs):
+    def __new__(cls, base, *unused_args, **unused_kwargs):
         return ProxyBase.__new__(cls, base)
 
     def __init__(self, base, container=None):

@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from __future__ import print_function, unicode_literals, absolute_import, division
+from __future__ import print_function, absolute_import, division
 __docformat__ = "restructuredtext en"
 
 # disable: accessing protected members, too many methods
@@ -16,75 +16,85 @@ from nti.testing.layers import ConfiguringLayerMixin
 
 import zope.testing.cleanup
 
+
 class SharedConfiguringTestLayer(ZopeComponentLayer,
-								 GCLayerMixin,
-								 ConfiguringLayerMixin):
+                                 GCLayerMixin,
+                                 ConfiguringLayerMixin):
 
-	set_up_packages = (
-					   'nti.assessment',
-					   'nti.externalization',
-					   'nti.mimetype',
-					   )
+    set_up_packages = (
+        'nti.assessment',
+        'nti.externalization',
+        'nti.mimetype',
+    )
 
-	@classmethod
-	def setUp(cls):
-		cls.setUpPackages()
+    @classmethod
+    def setUp(cls):
+        cls.setUpPackages()
 
-	@classmethod
-	def tearDown(cls):
-		cls.tearDownPackages()
-		zope.testing.cleanup.cleanUp()
+    @classmethod
+    def tearDown(cls):
+        cls.tearDownPackages()
+        zope.testing.cleanup.cleanUp()
 
-	@classmethod
-	def testSetUp(cls):
-		pass
+    @classmethod
+    def testSetUp(cls):
+        pass
 
-	@classmethod
-	def testTearDown(cls):
-		pass
+    @classmethod
+    def testTearDown(cls):
+        pass
+
 
 import unittest
 
+
 class AssessmentTestCase(unittest.TestCase):
 
-	layer = SharedConfiguringTestLayer
+    layer = SharedConfiguringTestLayer
 
 # ==========
+
 
 from hamcrest.core.base_matcher import BaseMatcher
 
+
 class GradeMatcher(BaseMatcher):
-	def __init__(self, value, response):
-		super(GradeMatcher, self).__init__()
-		self.value = value
-		self.response = response
 
-	def _matches(self, solution):
-		return solution.grade(self.response) == self.value
+    def __init__(self, value, response):
+        super(GradeMatcher, self).__init__()
+        self.value = value
+        self.response = response
 
-	def describe_to(self, description):
-		description.append_text('solution that grades ').append_text(
-							str(self.response)).append_text(' as ').append_text(str(self.value))
+    def _matches(self, solution):
+        return solution.grade(self.response) == self.value
 
-	def describe_mismatch(self, item, mismatch_description):
-		mismatch_description.append_text('solution ').append_text(
-							str(type(item))).append_text(' ').append_text(repr(item))
-		if getattr(item, 'allowed_units', ()):
-			mismatch_description.append_text(" units " + str(item.allowed_units))
+    def describe_to(self, description):
+        description.append_text('solution that grades ').append_text(
+            str(self.response)).append_text(' as ').append_text(str(self.value))
 
-		mismatch_description.append_text(' graded ' + repr(self.response) + ' as ' + str(not self.value))
+    def describe_mismatch(self, item, mismatch_description):
+        mismatch_description.append_text('solution ').append_text(
+            str(type(item))).append_text(' ').append_text(repr(item))
+        if getattr(item, 'allowed_units', ()):
+            mismatch_description.append_text(" units " + str(item.allowed_units))
 
-	def __repr__(self):
-		return 'solution that grades as ' + str(self.value)
+        mismatch_description.append_text(
+            ' graded ' + repr(self.response) + ' as ' + str(not self.value))
+
+    def __repr__(self):
+        return 'solution that grades as ' + str(self.value)
+
 
 def grades_correct(response):
-	return GradeMatcher(True, response)
+    return GradeMatcher(True, response)
 grades_right = grades_correct
 
+
 def grades_wrong(response):
-	return GradeMatcher(False, response)
+    return GradeMatcher(False, response)
 
 # ==========
+
 
 from hamcrest import is_
 from hamcrest import assert_that
@@ -98,31 +108,35 @@ from zope.annotation.interfaces import IAttributeAnnotatable
 
 from zope.dublincore.annotatableadapter import ZDCAnnotatableAdapter
 
+
 def check_old_dublin_core(qaq):
-	"we can read old dublin core metadata"
+    """
+    we can read old dublin core metadata
+    """
 
-	del qaq.__dict__['lastModified']
-	del qaq.__dict__['createdTime']
+    del qaq.__dict__['lastModified']
+    del qaq.__dict__['createdTime']
 
-	assert_that(qaq.lastModified, is_(0))
-	assert_that(qaq.createdTime, is_(0))
+    assert_that(qaq.lastModified, is_(0))
+    assert_that(qaq.createdTime, is_(0))
 
-	interface.alsoProvides(qaq, IAttributeAnnotatable)
+    interface.alsoProvides(qaq, IAttributeAnnotatable)
 
-	zdc = ZDCAnnotatableAdapter(qaq)
+    zdc = ZDCAnnotatableAdapter(qaq)
 
-	now = datetime.now()
+    now = datetime.now()
 
-	zdc.created = now
-	zdc.modified = now
+    zdc.created = now
+    zdc.modified = now
 
-	assert_that(qaq.lastModified, is_(time.mktime(now.timetuple())))
-	assert_that(qaq.createdTime, is_(time.mktime(now.timetuple())))
+    assert_that(qaq.lastModified, is_(time.mktime(now.timetuple())))
+    assert_that(qaq.createdTime, is_(time.mktime(now.timetuple())))
+
 
 def lineage(resource):
-	while resource is not None:
-		yield resource
-		try:
-			resource = resource.__parent__
-		except AttributeError:
-			resource = None
+    while resource is not None:
+        yield resource
+        try:
+            resource = resource.__parent__
+        except AttributeError:
+            resource = None

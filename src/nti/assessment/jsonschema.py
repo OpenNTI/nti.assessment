@@ -4,7 +4,7 @@
 .. $Id$
 """
 
-from __future__ import print_function, unicode_literals, absolute_import, division
+from __future__ import print_function, absolute_import, division
 __docformat__ = "restructuredtext en"
 
 logger = __import__('logging').getLogger(__name__)
@@ -48,7 +48,7 @@ ITEMS = StandardExternalFields.ITEMS
 class BaseJsonSchemafier(CoreJsonSchemafier):
 
     IGNORE_INTERFACES = CoreJsonSchemafier.IGNORE_INTERFACES + \
-                        (IRecordable, IRecordableContainer)
+        (IRecordable, IRecordableContainer)
 
     def post_process_field(self, name, field, item_schema):
         super(BaseJsonSchemafier, self).post_process_field(name, field, item_schema)
@@ -59,7 +59,7 @@ class EvaluationJsonSchemaMaker(object):
 
     maker = BaseJsonSchemafier
 
-    def make_schema(self, schema=IQAssessment, user=None):
+    def make_schema(self, schema=IQAssessment, unused_user=None):
         result = LocatedExternalDict()
         maker = self.maker(schema)
         result[FIELDS] = maker.make_schema()

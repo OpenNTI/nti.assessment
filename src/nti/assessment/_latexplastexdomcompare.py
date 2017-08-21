@@ -6,7 +6,7 @@ Support functions for comparing latex Math DOMs using PlasTeX
 .. $Id$
 """
 
-from __future__ import print_function, unicode_literals, absolute_import, division
+from __future__ import print_function, absolute_import, division
 __docformat__ = "restructuredtext en"
 
 logger = __import__('logging').getLogger(__name__)
@@ -120,7 +120,6 @@ def _len_important_children_nodes_are_equal(child1, child2):
 
 def _math_child_is_equal(child1, child2):
     # If are children aren't even the same type they are probably not equal
-
     # If they are actually the same thing (only happens in None case I think)
     if child1 == child2:
         return True

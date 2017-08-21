@@ -4,7 +4,7 @@
 .. $Id$
 """
 
-from __future__ import unicode_literals, print_function, absolute_import, division
+from __future__ import print_function, absolute_import, division
 __docformat__ = "restructuredtext en"
 
 logger = __import__('logging').getLogger(__name__)
@@ -113,35 +113,35 @@ class OrderingPartResponseNormalizer(ConnectingPartResponseNormalizer):
 
 @interface.implementer(IQAggregatedPartFactory)
 @component.adapter(IQNonGradableFreeResponsePart)
-def NonGradableFreeResponsePartFactory(part):
+def NonGradableFreeResponsePartFactory(_):
     return QAggregatedFreeResponsePart
 
 
 @interface.implementer(IQAggregatedPartFactory)
 @component.adapter(IQNonGradableModeledContentPart)
-def NonGradableModeledContentPartFactory(part):
+def NonGradableModeledContentPartFactory(_):
     return QAggregatedModeledContentPart
 
 
 @interface.implementer(IQAggregatedPartFactory)
 @component.adapter(IQNonGradableMultipleChoicePart)
-def NonGradableMultipleChoicePartFactory(part):
+def NonGradableMultipleChoicePartFactory(_):
     return QAggregatedMultipleChoicePart
 
 
 @interface.implementer(IQAggregatedPartFactory)
 @component.adapter(IQNonGradableMultipleChoiceMultipleAnswerPart)
-def NonGradableMultipleChoiceMultipleAnswerPartFactory(part):
+def NonGradableMultipleChoiceMultipleAnswerPartFactory(_):
     return QAggregatedMultipleChoiceMultipleAnswerPart
 
 
 @interface.implementer(IQAggregatedPartFactory)
 @component.adapter(IQNonGradableMatchingPart)
-def NonGradableMatchingPartFactory(part):
+def NonGradableMatchingPartFactory(_):
     return QAggregatedMatchingPart
 
 
 @interface.implementer(IQAggregatedPartFactory)
 @component.adapter(IQNonGradableOrderingPart)
-def NonGradableOrderingPartFactory(part):
+def NonGradableOrderingPartFactory(_):
     return QAggregatedOrderingPart

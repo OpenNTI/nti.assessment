@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from __future__ import print_function, unicode_literals, absolute_import, division
+from __future__ import print_function, absolute_import, division
 __docformat__ = "restructuredtext en"
 
 # disable: accessing protected members, too many methods
@@ -11,7 +11,8 @@ from zope.dottedname import resolve as dottedname
 
 from nti.assessment.tests import AssessmentTestCase
 
+
 class TestInterfaces(AssessmentTestCase):
 
-	def test_import_interfaces(self):
-		dottedname.resolve('nti.assessment.interfaces')
+    def test_import_interfaces(self):
+        dottedname.resolve('nti.assessment.interfaces')

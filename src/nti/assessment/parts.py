@@ -6,7 +6,7 @@ Implementations and support for question parts.
 .. $Id$
 """
 
-from __future__ import unicode_literals, print_function, absolute_import, division
+from __future__ import print_function, absolute_import, division
 __docformat__ = "restructuredtext en"
 
 logger = __import__('logging').getLogger(__name__)
@@ -221,7 +221,7 @@ class QPart(QNonGradablePart):
     def _grade(self, solution, response, creator):
         __traceback_info__ = solution, response, self.grader_name
         grader = grader_for_solution_and_response(self, solution,
-												  response, creator)
+                                                  response, creator)
         if grader is None:
             objects = (self, solution, response)
             raise ComponentLookupError(objects,
@@ -521,7 +521,7 @@ class QNonGradableFillInTheBlankShortAnswerPart(QNonGradablePart):
 
 @interface.implementer(IQFillInTheBlankShortAnswerPart)
 class QFillInTheBlankShortAnswerPart(QPart,
-									 QNonGradableFillInTheBlankShortAnswerPart): # order matters
+                                     QNonGradableFillInTheBlankShortAnswerPart):  # order matters
 
     mimeType = mime_type = 'application/vnd.nextthought.assessment.fillintheblankshortanswerpart'
     grader_interface = IQFillInTheBlankShortAnswerGrader
@@ -535,8 +535,8 @@ class QNonGradableFillInTheBlankWithWordBankPart(QNonGradablePart):
 
 
 @interface.implementer(IQFillInTheBlankWithWordBankPart)
-# order matters
-class QFillInTheBlankWithWordBankPart(QPart, QNonGradableFillInTheBlankWithWordBankPart):
+class QFillInTheBlankWithWordBankPart(QPart,  # order matters
+                                      QNonGradableFillInTheBlankWithWordBankPart):
 
     mimeType = mime_type = 'application/vnd.nextthought.assessment.fillintheblankwithwordbankpart'
     grader_interface = IQFillInTheBlankWithWordBankGrader

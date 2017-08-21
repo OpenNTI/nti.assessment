@@ -4,7 +4,7 @@
 .. $Id$
 """
 
-from __future__ import print_function, unicode_literals, absolute_import, division
+from __future__ import print_function, absolute_import, division
 __docformat__ = "restructuredtext en"
 
 logger = __import__('logging').getLogger(__name__)
@@ -50,7 +50,7 @@ def _patch():
                 root = interfaces[0]
                 root.setTaggedValue('_ext_mime_type', mimeType)
                 if root.isOrExtends(IQPart):
-                    root.setTaggedValue('_ext_jsonschema', u'part')
+                    root.setTaggedValue('_ext_jsonschema', 'part')
             except (AttributeError, TypeError, IndexError):
                 pass
 
