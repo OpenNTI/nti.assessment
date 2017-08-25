@@ -14,6 +14,7 @@ import simplejson as json
 
 from nti.assessment.tests import AssessmentTestCase
 
+
 class TestAssignmentPolicyExtractor(AssessmentTestCase):
 
 	def test_extract_and_merge(self):
@@ -73,9 +74,9 @@ class TestAssignmentPolicyExtractor(AssessmentTestCase):
 				'href': 'index.html'}
 		json_string = json.dumps(the_map)
 
-		from ..nti_task_policy_extractor import _merge_disk
-		from ..nti_task_policy_extractor import _load_assignments
-		from ..nti_task_policy_extractor import _asg_registry_to_course_data
+		from nti.assessment.scripts.nti_task_policy_extractor import _merge_disk
+		from nti.assessment.scripts.nti_task_policy_extractor import _load_assignments
+		from nti.assessment.scripts.nti_task_policy_extractor import _asg_registry_to_course_data
 
 		registry = _load_assignments(json_string)
 

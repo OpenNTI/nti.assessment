@@ -48,7 +48,7 @@ ITEMS = StandardExternalFields.ITEMS
 class BaseJsonSchemafier(CoreJsonSchemafier):
 
     IGNORE_INTERFACES = CoreJsonSchemafier.IGNORE_INTERFACES + \
-        (IRecordable, IRecordableContainer)
+                        (IRecordable, IRecordableContainer)
 
     def post_process_field(self, name, field, item_schema):
         super(BaseJsonSchemafier, self).post_process_field(name, field, item_schema)
