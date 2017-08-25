@@ -67,7 +67,6 @@ setup(
         'nti.schema',
         'nti.wref',
         'persistent',
-        'plone.namedfile',
         'repoze.lru',
         'requests',
         'simplejson',
