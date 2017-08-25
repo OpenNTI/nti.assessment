@@ -6,7 +6,7 @@ Grading algorithm support.
 .. $Id$
 """
 
-from __future__ import unicode_literals, print_function, absolute_import, division
+from __future__ import print_function, absolute_import, division
 __docformat__ = "restructuredtext en"
 
 logger = __import__('logging').getLogger(__name__)
@@ -21,7 +21,7 @@ from zope.location import LocationIterator
 
 import repoze.lru
 
-from nti.base._compat import unicode_
+from nti.base._compat import text_
 
 from nti.assessment.interfaces import IRegEx
 from nti.assessment.interfaces import IQPartGrader
@@ -37,7 +37,7 @@ from nti.schema.field import InvalidValue
 
 
 @staticmethod
-def _id(o, *args, **kwargs):
+def _id(o, *unused_args, **unused_kwargs):
     return o
 
 
@@ -46,7 +46,7 @@ def __lower(o):
     # isn't already unicode. We expect all strings to actually
     # be unicode, however. The conversion exists for things
     # like numbers.
-    return unicode_(o).lower()
+    return text_(o).lower()
 _lower = staticmethod(__lower)
 
 
@@ -54,10 +54,10 @@ def __normalize_quotes(string):
     """
     We want curly quotes to compare the same as straight quotes.
     """
-    replacements = ((u'\u201c', '"'),  # Left double
-                    (u'\u201d', '"'),  # Right double
-                    (u'\u2018', "'"),  # Left single
-                    (u'\u2019', "'"))  # Right single
+    replacements = ((u'\u201c', u'"'),  # Left double
+                    (u'\u201d', u'"'),  # Right double
+                    (u'\u2018', u"'"),  # Left single
+                    (u'\u2019', u"'"))  # Right single
     for bad, good in replacements:
         string = string.replace(bad, good)
     return string
@@ -117,8 +117,8 @@ class StringEqualityGrader(EqualityGrader):
     Grader that converts the response to a string before doing
     an equality comparison.
     """
-    solution_converter = unicode
-    response_converter = unicode
+    solution_converter = text_
+    response_converter = text_
 
 
 class LowerStringEqualityGrader(StringEqualityGrader):
@@ -141,7 +141,7 @@ class LowerQuoteNormalizedStringEqualityGrader(StringEqualityGrader):
     def _compare(self, solution_value, response_value):
         if IRegEx.providedBy(solution_value):
             pattern = solution_value.pattern
-            converted_response = unicode_(response_value)
+            converted_response = text_(response_value)
             result = converted_response \
             	and _compile(pattern).match(converted_response)
         else:
