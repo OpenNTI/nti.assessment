@@ -344,7 +344,7 @@ class _EvaluationExporter(object):
 @component.adapter(IQuestion)
 @component.adapter(IQAssignment)
 @interface.implementer(IInternalObjectExternalizer)
-class _EvalWithPartsExporter(_EvaluationExporter):
+class EvalWithPartsExporter(_EvaluationExporter):
 
     def _remove_part_ntiids(self, result):
         for part in result.get('parts') or ():
@@ -356,6 +356,7 @@ class _EvalWithPartsExporter(_EvaluationExporter):
     def toExternalObject(self, **kwargs):
         result = _EvaluationExporter.toExternalObject(self, **kwargs)
         return self._remove_part_ntiids(result)
+_EvalWithPartsExporter = EvalWithPartsExporter
 
 
 @component.adapter(IQuestionSet)
