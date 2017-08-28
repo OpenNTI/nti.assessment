@@ -1053,7 +1053,7 @@ class IQDiscussionAssignment(IQAssignment):
     a discussion.
     """
 
-    discussion_ntiid = ValidNTIID(title=u"Discussion NTIID", required=False)
+    discussion_ntiid = TextLine(title=u"Discussion NTIID", required=False)
 
     parts = IndexedIterable(title=u"The ordered parts of the assignment.",
                             description=u"Discussion assignments should have no parts.",
