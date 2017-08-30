@@ -82,13 +82,13 @@ class QDictResponse(TrivialValuedMixin, QResponse):
 @interface.implementer(IQUploadedFile)
 class QUploadedFile(PersistentCreatedModDateTrackingObject,  # Order matters
                     NamedBlobFile):
-    pass
+    __external_mimeType__ = 'application/vnd.nextthought.assessment.uploadedfile'
 
 
 @interface.implementer(IQUploadedFile)
 class QUploadedImageFile(PersistentCreatedModDateTrackingObject,  # Order matters
                          NamedBlobImage):
-    pass
+    __external_mimeType__ = 'application/vnd.nextthought.assessment.uploadedimage'
 
 
 @interface.implementer(IQFileResponse)
