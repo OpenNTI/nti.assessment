@@ -11,6 +11,8 @@ logger = __import__('logging').getLogger(__name__)
 
 from zope import interface
 
+from zope.cachedescriptors.property import readproperty
+
 from zope.container.contained import Contained
 
 from zope.interface.common.mapping import IWriteMapping
@@ -157,6 +159,10 @@ class AssignmentSubmission(ContainedMixin,
         # schema configured is not cooperative
         ContainedMixin.__init__(self, *args, **kwargs)
         PersistentCreatedModDateTrackingObject.__init__(self)
+    
+    @readproperty
+    def containerId(self):
+        return self.assignmentId
 
     def index(self, key):
         for idx, question_set in enumerate(self.parts or ()):
