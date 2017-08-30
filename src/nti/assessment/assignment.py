@@ -164,7 +164,7 @@ class QAssignmentSubmissionPendingAssessment(ContainedMixin,
     # safely cause name and id to be aliases
     __name__ = alias('id')
 
-    mime_type = 'application/vnd.nextthought.assessment.assignmentsubmissionpendingassessment'
+    mimeType = mime_type = 'application/vnd.nextthought.assessment.assignmentsubmissionpendingassessment'
 
     __external_can_create__ = False
 
