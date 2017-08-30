@@ -78,6 +78,8 @@ class QAssessedQuestion(SchemaConfigured,
     createdTime = _dctimes_property_fallback('createdTime', 'Date.Modified')
     lastModified = _dctimes_property_fallback('lastModified', 'Date.Created')
 
+    mimeType = mime_type = 'application/vnd.nextthought.assessment.assessedquestion'
+
     def __init__(self, *args, **kwargs):
         super(QAssessedQuestion, self).__init__(*args, **kwargs)
         self.lastModified = self.createdTime = time.time()
@@ -100,13 +102,15 @@ class QAssessedQuestionSet(SchemaConfigured,
                            ContainedMixin,
                            CreatorMixin,
                            Persistent):
-
     createDirectFieldProperties(IQAssessedQuestionSet)
+
     __external_can_create__ = False
 
     creator = None
     createdTime = _dctimes_property_fallback('createdTime', 'Date.Modified')
     lastModified = _dctimes_property_fallback('lastModified', 'Date.Created')
+
+    mimeType = mime_type = 'application/vnd.nextthought.assessment.assessedquestionset'
 
     def __init__(self, *args, **kwargs):
         super(QAssessedQuestionSet, self).__init__(*args, **kwargs)
