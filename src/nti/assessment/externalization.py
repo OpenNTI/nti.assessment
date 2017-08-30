@@ -295,8 +295,7 @@ class _QUploadedFileObjectIO(NamedFileObjectIO):
 
 
 def _QUploadedFileFactory(ext_obj):
-    factory = BaseFactory(ext_obj, QUploadedFile, QUploadedImageFile)
-    return factory
+    return BaseFactory(ext_obj, QUploadedFile, QUploadedImageFile)
 
 
 # custom externalization

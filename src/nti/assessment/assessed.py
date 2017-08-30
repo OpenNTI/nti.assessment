@@ -38,8 +38,8 @@ from nti.assessment.interfaces import IQAssessedQuestionSet
 from nti.assessment.randomized.interfaces import IQRandomizedPart
 from nti.assessment.randomized.interfaces import IRandomizedPartsContainer
 
-from nti.coremetadata.interfaces import ICreated
-from nti.coremetadata.interfaces import ILastModified
+from nti.base.interfaces import ICreated
+from nti.base.interfaces import ILastModified
 
 from nti.coremetadata.mixins import ContainedMixin
 

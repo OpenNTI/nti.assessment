@@ -28,6 +28,8 @@ from zope import component
 
 from zope.schema.interfaces import WrongContainedType
 
+from nti.assessment.common import has_submitted_file
+
 from nti.assessment.interfaces import IQPoll
 from nti.assessment.interfaces import IQSurvey
 from nti.assessment.interfaces import IQPollSubmission
@@ -107,7 +109,7 @@ class TestSurvey(AssessmentTestCase):
         assert_that(QPollSubmission(),
                     externalizes(has_entries('Class', 'PollSubmission',
                                              'MimeType', 'application/vnd.nextthought.assessment.pollsubmission')))
-
+        
         assert_that(QSurveySubmission(),
                     verifiably_provides(IQSurveySubmission))
         assert_that(QSurveySubmission(),
@@ -131,6 +133,7 @@ class TestSurvey(AssessmentTestCase):
         assert_that(ssub,
                     has_property('questions', contains(is_(QPollSubmission))))
         assert_that(ssub, validly_provides(IQSurveySubmission))
+        assert_that(has_submitted_file(ssub), is_(False))
 
         # time_length
         update_from_external_object(ssub,

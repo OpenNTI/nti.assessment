@@ -45,7 +45,7 @@
 
 	<adapter factory=".response.QFileResponse"
 			 provides=".interfaces.IQFileResponse"
-			 for=".interfaces.IQUploadedFile" />
+			 for="nti.base.interfaces.IFile" />
 
 	<!-- Solution types -->
 	<!-- TODO: This should really be on the ILatexContentFragment -->
@@ -442,7 +442,7 @@
 			 name="application/vnd.nextthought.assessment.quploadedfile" />
 
 	<adapter factory=".externalization._QUploadedFileObjectIO"
-			 for=".interfaces.IQUploadedFile"  />
+			 for=".interfaces.IQUploadedFile" />
 
 	<!-- randomized -->
 	<include package=".randomized" file="configure.zcml" />

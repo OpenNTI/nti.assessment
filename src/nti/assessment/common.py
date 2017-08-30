@@ -32,9 +32,17 @@ from nti.assessment.interfaces import PART_NTIID_TYPE
 from nti.assessment.interfaces import IQPart
 from nti.assessment.interfaces import IQAssessment
 from nti.assessment.interfaces import IQSubmittable
+from nti.assessment.interfaces import IQAssessedPart
 from nti.assessment.interfaces import IQSubmittedPart
+from nti.assessment.interfaces import IQPollSubmission
 from nti.assessment.interfaces import IQNonGradablePart
+from nti.assessment.interfaces import IQAssessedQuestion
+from nti.assessment.interfaces import IQSurveySubmission
+from nti.assessment.interfaces import IQuestionSubmission
 from nti.assessment.interfaces import IQEditableEvaluation
+from nti.assessment.interfaces import IQAssessedQuestionSet
+from nti.assessment.interfaces import IQAssignmentSubmission
+from nti.assessment.interfaces import IQuestionSetSubmission
 from nti.assessment.interfaces import IQPartResponseNormalizer
 from nti.assessment.interfaces import IQAssessmentJsonSchemaMaker
 from nti.assessment.interfaces import IQLatexSymbolicMathSolution
@@ -44,6 +52,8 @@ from nti.assessment.randomized.interfaces import IQuestionBank
 from nti.assessment.randomized.interfaces import IQRandomizedPart
 from nti.assessment.randomized.interfaces import IRandomizedQuestionSet
 from nti.assessment.randomized.interfaces import IRandomizedPartsContainer
+
+from nti.base.interfaces import IFile
 
 from nti.coremetadata.mixins import VersionedMixin
 
@@ -236,6 +246,25 @@ def can_be_auto_graded(assignment):
                 if not is_part_auto_gradable(part):
                     return False
     return True
+
+
+def has_submitted_file(context):
+    if     IQSurveySubmission.providedBy(context) \
+        or IQAssessedQuestionSet.providedBy(context) \
+        or IQuestionSetSubmission.providedBy(context):
+        for question in context.questions or ():
+            if has_submitted_file(question):
+                return True
+    elif   IQPollSubmission.providedBy(context) \
+        or IQAssessedQuestion.providedBy(context) \
+        or IQuestionSubmission.providedBy(context) \
+        or IQAssignmentSubmission.providedBy(context):
+        for part in context.parts or ():
+            if has_submitted_file(part):
+                return True
+    elif IQAssessedPart.providedBy(context):
+        return IFile.providedBy(context.submittedResponse)
+    return IFile.providedBy(context)
 
 
 # classes
