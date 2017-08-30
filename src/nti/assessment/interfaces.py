@@ -31,6 +31,7 @@ from zope.lifecycleevent.interfaces import IObjectModifiedEvent
 from zope.schema import vocabulary
 
 from nti.base.interfaces import IDict
+from nti.base.interfaces import IFile
 from nti.base.interfaces import IList
 from nti.base.interfaces import INumeric
 from nti.base.interfaces import IIterable
@@ -1275,7 +1276,7 @@ class IQBaseSubmission(IContained, IVersioned):
 
 class IQPartsSubmission(IQBaseSubmission):
 
-    parts = IndexedIterable(title=u"Ordered submissions, one for each part of the poll.",
+    parts = IndexedIterable(title=u"Ordered submissions, one for each part of the question.",
                             default=(),
                             description=u"""The length must match the length of the questions. Each object must be
                             adaptable into the proper :class:`IQResponse` object (e.g., a string or dict).""")
@@ -1310,9 +1311,8 @@ class IQSubmittedPart(IContained):
                                  Object(IDict),
                                  Object(IList),
                                  Object(IUnicode),
-                                 Object(IQUploadedFile),
-                                 # List this so we get specific validation for
-                                 # it
+                                 Object(IFile),
+                                 # List this so we get specific validation
                                  Object(IQModeledContentResponse),
                                  Object(IQResponse)),
                                 variant_raise_when_schema_provided=True,
@@ -1344,6 +1344,7 @@ class IQAssessedQuestion(IContained):
     """
 
     questionId = TextLine(title=u"Identifier of the question being responded to.")
+
     parts = IndexedIterable(title=u"Ordered assessed values, one for each part of the question.",
                             value_type=Object(IQAssessedPart, title=u"The assessment of a part."))
 
@@ -1718,12 +1719,13 @@ IQSurvey['available_for_submission_beginning'].setTaggedValue(TAG_REQUIRED_IN_UI
 IQSurvey.setTaggedValue('_ext_jsonschema', u'survey')
 
 
-class IQInquirySubmission(IQPartsSubmission):
+class IQInquirySubmission(IQBaseSubmission):
     inquiryId = interface.Attribute("Identifier of the inquiry being responded to.")
     inquiryId.setTaggedValue('_ext_excluded_out', True)
 
 
-class IQPollSubmission(IQInquirySubmission):
+class IQPollSubmission(IQInquirySubmission,
+                       IQPartsSubmission):
     """
     A submission in response to a poll.
 
@@ -1739,6 +1741,7 @@ class IQSurveySubmission(IQInquirySubmission, IContextAnnotatable, IWriteMapping
     """
 
     surveyId = TextLine(title=u"Identifier of the survey being responded to.")
+
     questions = IndexedIterable(title=u"Submissions, one for each poll in the survey.",
                                 default=(),
                                 value_type=Object(IQPollSubmission,
