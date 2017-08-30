@@ -54,7 +54,7 @@ from nti.schema.fieldproperty import createDirectFieldProperties
 
 
 @WithRepr
-@interface.implementer(IQAssessedPart, ISublocations)
+@interface.implementer(IQAssessedPart)
 @EqHash('assessedValue', 'submittedResponse', superhash=True)
 class QAssessedPart(QSubmittedPart, CreatorMixin):
     createDirectFieldProperties(IQAssessedPart)
@@ -65,8 +65,7 @@ class QAssessedPart(QSubmittedPart, CreatorMixin):
 @WithRepr
 @interface.implementer(IQAssessedQuestion,
                        ICreated,
-                       ILastModified,
-                       ISublocations)
+                       ILastModified)
 @EqHash('questionId', 'parts', superhash=True)
 class QAssessedQuestion(SchemaConfigured,
                         ContainedMixin,
