@@ -66,6 +66,8 @@ class QuestionSubmission(SchemaConfigured, VersionedMixin, CreatorMixin, Contain
 
     sublocations = _make_sublocations()
 
+    mimeType = mime_type = 'application/vnd.nextthought.assessment.questionsubmission'
+
     def __getitem__(self, idx):
         return self.parts[idx]
 
@@ -86,6 +88,8 @@ class QuestionSetSubmission(SchemaConfigured, VersionedMixin, CreatorMixin, Cont
     createDirectFieldProperties(IQuestionSetSubmission)
 
     sublocations = _make_sublocations('questions')
+
+    mimeType = mime_type = 'application/vnd.nextthought.assessment.questionsetsubmission'
 
     def get(self, key, default=None):
         try:
@@ -145,7 +149,7 @@ class AssignmentSubmission(ContainedMixin,
     createDirectFieldProperties(IQBaseSubmission)
     createDirectFieldProperties(IQAssignmentSubmission)
 
-    mime_type = 'application/vnd.nextthought.assessment.assignmentsubmission'
+    mimeType = mime_type = 'application/vnd.nextthought.assessment.assignmentsubmission'
 
     sublocations = _make_sublocations()
 
