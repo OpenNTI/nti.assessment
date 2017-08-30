@@ -59,6 +59,8 @@ from nti.schema.fieldproperty import createDirectFieldProperties
 class QAssessedPart(QSubmittedPart, CreatorMixin):
     createDirectFieldProperties(IQAssessedPart)
 
+    mimeType = mime_type = 'application/vnd.nextthought.assessment.assessedpart'
+
 
 @WithRepr
 @interface.implementer(IQAssessedQuestion,
@@ -96,7 +98,8 @@ class QAssessedQuestion(SchemaConfigured,
 @WithRepr
 @interface.implementer(IQAssessedQuestionSet,
                        ICreated,
-                       ILastModified)
+                       ILastModified,
+                       ISublocations)
 @EqHash('questionSetId', 'questions', superhash=True)
 class QAssessedQuestionSet(SchemaConfigured,
                            ContainedMixin,
