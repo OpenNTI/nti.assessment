@@ -16,6 +16,8 @@ import time
 from zope import component
 from zope import interface
 
+from zope.cachedescriptors.property import readproperty
+
 from zope.location.interfaces import ISublocations
 
 from persistent import Persistent
@@ -91,6 +93,10 @@ class QAssessedQuestion(SchemaConfigured,
         )
         return self.lastModified
 
+    @readproperty
+    def containerId(self):
+        return self.questionId
+
     sublocations = _make_sublocations()
 
 
@@ -122,6 +128,10 @@ class QAssessedQuestionSet(SchemaConfigured,
         self.lastModified = (t if t is not None and t >
                              self.lastModified else time.time())
         return self.lastModified
+
+    @readproperty
+    def containerId(self):
+        return self.questionSetId
 
     sublocations = _make_sublocations('questions')
 

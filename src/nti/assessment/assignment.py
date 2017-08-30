@@ -174,3 +174,7 @@ class QAssignmentSubmissionPendingAssessment(ContainedMixin,
         # schema configured is not cooperative
         ContainedMixin.__init__(self, *args, **kwargs)
         PersistentCreatedModDateTrackingObject.__init__(self)
+        
+    @readproperty
+    def containerId(self):
+        return self.assignmentId
