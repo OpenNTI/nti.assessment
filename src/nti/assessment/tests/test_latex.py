@@ -25,9 +25,10 @@ from nti.assessment._latexplastexdomcompare import _mathChildIsEqual as mce
 
 from nti.assessment.common import grade_one_response
 
-from nti.assessment.tests.test_solution import grades_right, grades_wrong
-
 from nti.assessment.tests import AssessmentTestCase
+
+from nti.assessment.tests.test_solution import grades_right 
+from nti.assessment.tests.test_solution import grades_wrong
 
 
 class TestLatex(AssessmentTestCase):
@@ -77,8 +78,8 @@ class TestLatex(AssessmentTestCase):
 
         rsp = response.QTextResponse(soln.value + " day")
 
-        grader = component.getMultiAdapter(
-            (None, soln, rsp), interfaces.IQSymbolicMathGrader)
+        grader = component.getMultiAdapter((None, soln, rsp), 
+                                           interfaces.IQSymbolicMathGrader)
         assert_that(grader(), is_true())
         assert_that(soln, grades_right(soln.value + " day"))
 
@@ -163,14 +164,15 @@ class TestLatex(AssessmentTestCase):
 
     def test_grade_sympy_memory_error(self):
         soln = solution.QLatexSymbolicMathSolution(u'16')
-        # Seen in real life, causes a MemoryError sometimes. The browser's GUI editor makes this relatively
+        # Seen in real life, causes a MemoryError sometimes. 
+        # The browser's GUI editor makes this relatively
         # easy to construct. Hopefully it can redisplay it, too
 
         rsp = response.QTextResponse(u'\\left(\\left(\\left(\\left(\\left(\\left(\\left(\\left(\\left(\\left(\\left(\\left(\\left(\\left(\\left(\\left(\\left(\\left(\\left(\\left(\\left(\\left(\\left(\\left(\\left(\\left(\\left(\\left(\\left(\\left(\\left(\\left(\\left(\\left(\\left(\\left(\\left(\\left(\\left(\\left(\\left(\\left(\\left(\\left(\\left(\\left(\\left(\\left(\\left(\\left(\\left(\\left(\\left(\\left(\\left(\\left(\\left(\\left(\\left(\\left(\\left(\\left(\\left(\\left(\\left(\\left(\\left(\\left(\\left(\\left(\\left(\\left(\\left(\\left(\\left(\\left(\\left(\\left(\\left(\\left(\\left(\\left(\\left(\\left(\\left(\\left(\\left(\\left(\\left(\\left(\\left(\\left(\\left(\\left(\\left(\\left(\\left(\\left(2.72\\right)\\right)\\right)\\right)\\right)\\right)\\right)\\right)\\right)\\right)\\right)\\right)\\right)\\right)\\right)\\right)\\right)\\right)\\right)\\right)\\right)\\right)\\right)\\right)\\right)\\right)\\right)\\right)\\right)\\right)\\right)\\right)\\right)\\right)\\right)\\right)\\right)\\right)\\right)\\right)\\right)\\right)\\right)\\right)\\right)\\right)\\right)\\right)\\right)\\right)\\right)\\right)\\right)\\right)\\right)\\right)\\right)\\right)\\right)\\right)\\right)\\right)\\right)\\right)\\right)\\right)\\right)\\right)\\right)\\right)\\right)\\right)\\right)\\right)\\right)\\right)\\right)\\right)\\right)\\right)\\right)\\right)\\right)\\right)\\right)\\right)\\right)\\right)\\right)\\right)\\right)\\right)\\right)\\right)\\right)\\right)\\right)\\right)',
                                      u'', u'\\left(\\left(\\left(\\left(\\left(\\left(\\left(\\left(\\left(\\left(\\left(\\left(\\left(\\left(\\left(\\left(\\left(\\left(\\left(\\left(\\left(\\left(\\left(\\left(\\left(\\left(\\left(\\left(\\left(\\left(\\left(\\left(\\left(\\left(\\left(\\left(\\left(\\left(\\left(\\left(\\left(\\left(\\left(\\left(\\left(\\left(\\left(\\left(\\left(\\left(\\left(\\left(\\left(\\left(\\left(\\left(\\left(\\left(\\left(\\left(\\left(\\left(\\left(\\left(\\left(\\left(\\left(\\left(\\left(\\left(\\left(\\left(\\left(\\left(\\left(\\left(\\left(\\left(\\left(\\left(\\left(\\left(\\left(\\left(\\left(\\left(\\left(\\left(\\left(\\left(\\left(\\left(\\left(\\left(\\left(\\left(\\left(\\left(2.72\\right)\\right)\\right)\\right)\\right)\\right)\\right)\\right)\\right)\\right)\\right)\\right)\\right)\\right)\\right)\\right)\\right)\\right)\\right)\\right)\\right)\\right)\\right)\\right)\\right)\\right)\\right)\\right)\\right)\\right)\\right)\\right)\\right)\\right)\\right)\\right)\\right)\\right)\\right)\\right)\\right)\\right)\\right)\\right)\\right)\\right)\\right)\\right)\\right)\\right)\\right)\\right)\\right)\\right)\\right)\\right)\\right)\\right)\\right)\\right)\\right)\\right)\\right)\\right)\\right)\\right)\\right)\\right)\\right)\\right)\\right)\\right)\\right)\\right)\\right)\\right)\\right)\\right)\\right)\\right)\\right)\\right)\\right)\\right)\\right)\\right)\\right)\\right)\\right)\\right)\\right)\\right)\\right)\\right)\\right)\\right)\\right)\\right)')
 
-        grader = component.getMultiAdapter(
-            (None, soln, rsp), interfaces.IQSymbolicMathGrader)
+        grader = component.getMultiAdapter((None, soln, rsp), 
+                                           interfaces.IQSymbolicMathGrader)
         assert_that(grader(), is_false())
 
     def test_math_child_is_equal_cases(self):

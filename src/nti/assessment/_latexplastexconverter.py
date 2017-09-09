@@ -117,11 +117,11 @@ class EmptyResponseConverter(object):
     """
 
     @classmethod
-    def convert(cls, response):
+    def convert(cls, unused_response):
         return None
 
 
-def factory(solution, response):
+def factory(unused_solution, response):
     return sys.modules[__name__] if response.value else EmptyResponseConverter
 
 

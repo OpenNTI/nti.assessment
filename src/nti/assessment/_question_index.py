@@ -200,8 +200,8 @@ class QuestionIndex(object):
 
     def _process_assessments(self,
                              assessment_item_dict,
-                             containing_hierarchy_key,
-                             level_ntiid=None):
+                             unused_containing_hierarchy_key,
+                             unused_level_ntiid=None):
 
         result = set()
         for k, v in assessment_item_dict.items():

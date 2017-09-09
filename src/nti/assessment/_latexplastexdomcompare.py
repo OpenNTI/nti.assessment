@@ -215,7 +215,7 @@ def grade(solution, response):
 @interface.implementer(IQSymbolicMathGrader)
 class Grader(object):
 
-    def __init__(self, part, solution, response):
+    def __init__(self, unused_part, solution, response):
         self.solution = solution
         self.response = response
 
