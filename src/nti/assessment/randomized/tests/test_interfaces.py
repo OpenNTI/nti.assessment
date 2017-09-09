@@ -15,4 +15,4 @@ from zope.dottedname import resolve as dottedname
 class TestInterfaces(unittest.TestCase):
 
     def test_import_interfaces(self):
-        dottedname.resolve('nti.assessment.interfaces')
+        dottedname.resolve('nti.assessment.randomized.interfaces')
