@@ -54,6 +54,7 @@ setup(
         'persistent',
         'nti.base',
         'nti.contentfragments',
+        'nti.contenttypes.reports',
         'nti.coremetadata',
         'nti.dublincore',
         'nti.externalization',
