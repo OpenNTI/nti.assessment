@@ -248,7 +248,7 @@
 						 .interfaces.IQAggregatedSurvey"
 		modules=".common .hint .assessed .parts .question .response
 				 .solution .submission .assignment .survey"
-		factory_modules=".submission .question .response .survey .solution"
+		factory_modules=".assignment .submission .question .response .survey .solution"
 		iobase=".externalization._AssessmentInternalObjectIOBase"/>
 
 	<adapter factory=".externalization._AssignmentPartSummaryExternalizer"

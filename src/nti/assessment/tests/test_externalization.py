@@ -47,7 +47,6 @@ from nti.assessment.tests import AssessmentTestCase
 
 GIF_DATAURL = 'data:image/gif;base64,R0lGODlhCwALAIAAAAAA3pn/ZiH5BAEAAAEALAAAAAALAAsAAAIUhA+hkcuO4lmNVindo7qyrIXiGBYAOw=='
 
-
 class TestExternalization(AssessmentTestCase):
 
     def test_file_upload(self):
