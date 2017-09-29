@@ -4,10 +4,9 @@
 .. $Id$
 """
 
-from __future__ import print_function, absolute_import, division
-__docformat__ = "restructuredtext en"
-
-logger = __import__('logging').getLogger(__name__)
+from __future__ import division
+from __future__ import print_function
+from __future__ import absolute_import
 
 import random
 import hashlib
@@ -16,6 +15,8 @@ from zope import component
 
 from nti.assessment.randomized.interfaces import ISha224Randomized
 from nti.assessment.randomized.interfaces import IPrincipalSeedSelector
+
+logger = __import__('logging').getLogger(__name__)
 
 
 def get_seed(context=None):

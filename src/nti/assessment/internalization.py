@@ -15,7 +15,7 @@ from curses.ascii import isctrl
 from zope import component
 from zope import interface
 
-from nti.assessment.interfaces import DISCLOSURE_TERMINATION, IQFreeResponsePart
+from nti.assessment.interfaces import DISCLOSURE_TERMINATION
 
 from nti.assessment.interfaces import IRegEx
 from nti.assessment.interfaces import IQuestion
@@ -23,8 +23,10 @@ from nti.assessment.interfaces import IQInquiry
 from nti.assessment.interfaces import IQFilePart
 from nti.assessment.interfaces import IWordEntry
 from nti.assessment.interfaces import IQMatchingPart
-from nti.assessment.interfaces import IQMultipleChoicePart
+from nti.assessment.interfaces import IQFreeResponsePart
 from nti.assessment.interfaces import IQMatchingSolution
+from nti.assessment.interfaces import IQuestionSubmission
+from nti.assessment.interfaces import IQMultipleChoicePart
 from nti.assessment.interfaces import IQModeledContentResponse
 from nti.assessment.interfaces import IQMultipleChoiceSolution
 from nti.assessment.interfaces import IQMultipleChoiceMultipleAnswerPart
@@ -39,6 +41,8 @@ from nti.assessment.parts import QMultipleChoicePart
 from nti.assessment.parts import QMultipleChoiceMultipleAnswerPart
 
 from nti.assessment.question import QQuestion
+
+from nti.assessment.submission import QuestionSubmission
 
 from nti.assessment.solution import QMatchingSolution
 from nti.assessment.solution import QMultipleChoiceSolution
@@ -183,6 +187,11 @@ class AssessmentFactoryMixin(object):
 class QuestionFactory(AssessmentFactoryMixin):
     factory = QQuestion
     provided = IQuestion
+
+
+class QuestionSubmissionFactory(AssessmentFactoryMixin):
+    factory = QuestionSubmission
+    provided = IQuestionSubmission
 
 
 class FilePartFactory(AssessmentFactoryMixin):

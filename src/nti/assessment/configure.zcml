@@ -319,6 +319,7 @@
 
 	<!-- Class Factories (Legacy) -->
 	<utility name='Question' factory='.internalization.QuestionFactory' />
+	<utility name='QuestionSubmission' factory='.internalization.QuestionSubmissionFactory' />
 
 	<utility name='FilePart' 
 			 factory='.internalization.FilePartFactory' />
