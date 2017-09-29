@@ -318,32 +318,21 @@
 			 provides="nti.externalization.interfaces.IInternalObjectExternalizer" />
 
 	<!-- Class Factories (Legacy) -->
-	<utility name='Question' factory='.internalization.QuestionFactory' />
-	<utility name='QuestionSubmission' factory='.internalization.QuestionSubmissionFactory' />
+	<ext:classObjectFactory factory=".question.QQuestion" name="Question" />
 
-	<utility name='FilePart' 
-			 factory='.internalization.FilePartFactory' />
-			 
-	<utility name='MatchingPart' 
-			 factory='.internalization.MatchingPartFactory' />
+	<ext:classObjectFactory factory=".submission.QuestionSubmission" />
 
-	<utility name='FreeResponsePart'
-			 factory='.internalization.FreeResponsePartFactory' />
+	<ext:classObjectFactory factory=".parts.QFilePart" name="FilePart" />
+	<ext:classObjectFactory factory=".parts.QMatchingPart" name="MatchingPart" />
+	<ext:classObjectFactory factory=".parts.QFreeResponsePart" name="FreeResponsePart" />
+	<ext:classObjectFactory factory=".parts.QMultipleChoicePart" name="MultipleChoicePart" />
+	<ext:classObjectFactory factory=".parts.QMultipleChoiceMultipleAnswerPart" 
+							name="MultipleChoiceMultipleAnswerPart" />
 
-	<utility name='MultipleChoicePart' 
-			 factory='.internalization.MultipleChoicePartFactory' />
-
-	<utility name='MultipleChoiceMultipleAnswerPart' 
-			 factory='.internalization.MultipleChoiceMultipleAnswerPartFactory' />
-
-	<utility name='MatchingSolution' 
-			 factory='.internalization.MatchingSolutionFactory' />
-
-	<utility name='MultipleChoiceSolution' 
-			 factory='.internalization.MultipleChoiceSolutionFactory' />
-
-	<utility name='MultipleChoiceMultipleAnswerSolution' 
-			 factory='.internalization.MultipleChoiceMultipleAnswerSolutionFactory' />
+	<ext:classObjectFactory factory=".solution.QMatchingSolution" name="MatchingSolution" />
+	<ext:classObjectFactory factory=".solution.QMultipleChoiceSolution" name="MultipleChoiceSolution" />
+	<ext:classObjectFactory factory=".solution.QMultipleChoiceMultipleAnswerSolution" 
+							name="MultipleChoiceMultipleAnswerSolution" />
 
 	<!-- WordBank & Regex -->
 	<ext:registerAutoPackageIO

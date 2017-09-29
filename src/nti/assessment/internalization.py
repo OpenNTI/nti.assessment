@@ -18,39 +18,14 @@ from zope import interface
 from nti.assessment.interfaces import DISCLOSURE_TERMINATION
 
 from nti.assessment.interfaces import IRegEx
-from nti.assessment.interfaces import IQuestion
 from nti.assessment.interfaces import IQInquiry
-from nti.assessment.interfaces import IQFilePart
 from nti.assessment.interfaces import IWordEntry
-from nti.assessment.interfaces import IQMatchingPart
-from nti.assessment.interfaces import IQFreeResponsePart
-from nti.assessment.interfaces import IQMatchingSolution
-from nti.assessment.interfaces import IQuestionSubmission
-from nti.assessment.interfaces import IQMultipleChoicePart
 from nti.assessment.interfaces import IQModeledContentResponse
-from nti.assessment.interfaces import IQMultipleChoiceSolution
-from nti.assessment.interfaces import IQMultipleChoiceMultipleAnswerPart
 from nti.assessment.interfaces import IQFillInTheBlankShortAnswerSolution
 from nti.assessment.interfaces import IQFillInTheBlankWithWordBankSolution
-from nti.assessment.interfaces import IQMultipleChoiceMultipleAnswerSolution
-
-from nti.assessment.parts import QFilePart
-from nti.assessment.parts import QMatchingPart
-from nti.assessment.parts import QFreeResponsePart
-from nti.assessment.parts import QMultipleChoicePart
-from nti.assessment.parts import QMultipleChoiceMultipleAnswerPart
-
-from nti.assessment.question import QQuestion
-
-from nti.assessment.submission import QuestionSubmission
-
-from nti.assessment.solution import QMatchingSolution
-from nti.assessment.solution import QMultipleChoiceSolution
-from nti.assessment.solution import QMultipleChoiceMultipleAnswerSolution
 
 from nti.externalization.datastructures import InterfaceObjectIO
 
-from nti.externalization.interfaces import IClassObjectFactory
 from nti.externalization.interfaces import IInternalObjectUpdater
 
 from nti.externalization.internalization import find_factory_for
@@ -166,69 +141,3 @@ class _QInquiryUpdater(object):
                     self.obj,
                     IQInquiry).updateFromExternalObject(parsed)
         return result
-
-
-@interface.implementer(IClassObjectFactory)
-class AssessmentFactoryMixin(object):
-    factory = None
-    provided = None
-    description = title = "Assessment object factory"
-
-    def __init__(self, *args):
-        pass
-
-    def __call__(self, *unused_args, **unused_kw):
-        return self.factory()
-
-    def getInterfaces(self):
-        return (self.provided,)
-
-
-class QuestionFactory(AssessmentFactoryMixin):
-    factory = QQuestion
-    provided = IQuestion
-
-
-class QuestionSubmissionFactory(AssessmentFactoryMixin):
-    factory = QuestionSubmission
-    provided = IQuestionSubmission
-
-
-class FilePartFactory(AssessmentFactoryMixin):
-    factory = QFilePart
-    provided = IQFilePart
-
-
-class FreeResponsePartFactory(AssessmentFactoryMixin):
-    factory = QFreeResponsePart
-    provided = IQFreeResponsePart
-
-
-class MatchingPartFactory(AssessmentFactoryMixin):
-    factory = QMatchingPart
-    provided = IQMatchingPart
-
-
-class MultipleChoicePartFactory(AssessmentFactoryMixin):
-    factory = QMultipleChoicePart
-    provided = IQMultipleChoicePart
-
-
-class MultipleChoiceMultipleAnswerPartFactory(AssessmentFactoryMixin):
-    factory = QMultipleChoiceMultipleAnswerPart
-    provided = IQMultipleChoiceMultipleAnswerPart
-
-
-class MatchingSolutionFactory(AssessmentFactoryMixin):
-    factory = QMatchingSolution
-    provided = IQMatchingSolution
-
-
-class MultipleChoiceSolutionFactory(AssessmentFactoryMixin):
-    factory = QMultipleChoiceSolution
-    provided = IQMultipleChoiceSolution
-
-
-class MultipleChoiceMultipleAnswerSolutionFactory(AssessmentFactoryMixin):
-    factory = QMultipleChoiceMultipleAnswerSolution
-    provided = IQMultipleChoiceMultipleAnswerSolution
