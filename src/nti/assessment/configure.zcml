@@ -317,6 +317,33 @@
 			 for=".interfaces.IQSurveySubmission"
 			 provides="nti.externalization.interfaces.IInternalObjectExternalizer" />
 
+	<!-- Class Factories (Legacy) -->
+	<utility name='Question' factory='.internalization.QuestionFactory' />
+
+	<utility name='FilePart' 
+			 factory='.internalization.FilePartFactory' />
+			 
+	<utility name='MatchingPart' 
+			 factory='.internalization.MatchingPartFactory' />
+
+	<utility name='FreeResponsePart'
+			 factory='.internalization.FreeResponsePartFactory' />
+
+	<utility name='MultipleChoicePart' 
+			 factory='.internalization.MultipleChoicePartFactory' />
+
+	<utility name='MultipleChoiceMultipleAnswerPart' 
+			 factory='.internalization.MultipleChoiceMultipleAnswerPartFactory' />
+
+	<utility name='MatchingSolution' 
+			 factory='.internalization.MatchingSolutionFactory' />
+
+	<utility name='MultipleChoiceSolution' 
+			 factory='.internalization.MultipleChoiceSolutionFactory' />
+
+	<utility name='MultipleChoiceMultipleAnswerSolution' 
+			 factory='.internalization.MultipleChoiceMultipleAnswerSolutionFactory' />
+
 	<!-- WordBank & Regex -->
 	<ext:registerAutoPackageIO
 		root_interfaces=".interfaces.IWordEntry
