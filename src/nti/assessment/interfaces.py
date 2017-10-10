@@ -4,10 +4,9 @@
 .. $Id$
 """
 
-from __future__ import print_function, absolute_import, division
-__docformat__ = "restructuredtext en"
-
-logger = __import__('logging').getLogger(__name__)
+from __future__ import division
+from __future__ import print_function
+from __future__ import absolute_import
 
 from zope import interface
 
@@ -824,6 +823,9 @@ class IQuestionSet(IQAssessment, ITitledContent, IQEvaluationItemContainer,
                                 min_length=0,
                                 default=(),
                                 value_type=Object(IQuestion, title=u"The questions"))
+
+    question_count = interface.Attribute("Question count")
+    question_count.setTaggedValue('_ext_excluded_out', True)
 
     def append(item):
         """
@@ -1703,6 +1705,9 @@ class IQSurvey(IQInquiry, ITitledContent, IQEvaluationItemContainer, IFiniteSequ
                                 min_length=0,
                                 default=(),
                                 value_type=Object(IQPoll, title=u"The poll questions"))
+    
+    question_count = interface.Attribute("Question/Poll count")
+    question_count.setTaggedValue('_ext_excluded_out', True)
 
 
 IQSurvey['title'].setTaggedValue(TAG_HIDDEN_IN_UI, False)
