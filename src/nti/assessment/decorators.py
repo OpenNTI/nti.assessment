@@ -6,10 +6,9 @@ Decorators for assessment objects.
 .. $Id$
 """
 
-from __future__ import print_function, absolute_import, division
-__docformat__ = "restructuredtext en"
-
-logger = __import__('logging').getLogger(__name__)
+from __future__ import division
+from __future__ import print_function
+from __future__ import absolute_import
 
 from zope import component
 from zope import interface
@@ -24,7 +23,9 @@ from nti.coremetadata.interfaces import IVersioned
 from nti.externalization.interfaces import IExternalObjectDecorator
 from nti.externalization.interfaces import IExternalMappingDecorator
 
-from nti.externalization.singleton import SingletonDecorator
+from nti.externalization.singleton import Singleton
+
+logger = __import__('logging').getLogger(__name__)
 
 
 @component.adapter(IQPart)
@@ -64,9 +65,7 @@ class _MathPartDecorator(object):
 
 @component.adapter(IVersioned)
 @interface.implementer(IExternalObjectDecorator)
-class _VersionedDecorator(object):
-
-    __metaclass__ = SingletonDecorator
+class _VersionedDecorator(Singleton):
 
     def decorateExternalObject(self, unused_context, mapping):
         if not mapping.get('version'):
@@ -74,7 +73,7 @@ class _VersionedDecorator(object):
 
 
 @interface.implementer(IExternalObjectDecorator)
-class _QAssessmentObjectIContainedAdder(object):
+class _QAssessmentObjectIContainedAdder(Singleton):
     """
     When an assignment or question set comes from a content package
     and thus has a __parent__ that has an NTIID, make that NTIID
@@ -93,8 +92,6 @@ class _QAssessmentObjectIContainedAdder(object):
     into course definitions.
     """
 
-    __metaclass__ = SingletonDecorator
-
     def decorateExternalObject(self, context, mapping):
         if not mapping.get('containerId'):
             # Be careful not to write this out at rendering time
@@ -105,9 +102,7 @@ class _QAssessmentObjectIContainedAdder(object):
 
 
 @interface.implementer(IExternalObjectDecorator)
-class _QAssignmentObjectDecorator(object):
-
-    __metaclass__ = SingletonDecorator
+class _QAssignmentObjectDecorator(Singleton):
 
     def decorateExternalObject(self, context, mapping):
         mapping['NoSubmit'] = bool(context.no_submit)
@@ -115,9 +110,7 @@ class _QAssignmentObjectDecorator(object):
 
 
 @interface.implementer(IExternalObjectDecorator)
-class _QInquiryObjectDecorator(object):
-
-    __metaclass__ = SingletonDecorator
+class _QInquiryObjectDecorator(Singleton):
 
     def decorateExternalObject(self, unused_context, mapping):
         mapping.pop('no_submit', None)
