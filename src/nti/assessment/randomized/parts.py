@@ -4,10 +4,9 @@
 .. $Id$
 """
 
-from __future__ import print_function, absolute_import, division
-__docformat__ = "restructuredtext en"
-
-logger = __import__('logging').getLogger(__name__)
+from __future__ import division
+from __future__ import print_function
+from __future__ import absolute_import
 
 from zope import interface
 
@@ -24,6 +23,8 @@ from nti.assessment.randomized.interfaces import IQRandomizedOrderingPart
 from nti.assessment.randomized.interfaces import IQRandomizedConnectingPart
 from nti.assessment.randomized.interfaces import IQRandomizedMultipleChoicePart
 from nti.assessment.randomized.interfaces import IQRandomizedMultipleChoiceMultipleAnswerPart
+
+logger = __import__('logging').getLogger(__name__)
 
 
 deprecated('QRandomizedConnectingPart', 'No longer used')
