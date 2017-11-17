@@ -6,10 +6,9 @@ Convenient functions for creating simple math doms from latex expressions.
 .. $Id$
 """
 
-from __future__ import print_function, absolute_import, division
-__docformat__ = "restructuredtext en"
-
-logger = __import__('logging').getLogger(__name__)
+from __future__ import division
+from __future__ import print_function
+from __future__ import absolute_import
 
 import sys
 import tempfile
@@ -27,6 +26,8 @@ from nti.base._compat import text_
 import nti.openmath as openmath
 
 _counter = 0
+
+logger = __import__('logging').getLogger(__name__)
 
 
 def _buildDomFromString(docString):

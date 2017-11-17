@@ -4,10 +4,9 @@
 .. $Id$
 """
 
-from __future__ import print_function, absolute_import, division
-__docformat__ = "restructuredtext en"
-
-logger = __import__('logging').getLogger(__name__)
+from __future__ import division
+from __future__ import print_function
+from __future__ import absolute_import
 
 import six
 import simplejson
@@ -36,8 +35,10 @@ from nti.externalization.internalization import update_from_external_object
 
 from nti.wref.interfaces import IWeakRef
 
+logger = __import__('logging').getLogger(__name__)
 
-def _ntiid_object_hook(k, v, x):
+
+def _ntiid_object_hook(unused_k, v, x):
     """
     In this one, rare, case, we are reading things from external
     sources and need to preserve an NTIID value.

@@ -6,10 +6,9 @@ Support functions for comparing latex Math DOMs using PlasTeX
 .. $Id$
 """
 
-from __future__ import print_function, absolute_import, division
-__docformat__ = "restructuredtext en"
-
-logger = __import__('logging').getLogger(__name__)
+from __future__ import division
+from __future__ import print_function
+from __future__ import absolute_import
 
 from zope import component
 from zope import interface
@@ -21,16 +20,18 @@ from sympy.parsing import sympy_parser
 from nti.assessment.interfaces import IQSymbolicMathGrader
 from nti.assessment.interfaces import IResponseToSymbolicMathConverter
 
+logger = __import__('logging').getLogger(__name__)
+
 
 def _math_is_equal(solution, response):
     if solution is None or response is None:
         # We follow the rules for SQL NULL: it's not equal to anything,
         # even itself
         return False
-    return  _math_children_are_equal(solution.childNodes, response.childNodes) \
-        or (    _all_text_children(solution) and _all_text_children(response)
+    return _math_children_are_equal(solution.childNodes, response.childNodes) \
+        or (_all_text_children(solution) and _all_text_children(response)
             and _text_content_equal(solution, response))
-_mathIsEqual = _math_is_equal # BWC
+_mathIsEqual = _math_is_equal  # BWC
 
 
 def _math_children_are_equal(solution, response):
@@ -42,7 +43,7 @@ def _math_children_are_equal(solution, response):
         if not _mathChildIsEqual(math1child, math2child):
             return False
     return True
-_mathChildrenAreEqual = _math_children_are_equal # BWC
+_mathChildrenAreEqual = _math_children_are_equal  # BWC
 
 
 def _important_child_nodes(childNodes):
@@ -51,7 +52,7 @@ def _important_child_nodes(childNodes):
     that are important for comparison purposes. Spaces are not considered important.
     """
     return [x for x in childNodes if x.nodeType != x.TEXT_NODE or x.textContent.strip()]
-_importantChildNodes = _important_child_nodes # BWC
+_importantChildNodes = _important_child_nodes  # BWC
 
 
 def _all_text_children(childNode):
@@ -108,8 +109,8 @@ def _symbolic(child):
 
 
 def _all_math_children_are_equal(child1, child2):
-    return all((_math_child_is_equal(child1.attributes[k.name], child2.attributes[k.name]) 
-               for k in child1.arguments))
+    return all((_math_child_is_equal(child1.attributes[k.name], child2.attributes[k.name])
+                for k in child1.arguments))
 
 
 def _len_important_children_nodes_are_equal(child1, child2):
@@ -135,17 +136,18 @@ def _math_child_is_equal(child1, child2):
 
     if child1.nodeType == child1.ELEMENT_NODE:
         # Check that the arguments and the children are equal
-        return (        
-                len(child1.arguments) == len(child2.arguments)
+        return (
+            len(child1.arguments) == len(child2.arguments)
             and _all_math_children_are_equal(child1, child2)
             and (
-                   (    _all_text_children(child1)
+                (_all_text_children(child1)
                     and _all_text_children(child2)
                     and _text_content_equal(child1, child2))
-                 or
-                    _math_children_are_equal(child1.childNodes, child2.childNodes)
-                )
+                or
+                _math_children_are_equal(
+                    child1.childNodes, child2.childNodes)
             )
+        )
 
     if child1.nodeType == child1.DOCUMENT_FRAGMENT_NODE:
         return _math_children_are_equal(child1.childNodes, child2.childNodes)
@@ -153,8 +155,8 @@ def _math_child_is_equal(child1, child2):
     # Fallback to string comparison
     return _sanitize_text_node_content(child1) == _sanitize_text_node_content(child2)
 
-_mathChildIsEqual = _math_child_is_equal # BWC
-_stripEmptyChildren = _important_child_nodes # BWC
+_mathChildIsEqual = _math_child_is_equal  # BWC
+_stripEmptyChildren = _important_child_nodes  # BWC
 
 
 def grade(solution, response):

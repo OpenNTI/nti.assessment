@@ -8,6 +8,8 @@ from __future__ import division
 from __future__ import print_function
 from __future__ import absolute_import
 
+logger = __import__('logging').getLogger(__name__)
+
 
 def _patch():
     import os
@@ -25,23 +27,23 @@ def _patch():
     # set mimetypes on interfaces
     for name in os.listdir(os.path.dirname(__file__)):
         # ignore modules we may have trouble importing
-        if  name in ('jsonschema.py',
-                     'externalization.py',
-                     'internalization.py',
-                     'wref.py') \
-            or name[-3:] != '.py' \
-            or name.startswith('_'):
+        if name in ('jsonschema.py',
+                    'externalization.py',
+                    'internalization.py',
+                    'wref.py') \
+                or name[-3:] != '.py' \
+                or name.startswith('_'):
             continue
 
         try:
             module = package + '.' + name[:-3]
             module = importlib.import_module(module)
-        except ImportError:
+        except ImportError:  # pragma: no cover
             continue
         for _, item in inspect.getmembers(module):
             try:
                 mimeType = getattr(item, 'mimeType', None) \
-                        or getattr(item, 'mime_type', None)
+                    or getattr(item, 'mime_type', None)
                 if not mimeType:
                     continue
                 # first interface is the externalizable object
@@ -50,8 +52,9 @@ def _patch():
                 root.setTaggedValue('_ext_mime_type', mimeType)
                 if root.isOrExtends(IQPart):
                     root.setTaggedValue('_ext_jsonschema', 'part')
-            except (AttributeError, TypeError, IndexError):
+            except (AttributeError, TypeError, IndexError):  # pragma: no cover
                 pass
+
 
 _patch()
 del _patch
