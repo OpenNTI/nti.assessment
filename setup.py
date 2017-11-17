@@ -86,7 +86,7 @@ setup(
         'zope.mimetype',
         'zope.proxy',
         'zope.schema',
-        'zope.security'
+        'zope.security',
     ],
     extras_require={
         'test': TESTS_REQUIRE,
