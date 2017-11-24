@@ -75,7 +75,7 @@ CONTAINER_ID_INT = StandardInternalFields.CONTAINER_ID
 
 
 @interface.implementer(IInternalObjectIO)
-class _AssessmentInternalObjectIOBase(object):
+class _AssessmentInternalObjectIOBase(InterfaceObjectIO):
     """
     Base class to customize object IO. See zcml.
     """
@@ -100,6 +100,10 @@ class _AssessmentInternalObjectIOBase(object):
         k = a_type.__name__
         ext_class_name = k[1:] if not k.startswith('Question') else k
         return ext_class_name
+
+    def updateFromExternalObject(self, parsed, *args, **kwargs):
+        result = super(_AssessmentInternalObjectIOBase, self).updateFromExternalObject(parsed, *args, **kwargs)
+        return result
 
 
 # Solution parts
