@@ -13,46 +13,39 @@ logger = __import__('logging').getLogger(__name__)
 
 def _patch():
     import os
-    import sys
     import inspect
     import importlib
 
     from nti.assessment.interfaces import IQPart
-    from nti.assessment.interfaces import IQAssessment
-    module = sys.modules[IQAssessment.__module__]
 
-    # main package name
-    package = '.'.join(module.__name__.split('.')[:-1])
+    package = '.'.join(__name__.split('.')[:-1])
+
+    ignore_list = ('_patch.py', 'externalization.py', 'jsonschema.py',
+                   'externalization.py', 'internalization.py', 'wref.py')
 
     # set mimetypes on interfaces
     for name in os.listdir(os.path.dirname(__file__)):
-        # ignore modules we may have trouble importing
-        if name in ('jsonschema.py',
-                    'externalization.py',
-                    'internalization.py',
-                    'wref.py') \
-                or name[-3:] != '.py' \
-                or name.startswith('_'):
+        if     name in ignore_list \
+            or name[-3:] != '.py' \
+            or name.startswith('_'):
             continue
 
-        try:
-            module = package + '.' + name[:-3]
-            module = importlib.import_module(module)
-        except ImportError:  # pragma: no cover
-            continue
+        module = package + '.' + name[:-3]
+        module = importlib.import_module(module)
+
         for _, item in inspect.getmembers(module):
             try:
                 mimeType = getattr(item, 'mimeType', None) \
                     or getattr(item, 'mime_type', None)
                 if not mimeType:
                     continue
-                # first interface is the externalizable object
                 interfaces = tuple(item.__implemented__.interfaces())
+                # first interface is the externalizable object
                 root = interfaces[0]
                 root.setTaggedValue('_ext_mime_type', mimeType)
                 if root.isOrExtends(IQPart):
                     root.setTaggedValue('_ext_jsonschema', 'part')
-            except (AttributeError, TypeError, IndexError):  # pragma: no cover
+            except IndexError:  # pragma: no cover
                 pass
 
 
