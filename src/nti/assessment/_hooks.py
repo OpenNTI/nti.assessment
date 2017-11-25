@@ -12,7 +12,7 @@ from nti.contentfragments.interfaces import LatexContentFragment
 
 from nti.externalization.interfaces import StandardExternalFields
 
-CLASS = StandardExternalFields.OID
+CLASS = StandardExternalFields.CLASS
 NTIID = StandardExternalFields.NTIID
 
 logger = __import__('logging').getLogger(__name__)
@@ -25,13 +25,12 @@ def ntiid_object_hook(self, parsed):
     """
     result = False
     if NTIID in parsed and not getattr(self, 'ntiid', None):
-        self.ntiid = parsed[NTIID]
-        self.__name__ = self.ntiid
+        self.__name__ = self.ntiid = parsed[NTIID]
         result = True
 
     if      'value' in parsed \
         and CLASS in parsed \
-        and parsed['Class'] == 'LatexSymbolicMathSolution' \
+        and parsed[CLASS] == 'LatexSymbolicMathSolution' \
         and parsed['value'] != self.value:
         # We started out with LatexContentFragments when we wrote these,
         # and if we re-convert when we read, we tend to over-escape
