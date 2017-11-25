@@ -4,10 +4,9 @@
 .. $Id$
 """
 
-from __future__ import print_function, absolute_import, division
-__docformat__ = "restructuredtext en"
-
-logger = __import__('logging').getLogger(__name__)
+from __future__ import division
+from __future__ import print_function
+from __future__ import absolute_import
 
 import six
 from collections import Mapping
@@ -70,6 +69,8 @@ MIMETYPE = StandardExternalFields.MIMETYPE
 CONTAINER_ID_EXT = StandardExternalFields.CONTAINER_ID
 CONTAINER_ID_INT = StandardInternalFields.CONTAINER_ID
 
+logger = __import__('logging').getLogger(__name__)
+
 
 # Base internal IO
 
@@ -102,6 +103,7 @@ class _AssessmentInternalObjectIOBase(InterfaceObjectIO):
         return ext_class_name
 
     def updateFromExternalObject(self, parsed, *args, **kwargs):
+        # hook = ntiid_object_hook(self._ext_replacement(), parsed)
         result = super(_AssessmentInternalObjectIOBase, self).updateFromExternalObject(parsed, *args, **kwargs)
         return result
 
