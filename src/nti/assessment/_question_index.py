@@ -26,7 +26,6 @@ from nti.assessment.interfaces import IQuestionSet
 
 from nti.base._compat import text_
 
-from nti.contentfragments.interfaces import LatexContentFragment
 from nti.contentfragments.interfaces import PlainTextContentFragment
 from nti.contentfragments.interfaces import SanitizedHTMLContentFragment
 
@@ -36,27 +35,6 @@ from nti.externalization.internalization import update_from_external_object
 from nti.wref.interfaces import IWeakRef
 
 logger = __import__('logging').getLogger(__name__)
-
-
-def _ntiid_object_hook(unused_k, v, x):
-    """
-    In this one, rare, case, we are reading things from external
-    sources and need to preserve an NTIID value.
-    """
-    if 'NTIID' in x and not getattr(v, 'ntiid', None):
-        v.ntiid = x['NTIID']
-        v.__name__ = v.ntiid
-
-    if      'value' in x \
-        and 'Class' in x \
-        and x['Class'] == 'LatexSymbolicMathSolution' \
-        and x['value'] != v.value:
-        # We started out with LatexContentFragments when we wrote these,
-        # and if we re-convert when we read, we tend to over-escape
-        # One thing we do need to do, though, is replace long dashes with standard
-        # minus signs
-        v.value = LatexContentFragment(x['value'].replace(u'\u2212', u'-'))
-    return v
 
 
 class AssessmentProxy(ProxyBase):
