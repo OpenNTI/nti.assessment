@@ -213,9 +213,8 @@ class QuestionIndex(object):
 
             obj = factory()
             update_from_external_object(obj, v, require_updater=True,
-                                        notify=False,
-                                        object_hook=_ntiid_object_hook)
-            obj.ntiid = text_(k)
+                                        notify=False)
+            obj.ntiid = text_(k) # ensure unicode
             # No matter if we got an assignment or question set first or the questions
             # first, register the question objects exactly once. Replace
             # any question children of a question set by the registered object.

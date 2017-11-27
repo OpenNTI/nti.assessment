@@ -15,6 +15,8 @@ from collections import Sequence
 from zope import component
 from zope import interface
 
+from nti.assessment._hooks import ntiid_object_hook
+
 from nti.assessment.interfaces import IQSurvey
 from nti.assessment.interfaces import IQuestion
 from nti.assessment.interfaces import IQAssignment
@@ -103,9 +105,9 @@ class _AssessmentInternalObjectIOBase(InterfaceObjectIO):
         return ext_class_name
 
     def updateFromExternalObject(self, parsed, *args, **kwargs):
-        # hook = ntiid_object_hook(self._ext_replacement(), parsed)
         result = super(_AssessmentInternalObjectIOBase, self).updateFromExternalObject(parsed, *args, **kwargs)
-        return result
+        hook = ntiid_object_hook(self._ext_replacement(), parsed)
+        return result or hook
 
 
 # Solution parts

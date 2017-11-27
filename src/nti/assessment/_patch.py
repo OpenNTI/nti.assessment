@@ -36,7 +36,7 @@ def _patch():
         for _, item in inspect.getmembers(module):
             try:
                 mimeType = getattr(item, 'mimeType', None) \
-                    or getattr(item, 'mime_type', None)
+                        or getattr(item, 'mime_type', None)
                 if not mimeType:
                     continue
                 interfaces = tuple(item.__implemented__.interfaces())

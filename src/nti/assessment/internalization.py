@@ -15,6 +15,8 @@ from curses.ascii import isctrl
 from zope import component
 from zope import interface
 
+from nti.assessment._hooks import ntiid_object_hook
+
 from nti.assessment.interfaces import DISCLOSURE_TERMINATION
 
 from nti.assessment.interfaces import IRegEx
@@ -140,4 +142,5 @@ class _QInquiryUpdater(object):
         result = InterfaceObjectIO(
                     self.obj,
                     IQInquiry).updateFromExternalObject(parsed)
-        return result
+        hook = ntiid_object_hook(self.obj, parsed)
+        return result or hook
