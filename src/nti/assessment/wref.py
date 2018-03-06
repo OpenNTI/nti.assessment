@@ -20,6 +20,7 @@ from nti.assessment.interfaces import IQPoll
 from nti.assessment.interfaces import IQuestion
 
 from nti.ntiids.ntiids import validate_ntiid_string
+from nti.ntiids.ntiids import find_object_with_ntiid
 
 from nti.wref.interfaces import IWeakRef
 
@@ -61,6 +62,9 @@ class ItemWeakRef(object):
     def __setstate__(self, state):
         assert state[0] == 1
         self.ntiid = state[1]
+
+    def __call__(self):
+        return find_object_with_ntiid(self.ntiid)
 
 
 @component.adapter(IQuestion)

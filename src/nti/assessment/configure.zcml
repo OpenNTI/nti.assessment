@@ -326,22 +326,22 @@
 
 	<ext:classObjectFactory factory=".parts.QMatchingPart" name="MatchingPart" />
 
-	<ext:classObjectFactory factory=".parts.QFreeResponsePart" 
+	<ext:classObjectFactory factory=".parts.QFreeResponsePart"
 							name="FreeResponsePart" />
 
-	<ext:classObjectFactory factory=".parts.QMultipleChoicePart" 
+	<ext:classObjectFactory factory=".parts.QMultipleChoicePart"
 							name="MultipleChoicePart" />
 
-	<ext:classObjectFactory factory=".parts.QMultipleChoiceMultipleAnswerPart" 
+	<ext:classObjectFactory factory=".parts.QMultipleChoiceMultipleAnswerPart"
 							name="MultipleChoiceMultipleAnswerPart" />
 
-	<ext:classObjectFactory factory=".solution.QMatchingSolution" 
+	<ext:classObjectFactory factory=".solution.QMatchingSolution"
 							name="MatchingSolution" />
 
-	<ext:classObjectFactory factory=".solution.QMultipleChoiceSolution" 
+	<ext:classObjectFactory factory=".solution.QMultipleChoiceSolution"
 							name="MultipleChoiceSolution" />
 
-	<ext:classObjectFactory factory=".solution.QMultipleChoiceMultipleAnswerSolution" 
+	<ext:classObjectFactory factory=".solution.QMultipleChoiceMultipleAnswerSolution"
 							name="MultipleChoiceMultipleAnswerSolution" />
 
 	<!-- WordBank & Regex -->

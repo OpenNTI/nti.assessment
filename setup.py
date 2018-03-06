@@ -54,6 +54,7 @@ setup(
         'persistent',
         'nti.base',
         'nti.contentfragments',
+        'nti.contenttypes.completion',
         'nti.contenttypes.reports',
         'nti.coremetadata',
         'nti.dublincore',

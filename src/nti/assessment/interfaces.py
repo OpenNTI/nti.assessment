@@ -43,6 +43,8 @@ from nti.contentfragments.schema import LatexFragmentTextLine as _LatexTextLine
 from nti.contentfragments.schema import HTMLContentFragment as _HTMLContentFragment
 from nti.contentfragments.schema import TextUnicodeContentFragment as _ContentFragment
 
+from nti.contenttypes.completion.interfaces import ICompletableItem
+
 from nti.contenttypes.reports.interfaces import IReportContext
 
 from nti.coremetadata.interfaces import IVersioned
@@ -651,7 +653,7 @@ class IQMatchingPart(IQNonGradableMatchingPart, IQConnectingPart):
 
     solutions = IndexedIterable(title=u"The matching solution",
                                 min_length=0,
-                                value_type=Object(IQMatchingSolution, 
+                                value_type=Object(IQMatchingSolution,
                                                   title=u"Matching solution"),
                                 required=False)
 IQGradableMatchingPart = IQMatchingPart  # alias
@@ -661,7 +663,7 @@ class IQOrderingPart(IQNonGradableOrderingPart, IQConnectingPart):
 
     solutions = IndexedIterable(title=u"The matching solution",
                                 min_length=0,
-                                value_type=Object(IQOrderingSolution, 
+                                value_type=Object(IQOrderingSolution,
                                                   title=u"Ordering solution"),
                                 required=False)
 IQGradableOrderingPart = IQMatchingPart  # alias
@@ -806,7 +808,7 @@ IQuestion.setTaggedValue('_ext_jsonschema', u'question')
 
 
 class IQuestionSet(IQAssessment, ITitledContent, IQEvaluationItemContainer,
-                   IAttributeAnnotatable, IRecordableContainer):
+                   IAttributeAnnotatable, IRecordableContainer, ICompletableItem):
     """
     An ordered group of related questions generally intended to be
     completed as a unit (aka, a Quiz or worksheet).
@@ -925,7 +927,8 @@ class IQSubmittable(IRecordable, ICalendarPublishable, IVersioned):
                      default=False)
 
 
-class IQAssignment(IQAssessment, IQSubmittable, ITitledContent, IAttributeAnnotatable, IReportContext):
+class IQAssignment(IQAssessment, IQSubmittable, ITitledContent,
+                   IAttributeAnnotatable, IReportContext, ICompletableItem):
     """
     An assignment differs from either plain questions or question sets
     in that there is an expectation that it must be completed,
@@ -1705,7 +1708,7 @@ class IQSurvey(IQInquiry, ITitledContent, IQEvaluationItemContainer, IFiniteSequ
                                 min_length=0,
                                 default=(),
                                 value_type=Object(IQPoll, title=u"The poll questions"))
-    
+
     question_count = interface.Attribute("Question/Poll count")
     question_count.setTaggedValue('_ext_excluded_out', True)
 
