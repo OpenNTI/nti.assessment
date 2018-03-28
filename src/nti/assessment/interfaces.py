@@ -1697,7 +1697,8 @@ IQPoll['available_for_submission_beginning'].setTaggedValue(TAG_REQUIRED_IN_UI, 
 IQPoll.setTaggedValue('_ext_jsonschema', u'poll')
 
 
-class IQSurvey(IQInquiry, ITitledContent, IQEvaluationItemContainer, IFiniteSequence):
+class IQSurvey(IQInquiry, ITitledContent, IQEvaluationItemContainer,
+               IFiniteSequence, ICompletableItem):
     """
     An ordered group of poll questions.
 
