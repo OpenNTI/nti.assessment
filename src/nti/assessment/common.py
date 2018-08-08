@@ -236,7 +236,7 @@ def is_part_auto_gradable(part):
     # Validate every part has grader.
     result = getattr(part, 'grader_interface', None) \
           or getattr(part, 'grader_name', None)
-    return bool(result)
+    return bool(result) and bool(part.solutions)
 
 
 def can_be_auto_graded(assignment):
@@ -273,15 +273,15 @@ def has_submitted_file(context):
 
 @WithRepr
 @interface.implementer(IContained,
-                       IQSubmittable, 
-                       IContentTypeAware, 
+                       IQSubmittable,
+                       IContentTypeAware,
                        IAttributeAnnotatable)
 class QSubmittable(SchemaConfigured,
                    VersionedMixin,
                    RecordableMixin,
                    CalendarPublishableMixin,
                    CreatedAndModifiedTimeMixin):
-    
+
     available_for_submission_ending = \
         AdaptingFieldProperty(IQSubmittable['available_for_submission_ending'])
 
@@ -294,7 +294,7 @@ class QSubmittable(SchemaConfigured,
     parameters = {}  # IContentTypeAware
 
     __parent__ = None
-    
+
     def __init__(self, *args, **kwargs):
         SchemaConfigured.__init__(self, *args, **kwargs)
 
@@ -307,7 +307,7 @@ class QSubmittable(SchemaConfigured,
         return self.__parent__
 
 
-class QPersistentSubmittable(QSubmittable, 
+class QPersistentSubmittable(QSubmittable,
                              PersistentCreatedModDateTrackingObject):
 
     createdTime = 0
