@@ -171,11 +171,13 @@ class _FillInTheBlankWithWordBankPartSolutionsExternalizer(object):
 @interface.implementer(IInternalObjectExternalizer)
 class _QuestionSetExternalizer(InterfaceObjectIO):
 
-    _excluded_out_ivars_ = getattr(InterfaceObjectIO, '_excluded_out_ivars_').union({'questions'})
+    _excluded_out_ivars_ = frozenset(
+        getattr(InterfaceObjectIO, '_excluded_out_ivars_').union({'questions'})
+    )
 
     _ext_iface_upper_bound = IQuestionSet
 
-    def toExternalObject(self, **kwargs):
+    def toExternalObject(self, **kwargs):  # pylint: disable=arguments-differ
         context = self._ext_replacement()
         result = super(_QuestionSetExternalizer, self).toExternalObject(**kwargs)
         if 'questions' not in result:
@@ -188,7 +190,7 @@ class _QuestionSetExternalizer(InterfaceObjectIO):
 @interface.implementer(IInternalObjectExternalizer)
 class _BasicSummaryExternalizer(InterfaceObjectIO):
 
-    def toExternalObject(self, *args, **kwargs):
+    def toExternalObject(self, *args, **kwargs):  # pylint: disable=arguments-differ
         result = super(_BasicSummaryExternalizer, self).toExternalObject(*args, **kwargs)
         result['IsSummary'] = True
         return result
@@ -198,7 +200,7 @@ class _BasicSummaryExternalizer(InterfaceObjectIO):
 @interface.implementer(IInternalObjectExternalizer)
 class _SurveySummaryExternalizer(_BasicSummaryExternalizer):
 
-    _excluded_out_ivars_ = ('questions',)
+    _excluded_out_ivars_ = frozenset(('questions',))
 
     _ext_iface_upper_bound = IQuestionSet
 
@@ -207,7 +209,7 @@ class _SurveySummaryExternalizer(_BasicSummaryExternalizer):
 @interface.implementer(IInternalObjectExternalizer)
 class _QuestionSetSummaryExternalizer(_BasicSummaryExternalizer):
 
-    _excluded_out_ivars_ = ('questions',)
+    _excluded_out_ivars_ = frozenset(('questions',))
 
     _ext_iface_upper_bound = IQuestionSet
 
@@ -216,7 +218,7 @@ class _QuestionSetSummaryExternalizer(_BasicSummaryExternalizer):
 @interface.implementer(IInternalObjectExternalizer)
 class _AssignmentPartSummaryExternalizer(_BasicSummaryExternalizer):
 
-    _excluded_out_ivars_ = ('question_set',)
+    _excluded_out_ivars_ = frozenset(('question_set',))
 
     _ext_iface_upper_bound = IQAssignmentPart
 
@@ -290,12 +292,14 @@ from nti.namedfile.datastructures import NamedFileObjectIO
 @component.adapter(IQUploadedFile)
 class _QUploadedFileObjectIO(NamedFileObjectIO):
 
-    _excluded_in_ivars_ = {'download_url', 'url', 'value'}.union(NamedFileObjectIO._excluded_in_ivars_)
+    _excluded_in_ivars_ = frozenset(
+        {'download_url', 'url', 'value'}.union(NamedFileObjectIO._excluded_in_ivars_)
+    )
 
-    def _ext_mimeType(self, _):
+    def _ext_mimeType(self, *unused_args):  # pylint: disable=arguments-differ
         return 'application/vnd.nextthought.assessment.uploadedfile'
 
-    def toExternalObject(self, *args, **kwargs):
+    def toExternalObject(self, *args, **kwargs):  # pylint: disable=arguments-differ
         ext_dict = super(_QUploadedFileObjectIO, self).toExternalObject(*args, **kwargs)
         return ext_dict
 
