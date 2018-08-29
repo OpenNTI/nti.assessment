@@ -49,7 +49,6 @@ from nti.externalization.datastructures import InterfaceObjectIO
 
 from nti.externalization.externalization import to_external_object
 
-from nti.externalization.interfaces import IInternalObjectIO
 from nti.externalization.interfaces import IInternalObjectExternalizer
 
 from nti.externalization.interfaces import StandardExternalFields
@@ -77,7 +76,6 @@ logger = __import__('logging').getLogger(__name__)
 # Base internal IO
 
 
-@interface.implementer(IInternalObjectIO)
 class _AssessmentInternalObjectIOBase(InterfaceObjectIO):
     """
     Base class to customize object IO. See zcml.
