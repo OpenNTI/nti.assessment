@@ -25,9 +25,9 @@ from nti.externalization.representation import WithRepr
 
 from nti.schema.eqhash import EqHash
 
-from nti.schema.field import SchemaConfigured
-
 from nti.schema.fieldproperty import createDirectFieldProperties
+
+from nti.schema.schema import SchemaConfigured
 
 logger = __import__('logging').getLogger(__name__)
 
@@ -44,7 +44,7 @@ class QRandomizedQuestionSet(QQuestionSet):
 class QQuestionBank(QQuestionSet):
     createDirectFieldProperties(IQuestionBank)
 
-    srand = False  # XXX LEGACY field don't remove
+    srand = False  # Warning !!! LEGACY field don't remove
 
     __external_class_name__ = "QuestionSet"
     mimeType = mime_type = QUESTION_BANK_MIME_TYPE
@@ -107,6 +107,7 @@ class QQuestionIndexRange(SchemaConfigured):
             return NotImplemented
 
     def validate(self):
+        # pylint: disable=no-member
         if self.start > self.end:
             raise ValueError("Start index cannot be greater than end index")
 

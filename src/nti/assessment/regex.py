@@ -4,17 +4,16 @@
 .. $Id$
 """
 
-from __future__ import print_function, absolute_import, division
-__docformat__ = "restructuredtext en"
+from __future__ import division
+from __future__ import print_function
+from __future__ import absolute_import
 
-logger = __import__('logging').getLogger(__name__)
+from persistent import Persistent
 
 from zope import component
 from zope import interface
 
 from zope.container.contained import Contained
-
-from persistent import Persistent
 
 from nti.assessment.interfaces import IRegEx
 
@@ -23,9 +22,11 @@ from nti.contentfragments.interfaces import IHTMLContentFragment
 
 from nti.externalization.representation import WithRepr
 
-from nti.schema.field import SchemaConfigured
-
 from nti.schema.fieldproperty import createDirectFieldProperties
+
+from nti.schema.schema import SchemaConfigured
+
+logger = __import__('logging').getLogger(__name__)
 
 
 @WithRepr
@@ -37,7 +38,7 @@ class RegEx(Persistent, SchemaConfigured, Contained):
     mime_type = mimeType = 'application/vnd.nextthought.naqregex'
 
     def __init__(self, *args, **kwargs):
-        Persistent.__init__(self)
+        super(RegEx, self).__init__()
         SchemaConfigured.__init__(self, *args, **kwargs)
 
     def __str__(self):
@@ -59,6 +60,7 @@ class RegEx(Persistent, SchemaConfigured, Contained):
 @interface.implementer(IRegEx)
 def _regex_str_adapter(pattern, solution=None):
     result = RegEx(pattern=pattern)
+    # pylint: disable=attribute-defined-outside-init
     result.solution = IHTMLContentFragment(solution) if solution else None
     return result
 
