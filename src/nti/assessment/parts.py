@@ -6,10 +6,11 @@ Implementations and support for question parts.
 .. $Id$
 """
 
-from __future__ import print_function, absolute_import, division
-__docformat__ = "restructuredtext en"
+from __future__ import division
+from __future__ import print_function
+from __future__ import absolute_import
 
-logger = __import__('logging').getLogger(__name__)
+from persistent import Persistent
 
 from zope import interface
 
@@ -20,8 +21,6 @@ from zope.component.interfaces import ComponentLookupError
 from zope.location.interfaces import IContained
 
 from zope.schema.interfaces import ConstraintNotSatisfied
-
-from persistent import Persistent
 
 from nti.assessment.common import make_schema
 from nti.assessment.common import compute_part_ntiid
@@ -100,7 +99,9 @@ from nti.property.property import alias
 
 from nti.schema.eqhash import EqHash
 
-from nti.schema.field import SchemaConfigured
+from nti.schema.schema import SchemaConfigured
+
+logger = __import__('logging').getLogger(__name__)
 
 
 @WithRepr
@@ -125,7 +126,7 @@ class QNonGradablePart(SchemaConfigured, Persistent):
     evaluation = alias('__parent__')
 
     @readproperty
-    def ntiid(self):
+    def ntiid(self):  # pylint: disable=method-hidden
         result = compute_part_ntiid(self)
         if result:
             self.ntiid = result
@@ -189,14 +190,15 @@ class QPart(QNonGradablePart):
             if nv:
                 if not IQRandomizedPart.providedBy(self):
                     interface.alsoProvides(self, self.randomized_interface)
-                    self._p_changed = True
+                    self._p_changed = True  # pylint: disable=attribute-defined-outside-init
             elif IQRandomizedPart.providedBy(self):
                 interface.noLongerProvides(self, self.randomized_interface)
-                self._p_changed = True
+                self._p_changed = True  # pylint: disable=attribute-defined-outside-init
     randomized = property(_get_randomzied, _set_randomized)
 
     def grade(self, response, creator=None):
         if self.response_interface is not None:
+            # pylint: disable=not-callable
             response = self.response_interface(response)
 
         if not self.solutions:
@@ -215,10 +217,11 @@ class QPart(QNonGradablePart):
                 break
         return result
 
-    def _weight(self, result, solution):
+    def _weight(self, unused_result, solution):
         return self.weight * solution.weight
 
     def _grade(self, solution, response, creator):
+        # pylint: disable=unused-variable
         __traceback_info__ = solution, response, self.grader_name
         grader = grader_for_solution_and_response(self, solution,
                                                   response, creator)
@@ -473,6 +476,7 @@ class QFilePart(QPart, QNonGradableFilePart):  # order matters
         # and refuse to even grade if they are not met
         value = response.value
 
+        # pylint: disable=no-member,unused-variable
         if not self.is_mime_type_allowed(value.contentType):
             __traceback_info__ = value.contentType
             raise ConstraintNotSatisfied(value.contentType, 'mimeType')

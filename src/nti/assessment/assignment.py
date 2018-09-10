@@ -62,10 +62,10 @@ from nti.property.property import alias
 
 from nti.schema.eqhash import EqHash
 
-from nti.schema.field import SchemaConfigured
-
 from nti.schema.fieldproperty import AdaptingFieldProperty
 from nti.schema.fieldproperty import createDirectFieldProperties
+
+from nti.schema.schema import SchemaConfigured
 
 logger = __import__('logging').getLogger(__name__)
 
@@ -83,7 +83,7 @@ class QAssignmentPart(SchemaConfigured,
     mimeType = mime_type = 'application/vnd.nextthought.assessment.assignmentpart'
 
     @readproperty
-    def ntiid(self):
+    def ntiid(self):  # pylint: disable=method-hidden
         result = compute_part_ntiid(self)
         if result:
             self.ntiid = result
@@ -171,11 +171,11 @@ class QAssignmentSubmissionPendingAssessment(ContainedMixin,
 
     sublocations = _make_sublocations()
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args, **kwargs):  # pylint: disable=super-init-not-called
         # schema configured is not cooperative
         ContainedMixin.__init__(self, *args, **kwargs)
         PersistentCreatedModDateTrackingObject.__init__(self)
-        
+
     @readproperty
-    def containerId(self):
+    def containerId(self):  # pylint: disable=method-hidden
         return self.assignmentId

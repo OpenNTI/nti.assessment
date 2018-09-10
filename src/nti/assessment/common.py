@@ -80,12 +80,12 @@ from nti.recorder.mixins import RecordableMixin
 
 from nti.schema.eqhash import EqHash
 
-from nti.schema.field import SchemaConfigured
-
 from nti.schema.fieldproperty import AdaptingFieldProperty
 from nti.schema.fieldproperty import createDirectFieldProperties
 
 from nti.schema.interfaces import find_most_derived_interface
+
+from nti.schema.schema import SchemaConfigured
 
 logger = __import__('logging').getLogger(__name__)
 
@@ -143,9 +143,9 @@ grader = grader_for_solution_and_response  # alias BWC
 
 def grader_for_response(part, response):
     for solution in part.solutions or ():
-        grader = grader_for_solution_and_response(part, solution, response)
-        if grader is not None:
-            return grader
+        sol_grader = grader_for_solution_and_response(part, solution, response)
+        if sol_grader is not None:
+            return sol_grader
     return None
 
 
@@ -240,8 +240,8 @@ def is_part_auto_gradable(part):
 
 
 def can_be_auto_graded(assignment):
-    for part in assignment.parts or ():
-        question_set = part.question_set
+    for a_part in assignment.parts or ():
+        question_set = a_part.question_set
         for question in question_set.questions or ():
             for part in question.parts or ():
                 if not is_part_auto_gradable(part):
@@ -295,11 +295,12 @@ class QSubmittable(SchemaConfigured,
 
     __parent__ = None
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args, **kwargs):  # pylint: disable=super-init-not-called
         SchemaConfigured.__init__(self, *args, **kwargs)
 
     @readproperty
     def __name__(self):
+        # pylint: disable=no-member
         return self.ntiid
 
     @readproperty

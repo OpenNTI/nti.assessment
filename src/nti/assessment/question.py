@@ -8,6 +8,10 @@ from __future__ import division
 from __future__ import print_function
 from __future__ import absolute_import
 
+from persistent.list import PersistentList
+
+from ZODB.POSException import ConnectionStateError
+
 from zope import interface
 
 from zope.annotation.interfaces import IAttributeAnnotatable
@@ -17,10 +21,6 @@ from zope.cachedescriptors.property import readproperty
 from zope.interface.common.sequence import IFiniteSequence
 
 from zope.mimetype.interfaces import IContentTypeAware
-
-from ZODB.POSException import ConnectionStateError
-
-from persistent.list import PersistentList
 
 from nti.assessment.common import get_containerId
 
@@ -46,10 +46,10 @@ from nti.publishing.mixins import PublishableMixin
 from nti.recorder.mixins import RecordableMixin
 from nti.recorder.mixins import RecordableContainerMixin
 
-from nti.schema.field import SchemaConfigured
-
 from nti.schema.fieldproperty import AdaptingFieldProperty
 from nti.schema.fieldproperty import createDirectFieldProperties
+
+from nti.schema.schema import SchemaConfigured
 
 from nti.wref.interfaces import IWeakRef
 
@@ -74,7 +74,7 @@ class QBaseMixin(SchemaConfigured,
 
     parameters = {}  # IContentTypeAware
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args, **kwargs):  # pylint: disable=super-init-not-called
         SchemaConfigured.__init__(self, *args, **kwargs)
         PersistentCreatedModDateTrackingObject.__init__(self)
 
