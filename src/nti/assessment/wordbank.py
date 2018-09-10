@@ -61,7 +61,7 @@ class WordEntry(Persistent, SchemaConfigured, Contained):
     lang = u'en'
 
     def __init__(self, *args, **kwargs):
-        Persistent.__init__(self)
+        super(WordEntry, self).__init__()
         SchemaConfigured.__init__(self, *args, **kwargs)
 
     def __eq__(self, other):
@@ -90,7 +90,7 @@ class WordEntry(Persistent, SchemaConfigured, Contained):
 
 @WithRepr
 @interface.implementer(IWordBank)
-class WordBank(SchemaConfigured, Persistent, Contained):
+class WordBank(Persistent, SchemaConfigured, Contained):
     createDirectFieldProperties(IWordBank)
 
     __external_can_create__ = True
@@ -100,7 +100,7 @@ class WordBank(SchemaConfigured, Persistent, Contained):
     unique = None
 
     def __init__(self, *args, **kwargs):
-        Persistent.__init__(self)
+        super(WordBank, self).__init__()
         SchemaConfigured.__init__(self, *args, **kwargs)
 
     @CachedProperty('entries')
@@ -115,6 +115,7 @@ class WordBank(SchemaConfigured, Persistent, Contained):
         return sorted(self.entries)
 
     def idOf(self, word):
+        # pylint: disable=no-member
         return self._word_map.get(safe_encode(word), None) if word is not None else None
     id_of = idOf
 
@@ -122,6 +123,7 @@ class WordBank(SchemaConfigured, Persistent, Contained):
         return self.idOf(word) != None
 
     def get(self, wid, default=None):
+        # pylint: disable=no-member
         result = self._id_map.get(wid, default)
         return result
 
@@ -138,11 +140,11 @@ class WordBank(SchemaConfigured, Persistent, Contained):
         return xhash
 
     def __contains__(self, wid):
-        return wid in self._id_map
+        return wid in self._id_map  # pylint: disable=unsupported-membership-test
     contains_id = __contains__
 
     def __getitem__(self, wid):
-        return self._id_map[wid]
+        return self._id_map[wid]  # pylint: disable=unsubscriptable-object
 
     def __len__(self):
         return len(self.entries)
@@ -182,6 +184,7 @@ def _wordentry_adapter(sequence):
         content = text_(sequence[3])
     else:
         content = result.word
+    # pylint: disable=attribute-defined-outside-init
     result.content = IHTMLContentFragment(content)
     return result
 
