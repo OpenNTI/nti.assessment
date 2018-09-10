@@ -4,10 +4,9 @@
 .. $Id$
 """
 
-from __future__ import print_function, absolute_import, division
-__docformat__ = "restructuredtext en"
-
-logger = __import__('logging').getLogger(__name__)
+from __future__ import division
+from __future__ import print_function
+from __future__ import absolute_import
 
 from zope import interface
 
@@ -45,6 +44,8 @@ from nti.assessment.parts import QMultipleChoiceMultipleAnswerPart
 from nti.externalization.representation import WithRepr
 
 from nti.schema.eqhash import EqHash
+
+logger = __import__('logging').getLogger(__name__)
 
 
 @WithRepr
@@ -84,7 +85,7 @@ class QMathSolution(QSolution):
         super(QMathSolution, self).__init__()
         allowed_units = args[1] if len(args) > 1 else kwargs.get('allowed_units')
         if allowed_units is not None:
-            # TODO: Do we need to defensively copy?
+            # Do we need to defensively copy?
             self.allowed_units = allowed_units
 
 

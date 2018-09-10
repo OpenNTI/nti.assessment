@@ -8,6 +8,12 @@ from __future__ import division
 from __future__ import print_function
 from __future__ import absolute_import
 
+from persistent.list import PersistentList
+
+from persistent.mapping import PersistentMapping
+
+from ZODB.POSException import ConnectionStateError
+
 from zope import component
 from zope import interface
 
@@ -18,11 +24,6 @@ from zope.interface.common.mapping import IWriteMapping
 from zope.interface.common.sequence import IFiniteSequence
 
 from zope.location.interfaces import ISublocations
-
-from ZODB.POSException import ConnectionStateError
-
-from persistent.list import PersistentList
-from persistent.mapping import PersistentMapping
 
 from nti.assessment._util import make_sublocations as _make_sublocations
 
@@ -69,10 +70,10 @@ from nti.property.property import alias
 
 from nti.schema.eqhash import EqHash
 
-from nti.schema.field import SchemaConfigured
-
 from nti.schema.fieldproperty import AdaptingFieldProperty
 from nti.schema.fieldproperty import createDirectFieldProperties
+
+from nti.schema.schema import SchemaConfigured
 
 from nti.wref.interfaces import IWeakRef
 
@@ -164,6 +165,7 @@ class QSurvey(QInquiry):
         ntiid = getattr(question, 'ntiid', question)
         for idx, question in enumerate(tuple(self.questions)):  # mutating
             if question.ntiid == ntiid:
+                # pylint: disable=no-member
                 return self.questions.pop(idx)
         return None
 
@@ -184,7 +186,7 @@ class QPollSubmission(ContainedMixin,
     inquiryId = alias('pollId')
     sublocations = _make_sublocations()
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args, **kwargs):  # pylint: disable=super-init-not-called
         # schema configured is not cooperative
         ContainedMixin.__init__(self, *args, **kwargs)
         PersistentCreatedModDateTrackingObject.__init__(self)
@@ -210,10 +212,12 @@ class QPollSubmission(ContainedMixin,
 class QBasePollSet(object):
 
     def append(self, value):
+        # pylint: disable=no-member
         self.polls.append(value)
 
     @property
     def length(self):
+        # pylint: disable=no-member
         return len(self.polls)
 
     def __len__(self):
@@ -222,20 +226,23 @@ class QBasePollSet(object):
     @CachedProperty('length')
     def _v_map(self):
         result = {}
+        # pylint: disable=no-member
         for poll in self.polls or ():
             result[poll.pollId] = poll
         return result
 
     def get(self, key, default=None):
+        # pylint: disable=no-member
         return self._v_map.get(key, default)
 
     def __getitem__(self, key):
-        return self._v_map[key]
+        return self._v_map[key]  # pylint: disable=unsubscriptable-object
 
     def __contains__(self, key):
-        return key in self._v_map
+        return key in self._v_map  # pylint: disable=unsupported-membership-test
 
     def index(self, key):
+        # pylint: disable=no-member
         for idx, poll in enumerate(self.polls or ()):
             if poll.pollId == key:
                 return idx
@@ -245,17 +252,20 @@ class QBasePollSet(object):
         idx = self.index(key)
         if idx == -1:
             raise KeyError(key)
+        # pylint: disable=no-member
         del self.polls[idx]
 
     def __setitem__(self, key, value):
         assert key == value.pollId
         idx = self.index(key)
+        # pylint: disable=no-member
         if idx == -1:
             self.polls.append(value)
         else:
             self.polls[idx] = value
 
     def __iter__(self):
+        # pylint: disable=no-member
         return iter(self.polls)
 
 
@@ -273,7 +283,7 @@ class QSurveySubmission(ContainedMixin,
 
     sublocations = _make_sublocations('questions')
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args, **kwargs):  # pylint: disable=super-init-not-called
         # schema configured is not cooperative
         ContainedMixin.__init__(self, *args, **kwargs)
         PersistentCreatedModDateTrackingObject.__init__(self)
@@ -295,7 +305,7 @@ class QAggregatedPart(ContainedMixin,
     total = 0
     Total = alias('total')
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args, **kwargs):  # pylint: disable=super-init-not-called
         # schema configured is not cooperative
         ContainedMixin.__init__(self, *args, **kwargs)
         PersistentCreatedModDateTrackingObject.__init__(self)
@@ -351,7 +361,7 @@ class QAggregatedMultipleChoiceMultipleAnswerPart(QAggregatedMultipleChoicePart)
     def Results(self, nv):
         pass
 
-    def append(self, responses=()):
+    def append(self, responses=()):  # pylint: disable=arguments-differ
         self.total += 1
         for response in responses or ():
             current = self.results.get(response) or 0
@@ -438,7 +448,7 @@ class QAggregatedConnectingPart(QAggregatedPart):
             self.results[k] = m = PersistentMapping()
         return m
 
-    def append(self, responses=None):
+    def append(self, responses=None):  # pylint: disable=arguments-differ
         self.total += 1
         if responses is not None:
             for k, v in responses.items():
@@ -478,7 +488,7 @@ class QAggregatedPoll(ContainedMixin,
     inquiryId = alias('pollId')
     sublocations = _make_sublocations()
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args, **kwargs):  # pylint: disable=super-init-not-called
         # schema configured is not cooperative
         ContainedMixin.__init__(self, *args, **kwargs)
         PersistentCreatedModDateTrackingObject.__init__(self)
@@ -518,7 +528,7 @@ class QAggregatedSurvey(ContainedMixin,
 
     sublocations = _make_sublocations('questions')
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args, **kwargs):  # pylint: disable=super-init-not-called
         # schema configured is not cooperative
         ContainedMixin.__init__(self, *args, **kwargs)
         PersistentCreatedModDateTrackingObject.__init__(self)
@@ -561,6 +571,7 @@ def aggregate_poll_submission(submission, registry=component):
 
     aggregated_parts = PersistentList()
     for sub_part, q_part in zip(submission.parts, poll.parts):
+        # pylint: disable=unused-variable
         __traceback_info__ = sub_part, q_part
         if sub_part is None:  # null responses
             logger.debug("Null response for part (%s) in poll (%s)",
@@ -599,8 +610,8 @@ def aggregate_survey_submission(submission, registry=component):
             sub_aggregated = IQAggregatedPoll(sub_poll)
             assessed.append(sub_aggregated)
         else:  # pragma: no cover
-            logger.warn("Bad input, poll (%s) not in survey (%s) (known: %s)",
-                        poll, survey, survey.questions)
+            logger.warning("Bad input, poll (%s) not in survey (%s) (known: %s)",
+                           poll, survey, survey.questions)
 
     result = QAggregatedSurvey(surveyId=surveyId, questions=assessed)
     return result
