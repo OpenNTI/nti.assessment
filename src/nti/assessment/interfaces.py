@@ -299,10 +299,10 @@ class IQNonGradablePart(interface.Interface):
 
     content = _ContentFragment(title=u"The content to present to the user for this portion, if any.")
 
-    hints = ListOrTuple(title=u"Any hints that pertain to this part",
-                        value_type=Object(IQHint,
-                                          title=u"A hint for the part"),
-                        required=False)
+    hints = IndexedIterable(title=u"Any hints that pertain to this part",
+                            value_type=Object(IQHint,
+                                              title=u"A hint for the part"),
+                            required=False)
 
 
 class IQPartGrader(interface.Interface):
@@ -327,12 +327,12 @@ class IQPart(IQNonGradablePart, IGradable):
                                    default=u'',
                                    required=False)
 
-    solutions = ListOrTuple(title=u"Acceptable solutions for this question part in no particular order.",
-                            description=u"All solutions must be of the same type, and there must be at least one.",
-                            value_type=Object(IQSolution,
-                                              title=u"A solution for this part"),
-                            min_length=0,
-                            required=False)
+    solutions = IndexedIterable(title=u"Acceptable solutions for this question part in no particular order.",
+                                description=u"All solutions must be of the same type, and there must be at least one.",
+                                value_type=Object(IQSolution,
+                                                  title=u"A solution for this part"),
+                                min_length=0,
+                                required=False)
 
     randomized = Bool(title=u"Boolean to indicate whether this part is randomized.",
                       default=False,
@@ -514,11 +514,11 @@ class IQMultipleChoiceSolution(IQSolution, IQSingleValuedSolution):
 
 class IQMultipleChoicePart(IQNonGradableMultipleChoicePart, IQPart):
 
-    solutions = ListOrTuple(title=u"The multiple-choice solutions",
-                            min_length=0,
-                            value_type=Object(IQMultipleChoiceSolution,
-                                              title=u"Multiple choice solution"),
-                            required=False)
+    solutions = IndexedIterable(title=u"The multiple-choice solutions",
+                                min_length=0,
+                                value_type=Object(IQMultipleChoiceSolution,
+                                                 title=u"Multiple choice solution"),
+                                required=False)
 IQGradableMultipleChoicePart = IQMultipleChoicePart  # alias
 
 
@@ -556,11 +556,11 @@ class IQMultipleChoiceMultipleAnswerSolution(IQSolution,
 class IQMultipleChoiceMultipleAnswerPart(IQNonGradableMultipleChoiceMultipleAnswerPart,
                                          IQMultipleChoicePart):
 
-    solutions = ListOrTuple(title=u"The multiple-choice solutions",
-                            min_length=0,
-                            value_type=Object(IQMultipleChoiceMultipleAnswerSolution,
-                                              title=u"Multiple choice / multiple answer solution"),
-                            required=False)
+    solutions = IndexedIterable(title=u"The multiple-choice solutions",
+                                min_length=0,
+                                value_type=Object(IQMultipleChoiceMultipleAnswerSolution,
+                                                  title=u"Multiple choice / multiple answer solution"),
+                                required=False)
 
 
 class IQMultipleChoiceMultipleAnswerPartGrader(IQPartGrader):
@@ -653,20 +653,20 @@ IQGradableConnectingPart = IQConnectingPart  # alias
 
 class IQMatchingPart(IQNonGradableMatchingPart, IQConnectingPart):
 
-    solutions = ListOrTuple(title=u"The matching solution",
-                            min_length=0,
-                            value_type=Object(IQMatchingSolution,
-                                              title=u"Matching solution"),
-                            required=False)
+    solutions = IndexedIterable(title=u"The matching solution",
+                                min_length=0,
+                                value_type=Object(IQMatchingSolution,
+                                                  title=u"Matching solution"),
+                                required=False)
 IQGradableMatchingPart = IQMatchingPart  # alias
 
 
 class IQOrderingPart(IQNonGradableOrderingPart, IQConnectingPart):
 
-    solutions = ListOrTuple(title=u"The matching solution",
-                            min_length=0,
-                            value_type=Object(IQOrderingSolution,
-                                              title=u"Ordering solution"),
+    solutions = IndexedIterable(title=u"The matching solution",
+                                min_length=0,
+                                value_type=Object(IQOrderingSolution,
+                                                  title=u"Ordering solution"),
                             required=False)
 IQGradableOrderingPart = IQMatchingPart  # alias
 
@@ -803,9 +803,9 @@ class IQuestion(IQAssessment, IPublishable, INoPublishLink, IAttributeAnnotatabl
     content = Text(title=u"The content to present to the user, if any.",
                    default=u'')
 
-    parts = ListOrTuple(title=u"The ordered parts of the question.",
-                        min_length=1,
-                        value_type=Object(IQPart, title=u"A question part"))
+    parts = IndexedIterable(title=u"The ordered parts of the question.",
+                            min_length=1,
+                            value_type=Object(IQPart, title=u"A question part"))
 IQuestion.setTaggedValue('_ext_jsonschema', u'question')
 
 
@@ -822,11 +822,11 @@ class IQuestionSet(IQAssessment, ITitledContent, IQEvaluationItemContainer,
 
     ntiid = ValidNTIID(title=u"Question set NTIID", required=False)
 
-    questions = ListOrTuple(title=u"The ordered questions in the set.",
-                            description=u"For convenience, this should also be aliased to `parts`",
-                            min_length=0,
-                            default=(),
-                            value_type=Object(IQuestion, title=u"The questions"))
+    questions = IndexedIterable(title=u"The ordered questions in the set.",
+                                description=u"For convenience, this should also be aliased to `parts`",
+                                min_length=0,
+                                default=(),
+                                value_type=Object(IQuestion, title=u"The questions"))
 
     question_count = interface.Attribute("Question count")
     question_count.setTaggedValue('_ext_excluded_out', True)
@@ -987,14 +987,14 @@ class IQAssignment(IQAssessment, IQSubmittable, ITitledContent,
                         default=u'default',
                         required=True)
 
-    parts = ListOrTuple(title=u"The ordered parts of the assignment.",
-                        description=u"""Unlike questions, assignments with zero parts are allowed.
-                        Because they accept no input, such an assignment is very
-                        special and serves as a marker to higher levels of code.
-                        """,
-                        min_length=0,
-                        default=(),
-                        value_type=Object(IQAssignmentPart, title=u"An assignment part"))
+    parts = IndexedIterable(title=u"The ordered parts of the assignment.",
+                            description=u"""Unlike questions, assignments with zero parts are allowed.
+                            Because they accept no input, such an assignment is very
+                            special and serves as a marker to higher levels of code.
+                            """,
+                            min_length=0,
+                            default=(),
+                            value_type=Object(IQAssignmentPart, title=u"An assignment part"))
 
     is_non_public = Bool(title=u"Whether this assignment should be public or restricted",
                          description=u"""An ill-defined semi-layer violation. Set it to true if
