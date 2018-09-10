@@ -4,10 +4,9 @@
 .. $Id$
 """
 
-from __future__ import print_function, absolute_import, division
-__docformat__ = "restructuredtext en"
-
-logger = __import__('logging').getLogger(__name__)
+from __future__ import division
+from __future__ import print_function
+from __future__ import absolute_import
 
 from zope import interface
 
@@ -36,8 +35,11 @@ from nti.dublincore.datastructures import PersistentCreatedModDateTrackingObject
 
 from nti.externalization.representation import WithRepr
 
-from nti.schema.field import SchemaConfigured
 from nti.schema.fieldproperty import createDirectFieldProperties
+
+from nti.schema.schema import SchemaConfigured
+
+logger = __import__('logging').getLogger(__name__)
 
 # NOTE that these objects are not Persistent. Originally this is
 # because they were never intended for storage in the database; only
@@ -71,15 +73,19 @@ class QuestionSubmission(SchemaConfigured, VersionedMixin, CreatorMixin, Contain
     mimeType = mime_type = 'application/vnd.nextthought.assessment.questionsubmission'
 
     def __getitem__(self, idx):
+        # pylint: disable=no-member
         return self.parts[idx]
 
     def __setitem__(self, idx, value):
+        # pylint: disable=no-member
         self.parts[idx] = value
 
     def __delitem__(self, idx):
+        # pylint: disable=no-member
         del self.parts[idx]
 
     def __len__(self):
+        # pylint: disable=no-member
         return len(self.parts)
 
 
@@ -100,6 +106,7 @@ class QuestionSetSubmission(SchemaConfigured, VersionedMixin, CreatorMixin, Cont
             return default
 
     def index(self, key):
+        # pylint: disable=no-member
         for idx, question in enumerate(self.questions or ()):
             if question.questionId == key:
                 return idx
@@ -109,17 +116,20 @@ class QuestionSetSubmission(SchemaConfigured, VersionedMixin, CreatorMixin, Cont
         idx = self.index(key)
         if idx == -1:
             raise KeyError(key)
+        # pylint: disable=no-member
         return self.questions[idx]
 
     def __delitem__(self, key):
         idx = self.index(key)
         if idx == -1:
             raise KeyError(key)
+        # pylint: disable=no-member
         del self.questions[idx]
 
     def __setitem__(self, key, value):
         assert key == value.questionId
         idx = self.index(key)
+        # pylint: disable=no-member
         if idx == -1:
             self.questions.append(value)
         else:
@@ -129,6 +139,7 @@ class QuestionSetSubmission(SchemaConfigured, VersionedMixin, CreatorMixin, Cont
         return self.index(key) != -1
 
     def __len__(self):
+        # pylint: disable=no-member
         return len(self.questions)
 
 
@@ -155,13 +166,13 @@ class AssignmentSubmission(ContainedMixin,
 
     sublocations = _make_sublocations()
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args, **kwargs):  # pylint: disable=super-init-not-called
         # schema configured is not cooperative
         ContainedMixin.__init__(self, *args, **kwargs)
         PersistentCreatedModDateTrackingObject.__init__(self)
     
     @readproperty
-    def containerId(self):
+    def containerId(self):  # pylint: disable=method-hidden
         return self.assignmentId
 
     def index(self, key):

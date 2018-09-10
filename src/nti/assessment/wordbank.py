@@ -4,15 +4,15 @@
 .. $Id$
 """
 
-from __future__ import print_function, absolute_import, division
-__docformat__ = "restructuredtext en"
+from __future__ import division
+from __future__ import print_function
+from __future__ import absolute_import
 
-logger = __import__('logging').getLogger(__name__)
-
-import six
 from functools import total_ordering
 
 from requests.structures import CaseInsensitiveDict
+
+import six
 
 from zope import interface
 
@@ -31,16 +31,18 @@ from nti.contentfragments.interfaces import IHTMLContentFragment
 
 from nti.externalization.representation import WithRepr
 
-from nti.schema.field import SchemaConfigured
-
 from nti.schema.fieldproperty import createDirectFieldProperties
+
+from nti.schema.schema import SchemaConfigured
+
+logger = __import__('logging').getLogger(__name__)
 
 
 def safe_encode(word, encoding="UTF-8"):
     word = str(word) if not isinstance(word, six.string_types) else word
     try:
         word = word.encode(encoding)
-    except Exception:
+    except Exception:  # pylint: disable=broad-except
         word = repr(word)
     return word
 
@@ -113,8 +115,7 @@ class WordBank(SchemaConfigured, Persistent, Contained):
         return sorted(self.entries)
 
     def idOf(self, word):
-        return self._word_map.get(
-            safe_encode(word), None) if word is not None else None
+        return self._word_map.get(safe_encode(word), None) if word is not None else None
     id_of = idOf
 
     def contains_word(self, word):
