@@ -33,7 +33,7 @@ from nti.assessment.interfaces import IQFillInTheBlankShortAnswerGrader
 from nti.assessment.interfaces import IQFillInTheBlankWithWordBankGrader
 from nti.assessment.interfaces import IQMultipleChoiceMultipleAnswerPartGrader
 
-from nti.schema.field import InvalidValue
+from nti.schema.interfaces import InvalidValue
 
 
 @staticmethod
