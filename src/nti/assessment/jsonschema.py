@@ -51,9 +51,6 @@ class BaseJsonSchemafier(CoreJsonSchemafier):
     IGNORE_INTERFACES = CoreJsonSchemafier.IGNORE_INTERFACES + \
                         (IRecordable, IRecordableContainer)
 
-    def post_process_field(self, name, field, item_schema):
-        super(BaseJsonSchemafier, self).post_process_field(name, field, item_schema)
-
 
 @interface.implementer(IQEvaluationJsonSchemaMaker)
 class EvaluationJsonSchemaMaker(object):
@@ -133,7 +130,7 @@ class QuestionJsonSchemaMaker(ItemContainerJsonSchemaMaker):
 
     has_items = False
 
-    # XXX: Only a subset so far.
+    # Warning!!! ... handling only a subset so far.
     ref_interfaces = (IQMatchingPart, IQMultipleChoicePart, IQOrderingPart,
                       IQMultipleChoiceMultipleAnswerPart, IQFreeResponsePart,
                       IQConnectingPart, IQFilePart, IQModeledContentPart)
@@ -171,5 +168,5 @@ class SurveyJsonSchemaMaker(ItemContainerJsonSchemaMaker):
     ref_interfaces = (IQPoll,)
 
     def make_schema(self, schema=IQSurvey, user=None):
-        result = super(PollJsonSchemaMaker, self).make_schema(schema, user)
+        result = super(SurveyJsonSchemaMaker, self).make_schema(schema, user)
         return result
