@@ -1164,6 +1164,12 @@ class IQAssessmentPolicies(IQAssessmentContextMixin):
 IQAssignmentPolicies = IQAssessmentPolicies  # alias for BWC
 
 
+class AssessmentPolicyValidationError(ValueError):
+    """
+    An error in the assessment policy validation.
+    """
+
+
 class IQAssessmentPolicyValidator(interface.Interface):
     """
     An object that can be validate an assessment policy
@@ -1171,7 +1177,9 @@ class IQAssessmentPolicyValidator(interface.Interface):
 
     def validate(assessment_ntiid, policy):
         """
-        validates the specfied policy.
+        validates the policy for the given assessment ntiid.
+
+        :raises: :class:`AssessmentPolicyValidationError`
         """
 IQAssignmentPolicyValidator = IQAssessmentPolicyValidator  # alias for BWC
 
