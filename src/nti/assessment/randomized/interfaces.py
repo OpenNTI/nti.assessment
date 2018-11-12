@@ -63,7 +63,7 @@ ISha224RandomizedPart.setTaggedValue('_ext_is_marker_interface', True)
 
 class IQRandomizedPartGrader(IQPartGrader):
 
-    def unshuffle(value, user=None, context=None):
+    def unshuffle(value, user=None, context=None, seed=None):
         """
         unrandomize the specified value
         """
@@ -167,8 +167,8 @@ IRandomizedPartsContainer.setTaggedValue('_ext_is_marker_interface', True)
 class IQuestionIndexRange(interface.Interface):
     start = Int(title=u"start index range", min=0, required=True)
     end = Int(title=u"end index range", min=0, required=True)
-    draw = Int(title=u"number of questions to draw in range", 
-			   min=1, 
+    draw = Int(title=u"number of questions to draw in range",
+			   min=1,
 			   required=True,
                default=1)
 

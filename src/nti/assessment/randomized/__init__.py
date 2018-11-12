@@ -25,8 +25,9 @@ def get_seed(context=None):
     return result
 
 
-def randomize(user=None, context=None):
-    seed = get_seed(user)
+def randomize(user=None, context=None, seed=None):
+    if seed is None:
+        seed = get_seed(user)
     if seed is not None:
         use_sha224 = ISha224Randomized.providedBy(context)
         if use_sha224:
