@@ -38,13 +38,13 @@ def _needs_unshuffled(grader, creator):
 
 class RandomizedConnectingPartGrader(ConnectingPartGrader):
 
-    def unshuffle(self, the_dict, user=None, context=None):
+    def unshuffle(self, the_dict, user=None, context=None, seed=None):
         user = user if user else self.creator
         the_dict = {k: int(v) for k, v in the_dict.items()}
         the_dict = ConnectingPartGrader._to_int_dict(self, the_dict)
         if not _needs_unshuffled(self, user):
             return the_dict
-        generator = randomize(user=user, context=context)
+        generator = randomize(user=user, context=context, seed=seed)
         if generator is not None:
             values = list(self.part.values)
             original = {v: idx for idx, v in enumerate(values)}
@@ -82,12 +82,12 @@ class RandomizedMultipleChoiceGrader(EqualityGrader):
         else:
             return self._compare(self.solution.value, self.response)
 
-    def unshuffle(self, the_value, user=None, context=None):
+    def unshuffle(self, the_value, user=None, context=None, seed=None):
         the_value = int(the_value)
         user = user if user else self.creator
         if not _needs_unshuffled(self, user):
             return the_value
-        generator = randomize(user=user, context=context)
+        generator = randomize(user=user, context=context, seed=seed)
         if generator is not None:
             choices = list(self.part.choices)
             original = {v: idx for idx, v in enumerate(choices)}
@@ -103,12 +103,12 @@ class RandomizedMultipleChoiceGrader(EqualityGrader):
 @interface.implementer(IQRandomizedMultipleChoiceMultipleAnswerPartGrader)
 class RandomizedMultipleChoiceMultipleAnswerGrader(MultipleChoiceMultipleAnswerGrader):
 
-    def unshuffle(self, the_values, user=None, context=None):
+    def unshuffle(self, the_values, user=None, context=None, seed=None):
         user = user if user else self.creator
         the_values = sorted([int(x) for x in the_values])
         if not _needs_unshuffled(self, user):
             return the_values
-        generator = randomize(user=user, context=context)
+        generator = randomize(user=user, context=context, seed=seed)
         if generator is not None:
             choices = list(self.part.choices)
             original = {v: idx for idx, v in enumerate(choices)}
