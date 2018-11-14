@@ -57,7 +57,8 @@ def questionbank_question_index_chooser(context, questions=None, user=None):
         ranges = context.ranges or ()
         if not ranges:
             result = generator.sample(range(0, len(questions)), context.draw)
-            logger.info('question bank indexes (%s) (%s)', user, result)
+            seed = get_seed(user)
+            logger.info('question bank indexes (%s) (seed=%s) (%s)', user, seed, result)
         else:
             result = []
             for r in ranges:
