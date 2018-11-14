@@ -28,6 +28,7 @@ def get_seed(context=None):
 def randomize(user=None, context=None, seed=None):
     if seed is None:
         seed = get_seed(user)
+    seed = int(seed)
     if seed is not None:
         use_sha224 = ISha224Randomized.providedBy(context)
         if use_sha224:
@@ -57,8 +58,6 @@ def questionbank_question_index_chooser(context, questions=None, user=None):
         ranges = context.ranges or ()
         if not ranges:
             result = generator.sample(range(0, len(questions)), context.draw)
-            seed = get_seed(user)
-            logger.info('question bank indexes (%s) (seed=%s) (%s)', user, seed, result)
         else:
             result = []
             for r in ranges:
