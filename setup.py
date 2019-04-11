@@ -12,6 +12,8 @@ entry_points = {
 
 
 TESTS_REQUIRE = [
+    'fudge',
+    'nose',
     'nti.testing',
     'zope.dottedname',
     'zope.testrunner',
