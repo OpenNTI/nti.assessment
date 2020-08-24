@@ -35,6 +35,10 @@ from nti.assessment.interfaces import IQuestion
 from nti.assessment.interfaces import IQuestionSet
 from nti.assessment.interfaces import IQFillInTheBlankWithWordBankQuestion
 
+from nti.assessment.randomized.interfaces import IRandomizedPartsContainer
+
+from nti.assessment.randomized_proxy import QuestionRandomizedPartsProxy
+
 from nti.coremetadata.interfaces import IContained as INTIContained
 
 from nti.dublincore.datastructures import PersistentCreatedModDateTrackingObject
@@ -52,8 +56,6 @@ from nti.schema.fieldproperty import createDirectFieldProperties
 from nti.schema.schema import SchemaConfigured
 
 from nti.wref.interfaces import IWeakRef
-from nti.assessment.randomized.interfaces import IRandomizedPartsContainer
-from nti.assessment.randomized_proxy import QuestionRandomizedPartsProxy
 
 logger = __import__('logging').getLogger(__name__)
 

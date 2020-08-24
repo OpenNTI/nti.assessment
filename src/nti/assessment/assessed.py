@@ -34,8 +34,9 @@ from nti.assessment.interfaces import IQAssessedQuestion
 from nti.assessment.interfaces import IQuestionSubmission
 from nti.assessment.interfaces import IQAssessedQuestionSet
 
-from nti.assessment.randomized.interfaces import IQRandomizedPart
 from nti.assessment.randomized.interfaces import IRandomizedPartsContainer
+
+from nti.assessment.randomized_proxy import QuestionRandomizedPartsProxy
 
 from nti.base.interfaces import ICreated
 from nti.base.interfaces import ILastModified
@@ -51,7 +52,6 @@ from nti.schema.fieldproperty import createDirectFieldProperties
 from nti.schema.interfaces import InvalidValue
 
 from nti.schema.schema import SchemaConfigured
-from nti.assessment.randomized_proxy import QuestionRandomizedPartsProxy
 
 logger = __import__('logging').getLogger(__name__)
 
@@ -246,26 +246,7 @@ def assess_question_set_submission(set_submission, registry=component):
     """
     question_set = registry.getUtility(IQuestionSet,
                                        name=set_submission.questionSetId)
-    # For marked randomized parts question sets, mark all parts
-    # randomized and then undo post assessment.
-    if IRandomizedPartsContainer.providedBy(question_set):
-        try:
-            for question in question_set.Items:
-                for part in question.parts or ():
-                    interface.alsoProvides(part, IQRandomizedPart)
-            result = _do_assess_question_set_submission(question_set,
-                                                        set_submission,
-                                                        registry)
-        finally:
-            for question in question_set.Items:
-                for part in question.parts or ():
-                    try:
-                        interface.noLongerProvides(part, IQRandomizedPart)
-                    except ValueError:
-                        # Concrete randomized type already.
-                        pass
-    else:
-        result = _do_assess_question_set_submission(question_set,
-                                                    set_submission,
-                                                    registry)
+    result = _do_assess_question_set_submission(question_set,
+                                                set_submission,
+                                                registry)
     return result
