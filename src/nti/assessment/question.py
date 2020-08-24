@@ -52,6 +52,8 @@ from nti.schema.fieldproperty import createDirectFieldProperties
 from nti.schema.schema import SchemaConfigured
 
 from nti.wref.interfaces import IWeakRef
+from nti.assessment.randomized.interfaces import IRandomizedPartsContainer
+from nti.assessment.randomized_proxy import QuestionRandomizedPartsProxy
 
 logger = __import__('logging').getLogger(__name__)
 
@@ -69,7 +71,7 @@ class QBaseMixin(SchemaConfigured,
 
     tags = ()
     id = alias('ntiid')
-    
+
     __parent__ = None
 
     parameters = {}  # IContentTypeAware
@@ -134,21 +136,42 @@ class QQuestionSet(QBaseMixin, RecordableContainerMixin):
 
     mimeType = mime_type = QUESTION_SET_MIME_TYPE
 
+    def _maybe_proxy_wrap_question(self, question):
+        """
+        Return randomized part question proxy based on our
+        state.
+        """
+        result = question
+        if      question is not None \
+            and IRandomizedPartsContainer.providedBy(self):
+            result = QuestionRandomizedPartsProxy(question)
+        return result
+
     @property
     def Items(self):
         for question in self.questions or ():
             question = question() if IWeakRef.providedBy(question) else question
             if question is not None:
+                question = self._maybe_proxy_wrap_question(question)
                 yield question
 
     def __getitem__(self, index):
-        return self.questions[index]
+        question = self.questions[index]
+        question = self._maybe_proxy_wrap_question(question)
+        return question
+
+    def get_question_by_ntiid(self, ntiid):
+        for question in self.Items:
+            if ntiid == question.ntiid:
+                return question
 
     def __len__(self):
         return len(self.questions or ())
-    
+
     def pop(self, index):
-        return self.questions.pop(index)
+        question = self.questions.pop(index)
+        question = self._maybe_proxy_wrap_question(question)
+        return question
 
     def remove(self, question):
         ntiid = getattr(question, 'ntiid', question)

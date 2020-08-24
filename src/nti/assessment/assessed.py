@@ -51,6 +51,7 @@ from nti.schema.fieldproperty import createDirectFieldProperties
 from nti.schema.interfaces import InvalidValue
 
 from nti.schema.schema import SchemaConfigured
+from nti.assessment.randomized_proxy import QuestionRandomizedPartsProxy
 
 logger = __import__('logging').getLogger(__name__)
 
@@ -128,7 +129,7 @@ class QAssessedQuestionSet(SchemaConfigured,
     sublocations = _make_sublocations('questions')
 
 
-def assess_question_submission(submission, registry=component):
+def assess_question_submission(submission, question_set=None, registry=component):
     """
     Assess the given question submission.
 
@@ -141,6 +142,10 @@ def assess_question_submission(submission, registry=component):
             (In the future, if we have questions
             with required and/or optional parts, we would implement that check
             here).
+    :param question_set: An :class:`.interfaces.IQQuestionSet`.
+            The question set context. If present, this must be used to retrieve
+            the question being assessed. This is to ensure dynamic randomization
+            is applied correctly.
     :param registry: If given, an :class:`.IComponents`. If
             not given, the current component registry will be used.
             Used to look up the question set and question by id.
@@ -148,8 +153,25 @@ def assess_question_submission(submission, registry=component):
     :raises Invalid: If a submitted part has the wrong kind of input
             to be graded.
     """
+    question = None
+    if question_set is not None:
+        # This will return a randomized parts proxy, if applicable.
+        question = question_set.get_question_by_ntiid(submission.questionId)
 
-    question = registry.getUtility(IQuestion, name=submission.questionId)
+    registered_question = registry.getUtility(IQuestion, name=submission.questionId)
+    if question is None:
+        # If question_set is None or does not contain our question is probably only
+        # a test scenario.
+        question = registered_question
+
+    # According to tests, the registered question takes precedence. If those
+    # are unequal, we must make sure the question/parts are dynamically
+    # randomized, if necessary.
+    if question != registered_question:
+        question = registered_question
+        if IRandomizedPartsContainer.providedBy(question_set):
+            question = QuestionRandomizedPartsProxy(question)
+
     if len(question.parts) != len(submission.parts):
         raise ValueError(
             "Question (%s) and submission (%s) have different numbers of parts." %
@@ -193,12 +215,13 @@ def _do_assess_question_set_submission(question_set, set_submission, registry):
     for sub_question in set_submission.questions:
         question = registry.getUtility(IQuestion,
                                        name=sub_question.questionId)
-
         ntiid = getattr(question, 'ntiid', None)
         if     ntiid in questions_ntiids \
             or question in question_set.Items:
-            # Raises ComponentLookupError
-            sub_assessed = IQAssessedQuestion(sub_question)
+            # Important to use our context when grading
+            sub_assessed = component.queryMultiAdapter((sub_question, question_set))
+            if sub_assessed is None:
+                sub_assessed = IQAssessedQuestion(sub_question)
             assessed.append(sub_assessed)
         else:  # pragma: no cover
             logger.warn("Bad input, question (%s) not in question set (%s) (known: %s)",

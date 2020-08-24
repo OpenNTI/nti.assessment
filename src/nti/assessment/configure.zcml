@@ -154,6 +154,11 @@
 			 for=".interfaces.IQuestionSubmission"
 			 provides=".interfaces.IQAssessedQuestion" />
 
+    <adapter factory=".assessed.assess_question_submission"
+             for=".interfaces.IQuestionSubmission
+                  .interfaces.IQuestionSet"
+             provides=".interfaces.IQAssessedQuestion" />
+
 	<adapter factory=".assessed.assess_question_set_submission"
 			 for=".interfaces.IQuestionSetSubmission"
 			 provides=".interfaces.IQAssessedQuestionSet" />
