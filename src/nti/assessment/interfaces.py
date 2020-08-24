@@ -91,6 +91,8 @@ from nti.schema.field import ValidDatetime as Datetime
 from nti.schema.jsonschema import TAG_HIDDEN_IN_UI
 from nti.schema.jsonschema import TAG_REQUIRED_IN_UI
 
+from nti.contentfragments.schema import RstContentFragment
+
 NTIID_TYPE = u'NAQ'
 PART_NTIID_TYPE = u'NAQPart'
 
@@ -1722,6 +1724,9 @@ class IQSurvey(IQInquiry, ITitledContent, IQEvaluationItemContainer,
     Surveys sets are annotatable.
     """
 
+    contents = RstContentFragment(title=u"The content to present to the user, if any.",
+                                  default=u'', required=False)
+
     questions = IndexedIterable(title=u"The ordered polls in the set.",
                                 min_length=0,
                                 default=(),
@@ -1742,7 +1747,8 @@ IQSurvey['available_for_submission_ending'].setTaggedValue(TAG_REQUIRED_IN_UI, F
 IQSurvey['available_for_submission_beginning'].setTaggedValue(TAG_HIDDEN_IN_UI, False)
 IQSurvey['available_for_submission_beginning'].setTaggedValue(TAG_REQUIRED_IN_UI, False)
 
-IQSurvey.setTaggedValue('_ext_jsonschema', u'survey')
+IQSurvey['contents'].setTaggedValue(TAG_HIDDEN_IN_UI, True)
+IQSurvey['contents'].setTaggedValue(TAG_REQUIRED_IN_UI, False)
 
 
 class IQInquirySubmission(IQBaseSubmission):
