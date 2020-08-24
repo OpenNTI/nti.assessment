@@ -135,7 +135,7 @@ class QPoll(QInquiry):
 
 
 @interface.implementer(IQSurvey)
-@EqHash('title', 'questions', superhash=True)
+@EqHash('title', 'contents', 'questions', superhash=True)
 class QSurvey(QInquiry):
     createDirectFieldProperties(IQSurvey)
 

@@ -52,6 +52,8 @@ from nti.assessment.survey import QSurveySubmission
 from nti.assessment.survey import QAggregatedMultipleChoicePart
 from nti.assessment.survey import QAggregatedMultipleChoiceMultipleAnswerPart
 
+from nti.contentfragments.interfaces import RstContentFragment
+
 from nti.externalization.externalization import toExternalObject
 
 from nti.externalization.internalization import find_factory_for
@@ -104,6 +106,13 @@ class TestSurvey(AssessmentTestCase):
         assert_that(survey,
                     externalizes(has_entries('Class', 'Survey',
                                              'MimeType', 'application/vnd.nextthought.nasurvey')))
+
+        survey_contents = '===========\n' \
+                          'Test Survey\n' \
+                          '===========\n'
+        update_from_external_object(survey, {'contents': unicode(survey_contents)})
+        assert_that(survey.contents, instance_of(RstContentFragment))
+        assert_that(survey.contents, is_(survey_contents))
 
         assert_that(QPollSubmission(), verifiably_provides(IQPollSubmission))
         assert_that(QPollSubmission(),
