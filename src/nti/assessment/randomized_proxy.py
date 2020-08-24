@@ -12,6 +12,8 @@ from zope import interface
 
 from zope.proxy import ProxyBase
 
+from zope.proxy.decorator import DecoratorSpecificationDescriptor
+
 from nti.assessment.randomized.interfaces import IQRandomizedPart
 
 logger = __import__('logging').getLogger(__name__)
@@ -48,3 +50,5 @@ class RandomizedPartProxy(ProxyBase):
     def __init__(self, base):
         ProxyBase.__init__(self, base)
         self.part = base
+
+    __providedBy__ = DecoratorSpecificationDescriptor()
