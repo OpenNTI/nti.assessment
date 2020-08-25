@@ -146,7 +146,7 @@ class _QuestionIterableWrapper(Sequence):
     __slots__ = ('_storage',)
 
     def __init__(self, questions):
-        self._storage = questions or ()
+        self._storage = questions
 
     def __len__(self):
         return len(self._storage)
@@ -193,9 +193,13 @@ class QQuestionSet(QBaseMixin, RecordableContainerMixin):
     def _questions(self):
         return self.__dict__.get('questions')
 
+    @_questions.setter
+    def _questions(self, val):
+        self.__dict__['questions'] = val
+
     @property
     def questions(self):
-        result = self._questions or ()
+        result = self._questions
         if result:
             if IRandomizedPartsContainer.providedBy(self):
                 result = _ProxyQuestionIterableWrapper(result)
@@ -205,18 +209,19 @@ class QQuestionSet(QBaseMixin, RecordableContainerMixin):
 
     @questions.setter
     def questions(self, val):
+        val = PersistentList(val) if val is not None else val
         self.__dict__['questions'] = val
         self._p_changed = True
 
     @property
     def Items(self):
-        return iter(self.questions)
+        return iter(self.questions or ())
 
     def __getitem__(self, index):
         return self.questions[index]
 
     def get_question_by_ntiid(self, ntiid):
-        for question in self.questions:
+        for question in self.questions or ():
             if ntiid == question.ntiid:
                 return question
 
@@ -224,11 +229,14 @@ class QQuestionSet(QBaseMixin, RecordableContainerMixin):
         return len(self.questions or ())
 
     def pop(self, index):
-        return self._questions.pop(index)
+        try:
+            return self._questions.pop(index)
+        except (TypeError, AttributeError):
+            raise IndexError()
 
     def remove(self, question):
         ntiid = getattr(question, 'ntiid', question)
-        for idx, question in enumerate(tuple(self.questions)):  # mutating
+        for idx, question in enumerate(tuple(self.questions or ())):  # mutating
             if question.ntiid == ntiid:
                 return self.pop(idx)
         return None
@@ -238,8 +246,8 @@ class QQuestionSet(QBaseMixin, RecordableContainerMixin):
 
     def append(self, item):
         item = self._validate_insert(item)
-        if not self.questions:
-            self.questions = PersistentList()
+        if '_questions' not in self.__dict__:
+            self._questions = PersistentList()
         self._questions.append(item)
     add = append
 
