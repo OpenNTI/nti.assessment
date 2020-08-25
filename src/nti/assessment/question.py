@@ -194,7 +194,7 @@ class QQuestionSet(QBaseMixin, RecordableContainerMixin):
         return self.questions[index]
 
     def get_question_by_ntiid(self, ntiid):
-        for question in self.Items:
+        for question in self.questions:
             if ntiid == question.ntiid:
                 return question
 

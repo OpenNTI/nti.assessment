@@ -16,9 +16,12 @@ from zope.proxy.decorator import SpecificationDecoratorBase
 
 from nti.assessment.randomized.interfaces import IQRandomizedPart
 
+from nti.externalization.persistence import NoPickle
+
 logger = __import__('logging').getLogger(__name__)
 
 
+@NoPickle
 class QuestionRandomizedPartsProxy(SpecificationDecoratorBase):
     """
     A proxy for :class:`IQuestion` objects that will return
@@ -42,6 +45,7 @@ class QuestionRandomizedPartsProxy(SpecificationDecoratorBase):
         return RandomizedPartProxy(self.question.parts[index])
 
 
+@NoPickle
 @interface.implementer(IQRandomizedPart)
 class RandomizedPartProxy(SpecificationDecoratorBase):
     """
