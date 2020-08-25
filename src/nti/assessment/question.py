@@ -126,10 +126,39 @@ class QQuestion(QBaseMixin):
                 x.__parent__ = self  # take ownership
 
 
+class _QuestionIterableWrapper(list):
+
+    def __init__(self, questions):
+        self.questions = questions
+
+    def __len__(self):
+        return len(self.questions)
+
+    def _transform(self, question):
+        if IWeakRef.providedBy(question):
+            question = question()
+        return question
+
+    def __iter__(self):
+        for question in self.questions:
+            yield self._transform(question)
+
+    def __getitem__(self, index):
+        return self._transform(self.questions[index])
+
+
+class _ProxyQuestionIterableWrapper(_QuestionIterableWrapper):
+
+    def _transform(self, question):
+        result = super(_ProxyQuestionIterableWrapper, self)._transform(question)
+        if result is not None:
+            result = QuestionRandomizedPartsProxy(result)
+        return result
+
+
 @interface.implementer(IQuestionSet)
 class QQuestionSet(QBaseMixin, RecordableContainerMixin):
 
-    questions = ()
     parts = alias('questions')
 
     createDirectFieldProperties(IQuestionSet)
@@ -138,29 +167,31 @@ class QQuestionSet(QBaseMixin, RecordableContainerMixin):
 
     mimeType = mime_type = QUESTION_SET_MIME_TYPE
 
-    def _maybe_proxy_wrap_question(self, question):
-        """
-        Return randomized part question proxy based on our
-        state.
-        """
-        result = question
-        if      question is not None \
-            and IRandomizedPartsContainer.providedBy(self):
-            result = QuestionRandomizedPartsProxy(question)
+    @property
+    def _questions(self):
+        return self.__dict__.get('questions')
+
+    @property
+    def questions(self):
+        result = self._questions or ()
+        if result:
+            if IRandomizedPartsContainer.providedBy(self):
+                result = _ProxyQuestionIterableWrapper(result)
+            else:
+                result = _QuestionIterableWrapper(result)
         return result
+
+    @questions.setter
+    def questions(self, val):
+        self.__dict__['questions'] = val
+        self._p_changed = True
 
     @property
     def Items(self):
-        for question in self.questions or ():
-            question = question() if IWeakRef.providedBy(question) else question
-            if question is not None:
-                question = self._maybe_proxy_wrap_question(question)
-                yield question
+        return iter(self.questions)
 
     def __getitem__(self, index):
-        question = self.questions[index]
-        question = self._maybe_proxy_wrap_question(question)
-        return question
+        return self.questions[index]
 
     def get_question_by_ntiid(self, ntiid):
         for question in self.Items:
@@ -171,15 +202,13 @@ class QQuestionSet(QBaseMixin, RecordableContainerMixin):
         return len(self.questions or ())
 
     def pop(self, index):
-        question = self.questions.pop(index)
-        question = self._maybe_proxy_wrap_question(question)
-        return question
+        return self._questions.pop(index)
 
     def remove(self, question):
         ntiid = getattr(question, 'ntiid', question)
         for idx, question in enumerate(tuple(self.questions)):  # mutating
             if question.ntiid == ntiid:
-                return self.questions.pop(idx)
+                return self.pop(idx)
         return None
 
     def _validate_insert(self, item):
@@ -187,8 +216,9 @@ class QQuestionSet(QBaseMixin, RecordableContainerMixin):
 
     def append(self, item):
         item = self._validate_insert(item)
-        self.questions = PersistentList() if not self.questions else self.questions
-        self.questions.append(item)
+        if not self.questions:
+            self.questions = PersistentList()
+        self._questions.append(item)
     add = append
 
     def insert(self, index, item):
@@ -200,7 +230,7 @@ class QQuestionSet(QBaseMixin, RecordableContainerMixin):
             # Default to append.
             self.append(item)
         else:
-            self.questions.insert(index, item)
+            self._questions.insert(index, item)
 
     @property
     def question_count(self):

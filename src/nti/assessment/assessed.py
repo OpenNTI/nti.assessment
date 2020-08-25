@@ -219,7 +219,8 @@ def _do_assess_question_set_submission(question_set, set_submission, registry):
         if     ntiid in questions_ntiids \
             or question in question_set.Items:
             # Important to use our context when grading
-            sub_assessed = component.queryMultiAdapter((sub_question, question_set))
+            sub_assessed = component.queryMultiAdapter((sub_question, question_set),
+                                                       IQAssessedQuestion)
             if sub_assessed is None:
                 sub_assessed = IQAssessedQuestion(sub_question)
             assessed.append(sub_assessed)
