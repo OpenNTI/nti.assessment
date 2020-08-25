@@ -8,9 +8,14 @@ from __future__ import division
 from __future__ import print_function
 from __future__ import absolute_import
 
+try:
+    from collections.abc import Sequence
+except ImportError: # pragma: no cover
+    # Python 2
+    from collections import Sequence
+
 import six
 from collections import Mapping
-from collections import Sequence
 
 from zope import component
 from zope import interface

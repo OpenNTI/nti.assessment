@@ -8,6 +8,12 @@ from __future__ import division
 from __future__ import print_function
 from __future__ import absolute_import
 
+try:
+    from collections.abc import Sequence
+except ImportError: # pragma: no cover
+    # Python 2
+    from collections import Sequence
+
 from persistent.list import PersistentList
 
 from ZODB.POSException import ConnectionStateError
@@ -42,6 +48,10 @@ from nti.assessment.randomized_proxy import QuestionRandomizedPartsProxy
 from nti.coremetadata.interfaces import IContained as INTIContained
 
 from nti.dublincore.datastructures import PersistentCreatedModDateTrackingObject
+
+from nti.externalization.externalization import to_external_object
+
+from nti.externalization.persistence import NoPickle
 
 from nti.property.property import alias
 
@@ -126,28 +136,40 @@ class QQuestion(QBaseMixin):
                 x.__parent__ = self  # take ownership
 
 
-class _QuestionIterableWrapper(list):
+@NoPickle
+class _QuestionIterableWrapper(Sequence):
+    """
+    A wrapper to a sequence of questions that ensures possible
+    weak refs are resolved.
+    """
+
+    __slots__ = ('_storage',)
 
     def __init__(self, questions):
-        self.questions = questions
+        self._storage = questions or ()
 
     def __len__(self):
-        return len(self.questions)
+        return len(self._storage)
 
     def _transform(self, question):
         if IWeakRef.providedBy(question):
             question = question()
         return question
 
-    def __iter__(self):
-        for question in self.questions:
-            yield self._transform(question)
-
     def __getitem__(self, index):
-        return self._transform(self.questions[index])
+        result = self._storage[index]
+        return self._transform(result)
+
+    def toExternalObject(self, *args, **kwargs):
+        return tuple(to_external_object(x, *args, **kwargs) for x in self)
 
 
+@NoPickle
 class _ProxyQuestionIterableWrapper(_QuestionIterableWrapper):
+    """
+    Used by :class:`IRandomizedPartsContainer` question sets, this will
+    return :class:`QuestionRandomizedPartsProxy` question objects.
+    """
 
     def _transform(self, question):
         result = super(_ProxyQuestionIterableWrapper, self)._transform(question)
