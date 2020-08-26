@@ -8,6 +8,12 @@ from __future__ import division
 from __future__ import print_function
 from __future__ import absolute_import
 
+try:
+    from collections.abc import Sequence
+except ImportError: # pragma: no cover
+    # Python 2
+    from collections import Sequence
+
 from persistent.list import PersistentList
 
 from ZODB.POSException import ConnectionStateError
@@ -35,9 +41,17 @@ from nti.assessment.interfaces import IQuestion
 from nti.assessment.interfaces import IQuestionSet
 from nti.assessment.interfaces import IQFillInTheBlankWithWordBankQuestion
 
+from nti.assessment.randomized.interfaces import IRandomizedPartsContainer
+
+from nti.assessment.randomized_proxy import QuestionRandomizedPartsProxy
+
 from nti.coremetadata.interfaces import IContained as INTIContained
 
 from nti.dublincore.datastructures import PersistentCreatedModDateTrackingObject
+
+from nti.externalization.externalization import to_external_object
+
+from nti.externalization.persistence import NoPickle
 
 from nti.property.property import alias
 
@@ -69,7 +83,7 @@ class QBaseMixin(SchemaConfigured,
 
     tags = ()
     id = alias('ntiid')
-    
+
     __parent__ = None
 
     parameters = {}  # IContentTypeAware
@@ -122,10 +136,51 @@ class QQuestion(QBaseMixin):
                 x.__parent__ = self  # take ownership
 
 
+@NoPickle
+class _QuestionIterableWrapper(Sequence):
+    """
+    A wrapper to a sequence of questions that ensures possible
+    weak refs are resolved.
+    """
+
+    __slots__ = ('_storage',)
+
+    def __init__(self, questions):
+        self._storage = questions
+
+    def __len__(self):
+        return len(self._storage)
+
+    def _transform(self, question):
+        if IWeakRef.providedBy(question):
+            question = question()
+        return question
+
+    def __getitem__(self, index):
+        result = self._storage[index]
+        return self._transform(result)
+
+    def toExternalObject(self, *args, **kwargs):
+        return tuple(to_external_object(x, *args, **kwargs) for x in self)
+
+
+@NoPickle
+class _ProxyQuestionIterableWrapper(_QuestionIterableWrapper):
+    """
+    Used by :class:`IRandomizedPartsContainer` question sets, this will
+    return :class:`QuestionRandomizedPartsProxy` question objects.
+    """
+
+    def _transform(self, question):
+        result = super(_ProxyQuestionIterableWrapper, self)._transform(question)
+        if result is not None:
+            result = QuestionRandomizedPartsProxy(result)
+        return result
+
+
 @interface.implementer(IQuestionSet)
 class QQuestionSet(QBaseMixin, RecordableContainerMixin):
 
-    questions = ()
     parts = alias('questions')
 
     createDirectFieldProperties(IQuestionSet)
@@ -135,26 +190,63 @@ class QQuestionSet(QBaseMixin, RecordableContainerMixin):
     mimeType = mime_type = QUESTION_SET_MIME_TYPE
 
     @property
+    def _questions(self):
+        return self.__dict__.get('questions')
+
+    @_questions.setter
+    def _questions(self, val):
+        self.__dict__['questions'] = PersistentList(val or ())
+        self._p_changed = True
+
+    @property
+    def questions(self):
+        """
+        Returns a view into the underlying questions. This
+        result set is immutable.
+
+        `questions` in our __dict__ is the source of truth.
+        The `_questions` properties handle updating this dict value.
+        The questions props will make sure we:
+        * return a non-null view into our questions
+        * pass through the update to the `_questions.setter`.
+        """
+        result = self._questions or ()
+        if IRandomizedPartsContainer.providedBy(self):
+            result = _ProxyQuestionIterableWrapper(result)
+        else:
+            result = _QuestionIterableWrapper(result)
+        return result
+
+    @questions.setter
+    def questions(self, val):
+        self._questions = val
+
+    @property
     def Items(self):
-        for question in self.questions or ():
-            question = question() if IWeakRef.providedBy(question) else question
-            if question is not None:
-                yield question
+        return iter(self.questions or ())
 
     def __getitem__(self, index):
         return self.questions[index]
 
+    def get_question_by_ntiid(self, ntiid):
+        for question in self.questions or ():
+            if ntiid == question.ntiid:
+                return question
+
     def __len__(self):
         return len(self.questions or ())
-    
+
     def pop(self, index):
-        return self.questions.pop(index)
+        try:
+            return self._questions.pop(index)
+        except (TypeError, AttributeError):
+            raise IndexError()
 
     def remove(self, question):
         ntiid = getattr(question, 'ntiid', question)
-        for idx, question in enumerate(tuple(self.questions)):  # mutating
+        for idx, question in enumerate(tuple(self.questions or ())):  # mutating
             if question.ntiid == ntiid:
-                return self.questions.pop(idx)
+                return self.pop(idx)
         return None
 
     def _validate_insert(self, item):
@@ -162,11 +254,16 @@ class QQuestionSet(QBaseMixin, RecordableContainerMixin):
 
     def append(self, item):
         item = self._validate_insert(item)
-        self.questions = PersistentList() if not self.questions else self.questions
-        self.questions.append(item)
+        if 'questions' not in self.__dict__:
+            self._questions = PersistentList()
+        self._questions.append(item)
     add = append
 
     def insert(self, index, item):
+        """
+        Insert a question at the index. This is the API
+        method to add a new question to a question set.
+        """
         # Remove from our list if it exists, and then insert at.
         self.remove(item)
         # Only validate after remove.
@@ -175,7 +272,7 @@ class QQuestionSet(QBaseMixin, RecordableContainerMixin):
             # Default to append.
             self.append(item)
         else:
-            self.questions.insert(index, item)
+            self._questions.insert(index, item)
 
     @property
     def question_count(self):

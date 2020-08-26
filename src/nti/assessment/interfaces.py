@@ -846,6 +846,13 @@ class IQuestionSet(IQAssessment, ITitledContent, IQEvaluationItemContainer,
         """
         Insert the specified :class:`IQuestion` item at the specified index
         """
+
+    def get_question_by_ntiid(ntiid):
+        """
+        Return the :class:`IQuestion` by the given ntiid or None if not found.
+        """
+
+
 IQuestionSet.setTaggedValue('_ext_jsonschema', u'questionset')
 
 
