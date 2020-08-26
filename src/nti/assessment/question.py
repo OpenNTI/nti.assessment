@@ -195,7 +195,7 @@ class QQuestionSet(QBaseMixin, RecordableContainerMixin):
 
     @_questions.setter
     def _questions(self, val):
-        self.__dict__['questions'] = val
+        self.__dict__['questions'] = PersistentList(val or ())
         self._p_changed = True
 
     @property
@@ -203,6 +203,12 @@ class QQuestionSet(QBaseMixin, RecordableContainerMixin):
         """
         Returns a view into the underlying questions. This
         result set is immutable.
+
+        `questions` in our __dict__ is the source of truth.
+        The `_questions` properties handle updating this dict value.
+        The questions props will make sure we:
+        * return a non-null view into our questions
+        * pass through the update to the `_questions.setter`.
         """
         result = self._questions or ()
         if IRandomizedPartsContainer.providedBy(self):
@@ -213,7 +219,6 @@ class QQuestionSet(QBaseMixin, RecordableContainerMixin):
 
     @questions.setter
     def questions(self, val):
-        val = PersistentList(val or ())
         self._questions = val
 
     @property
