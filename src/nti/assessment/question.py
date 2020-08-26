@@ -196,22 +196,25 @@ class QQuestionSet(QBaseMixin, RecordableContainerMixin):
     @_questions.setter
     def _questions(self, val):
         self.__dict__['questions'] = val
+        self._p_changed = True
 
     @property
     def questions(self):
-        result = self._questions
-        if result:
-            if IRandomizedPartsContainer.providedBy(self):
-                result = _ProxyQuestionIterableWrapper(result)
-            else:
-                result = _QuestionIterableWrapper(result)
+        """
+        Returns a view into the underlying questions. This
+        result set is immutable.
+        """
+        result = self._questions or ()
+        if IRandomizedPartsContainer.providedBy(self):
+            result = _ProxyQuestionIterableWrapper(result)
+        else:
+            result = _QuestionIterableWrapper(result)
         return result
 
     @questions.setter
     def questions(self, val):
-        val = PersistentList(val) if val is not None else val
-        self.__dict__['questions'] = val
-        self._p_changed = True
+        val = PersistentList(val or ())
+        self._questions = val
 
     @property
     def Items(self):
@@ -246,12 +249,16 @@ class QQuestionSet(QBaseMixin, RecordableContainerMixin):
 
     def append(self, item):
         item = self._validate_insert(item)
-        if '_questions' not in self.__dict__:
+        if 'questions' not in self.__dict__:
             self._questions = PersistentList()
         self._questions.append(item)
     add = append
 
     def insert(self, index, item):
+        """
+        Insert a question at the index. This is the API
+        method to add a new question to a question set.
+        """
         # Remove from our list if it exists, and then insert at.
         self.remove(item)
         # Only validate after remove.
