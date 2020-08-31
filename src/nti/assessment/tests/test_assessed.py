@@ -2,7 +2,6 @@
 # -*- coding: utf-8 -*-
 
 from __future__ import print_function, absolute_import, division
-__docformat__ = "restructuredtext en"
 
 # disable: accessing protected members, too many methods
 # pylint: disable=W0212,R0904
@@ -19,6 +18,8 @@ from hamcrest import assert_that
 from hamcrest import has_entries
 from hamcrest import greater_than
 from hamcrest import has_property
+
+import fudge
 
 from nti.testing.matchers import verifiably_provides
 
@@ -45,6 +46,8 @@ from nti.assessment.parts import QMultipleChoicePart
 
 from nti.assessment.question import QQuestion
 from nti.assessment.question import QQuestionSet
+
+from nti.assessment.randomized.interfaces import IRandomizedPartsContainer
 
 from nti.assessment.response import QUploadedFile
 from nti.assessment.response import QModeledContentResponse
@@ -127,7 +130,7 @@ class TestAssessedQuestion(AssessmentTestCase):
         result = IQAssessedQuestion(sub)
         assert_that(result, has_property('questionId', "1"))
         assert_that(result,
-                    has_property('parts', 
+                    has_property('parts',
                                  contains(QAssessedPart(submittedResponse=u'correct',
                                                         assessedValue=1.0))))
 
@@ -312,7 +315,7 @@ class TestAssessedQuestionSet(AssessmentTestCase):
         assert_that(result,
                     has_property('questions',
                                  contains(has_property('parts',
-                                                       contains(QAssessedPart(submittedResponse=u'correct', 
+                                                       contains(QAssessedPart(submittedResponse=u'correct',
                                                                               assessedValue=1.0))))))
         # consistent hashing
         assert_that(hash(result), is_(hash(result)))
@@ -365,9 +368,9 @@ class TestAssessedQuestionSet(AssessmentTestCase):
         result = IQAssessedQuestionSet(set_sub)
         assert_that(has_submitted_file(result), is_(False))
         assert_that(result, has_property('questionSetId', "2"))
-        assert_that(result, 
+        assert_that(result,
                     has_property('questions',
-                                 contains(has_property('parts', 
+                                 contains(has_property('parts',
                                                        contains(QAssessedPart(submittedResponse=u'correct2',
                                                                               assessedValue=1.0))))))
 
@@ -398,11 +401,55 @@ class TestAssessedQuestionSet(AssessmentTestCase):
         result = IQAssessedQuestionSet(set_sub)
         assert_that(has_submitted_file(result), is_(False))
         assert_that(result, has_property('questionSetId', "2"))
-        assert_that(result, 
+        assert_that(result,
                     has_property('questions',
-                                 contains(has_property('parts', 
-                                                       contains(QAssessedPart(submittedResponse=u'correct', 
+                                 contains(has_property('parts',
+                                                       contains(QAssessedPart(submittedResponse=u'correct',
                                                                               assessedValue=1.0))))))
 
         ext_obj = toExternalObject(result)
         assert_that(ext_obj, has_entry('questions', has_length(1)))
+
+    @fudge.patch("nti.assessment.randomized.get_seed")
+    def test_assess_randomized_proxy(self, mock_get_seed):
+        """
+        With a marked randomized-parts question set, validate assessment.
+        """
+        mock_get_seed.is_callable().returns('34870983478047803')
+        solution = QMultipleChoiceSolution(1)
+        choices = (u"A", u"B", u"C", u"D", u"E", u"F")
+        part = QMultipleChoicePart(solutions=(solution,),
+                                   choices=list(choices))
+        question = QQuestion(parts=(part,))
+        ntiid = u'tag:nextthought.com,2015-11-30:Test_Rand_Proxy'
+        question.ntiid = ntiid
+        question_set = QQuestionSet(questions=(question,))
+        interface.alsoProvides(question_set, IRandomizedPartsContainer)
+
+        component.provideUtility(question,
+                                 provides=IQuestion,
+                                 name=ntiid)
+        component.provideUtility(question_set,
+                                 provides=IQuestionSet,
+                                 name="2")
+
+        # Incorrect
+        sub = QuestionSubmission(questionId=ntiid, parts=(1,))
+        set_sub = QuestionSetSubmission(questionSetId=u"2", questions=(sub,))
+        result = IQAssessedQuestionSet(set_sub)
+        assert_that(result, has_property('questionSetId', "2"))
+        assert_that(result,
+                    has_property('questions',
+                                 contains(has_property('parts',
+                                                       contains(QAssessedPart(submittedResponse=1,
+                                                                              assessedValue=0.0))))))
+
+        # `B` is index 5 with this seed
+        sub.parts = (5,)
+        result = IQAssessedQuestionSet(set_sub)
+        assert_that(result, has_property('questionSetId', "2"))
+        assert_that(result,
+                    has_property('questions',
+                                 contains(has_property('parts',
+                                                       contains(QAssessedPart(submittedResponse=5,
+                                                                              assessedValue=1.0))))))
