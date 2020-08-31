@@ -132,6 +132,7 @@ class _QModeledContentResponseUpdater(object):
 class _QInquiryUpdater(object):
 
     __slots__ = ('obj',)
+    __external_oids__ = ('parts', 'questions')
 
     def __init__(self, obj):
         self.obj = obj
