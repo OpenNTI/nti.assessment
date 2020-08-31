@@ -11,6 +11,7 @@ from zope import interface
 
 from zope.proxy import ProxyBase
 from zope.proxy import non_overridable
+from zope.proxy import getProxiedObject
 
 from zope.proxy.decorator import SpecificationDecoratorBase
 
@@ -65,3 +66,22 @@ class RandomizedPartProxy(SpecificationDecoratorBase):
     @property
     def randomized(self):
         return True
+
+    @non_overridable
+    def grade(self, *args, **kwargs):
+        """
+        Must go through our proxy to ensure we end up
+        checking the proxy for randomized attrs in this
+        call chain.
+
+        XXX: This is fragile. We probably need to refactor the grading logic.
+        """
+        wrapped = getProxiedObject(self)
+        grade_func = type(wrapped).grade
+        return grade_func(self, *args, **kwargs)
+
+    @non_overridable
+    def _grade(self, *args, **kwargs):
+        wrapped = getProxiedObject(self)
+        grade_func = type(wrapped)._grade
+        return grade_func(self, *args, **kwargs)

@@ -197,6 +197,8 @@ class QPart(QNonGradablePart):
     randomized = property(_get_randomzied, _set_randomized)
 
     def grade(self, response, creator=None):
+        # XXX: Care must be taken not to change the grading call chain
+        # within a part. See `nti.assessment.randomized_proxy`.
         if self.response_interface is not None:
             # pylint: disable=not-callable
             response = self.response_interface(response)
@@ -221,6 +223,8 @@ class QPart(QNonGradablePart):
         return self.weight * solution.weight
 
     def _grade(self, solution, response, creator):
+        # XXX: Care must be taken not to change the grading call chain
+        # within a part. See `nti.assessment.randomized_proxy`.
         # pylint: disable=unused-variable
         __traceback_info__ = solution, response, self.grader_name
         grader = grader_for_solution_and_response(self, solution,
