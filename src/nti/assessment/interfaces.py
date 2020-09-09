@@ -1727,6 +1727,9 @@ class IQSurvey(IQInquiry, ITitledContent, IQEvaluationItemContainer,
     contents = RstContentFragment(title=u"The content to present to the user, if any.",
                                   default=u'', required=False)
 
+    description = Text(title=u"The human-readable description",
+                       default=u'')
+
     questions = IndexedIterable(title=u"The ordered polls in the set.",
                                 min_length=0,
                                 default=(),
