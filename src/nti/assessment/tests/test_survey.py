@@ -89,6 +89,24 @@ class TestSurvey(AssessmentTestCase):
         assert_that(obj, has_property('content', is_('foo')))
         assert_that(obj.parts[0], instance_of(QNonGradableMultipleChoicePart))
 
+    def test_internalize_survey(self):
+        part = QNonGradableMultipleChoicePart(choices=[u''], content=u'here')
+        poll = QPoll(parts=(part,), content=u'foo')
+        survey = QSurvey(questions=(poll,), description=u'survey desc')
+        ext_obj = toExternalObject(survey)
+        factory = find_factory_for(ext_obj)
+        obj = factory()
+        update_from_external_object(obj, ext_obj, notify=False)
+        assert_that(obj, has_property('description', is_('survey desc')))
+        assert_that(obj.questions[0], instance_of(QPoll))
+
+        survey_contents = '===========\n' \
+                          'Test Survey\n' \
+                          '===========\n'
+        update_from_external_object(survey, {'contents': unicode(survey_contents)})
+        assert_that(survey.contents, instance_of(RstContentFragment))
+        assert_that(survey.contents, is_(survey_contents))
+
     def test_externalizes(self):
         part = QNonGradableFreeResponsePart()
         poll = QPoll(parts=(part,))
@@ -105,14 +123,8 @@ class TestSurvey(AssessmentTestCase):
                     is_not(none()))
         assert_that(survey,
                     externalizes(has_entries('Class', 'Survey',
-                                             'MimeType', 'application/vnd.nextthought.nasurvey')))
-
-        survey_contents = '===========\n' \
-                          'Test Survey\n' \
-                          '===========\n'
-        update_from_external_object(survey, {'contents': unicode(survey_contents)})
-        assert_that(survey.contents, instance_of(RstContentFragment))
-        assert_that(survey.contents, is_(survey_contents))
+                                             'MimeType', 'application/vnd.nextthought.nasurvey',
+                                             'description', '')))
 
         assert_that(QPollSubmission(), verifiably_provides(IQPollSubmission))
         assert_that(QPollSubmission(),
