@@ -36,6 +36,7 @@ from nti.assessment.interfaces import IQuestionSubmission
 from nti.assessment.interfaces import IQAssessedQuestionSet
 from nti.assessment.interfaces import IQuestionSetSubmission
 from nti.assessment.interfaces import IQPartSolutionsExternalizer
+from nti.assessment.interfaces import IQPoll
 
 from nti.assessment.interfaces import IQPollSubmission
 from nti.assessment.interfaces import IQSurveySubmission
@@ -355,6 +356,7 @@ class _EvaluationExporter(object):
         return result
 
 
+@component.adapter(IQPoll)
 @component.adapter(IQuestion)
 @component.adapter(IQAssignment)
 @interface.implementer(IInternalObjectExternalizer)
@@ -373,6 +375,7 @@ class EvalWithPartsExporter(_EvaluationExporter):
 _EvalWithPartsExporter = EvalWithPartsExporter
 
 
+@component.adapter(IQSurvey)
 @component.adapter(IQuestionSet)
 @interface.implementer(IInternalObjectExternalizer)
 class _QuestionSetExporter(_EvalWithPartsExporter):

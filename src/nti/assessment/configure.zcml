@@ -494,11 +494,19 @@
 			 name="exporter" />
 
 	<adapter factory=".externalization._EvalWithPartsExporter"
+			 for=".interfaces.IQPoll"
+			 name="exporter" />
+
+	<adapter factory=".externalization._EvalWithPartsExporter"
 			 for=".interfaces.IQAssignment"
 			 name="exporter" />
 
 	<adapter factory=".externalization._QuestionSetExporter"
 			 for=".interfaces.IQuestionSet"
+			 name="exporter" />
+
+	<adapter factory=".externalization._QuestionSetExporter"
+			 for=".interfaces.IQSurvey"
 			 name="exporter" />
 
 </configure>
