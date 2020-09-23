@@ -1685,7 +1685,13 @@ class IQInquiry(IQSubmittable, IQEvaluation, IAttributeAnnotatable, IReportConte
                          default=False)
 
 
-class IQPoll(IQInquiry, IFiniteSequence):
+class IQNoSolutions(interface.Interface):
+    """
+    Used to indicate that solutions are not used for the underlying parts
+    """
+
+
+class IQPoll(IQNoSolutions, IQInquiry, IFiniteSequence):
     """
     A poll question consists of one or more parts (typically one).
     It may have prefacing text. It may have other metadata, such as what
