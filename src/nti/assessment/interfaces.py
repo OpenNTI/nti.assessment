@@ -1744,9 +1744,12 @@ class IQSurvey(IQInquiry, ITitledContent, IQEvaluationItemContainer,
     question_count = interface.Attribute("Question/Poll count")
     question_count.setTaggedValue('_ext_excluded_out', True)
 
+    title = TextLine(title=u"Survey title", required=True,
+                     min_length=1, max_length=140)
+
 
 IQSurvey['title'].setTaggedValue(TAG_HIDDEN_IN_UI, False)
-IQSurvey['title'].setTaggedValue(TAG_REQUIRED_IN_UI, False)
+IQSurvey['title'].setTaggedValue(TAG_REQUIRED_IN_UI, True)
 IQSurvey['closed'].setTaggedValue(TAG_HIDDEN_IN_UI, False)
 IQSurvey['closed'].setTaggedValue(TAG_REQUIRED_IN_UI, False)
 IQSurvey['disclosure'].setTaggedValue(TAG_HIDDEN_IN_UI, False)
