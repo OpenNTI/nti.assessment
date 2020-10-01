@@ -1939,3 +1939,18 @@ class QuestionMovedEvent(ObjectEvent):
         self.index = index
         self.principal = principal
         self.old_parent_ntiid = old_parent_ntiid
+
+
+class IEvaluationImporterUpdater(interface.Interface):
+    """
+    Used as a subscription adapter to process additional information
+    while importing an evaluation object
+    """
+
+    def updateFromExternalObject(eval_obj, externalObject, *args, **kwargs):
+        """
+        Update the evaluation object from the external object.
+
+        :param eval_obj: The evaluation that is being imported.
+        :param externalObject: The external source
+        """
