@@ -8,9 +8,13 @@ from __future__ import division
 from __future__ import print_function
 from __future__ import absolute_import
 
+import base64
+
 import six
 import collections
 from curses.ascii import isctrl
+
+import zlib
 
 from zope import component
 from zope import interface
@@ -25,6 +29,9 @@ from nti.assessment.interfaces import IWordEntry
 from nti.assessment.interfaces import IQModeledContentResponse
 from nti.assessment.interfaces import IQFillInTheBlankShortAnswerSolution
 from nti.assessment.interfaces import IQFillInTheBlankWithWordBankSolution
+from nti.assessment.interfaces import IQSurvey
+
+from nti.externalization._compat import text_
 
 from nti.externalization.datastructures import InterfaceObjectIO
 
@@ -145,3 +152,28 @@ class _QInquiryUpdater(object):
                     IQInquiry).updateFromExternalObject(parsed)
         hook = ntiid_object_hook(self.obj, parsed)
         return result or hook
+
+
+def decode_content(content, safe=False):
+    result = content
+    try:
+        if result:
+            decoded = base64.b64decode(result)
+            result = text_(zlib.decompress(decoded))
+    except Exception:  # pylint: disable=broad-except
+        if not safe:
+            raise
+    return result
+
+
+@component.adapter(IQSurvey)
+@interface.implementer(IInternalObjectUpdater)
+class _SurveyUpdater(_QInquiryUpdater):
+
+    def updateFromExternalObject(self, parsed, *unused_args, **unused_kwargs):
+        if 'contents' in parsed and parsed.get('encoded') is True:
+            parsed['contents'] = decode_content(parsed['contents'])
+
+        return super(_SurveyUpdater, self).updateFromExternalObject(parsed,
+                                                                    *unused_args,
+                                                                    **unused_kwargs)

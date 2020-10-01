@@ -386,7 +386,7 @@
 			 for=".interfaces.IQPoll"
 			 provides="nti.externalization.interfaces.IInternalObjectUpdater" />
 
-	<adapter factory=".internalization._QInquiryUpdater"
+	<adapter factory=".internalization._SurveyUpdater"
 			 for=".interfaces.IQSurvey"
 			 provides="nti.externalization.interfaces.IInternalObjectUpdater" />
 

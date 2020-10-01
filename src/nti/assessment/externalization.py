@@ -51,6 +51,8 @@ from nti.assessment.interfaces import IQFillInTheBlankWithWordBankSolution
 from nti.assessment.response import QUploadedFile
 from nti.assessment.response import QUploadedImageFile
 
+from nti.contentlibrary.utils import operate_encode_content
+
 from nti.externalization.datastructures import InterfaceObjectIO
 
 from nti.externalization.externalization import to_external_object
@@ -375,7 +377,6 @@ class EvalWithPartsExporter(_EvaluationExporter):
 _EvalWithPartsExporter = EvalWithPartsExporter
 
 
-@component.adapter(IQSurvey)
 @component.adapter(IQuestionSet)
 @interface.implementer(IInternalObjectExternalizer)
 class _QuestionSetExporter(_EvalWithPartsExporter):
