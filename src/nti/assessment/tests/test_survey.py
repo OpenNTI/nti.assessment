@@ -92,7 +92,7 @@ class TestSurvey(AssessmentTestCase):
     def test_internalize_survey(self):
         part = QNonGradableMultipleChoicePart(choices=[u''], content=u'here')
         poll = QPoll(parts=(part,), content=u'foo')
-        survey = QSurvey(questions=(poll,), description=u'survey desc')
+        survey = QSurvey(questions=(poll,), description=u'survey desc', title=u'title')
         ext_obj = toExternalObject(survey)
         factory = find_factory_for(ext_obj)
         obj = factory()
@@ -130,7 +130,7 @@ class TestSurvey(AssessmentTestCase):
         assert_that(QPollSubmission(),
                     externalizes(has_entries('Class', 'PollSubmission',
                                              'MimeType', 'application/vnd.nextthought.assessment.pollsubmission')))
-        
+
         assert_that(QSurveySubmission(),
                     verifiably_provides(IQSurveySubmission))
         assert_that(QSurveySubmission(),

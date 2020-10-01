@@ -70,7 +70,6 @@ from nti.property.property import alias
 
 from nti.schema.eqhash import EqHash
 
-from nti.schema.fieldproperty import AdaptingFieldProperty
 from nti.schema.fieldproperty import createDirectFieldProperties
 
 from nti.schema.schema import SchemaConfigured
@@ -145,8 +144,6 @@ class QSurvey(QInquiry):
 
     surveyId = id = alias('ntiid')
     polls = parts = alias('questions')
-
-    title = AdaptingFieldProperty(IQSurvey['title'])
 
     @property
     def Items(self):
