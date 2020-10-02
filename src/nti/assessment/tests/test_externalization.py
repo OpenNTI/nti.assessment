@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 
 from __future__ import print_function, absolute_import, division
+from nti.assessment.randomized_proxy import RandomizedPartProxy
 __docformat__ = "restructuredtext en"
 
 # disable: accessing protected members, too many methods
@@ -223,7 +224,7 @@ class TestExternalization(AssessmentTestCase):
         part = internal.parts[0]
         assert_that(part, has_property('input', contains_string('<input')))
         assert_that(internal,
-                    externalizes(all_of(has_entry('Class', 'Question')))),
+                    externalizes(all_of(has_entry('Class', 'Question'))))
 
     def test_regex(self):
         ext_obj = {
@@ -482,3 +483,39 @@ class TestExternalization(AssessmentTestCase):
 
         assert_that(org_solutions[0]['value'],
                     is_(equal_to(no_rand_solutions[0]['value'])))
+
+    def test_proxied_file_part(self):
+        ext_obj = {
+            'Class': 'Question',
+            "MimeType": "application/vnd.nextthought.naquestion",
+            'parts': [
+                {
+                    "Class": "QFilePart",
+                    "MimeType": "application/vnd.nextthought.assessment.filepart",
+                    "content": u"",
+                    "explanation": u"",
+                    "hints": [],
+                    "allowed_mime_types": [u"*/*"],
+                    "allowed_extensions": [u"*"]
+                },
+            ]
+        }
+
+        assert_that(internalization.find_factory_for(ext_obj),
+                    is_(not_none()))
+
+        internal = internalization.find_factory_for(ext_obj)()
+        internalization.update_from_external_object(internal,
+                                                    ext_obj,
+                                                    require_updater=True)
+
+        part = internal.parts[0]
+        assert_that(part,
+                    externalizes(all_of(has_entry('Class', 'FilePart'),
+                                        has_entry('hints', []),
+                                        has_entry('randomized', False))))
+
+        assert_that(RandomizedPartProxy(part),
+                    externalizes(all_of(has_entry('Class', 'FilePart'),
+                                        has_entry('hints', []),
+                                        has_entry('randomized', True))))

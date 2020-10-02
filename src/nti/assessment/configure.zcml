@@ -227,6 +227,7 @@
 	<ext:registerAutoPackageIO
 		root_interfaces=".interfaces.IQPart
 						 .interfaces.IQuestion
+						 .interfaces.IQFilePart
 						 .interfaces.IQSolution
 						 .interfaces.IQAssignment
 						 .interfaces.IQTimedAssignment
