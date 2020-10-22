@@ -1659,10 +1659,12 @@ class IQOrderingPartResponseNormalizer(IQPartResponseNormalizer):
 DISCLOSURE_NEVER = u'never'
 DISCLOSURE_ALWAYS = u'always'
 DISCLOSURE_TERMINATION = u'termination'
+DISCLOSURE_SUBMISSION = u'submission'
 
 DISCLOSURE_STATES = (DISCLOSURE_NEVER,
                      DISCLOSURE_ALWAYS,
-                     DISCLOSURE_TERMINATION)
+                     DISCLOSURE_TERMINATION,
+                     DISCLOSURE_SUBMISSION)
 DISCLOSURE_VOCABULARY = vocabulary.SimpleVocabulary(
     [vocabulary.SimpleTerm(_x) for _x in DISCLOSURE_STATES])
 
