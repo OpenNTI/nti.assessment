@@ -179,7 +179,6 @@ def assess_question_submission(submission, question_set=None, registry=component
 
     creator = getattr(submission, 'creator', None)
     assessed_parts = PersistentList()
-
     for sub_part, q_part in zip(submission.parts, question.parts):
         # Grade what they submitted, if they submitted something. If they didn't
         # submit anything, it's automatically "wrong."
@@ -198,7 +197,6 @@ def assess_question_submission(submission, question_set=None, registry=component
             apart = QAssessedPart(submittedResponse=sub_part,
                                   assessedValue=grade)
             assessed_parts.append(apart)
-
     result = QAssessedQuestion(questionId=submission.questionId,
                                parts=assessed_parts)
     return result
