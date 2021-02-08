@@ -35,15 +35,16 @@ class QuestionRandomizedPartsProxy(SpecificationDecoratorBase):
 
     def __init__(self, base):
         ProxyBase.__init__(self, base)
-        self.question = base
 
     @non_overridable
     @property
     def parts(self):
-        return [RandomizedPartProxy(x) for x in self.question.parts]
+        wrapped = getProxiedObject(self)
+        return [RandomizedPartProxy(x) for x in wrapped.parts]
 
     def __getitem__(self, index):
-        return RandomizedPartProxy(self.question.parts[index])
+        wrapped = getProxiedObject(self)
+        return RandomizedPartProxy(wrapped.parts[index])
 
 
 @NoPickle
@@ -60,7 +61,6 @@ class RandomizedPartProxy(SpecificationDecoratorBase):
 
     def __init__(self, base):
         ProxyBase.__init__(self, base)
-        self.part = base
 
     @non_overridable
     @property
