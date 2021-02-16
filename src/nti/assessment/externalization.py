@@ -204,6 +204,36 @@ class _BasicSummaryExternalizer(InterfaceObjectIO):
         return result
 
 
+@interface.implementer(IInternalObjectExternalizer)
+class _QPartExternalizer(InterfaceObjectIO):
+    """
+    Removed by default, and decorated when approprate for the given
+    context.
+    """
+
+    _ext_iface_upper_bound = IQPart
+
+    def toExternalObject(self, *args, **kwargs):  # pylint: disable=arguments-differ
+        result = super(_QPartExternalizer, self).toExternalObject(*args, **kwargs)
+        for key in ('solutions', 'explanation'):
+            if key in result:
+                result[key] = None
+        return result
+
+
+@interface.implementer(IInternalObjectExternalizer)
+class _QPartWithSolutionsExternalizer(InterfaceObjectIO):
+    """
+    Version that can be used to expose underlying solutions, e.g for
+    certain privileged users.
+    """
+
+    _ext_iface_upper_bound = IQPart
+
+    def toExternalObject(self, *args, **kwargs):  # pylint: disable=arguments-differ
+        return super(_QPartWithSolutionsExternalizer, self).toExternalObject(*args, **kwargs)
+
+
 @component.adapter(IQSurvey)
 @interface.implementer(IInternalObjectExternalizer)
 class _SurveySummaryExternalizer(_BasicSummaryExternalizer):
@@ -259,6 +289,11 @@ class _QSubmittedPartExternalizer(_QContainedObjectExternalizer):
 @component.adapter(IQAssessedPart)
 class _QAssessedPartExternalizer(_QContainedObjectExternalizer):
     interface = IQAssessedPart
+
+    def toExternalObject(self, **kwargs):
+        result = super(_QAssessedPartExternalizer, self).toExternalObject(**kwargs)
+        result.pop('assessedValue')
+        return result
 
 
 @component.adapter(IQuestionSubmission)
