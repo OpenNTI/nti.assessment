@@ -82,6 +82,8 @@ def questionbank_question_chooser(context, questions=None, user=None):
 
 
 def shuffle_matching_part_solutions(generator, values, ext_solutions):
+    if not ext_solutions:
+        return
     original = {idx: v for idx, v in enumerate(values)}
     shuffled = {
 		v: idx for idx, v in enumerate(shuffle_list(generator, values))
@@ -95,6 +97,8 @@ def shuffle_matching_part_solutions(generator, values, ext_solutions):
 
 
 def shuffle_multiple_choice_part_solutions(generator, choices, ext_solutions):
+    if not ext_solutions:
+        return
     original = {idx: v for idx, v in enumerate(choices)}
     shuffled = {
         v: idx for idx, v in enumerate(shuffle_list(generator, choices))
@@ -108,6 +112,8 @@ def shuffle_multiple_choice_part_solutions(generator, choices, ext_solutions):
 def shuffle_multiple_choice_multiple_answer_part_solutions(generator,
                                                            choices,
                                                            ext_solutions):
+    if not ext_solutions:
+        return
     original = {idx: v for idx, v in enumerate(choices)}
     shuffled = {
         v: idx for idx, v in enumerate(shuffle_list(generator, choices))
