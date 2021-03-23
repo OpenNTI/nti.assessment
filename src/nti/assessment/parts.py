@@ -16,7 +16,7 @@ from zope import interface
 
 from zope.cachedescriptors.property import readproperty
 
-from zope.component.interfaces import ComponentLookupError
+from zope.interface.interfaces import ComponentLookupError
 
 from zope.location.interfaces import IContained
 
