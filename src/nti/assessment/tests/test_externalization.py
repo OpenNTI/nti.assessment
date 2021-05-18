@@ -3,6 +3,8 @@
 
 from __future__ import print_function, absolute_import, division
 from nti.assessment.randomized_proxy import RandomizedPartProxy
+from nti.assessment.randomized.parts import QRandomizedMultipleChoiceMultipleAnswerPart
+from nti.assessment.parts import QMultipleChoiceMultipleAnswerPart
 __docformat__ = "restructuredtext en"
 
 # disable: accessing protected members, too many methods

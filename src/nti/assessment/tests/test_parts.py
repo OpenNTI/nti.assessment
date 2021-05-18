@@ -54,9 +54,9 @@ class TestQPart(AssessmentTestCase):
 class TestMultipleChoicePart(AssessmentTestCase):
 
     def test_part_provides(self):
-        assert_that(parts.QMultipleChoicePart(), 
+        assert_that(parts.QMultipleChoicePart(),
                     verifiably_provides(interfaces.IQMultipleChoicePart))
-        assert_that(parts.QMultipleChoicePart(), 
+        assert_that(parts.QMultipleChoicePart(),
                     externalizes(has_entry('Class', 'MultipleChoicePart')))
 
         # A bad solution type
@@ -69,6 +69,11 @@ class TestMultipleChoicePart(AssessmentTestCase):
             sf = interfaces.IQMultipleChoicePart['solutions']
             sf.bind(part)
             sf.validate(part.solutions)
+
+        part = parts.QMultipleChoicePart()
+        part.randomized = True
+        assert_that(part,
+                    externalizes(has_entry('Class', 'MultipleChoicePart')))
 
     def test_grade(self):
         solution = solutions.QMultipleChoiceSolution(1)
@@ -89,14 +94,14 @@ class TestMultipleChoicePart(AssessmentTestCase):
 class TestMultipleChoiceMultipleAnswerPart(AssessmentTestCase):
 
     def test_part_provides(self):
-        assert_that(parts.QMultipleChoiceMultipleAnswerPart(), 
+        assert_that(parts.QMultipleChoiceMultipleAnswerPart(),
                     verifiably_provides(interfaces.IQMultipleChoiceMultipleAnswerPart))
-        assert_that(parts.QMultipleChoiceMultipleAnswerPart(), 
+        assert_that(parts.QMultipleChoiceMultipleAnswerPart(),
                     externalizes(has_entry('Class', 'MultipleChoiceMultipleAnswerPart')))
 
         # A bad solution type
         part = parts.QMultipleChoiceMultipleAnswerPart(solutions=([0, 1],))
-        assert_that(part, 
+        assert_that(part,
                     verifiably_provides(interfaces.IQMultipleChoiceMultipleAnswerPart))
         assert_that(part, is_(part))
         assert_that(hash(part), is_(hash(part)))
@@ -106,10 +111,15 @@ class TestMultipleChoiceMultipleAnswerPart(AssessmentTestCase):
             sf.bind(part)
             sf.validate(part.solutions)
 
+        part = parts.QMultipleChoiceMultipleAnswerPart()
+        part.randomized = True
+        assert_that(part,
+                    externalizes(has_entry('Class', 'MultipleChoiceMultipleAnswerPart')))
+
     def test_grade(self):
         solution = solutions.QMultipleChoiceMultipleAnswerSolution([1])
         choices = (u"A", u"B", u"C")
-        part = parts.QMultipleChoiceMultipleAnswerPart(solutions=(solution,), 
+        part = parts.QMultipleChoiceMultipleAnswerPart(solutions=(solution,),
                                                        choices=choices)
 
         # Submitting the index
@@ -127,9 +137,9 @@ class TestMatchingPart(AssessmentTestCase):
         solution_nums = {0: 1, 1: 0}
 
         solution = solutions.QMatchingSolution(solution_keys)
-        part = parts.QMatchingPart(labels=labels, values=values, 
+        part = parts.QMatchingPart(labels=labels, values=values,
                                    solutions=(solution,))
-        part2 = parts.QMatchingPart(labels=labels, values=values, 
+        part2 = parts.QMatchingPart(labels=labels, values=values,
                                     solutions=(solution,))
         assert_that(part, externalizes(has_entry('Class', 'MatchingPart')))
         assert_that(part, is_(part))
@@ -141,7 +151,7 @@ class TestMatchingPart(AssessmentTestCase):
 
         assert_that(part, grades_wrong({"A": "Y"}))
 
-        part = parts.QMatchingPart(labels=labels, values=values, 
+        part = parts.QMatchingPart(labels=labels, values=values,
                                    solutions=(solutions.QMatchingSolution(solution_nums),))
 
         assert_that(part, grades_right(solution_keys))
@@ -158,19 +168,19 @@ class TestMatchingPart(AssessmentTestCase):
         solution_keys = {u"A": u"Y", u"B": u"X"}
 
         solution = solutions.QMatchingSolution(solution_keys)
-        part = parts.QMatchingPart(labels=labels, values=values, 
+        part = parts.QMatchingPart(labels=labels, values=values,
                                    solutions=(solution,))
-        part2 = parts.QMatchingPart(labels=labels, values=values, 
+        part2 = parts.QMatchingPart(labels=labels, values=values,
                                     solutions=(solution,))
 
         assert_that(part, is_(part))
         assert_that(part, is_(part2))
-        assert_that(part, 
-                    is_not(parts.QMatchingPart(labels=values, values=labels, 
+        assert_that(part,
+                    is_not(parts.QMatchingPart(labels=values, values=labels,
                                                solutions=(solution,))))
-        assert_that(part, 
+        assert_that(part,
                     is_not(parts.QNumericMathPart(solutions=(solution,))))
-        assert_that(parts.QNumericMathPart(solutions=(solution,)), 
+        assert_that(parts.QNumericMathPart(solutions=(solution,)),
                     is_not(part))
 
         # Cover the AttributeError case
@@ -190,11 +200,11 @@ class TestOrderingPart(AssessmentTestCase):
         solution_keys = {u"A": u"Y", u"B": u"X"}
 
         solution = solutions.QOrderingSolution(solution_keys)
-        part = parts.QOrderingPart(labels=labels, values=values, 
+        part = parts.QOrderingPart(labels=labels, values=values,
                                    solutions=(solution,))
-        part2 = parts.QOrderingPart(labels=labels, values=values, 
+        part2 = parts.QOrderingPart(labels=labels, values=values,
                                     solutions=(solution,))
-        assert_that(part, 
+        assert_that(part,
                     externalizes(all_of(has_entry('Class', 'OrderingPart'),
                                         has_entry('MimeType', 'application/vnd.nextthought.assessment.orderingpart'))))
         assert_that(part, is_(part))
@@ -221,19 +231,19 @@ class TestOrderingPart(AssessmentTestCase):
         solution_keys = {u"A": u"Y", u"B": u"X"}
 
         solution = solutions.QOrderingSolution(solution_keys)
-        part = parts.QOrderingPart(labels=labels, values=values, 
+        part = parts.QOrderingPart(labels=labels, values=values,
                                    solutions=(solution,))
-        part2 = parts.QOrderingPart(labels=labels, values=values, 
+        part2 = parts.QOrderingPart(labels=labels, values=values,
                                     solutions=(solution,))
 
         assert_that(part, is_(part))
         assert_that(part, is_(part2))
-        assert_that(part, 
-                    is_not(parts.QOrderingPart(labels=values, values=labels, 
+        assert_that(part,
+                    is_not(parts.QOrderingPart(labels=values, values=labels,
                                                solutions=(solution,))))
-        assert_that(part, 
+        assert_that(part,
                     is_not(parts.QNumericMathPart(solutions=(solution,))))
-        assert_that(parts.QNumericMathPart(solutions=(solution,)), 
+        assert_that(parts.QNumericMathPart(solutions=(solution,)),
                     is_not(part))
 
         # Cover the AttributeError case
@@ -253,11 +263,11 @@ class TestFillInTheBlackWithWordBankPart(AssessmentTestCase):
         solution = solutions.QFillInTheBlankWithWordBankSolution(
             {u"x": u"1", u"y": u"2"}
         )
-        part = parts.QFillInTheBlankWithWordBankPart(wordbank=bank, 
+        part = parts.QFillInTheBlankWithWordBankPart(wordbank=bank,
                                                      solutions=(solution,))
         assert_that(part,
                     verifiably_provides(interfaces.IQFillInTheBlankWithWordBankPart))
-        assert_that(part, 
+        assert_that(part,
                     externalizes(has_entry('Class', 'FillInTheBlankWithWordBankPart')))
         assert_that(solution.grade({"x": "1", "y": "2"}), is_(True))
         assert_that(solution.grade({"x": "1", "y": "4"}), is_(False))
@@ -270,9 +280,9 @@ class TestFillInTheBlackShortAnswerPart(AssessmentTestCase):
         part = parts.QFillInTheBlankShortAnswerPart(solutions=(solution,))
         assert_that(part,
                     verifiably_provides(interfaces.IQFillInTheBlankShortAnswerPart))
-        assert_that(part, 
+        assert_that(part,
                     externalizes(has_entry('Class', 'FillInTheBlankShortAnswerPart')))
-        assert_that(solution, 
+        assert_that(solution,
                     externalizes(has_entries('Class', 'FillInTheBlankShortAnswerSolution',
                                              'value', {'x': '^1$'})))
         assert_that(solution.grade({"x": "1"}), is_(True))
@@ -309,7 +319,7 @@ class TestFreeResponsePart(AssessmentTestCase):
 class TestMathPart(AssessmentTestCase):
 
     def test_eq(self):
-        solution = solutions.QMathSolution(solutions=[1, 2], 
+        solution = solutions.QMathSolution(solutions=[1, 2],
                                            allowed_units=['times'])
         solution2 = solutions.QMathSolution(solutions=[3])
         part = parts.QMathPart(solutions=[solution, solution2])
@@ -326,7 +336,7 @@ class TestMathPart(AssessmentTestCase):
         del part2.grader_interface
         assert_that(part2, is_not(part))
 
-        assert_that(part, 
+        assert_that(part,
                     externalizes(has_entry('allowed_units', ['times'])))
         assert_that(part2, externalizes())
 
