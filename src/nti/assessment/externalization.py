@@ -22,6 +22,8 @@ from zope import interface
 
 from nti.assessment._hooks import ntiid_object_hook
 
+import nti.assessment.interfaces as assessment_interfaces
+
 from nti.assessment.interfaces import IQSurvey
 from nti.assessment.interfaces import IQuestion
 from nti.assessment.interfaces import IQAssignment
@@ -51,9 +53,8 @@ from nti.assessment.interfaces import IQFillInTheBlankWithWordBankSolution
 from nti.assessment.response import QUploadedFile
 from nti.assessment.response import QUploadedImageFile
 
-from nti.contentlibrary.utils import operate_encode_content
-
 from nti.externalization.datastructures import InterfaceObjectIO
+from nti.externalization.datastructures import ModuleScopedInterfaceObjectIO
 
 from nti.externalization.externalization import to_external_object
 
@@ -205,13 +206,14 @@ class _BasicSummaryExternalizer(InterfaceObjectIO):
 
 
 @interface.implementer(IInternalObjectExternalizer)
-class _QPartExternalizer(InterfaceObjectIO):
+class _QPartExternalizer(ModuleScopedInterfaceObjectIO):
     """
-    Removed by default, and decorated when approprate for the given
+    Removed by default, and decorated when appropriate for the given
     context.
     """
 
     _ext_iface_upper_bound = IQPart
+    _ext_search_module = assessment_interfaces
 
     def toExternalObject(self, *args, **kwargs):  # pylint: disable=arguments-differ
         result = super(_QPartExternalizer, self).toExternalObject(*args, **kwargs)
@@ -222,13 +224,14 @@ class _QPartExternalizer(InterfaceObjectIO):
 
 
 @interface.implementer(IInternalObjectExternalizer)
-class _QPartWithSolutionsExternalizer(InterfaceObjectIO):
+class _QPartWithSolutionsExternalizer(ModuleScopedInterfaceObjectIO):
     """
     Version that can be used to expose underlying solutions, e.g for
     certain privileged users.
     """
 
     _ext_iface_upper_bound = IQPart
+    _ext_search_module = assessment_interfaces
 
     def toExternalObject(self, *args, **kwargs):  # pylint: disable=arguments-differ
         return super(_QPartWithSolutionsExternalizer, self).toExternalObject(*args, **kwargs)
