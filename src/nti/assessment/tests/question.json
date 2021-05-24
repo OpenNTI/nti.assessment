@@ -1,0 +1,45 @@
+{
+  "Class": "Question",
+  "MimeType": "application/vnd.nextthought.naquestion",
+  "NTIID": "tag:nextthought.com,2011-10:OU-NAQ-BIOL2124_F_2014_Human_Physiology.naq.qid.intro.01",
+  "content": "<a name=\"qid.intro.01\"><\/a> 1. Rank the following in terms of complexity from low (1) to high (7)",
+  "parts": [{
+    "Class": "MatchingPart",
+    "MimeType": "application/vnd.nextthought.assessment.matchingpart",
+    "content": "",
+    "explanation": "",
+    "hints": [],
+    "labels": [
+      "<a name=\"5c203840dfcdf51dd7e33a72ea2f484f\" ><\/a>\n\n<p class=\"par\" id=\"5c203840dfcdf51dd7e33a72ea2f484f\">cells <\/p>",
+      "<a name=\"75c9acad5c1814888e86ce8ac1e3e71c\" ><\/a>\n\n<p class=\"par\" id=\"75c9acad5c1814888e86ce8ac1e3e71c\">organ systems <\/p>",
+      "<a name=\"1f6a00187d4285ca33aef4e411177542\" ><\/a>\n\n<p class=\"par\" id=\"1f6a00187d4285ca33aef4e411177542\">organelles <\/p>",
+      "<a name=\"2bb8d809d871a7c1a392fec36563a8f7\" ><\/a>\n\n<p class=\"par\" id=\"2bb8d809d871a7c1a392fec36563a8f7\">atoms <\/p>",
+      "<a name=\"a71934f2b8a4a23c91077c17afff23a9\" ><\/a>\n\n<p class=\"par\" id=\"a71934f2b8a4a23c91077c17afff23a9\">organs <\/p>",
+      "<a name=\"187c25e49d45ad10b2f266c1fa7a8d49\" ><\/a>\n\n<p class=\"par\" id=\"187c25e49d45ad10b2f266c1fa7a8d49\">molecules <\/p>",
+      "<a name=\"79654ca5ba0bc2dbc0ee54a48bab4e31\" ><\/a>\n\n<p class=\"par\" id=\"79654ca5ba0bc2dbc0ee54a48bab4e31\">tissues <\/p>"
+    ],
+    "solutions": [{
+      "Class": "MatchingSolution",
+      "MimeType": "application/vnd.nextthought.assessment.matchingsolution",
+      "value": {
+        "0": 3,
+        "1": 6,
+        "2": 2,
+        "3": 0,
+        "4": 5,
+        "5": 1,
+        "6": 4
+      },
+      "weight": 1.0
+    }],
+    "values": [
+      "<a name=\"c4ca4238a0b923820dcc509a6f75849b\" ><\/a>\n\n<p class=\"par\" id=\"c4ca4238a0b923820dcc509a6f75849b\">1 <\/p>",
+      "<a name=\"c81e728d9d4c2f636f067f89cc14862c\" ><\/a>\n\n<p class=\"par\" id=\"c81e728d9d4c2f636f067f89cc14862c\">2 <\/p>",
+      "<a name=\"eccbc87e4b5ce2fe28308fd9f2a7baf3\" ><\/a>\n\n<p class=\"par\" id=\"eccbc87e4b5ce2fe28308fd9f2a7baf3\">3 <\/p>",
+      "<a name=\"a87ff679a2f3e71d9181a67b7542122c\" ><\/a>\n\n<p class=\"par\" id=\"a87ff679a2f3e71d9181a67b7542122c\">4 <\/p>",
+      "<a name=\"e4da3b7fbbce2345d7772b0674a318d5\" ><\/a>\n\n<p class=\"par\" id=\"e4da3b7fbbce2345d7772b0674a318d5\">5 <\/p>",
+      "<a name=\"1679091c5a880faf6fb5e6087eb1b2dc\" ><\/a>\n\n<p class=\"par\" id=\"1679091c5a880faf6fb5e6087eb1b2dc\">6 <\/p>",
+      "<a name=\"8f14e45fceea167a5a36dedd4bea2543\" ><\/a>\n\n<p class=\"par\" id=\"8f14e45fceea167a5a36dedd4bea2543\">7 <\/p>"
+    ]
+  }]
+}

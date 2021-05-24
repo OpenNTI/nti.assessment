@@ -329,6 +329,8 @@ class TestExternalization(AssessmentTestCase):
                                           'Class', 'QuestionSet',
                                           'MimeType', 'application/vnd.nextthought.naquestionset',
                                           'questions', has_length(20)))
+        assert_that(exported['questions'][0]['parts'][0],
+                    has_entry('solutions', not_none()))
 
     def test_question_set_summary(self):
         path = os.path.join(os.path.dirname(__file__), "questionset.json")
@@ -413,6 +415,35 @@ class TestExternalization(AssessmentTestCase):
         internal = factory()
         internalization.update_from_external_object(internal, ext_obj,
                                                     require_updater=True)
+
+    def test_assignment_export(self):
+        path = os.path.join(
+            os.path.dirname(__file__), "assignment.json")
+        with open(path, "r") as fp:
+            ext_obj = json.load(fp)
+        factory = internalization.find_factory_for(ext_obj)
+        assert_that(factory, is_(not_none()))
+        internal = factory()
+        internalization.update_from_external_object(internal, ext_obj,
+                                                    require_updater=True)
+
+        exported = to_external_object(internal, name="exporter")
+        assert_that(exported['parts'][0]['question_set']['questions'][0]['parts'][0],
+                    has_entry('solutions', not_none()))
+
+    def test_question_export(self):
+        path = os.path.join(
+            os.path.dirname(__file__), "question.json")
+        with open(path, "r") as fp:
+            ext_obj = json.load(fp)
+        factory = internalization.find_factory_for(ext_obj)
+        assert_that(factory, is_(not_none()))
+        internal = factory()
+        internalization.update_from_external_object(internal, ext_obj,
+                                                    require_updater=True)
+
+        exported = to_external_object(internal, name="exporter")
+        assert_that(exported['parts'][0], has_entry('solutions', not_none()))
 
     def test_discussion_assignment(self):
         discussion_ntiid = u'tag:nextthought.com,2015-11-30:DiscussionTest'

@@ -361,6 +361,8 @@ def _QUploadedFileFactory(ext_obj):
 @interface.implementer(IInternalObjectExternalizer)
 class _EvaluationExporter(object):
 
+    externalizer_name = ''  # default
+
     def __init__(self, obj):
         self.evaluation = obj
 
@@ -384,7 +386,7 @@ class _EvaluationExporter(object):
 
     def toExternalObject(self, **kwargs):
         mod_args = dict(**kwargs)
-        mod_args['name'] = ''  # default
+        mod_args['name'] = self.externalizer_name
         mod_args['decorate'] = False  # no decoration
         mod_args['decorate_callback'] = self._decorate_callback
         result = to_external_object(self.evaluation, **mod_args)
@@ -401,6 +403,9 @@ class _EvaluationExporter(object):
 @component.adapter(IQAssignment)
 @interface.implementer(IInternalObjectExternalizer)
 class EvalWithPartsExporter(_EvaluationExporter):
+
+    # Ensure our solutions are externalized
+    externalizer_name = 'solutions'
 
     def _remove_part_ntiids(self, result):
         for part in result.get('parts') or ():
