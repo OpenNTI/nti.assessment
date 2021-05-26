@@ -1959,3 +1959,10 @@ class IEvaluationImporterUpdater(interface.Interface):
         :param eval_obj: The evaluation that is being imported.
         :param externalObject: The external source
         """
+
+
+class IAvoidSolutionDecoration(interface.Interface):
+    pass
+
+
+IAvoidSolutionDecoration.setTaggedValue('_ext_is_marker_interface', True)

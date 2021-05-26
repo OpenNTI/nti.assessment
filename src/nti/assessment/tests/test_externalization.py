@@ -34,8 +34,12 @@ import fudge
 
 from copy import deepcopy
 
+from zope import component
+from zope import interface
+
 from nti.assessment.interfaces import IQuestionSet
 from nti.assessment.interfaces import IQPartSolutionsExternalizer
+from nti.assessment.interfaces import IAvoidSolutionDecoration
 
 from nti.assessment.randomized.interfaces import IQuestionBank
 from nti.assessment.randomized.interfaces import IQuestionIndexRange
@@ -43,6 +47,8 @@ from nti.assessment.randomized.interfaces import IQuestionIndexRange
 from nti.externalization import internalization
 
 from nti.externalization.externalization import to_external_object
+
+from nti.externalization.interfaces import IExternalObjectDecorator
 
 from nti.externalization.tests import externalizes
 
@@ -415,6 +421,45 @@ class TestExternalization(AssessmentTestCase):
         internal = factory()
         internalization.update_from_external_object(internal, ext_obj,
                                                     require_updater=True)
+
+    def test_assignment_externalization(self):
+        path = os.path.join(
+            os.path.dirname(__file__), "assignment.json")
+        with open(path, "r") as fp:
+            ext_obj = json.load(fp)
+        factory = internalization.find_factory_for(ext_obj)
+        assert_that(factory, is_(not_none()))
+        internal = factory()
+        internalization.update_from_external_object(internal, ext_obj,
+                                                    require_updater=True)
+
+        class IRequest(interface.Interface):
+            pass
+
+        @interface.implementer(IRequest)
+        class Request(object):
+            pass
+
+        @component.adapter(IQuestionSet, IRequest)
+        @interface.implementer(IExternalObjectDecorator)
+        class Decorator(object):
+
+            decorated = []
+
+            def __init__(self, *args):
+                pass
+
+            def decorateExternalObject(self, *args):
+                Decorator.decorated.append(args)
+
+        component.getGlobalSiteManager().registerSubscriptionAdapter(Decorator)
+        try:
+            to_external_object(internal, request=Request())
+
+            assert_that(IAvoidSolutionDecoration.providedBy(Decorator.decorated[0]),
+                        is_(True))
+        finally:
+            component.getGlobalSiteManager().unregisterSubscriptionAdapter(Decorator)
 
     def test_assignment_export(self):
         path = os.path.join(
