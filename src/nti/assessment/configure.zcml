@@ -323,6 +323,14 @@
 			 for=".interfaces.IQSurveySubmission"
 			 provides="nti.externalization.interfaces.IInternalObjectExternalizer" />
 
+	<adapter factory=".externalization._QAssignmentExternalizer"
+			 for=".interfaces.IQAssignment"
+			 provides="nti.externalization.interfaces.IInternalObjectExternalizer" />
+
+	<adapter factory=".externalization.QAssignmentSubmissionPendingAssessmentExternalizer"
+			 for=".interfaces.IQAssignmentSubmissionPendingAssessment"
+			 provides="nti.externalization.interfaces.IInternalObjectExternalizer" />
+
 	<adapter factory=".externalization._QPartExternalizer"
 			 for=".interfaces.IQPart"
 			 provides="nti.externalization.interfaces.IInternalObjectExternalizer" />

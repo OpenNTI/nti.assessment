@@ -20,10 +20,14 @@ from collections import Mapping
 from zope import component
 from zope import interface
 
+from zope.proxy.decorator import SpecificationDecoratorBase
+
 from nti.assessment._hooks import ntiid_object_hook
 
 import nti.assessment.interfaces as assessment_interfaces
 
+from nti.assessment.interfaces import IAvoidSolutionDecoration
+from nti.assessment.interfaces import IQAssignmentSubmissionPendingAssessment
 from nti.assessment.interfaces import IQSurvey
 from nti.assessment.interfaces import IQuestion
 from nti.assessment.interfaces import IQAssignment
@@ -235,6 +239,65 @@ class _QPartWithSolutionsExternalizer(ModuleScopedInterfaceObjectIO):
 
     def toExternalObject(self, *args, **kwargs):  # pylint: disable=arguments-differ
         return super(_QPartWithSolutionsExternalizer, self).toExternalObject(*args, **kwargs)
+
+
+@interface.implementer(IAvoidSolutionDecoration)
+class _AvoidSolutionDecorationProxy(SpecificationDecoratorBase):
+    """
+    Marker interface used to indicate we should avoid solution decoration
+    (e.g. for QuestionSet objects when solution decoration will be handled
+    in the context of the assignment)
+    """
+
+
+class _AssignmentPartAvoidSolutionDecorationProxy(SpecificationDecoratorBase):
+
+    def __getattr__(self, item):
+        result = SpecificationDecoratorBase.__getattr__(self, item)
+
+        if item == "question_set":
+            return _AvoidSolutionDecorationProxy(result)
+
+        return result
+
+
+@interface.implementer(IInternalObjectExternalizer)
+class _QAssignmentExternalizer(ModuleScopedInterfaceObjectIO):
+    """
+    Provides context for question sets during decoration to indicate
+    solutions externalization will be handled at the assignment level
+    """
+
+    _ext_iface_upper_bound = IQAssignment
+    _ext_search_module = assessment_interfaces
+
+    def _ext_getattr(self, ext_self, k, *args, **kwargs):
+        result = ModuleScopedInterfaceObjectIO._ext_getattr(self, ext_self, k, *args, **kwargs)
+
+        if k == "parts" and result:
+            return [_AssignmentPartAvoidSolutionDecorationProxy(x) for x in result]
+
+        return result
+
+
+@interface.implementer(IInternalObjectExternalizer)
+class QAssignmentSubmissionPendingAssessmentExternalizer(ModuleScopedInterfaceObjectIO):
+    """
+    Provides context for assessed question sets during decoration to
+    indicate solutions externalization will be handled at the assignment
+    submission level
+    """
+
+    _ext_iface_upper_bound = IQAssignmentSubmissionPendingAssessment
+    _ext_search_module = assessment_interfaces
+
+    def _ext_getattr(self, ext_self, k, *args, **kwargs):
+        result = ModuleScopedInterfaceObjectIO._ext_getattr(self, ext_self, k, *args, **kwargs)
+
+        if k == "parts" and result:
+            return [_AvoidSolutionDecorationProxy(x) for x in result]
+
+        return result
 
 
 @component.adapter(IQSurvey)
