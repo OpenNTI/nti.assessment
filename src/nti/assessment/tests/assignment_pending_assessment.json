@@ -1,0 +1,120 @@
+{
+  "Class": "AssignmentSubmissionPendingAssessment",
+  "ContainerId": "tag:nextthought.com,2011-10:NTI-NAQ-assignment_system_4744544940803182916_3935412016",
+  "CreatedTime": 1622055568.654417,
+  "CreatorRecordedEffortDuration": null,
+  "Last Modified": 1622055568.654417,
+  "Links": [
+    {
+      "Class": "Link",
+      "href": "/dataserver2/++etc++hostsites/alpha.dev/++etc++site/Courses/DefaultAPICreated/WAGO-1001/AssignmentHistories/student4/tag:nextthought.com,2011-10:NTI-NAQ-assignment_system_4744544940803182916_3935412016/UsersCourseAssignmentHistoryItem",
+      "ntiid": "tag:nextthought.com,2011-10:student4-OID-0x175945:5573657273:RyqdVt9N2kd",
+      "rel": "AssignmentHistoryItem"
+    }
+  ],
+  "MimeType": "application/vnd.nextthought.assessment.assignmentsubmissionpendingassessment",
+  "NTIID": "tag:nextthought.com,2011-10:system-OID-0x175943:5573657273:RyqdVt9N2kf",
+  "OID": "tag:nextthought.com,2011-10:system-OID-0x175943:5573657273:RyqdVt9N2kf",
+  "assignmentId": "tag:nextthought.com,2011-10:NTI-NAQ-assignment_system_4744544940803182916_3935412016",
+  "containerId": "tag:nextthought.com,2011-10:NTI-NAQ-assignment_system_4744544940803182916_3935412016",
+  "href": "/dataserver2/Objects/tag%3Anextthought.com%2C2011-10%3Asystem-OID-0x175943%3A5573657273%3ARyqdVt9N2kf",
+  "parts": [
+    {
+      "Class": "AssessedQuestionSet",
+      "ContainerContext": null,
+      "CreatedTime": 1622055568.653751,
+      "Last Modified": 1622055568.653751,
+      "MimeType": "application/vnd.nextthought.assessment.assessedquestionset",
+      "NTIID": "tag:nextthought.com,2011-10:system-OID-0x175942:5573657273:RyqdVt9N2kg",
+      "OID": "tag:nextthought.com,2011-10:system-OID-0x175942:5573657273:RyqdVt9N2kg",
+      "questionSetId": "tag:nextthought.com,2011-10:NTI-NAQ-questionset_system_4744544940864495692_1459490461",
+      "questions": [
+        {
+          "Class": "AssessedQuestion",
+          "CreatedTime": 1622055568.652336,
+          "Last Modified": 1622055568.652336,
+          "MimeType": "application/vnd.nextthought.assessment.assessedquestion",
+          "NTIID": "tag:nextthought.com,2011-10:system-OID-0x17593f:5573657273:RyqdVt9N2kk",
+          "OID": "tag:nextthought.com,2011-10:system-OID-0x17593f:5573657273:RyqdVt9N2kk",
+          "parts": [
+            {
+              "Class": "AssessedPart",
+              "MimeType": "application/vnd.nextthought.assessment.assessedpart",
+              "assessedValue": 1.0,
+              "explanation": "",
+              "solutions": [
+                {
+                  "Class": "MultipleChoiceSolution",
+                  "MimeType": "application/vnd.nextthought.assessment.multiplechoicesolution",
+                  "NTIID": "tag:nextthought.com,2011-10:system-OID-0x0167c7:5573657273",
+                  "OID": "tag:nextthought.com,2011-10:system-OID-0x0167c7:5573657273",
+                  "value": 0,
+                  "weight": 1.0
+                }
+              ],
+              "submittedResponse": 0
+            }
+          ],
+          "questionId": "tag:nextthought.com,2011-10:NTI-NAQ-question_system_4744544940864463316_1459490461"
+        },
+        {
+          "Class": "AssessedQuestion",
+          "CreatedTime": 1622055568.652804,
+          "Last Modified": 1622055568.652804,
+          "MimeType": "application/vnd.nextthought.assessment.assessedquestion",
+          "NTIID": "tag:nextthought.com,2011-10:system-OID-0x175940:5573657273:RyqdVt9N2kj",
+          "OID": "tag:nextthought.com,2011-10:system-OID-0x175940:5573657273:RyqdVt9N2kj",
+          "parts": [
+            {
+              "Class": "AssessedPart",
+              "MimeType": "application/vnd.nextthought.assessment.assessedpart",
+              "assessedValue": 1.0,
+              "explanation": "",
+              "solutions": [
+                {
+                  "Class": "MultipleChoiceMultipleAnswerSolution",
+                  "MimeType": "application/vnd.nextthought.assessment.multiplechoicemultipleanswersolution",
+                  "NTIID": "tag:nextthought.com,2011-10:system-OID-0x16f0f9:5573657273",
+                  "OID": "tag:nextthought.com,2011-10:system-OID-0x16f0f9:5573657273",
+                  "value": [0, 1],
+                  "weight": 1.0
+                }
+              ],
+              "submittedResponse": [0, 1]
+            }
+          ],
+          "questionId": "tag:nextthought.com,2011-10:NTI-NAQ-question_system_4744544940936794793_2703161305"
+        },
+        {
+          "Class": "AssessedQuestion",
+          "CreatedTime": 1622055568.65321,
+          "Last Modified": 1622055568.65321,
+          "MimeType": "application/vnd.nextthought.assessment.assessedquestion",
+          "NTIID": "tag:nextthought.com,2011-10:system-OID-0x175941:5573657273:RyqdVt9N2kh",
+          "OID": "tag:nextthought.com,2011-10:system-OID-0x175941:5573657273:RyqdVt9N2kh",
+          "parts": [
+            {
+              "Class": "AssessedPart",
+              "MimeType": "application/vnd.nextthought.assessment.assessedpart",
+              "assessedValue": 1.0,
+              "explanation": "",
+              "solutions": [
+                {
+                  "Class": "MultipleChoiceMultipleAnswerSolution",
+                  "MimeType": "application/vnd.nextthought.assessment.multiplechoicemultipleanswersolution",
+                  "NTIID": "tag:nextthought.com,2011-10:system-OID-0x16eba9:5573657273",
+                  "OID": "tag:nextthought.com,2011-10:system-OID-0x16eba9:5573657273",
+                  "value": [0],
+                  "weight": 1.0
+                }
+              ],
+              "submittedResponse": [0]
+            }
+          ],
+          "questionId": "tag:nextthought.com,2011-10:NTI-NAQ-question_system_4744573195134941178_323852893"
+        }
+      ]
+    }
+  ],
+  "version": "2021-05-26T13:47:10"
+}

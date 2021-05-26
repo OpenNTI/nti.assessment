@@ -37,6 +37,11 @@ from copy import deepcopy
 from zope import component
 from zope import interface
 
+from nti.assessment.assessed import QAssessedQuestionSet
+
+from nti.assessment.assignment import QAssignmentSubmissionPendingAssessment
+
+from nti.assessment.interfaces import IQAssessedQuestionSet
 from nti.assessment.interfaces import IQuestionSet
 from nti.assessment.interfaces import IQPartSolutionsExternalizer
 from nti.assessment.interfaces import IAvoidSolutionDecoration
@@ -433,6 +438,20 @@ class TestExternalization(AssessmentTestCase):
         internalization.update_from_external_object(internal, ext_obj,
                                                     require_updater=True)
 
+        self._test_no_solution_decoration(internal, IQuestionSet)
+
+    def test_submission_pending_assessment_externalization(self):
+        to_externalize = QAssignmentSubmissionPendingAssessment(
+            parts=(QAssessedQuestionSet(
+                questions=(),
+                questionSetId=u'',
+            ),)
+        )
+        self._test_no_solution_decoration(to_externalize,
+                                          IQAssessedQuestionSet)
+
+    def _test_no_solution_decoration(self, to_externalize, type_to_check):
+
         class IRequest(interface.Interface):
             pass
 
@@ -440,7 +459,7 @@ class TestExternalization(AssessmentTestCase):
         class Request(object):
             pass
 
-        @component.adapter(IQuestionSet, IRequest)
+        @component.adapter(type_to_check, IRequest)
         @interface.implementer(IExternalObjectDecorator)
         class Decorator(object):
 
@@ -454,9 +473,9 @@ class TestExternalization(AssessmentTestCase):
 
         component.getGlobalSiteManager().registerSubscriptionAdapter(Decorator)
         try:
-            to_external_object(internal, request=Request())
+            to_external_object(to_externalize, request=Request())
 
-            assert_that(IAvoidSolutionDecoration.providedBy(Decorator.decorated[0]),
+            assert_that(IAvoidSolutionDecoration.providedBy(Decorator.decorated[0][0]),
                         is_(True))
         finally:
             component.getGlobalSiteManager().unregisterSubscriptionAdapter(Decorator)

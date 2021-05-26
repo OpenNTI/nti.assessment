@@ -252,8 +252,8 @@ class _AvoidSolutionDecorationProxy(SpecificationDecoratorBase):
 
 class _AssignmentPartAvoidSolutionDecorationProxy(SpecificationDecoratorBase):
 
-    def __getattr__(self, item):
-        result = SpecificationDecoratorBase.__getattr__(self, item)
+    def __getattribute__(self, item):
+        result = SpecificationDecoratorBase.__getattribute__(self, item)
 
         if item == "question_set":
             return _AvoidSolutionDecorationProxy(result)
