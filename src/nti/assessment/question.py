@@ -49,8 +49,6 @@ from nti.coremetadata.interfaces import IContained as INTIContained
 
 from nti.dublincore.datastructures import PersistentCreatedModDateTrackingObject
 
-from nti.externalization.externalization import to_external_object
-
 from nti.externalization.persistence import NoPickle
 
 from nti.property.property import alias
@@ -137,6 +135,7 @@ class QQuestion(QBaseMixin):
 
 
 @NoPickle
+@interface.implementer(IFiniteSequence)
 class _QuestionIterableWrapper(Sequence):
     """
     A wrapper to a sequence of questions that ensures possible
@@ -159,9 +158,6 @@ class _QuestionIterableWrapper(Sequence):
     def __getitem__(self, index):
         result = self._storage[index]
         return self._transform(result)
-
-    def toExternalObject(self, *args, **kwargs):
-        return tuple(to_external_object(x, *args, **kwargs) for x in self)
 
 
 @NoPickle
@@ -192,18 +188,18 @@ class QQuestionSet(QBaseMixin, RecordableContainerMixin):
     @property
     def _questions(self):
         return self.__dict__.get('questions')
-
+    
     @_questions.setter
     def _questions(self, val):
         self.__dict__['questions'] = PersistentList(val or ())
         self._p_changed = True
-
+    
     @property
     def questions(self):
         """
         Returns a view into the underlying questions. This
         result set is immutable.
-
+    
         `questions` in our __dict__ is the source of truth.
         The `_questions` properties handle updating this dict value.
         The questions props will make sure we:
@@ -216,7 +212,7 @@ class QQuestionSet(QBaseMixin, RecordableContainerMixin):
         else:
             result = _QuestionIterableWrapper(result)
         return result
-
+    
     @questions.setter
     def questions(self, val):
         self._questions = val
